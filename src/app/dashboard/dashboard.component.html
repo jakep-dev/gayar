@@ -1,5 +1,54 @@
+<md-sidenav-container>
+  <md-sidenav #sidenav>
+    <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
+        <span>Cyber Suite</span>
+    </md-toolbar>
+
+    <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+        <div fxFlexFill> 
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">account_circle</md-icon>
+              <span>Sherin Dharmarajan</span>
+          </button>
+        </div>
+        <div fxFlexFill >  
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">dashboard</md-icon>
+              <span>Dashboard</span>
+          </button>
+        </div>
+        <div fxFlexFill> 
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">wifi</md-icon>
+              <span>Frequency</span>
+          </button>
+        </div>
+        <div fxFlexFill> 
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">gamepad</md-icon>
+              <span>Impact</span>
+          </button>
+        </div>
+        <div fxFlexFill> 
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">insert_chart</md-icon>
+              <span>Benchmark</span>
+          </button>
+        </div>
+        <div fxFlexFill> 
+          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+              <md-icon class="md-18">pie_chart</md-icon>
+              <span>Report</span>
+          </button>
+        </div>
+    </div>
+  </md-sidenav>
+  
   <md-toolbar color="primary">
-    <button md-icon-button>
+    <button md-icon-button (click)="sidenav.open()">
         <md-icon class="md-24">menu</md-icon>
     </button>
   </md-toolbar>
+
+  <div class="my-content"></div>
+</md-sidenav-container>
