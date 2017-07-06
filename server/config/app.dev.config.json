@@ -1,0 +1,79 @@
+{
+     "server": {
+            "protocol":"http",
+            "host": "localhost",
+            "port": 3002,
+            "useCertificate": false,
+            "certPath": "src/server/advisen.com2015.crt",
+            "certKey": "src/server/advisen2015.key",
+            "passPhrase":"advisen",
+            "deploymentFolder": "dist"
+     },
+     "api": {
+           "protocol": "http",
+           "host": "dev-vm-websvc.advisen.com",
+           "port": "8080",
+           "endPoints": [{
+               "name": "templateManager",
+               "contracts": [{
+                   "key": "auth",
+                   "value": "authenticate"
+               }]
+           }]
+       },
+       "log": {
+           "level": "debug",
+           "dirName": "log/nodejs",
+           "exceptionFilePath": "_exceptions.log",
+           "datePattern": "yyyy-MM-dd",
+           "prepend": true,
+           "handleExceptions" : true,
+           "humanReadableUnhandledException": true,
+           "json": false,
+           "maxSize": 1048576,
+           "maxFiles": 2000,
+           "colorize": false,
+           "prettyPrint": true,
+           "filePath": "_all_msg.log"
+       },
+       "security":{
+           "isCookie": true,
+           "httpOnly": true,
+           "secure": true,
+           "sameSite": "strict",
+           "ignoreMethods": ["GET"],
+           "cookieParser": "TmN!m9BmqS5x%g8Zdd6p%sqP2G6kft@z5SztHzN##Mc%wk6cL$#?yfUGA=&Xw7rLVB5@WQP7k_+#YWtR2-9u#^&U8fhdDL-Vrjq9%uAt^UfN?ew+SCbcQq&_YZsGmAdx",
+           "headers":[  
+                        {
+                            "name": "X-Powered-By",
+                            "value": "X-Powered-By",
+                            "type": "remove"
+                        },
+                        {
+                            "name": "Content-Security-Policy",
+                            "value": "script-src 'self' *.advisen.com 'unsafe-eval' 'unsafe-inline'; object-src 'self'",
+                            "type": "add"
+                        },
+                        {
+                            "name": "Strict-Transport-Security",
+                            "value": "max-age=31536000; includeSubDomains; preload",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-Frame-Options",
+                            "value": "SAMEORIGIN",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-XSS-Protection",
+                            "value": "1; mode=block",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-Content-Type-Options",
+                            "value": "nosniff",
+                            "type": "add"
+                        }
+                    ]
+       }
+}

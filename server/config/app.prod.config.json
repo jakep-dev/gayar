@@ -1,0 +1,65 @@
+{
+    "server": {
+            "protocol":"http",
+            "host": "localhost",
+            "port": 3000,
+            "useCertificate": false,
+            "certPath": "src/server/advisen.com2015.crt",
+            "certKey": "src/server/advisen2015.key",
+            "passPhrase":"advisen",
+            "deploymentFolder": "dist"
+     },
+     "api": {
+           "protocol": "https",
+           "host": "ws.advisen.com",
+           "port": "443"
+       },
+       "log": {
+           "logLevel": "warn",
+           "maxSize": 1048576,
+           "maxFiles": 2000,
+           "dirName": "/data/logs/nodejs",
+           "filePath": "_all_msg.log",
+           "exceptionFilePath": "_exceptions.log"
+       },
+       "security":{
+           "isCookie": true,
+           "httpOnly": true,
+           "secure": true,
+           "sameSite": "strict",
+           "ignoreMethods": [],
+           "cookieParser": "",
+           "headers":[  
+                        {
+                            "name": "X-Powered-By",
+                            "value": "X-Powered-By",
+                            "type": "remove"
+                        },
+                        {
+                            "name": "Content-Security-Policy",
+                            "value": "script-src 'self' *.advisen.com 'unsafe-eval' 'unsafe-inline'; object-src 'self'",
+                            "type": "add"
+                        },
+                        {
+                            "name": "Strict-Transport-Security",
+                            "value": "max-age=31536000; includeSubDomains; preload",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-Frame-Options",
+                            "value": "SAMEORIGIN",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-XSS-Protection",
+                            "value": "1; mode=block",
+                            "type": "add"
+                        },
+                        {
+                            "name": "X-Content-Type-Options",
+                            "value": "nosniff",
+                            "type": "add"
+                        }
+                    ]
+       }  
+}
