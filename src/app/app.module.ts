@@ -1,3 +1,4 @@
+//Library Components
 import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -5,7 +6,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common'; 
+import { RouterModule } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule  } from '@angular/material';
+
+
+// Application Components
 import { AppComponent } from './app.component';
+import { APP_ROUTES  } from './app.routes';
+
 
 
 @NgModule({
@@ -13,12 +22,15 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule,
+   BrowserModule,
     FormsModule,
     HttpModule,
     CommonModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    FlexLayoutModule,
+    MaterialModule,
+    RouterModule.forRoot(APP_ROUTES)
   ],
   providers: [],
   bootstrap: [AppComponent]
