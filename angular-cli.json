@@ -26,6 +26,7 @@
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
+        "int": "environments/environment.int.ts",
         "prod": "environments/environment.prod.ts"
       }
     }
