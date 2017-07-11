@@ -25,6 +25,7 @@ export abstract class BaseRoute {
                 method: 'GET',
                 port: BaseRoute.apiModel.port
             };
+            
          let handler: any = BaseRoute.apiModel.protocol === 'https' ? https: http;   
          let req = handler.request(options, function(res){
                 res.setEncoding('utf-8');

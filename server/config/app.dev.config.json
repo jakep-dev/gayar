@@ -28,6 +28,14 @@
                          {
                             "name": "getDistributionDataSet",
                             "contract": "cybermetrix/chart/getDistributionDataset"
+                         },
+                         {
+                            "name": "ratePerMillion",
+                            "contract": "cybermetrix/chart/getRatePerMillionDataset"
+                         },
+                         {
+                            "name": "getLimitAdequacy",
+                            "contract": "cybermetrix/chart/getLimitAdequacyDataset"
                          }]
        },
        "log": {
