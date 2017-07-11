@@ -8,8 +8,30 @@ export default class SearchRouter extends BaseRoute {
         this.init();
     }
 
+    //Perform the company search based on searchtype and searchvalue
+    //SearchType = COMP_NAME | COMP_ID | TICKER | DUNS
+    public doCompanySearch(req: Request, res: Response, next: NextFunction){
+        super.PerformGetRequest("companySearch", {
+           'ssnid': req.body.token,
+           'search_type': req.body.searchType,
+           'search_value': req.body.searchValue
+       }, (data)=>{
+           res.send(data);
+       });
+    }
+
+    //Get all available industries
+    public getIndustries(req: Request, res: Response, next: NextFunction){
+        super.PerformGetRequest("getIndustries", {
+           'ssnid': req.body.token
+       }, (data)=>{
+           res.send(data);
+       });
+    }
+    
     init(){
-       
+       this.app.post('/api/search/doCompanySearch', this.doCompanySearch);
+       this.app.post('/api/search/getIndustries', this.getIndustries);
     }
 }
 

@@ -39,6 +39,6 @@ export class App {
     }
     
     private routes(): void {
-        let loginRouter: SearchRouter = new SearchRouter(this.expressApp);
+        let searchRouter: SearchRouter = new SearchRouter(this.expressApp);
     }
 }

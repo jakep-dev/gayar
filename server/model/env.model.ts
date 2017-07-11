@@ -35,13 +35,10 @@ export class ApiModel {
         host: string;
         port: number;
         protocol: string;
-        endPoints: [{
+        endPoints: Array<{
             name: string;
-            contracts: [{
-                key: string;
-                value: string;
-            }]
-        }]
+            contract: string;
+        }>
 }
 
 export class SecurityModel {

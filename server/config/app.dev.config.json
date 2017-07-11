@@ -2,7 +2,7 @@
      "server": {
             "protocol":"http",
             "host": "localhost",
-            "port": 3002,
+            "port": 3000,
             "useCertificate": false,
             "certPath": "src/server/advisen.com2015.crt",
             "certKey": "src/server/advisen2015.key",
@@ -14,12 +14,21 @@
            "host": "dev-vm-websvc.advisen.com",
            "port": "8080",
            "endPoints": [{
-               "name": "templateManager",
-               "contracts": [{
-                   "key": "auth",
-                   "value": "authenticate"
-               }]
-           }]
+                            "name": "companySearch",
+                            "contract": "cybermetrix/util/companySearch"
+                         },
+                         {
+                            "name": "revenueRangeList",
+                            "contract": "cybermetrix/util/getRangeList"
+                         },
+                         {
+                            "name": "getIndustries",
+                            "contract": "cybermetrix/util/getIndustries"
+                         },
+                         {
+                            "name": "getDistributionDataSet",
+                            "contract": "cybermetrix/chart/getDistributionDataset"
+                         }]
        },
        "log": {
            "level": "debug",

@@ -46,6 +46,10 @@ export class EnvConfig {
         return EnvConfig.envConfigModel.Security.headers;
     }
 
+    static getContractByName(name: string): string{
+        return EnvConfig.envConfigModel.Api.endPoints.find(f=>f.name.toUpperCase() === name.toUpperCase()).contract;
+    }
+
 
     //Load the corresponding environment file
     private loadConfiguration(): void{
