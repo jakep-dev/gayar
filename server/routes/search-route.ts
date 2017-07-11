@@ -28,10 +28,10 @@ export default class SearchRouter extends BaseRoute {
            res.send(data);
        });
     }
-    
+
     init(){
-       this.app.post('/api/search/doCompanySearch', this.doCompanySearch);
-       this.app.post('/api/search/getIndustries', this.getIndustries);
+       this.app.post('/api/doCompanySearch', this.doCompanySearch);
+       this.app.post('/api/getIndustries', this.getIndustries);
     }
 }
 
