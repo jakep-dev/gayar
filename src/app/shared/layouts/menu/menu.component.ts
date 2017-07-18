@@ -8,14 +8,36 @@ import { Component, OnInit } from '@angular/core';
 export class MenuComponent implements OnInit {
   private breadCrumbName: string;
   private searchCompanyName: string;
+  private showShortMenu: boolean = true;
+  private sideNavMode: string = 'side';
   constructor() { }
 
   ngOnInit() {
     this.breadCrumbName = "Dashboard";
+    this.sideNavMode = "side";
   }
 
   onMenu(name) {
     this.breadCrumbName = name;
   }
 
+  toggleMenu(){
+    this.showShortMenu = !this.showShortMenu;
+  }
+
+  shortMenuMouseOver(){
+    console.log('Short Menu Mouse Over');
+    this.sideNavMode = "over";
+    if(this.sideNavMode){
+      this.showShortMenu = false;
+    }
+  }
+
+  shortMenuMouseLeave(){
+    console.log(this.showShortMenu)
+    if(!this.showShortMenu && this.sideNavMode === "over"){
+      this.showShortMenu = true;
+      this.sideNavMode = "side";
+    }
+  }
 }

@@ -9,6 +9,12 @@ import { ACCORDION_ANIMATION, SPLIT_ANIMATION } from '../animations/animations';
 })  
 export class TileComponent implements OnInit {
   @Input() title: string;
+  @Input() isSplittable: boolean = false;
+  @Input() isAccordion: boolean = true;
+  @Input() isFlippable: boolean = false;
+  @Input() isFullScreen: boolean = true;
+
+
   private isContent: boolean = true;
   private accordionState: string = "up";
 

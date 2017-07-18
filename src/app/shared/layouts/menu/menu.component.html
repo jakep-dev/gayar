@@ -1,56 +1,99 @@
 <md-sidenav-container>
-  <md-sidenav #sidenav>
-    <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-        <span>Cyber Suite</span>
-    </md-toolbar>
+  <md-sidenav #sidenav mode="{{sideNavMode}}" opened="true">
+    <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
+          <span>Cyber Suite</span>
+      </md-toolbar>
 
-    <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="background: primary">
-        <div fxFlexFill> 
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">account_circle</md-icon>
-              <span>Sherin Dharmarajan</span>
-          </button>
-        </div>
-        <div fxFlexFill>  
-          <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard'); sidenav.close()" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">dashboard</md-icon>
-              <span>Dashboard</span>
-          </button>
-        </div>
-        <div fxFlexFill> 
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">wifi</md-icon>
-              <span>Frequency</span>
-          </button>
-        </div>
-        <div fxFlexFill> 
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">gamepad</md-icon>
-              <span>Impact</span>
-          </button>
-        </div>
-        <div fxFlexFill> 
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark'); sidenav.close()" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">insert_chart</md-icon>
-              <span>Benchmark</span>
-          </button>
-        </div>
-        <div fxFlexFill> 
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-              <md-icon class="md-18">pie_chart</md-icon>
-              <span>Report</span>
-          </button>
-        </div>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">account_circle</md-icon>
+                <span>Sherin Dharmarajan</span>
+            </button>
+          </div>
+          <div fxFlexFill>  
+            <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">dashboard</md-icon>
+                <span>Dashboard</span>
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">wifi</md-icon>
+                <span>Frequency</span>
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">gamepad</md-icon>
+                <span>Impact</span>
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">insert_chart</md-icon>
+                <span>Benchmark</span>
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">pie_chart</md-icon>
+                <span>Report</span>
+            </button>
+          </div>
+      </div>
+    </div>
+    <div *ngIf="showShortMenu" style="width: 60px; max-width: 60px;" (mouseover)="shortMenuMouseOver()"  >
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
+          <md-icon class="md-18">hourglass_empty</md-icon>
+      </md-toolbar>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">account_circle</md-icon>
+            </button>
+          </div>
+          <div fxFlexFill>  
+            <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">dashboard</md-icon>
+                
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">wifi</md-icon>
+               
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">gamepad</md-icon>
+                
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">insert_chart</md-icon>
+                
+            </button>
+          </div>
+          <div fxFlexFill> 
+            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">pie_chart</md-icon>
+               
+            </button>
+          </div>
+      </div>
     </div>
   </md-sidenav>
-  
   <md-toolbar color="accent" class="top-menu">
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <div>
-          <button md-icon-button (click)="sidenav.open()">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
+        <div >
+          <button md-icon-button (click)="toggleMenu();" fxHide.lt-sm="true">
             <md-icon class="md-24">menu</md-icon>
           </button>
-          <span class="bread-crumb">{{breadCrumbName}}</span>
+          <span class="bread-crumb" fxHide.lt-sm="true">{{breadCrumbName}}</span>
         </div>
         <div>
           <div fxFlex fxLayout="row" fxLayoutAlign="end center">
@@ -63,7 +106,7 @@
     </div>
   </md-toolbar>
 
-  <div class="my-content">
+  <div class="app-content">
     <router-outlet></router-outlet>
   </div>
 </md-sidenav-container>

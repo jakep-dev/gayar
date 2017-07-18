@@ -9,6 +9,7 @@ import { FADE_ANIMATION} from '../shared/animations/animations';
   host: { '[@routerTransition]': '' }
 })
 export class DashboardComponent implements OnInit {
+
   constructor() { }
 
   ngOnInit() {
