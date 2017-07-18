@@ -10,21 +10,25 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule  } from '@angular/material';
 
-
 // Application Components
+import { TileComponent } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
-import { DashboardComponent } from './dashboard/dashboard.component';
-
+import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
+import { BLOCK_BENCHMARK } from './benchmark/benchmark';
+import { MenuComponent } from './shared/layouts/menu/menu.component';
 
 
 @NgModule({
   declarations: [
+    TileComponent,
     AppComponent,
-    DashboardComponent
+    BLOCK_DASHBOARD,
+    BLOCK_BENCHMARK,
+    MenuComponent
   ],
   imports: [
-   BrowserModule,
+    BrowserModule,
     FormsModule,
     HttpModule,
     CommonModule,
