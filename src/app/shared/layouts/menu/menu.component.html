@@ -6,37 +6,37 @@
 
     <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="background: primary">
         <div fxFlexFill> 
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">account_circle</md-icon>
               <span>Sherin Dharmarajan</span>
           </button>
         </div>
         <div fxFlexFill>  
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard'); sidenav.close()" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">dashboard</md-icon>
               <span>Dashboard</span>
           </button>
         </div>
         <div fxFlexFill> 
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">wifi</md-icon>
               <span>Frequency</span>
           </button>
         </div>
         <div fxFlexFill> 
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">gamepad</md-icon>
               <span>Impact</span>
           </button>
         </div>
         <div fxFlexFill> 
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark'); sidenav.close()" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">insert_chart</md-icon>
               <span>Benchmark</span>
           </button>
         </div>
         <div fxFlexFill> 
-          <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">pie_chart</md-icon>
               <span>Report</span>
           </button>
@@ -45,9 +45,22 @@
   </md-sidenav>
   
   <md-toolbar color="accent" class="top-menu">
-    <button md-icon-button (click)="sidenav.open()">
-        <md-icon class="md-24">menu</md-icon>
-    </button>
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <button md-icon-button (click)="sidenav.open()">
+            <md-icon class="md-24">menu</md-icon>
+          </button>
+          <span class="bread-crumb">{{breadCrumbName}}</span>
+        </div>
+        <div>
+          <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+             <span class="bread-crumb">{{searchCompanyName}}</span>
+             <button md-icon-button><md-icon>search</md-icon></button>
+             <button md-icon-button><md-icon>home</md-icon></button>
+             <button md-icon-button><md-icon>pie_chart</md-icon></button>
+          </div>
+        </div>
+    </div>
   </md-toolbar>
 
   <div class="my-content">

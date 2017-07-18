@@ -6,10 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-
+  private breadCrumbName: string;
+  private searchCompanyName: string;
   constructor() { }
 
   ngOnInit() {
+    this.breadCrumbName = "Dashboard";
+  }
+
+  onMenu(name) {
+    this.breadCrumbName = name;
   }
 
 }
