@@ -16,16 +16,20 @@
                 <div fxLayout="column" fxLayoutAlign="center start">
                   <button md-button (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon> Full Screen</button>
                   <button md-button (click)="toggleSplit($event)"><md-icon>filter_none</md-icon> Split</button>
-                  <button md-button (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon>Flip</button>
-                  <button md-button (click)="toggleContent($event)"><md-icon>expand_less</md-icon>Collapse</button>
+                  <button md-button (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon> Flip</button>
+                  <button md-button  (click)="toggleContent($event)">
+                    <md-icon [@accordionAnimation]="accordionState">expand_less</md-icon>
+                    <span *ngIf="isContent">Collapse</span>
+                    <span *ngIf="!isContent">Expand</span>
+                   </button>
                 </div>  
               </md-menu>
           </div>
       </div> 
   </md-toolbar>
   <div class="tile-content"  [@accordionContentAnimation]="accordionState">
-    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="space-around center"  fxLayout.lt-md="column">
-      <ng-content select="[front]" *ngIf="!isFlipped || isSplitted" [@splitAnimation]="splitState">
+    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="space-around center" [@splitAnimation]="splitState" fxLayout.lt-md="column">
+      <ng-content select="[front]" *ngIf="!isFlipped || isSplitted" >
       
       </ng-content>
 

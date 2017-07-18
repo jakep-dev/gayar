@@ -4,7 +4,7 @@
         <span>Cyber Suite</span>
     </md-toolbar>
 
-    <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+    <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="background: primary">
         <div fxFlexFill> 
           <button md-button (click)="onClick" fxLayout="row" fxLayoutAlign="start center">
               <md-icon class="md-18">account_circle</md-icon>
@@ -44,13 +44,13 @@
     </div>
   </md-sidenav>
   
-  <md-toolbar color="primary">
+  <md-toolbar color="accent" class="top-menu">
     <button md-icon-button (click)="sidenav.open()">
         <md-icon class="md-24">menu</md-icon>
     </button>
   </md-toolbar>
 
   <div class="my-content">
-    
+    <router-outlet></router-outlet>
   </div>
 </md-sidenav-container>

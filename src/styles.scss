@@ -2,8 +2,11 @@
 @import "assets/theme/theme.icon";
 @import "assets/theme/app.theme";
 
+$toolbar-height: 48px;
+
 body{
     font-family: "Helvetica Neue", Arial, sans-serif;
+    background: lightgray
 }
 
 html, body, material-app, md-sidenav-container, .my-content {
@@ -14,4 +17,17 @@ html, body, material-app, md-sidenav-container, .my-content {
 
 .ng-draggable {
   cursor: move;
+}
+
+
+.mat-toolbar-row {
+    height: $toolbar-height;
+    min-height: $toolbar-height;
+    max-height: $toolbar-height;
+}
+
+.mat-toolbar{
+  height: $toolbar-height !important;
+  min-height: $toolbar-height !important;
+  max-height: $toolbar-height !important;
 }

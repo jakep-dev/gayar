@@ -3,7 +3,7 @@
 @include mat-core();
 
 $cyber-app-primary: mat-palette($mat-blue-grey, 900);
-$cyber-app-accent: mat-palette($mat-grey, A200);
+$cyber-app-accent: mat-palette($mat-grey, 100);
 $cyber-app-warn: mat-palette($mat-amber, A200, A100, A400);
 $cyber-app-theme: mat-light-theme($cyber-app-primary, $cyber-app-accent, $cyber-app-warn);
 

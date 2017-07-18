@@ -34,7 +34,7 @@ export class TileComponent implements OnInit {
       this.isFlipped = !this.isFlipped;
       this.isSplitted = false;
   }
-
+  
   toggleFullScreen(){
 
   }
