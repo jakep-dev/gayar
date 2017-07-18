@@ -33,7 +33,6 @@ import { MenuComponent } from './shared/layouts/menu/menu.component';
     HttpModule,
     CommonModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule,
     FlexLayoutModule,
     MaterialModule,
     RouterModule.forRoot(APP_ROUTES)
