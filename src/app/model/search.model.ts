@@ -5,6 +5,11 @@ export interface SearchModel {
    resp: ResponseModel
 }
 
+export interface IndustryResponseModel{
+    industries: Array<IndustryModel>,
+    resp: ResponseModel
+}
+
 export interface CompanyModel {
     companyId: number;
     ticker: string;
@@ -16,6 +21,16 @@ export interface CompanyModel {
     country: string;
     topLevel: string;
     status: string;
+}
+
+export interface SearchCriteriaModel {
+    type: string;
+    value: string;
+    revenue: string;
+    industry: string;
+    premium: string;
+    retention: string;
+    limit: string;
 }
 
 export interface IndustryModel {

@@ -3,12 +3,13 @@ import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import  { Subject } from 'rxjs/Subject';
-import { SearchModel, IndustryModel, SearchByModel } from 'app/model/model';
+import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, SearchCriteriaModel} from 'app/model/model';
 
 
 @Injectable()
 export class SearchService extends BaseService {
-    public companyId: number;
+    public selectedCompany: CompanyModel;
+    public searchCriteria: SearchCriteriaModel;
 
     constructor(http: Http) {
         super(http);
@@ -35,9 +36,9 @@ export class SearchService extends BaseService {
         }
     }
 
-    public getIndustry(): Observable<IndustryModel>{
+    public getIndustry(): Observable<IndustryResponseModel>{
         try{
-           return super.Post<IndustryModel>('/api/getIndustries', {});    
+           return super.Post<IndustryResponseModel>('/api/getIndustries', {});    
         }
         catch(e){
 
@@ -47,26 +48,26 @@ export class SearchService extends BaseService {
 
 const SearchBy: Array<SearchByModel> = [{
     id: 1,
-    description: 'ADVISEN',
+    description: 'Advisen Number',
     type: 'SEARCH_BY_COMP_ID'
 },
 {
     id: 2,
-    description: 'COMPANY NAME',
+    description: 'Company Name',
     type: 'SEARCH_BY_COMP_NAME'
 },
 {
     id: 3,
-    description: 'DUNS',
+    description: 'Duns',
     type: 'SEARCH_BY_DUNS'
 },
 {
     id: 4,
-    description: 'TICKER',
+    description: 'Ticker',
     type: 'SEARCH_BY_TICKER'
 },
 {
     id: 5,
-    description: 'MANUAL INPUT',
+    description: 'Manual Input',
     type: 'SEARCH_BY_MANUAL_INPUT'
 }];

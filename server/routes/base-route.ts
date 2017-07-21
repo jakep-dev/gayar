@@ -41,7 +41,6 @@ export abstract class BaseRoute {
                 });
 
                 req.on('error', (e) => {
-                    console.log(e);
                     Logger.error(e);
                 });
          });

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService } from '../services/services';
-import { SearchByModel, SearchModel, CompanyModel } from '../model/model';
+import { Router } from '@angular/router';
 import {DataSource} from '@angular/cdk';
+import { SearchService } from '../services/services';
+import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -15,71 +16,104 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  selectedSearchBy: number = 2;
-  selectedSearchType: string;
-  selectedSearchValue: string;
-  searchValuePlaceHolder: string;
-  selectedIndustry: string;
+  private selectedSearchBy: number = 2;
+  private selectedSearchType: string;
+  private selectedSearchValue: string;
+  private searchValuePlaceHolder: string;
+  private selectedIndustry: string;
+  private selectedPremium: string;
+  private selectedRetention: string;
+  private selectedLimit: string;
+  private selectedRevenue: string;
+  private isManual: boolean;
   private searchByList: Array<SearchByModel>;
+  private industryList: Array<IndustryModel>;
+  private displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
+  private searchDatabase = new SearchDatabase();
+  private dataSource: SearchDataSource | null;
+  private searchResult: Array<CompanyModel>;
 
-  displayedColumns = ['depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
-  searchDatabase = new SearchDatabase();
-  dataSource: SearchDataSource | null;
-
-  constructor(private searchService: SearchService) { }
+  constructor(private searchService: SearchService, private router: Router) { }
 
   ngOnInit() {
-    this.loadSearchBy();
+     this.loadSearchBy();
+     this.loadIndustry();
      this.dataSource = new SearchDataSource(this.searchDatabase);
+  }
+
+  selectedRow(companyId){
+    let company: CompanyModel =  this.searchResult.find(f=>f.companyId === companyId);
+    this.searchService.selectedCompany = company;
   }
 
   calcPlaceHolderForSearchValue(){
     let searchByModel: SearchByModel =  this.searchByList.find(f=>f.id === this.selectedSearchBy);
-    this.searchValuePlaceHolder = `ENTER ${searchByModel.description}`;
+    this.searchValuePlaceHolder = `Enter ${searchByModel.description}`;
     this.selectedSearchType = searchByModel.type;
+    this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
+    if(this.isManual){
+      this.searchDatabase.clear();
+      this.searchResult = null;
+      
+    }
   }
 
   doSearchByChange(){
+    this.selectedSearchValue = '';
     this.calcPlaceHolderForSearchValue();
   }
 
+  doAssessment(){
+    this.searchService.searchCriteria = {
+      type: this.selectedSearchType,
+      value: this.selectedSearchValue,
+      industry: this.selectedIndustry,
+      revenue: this.selectedRevenue,
+      limit: this.selectedLimit,
+      premium: this.selectedPremium,
+      retention: this.selectedRetention
+    };
+    this.router.navigate(['/dashboard']);
+  }
+
+  doReport(){
+    this.router.navigate(['/report']);
+  }
+
   doSearch(){
+    this.searchDatabase.clear();
     this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
+       this.searchResult = res.companies;
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
        this.searchDatabase.dataChange.next(copiedData);
     });
-    console.log(this.searchDatabase.data);
-  }
-
-  getData(){
-    return {
-            companyId: 0,
-            ticker: '',
-            exchange: '',
-            depthScore: 2,
-            companyName: '',
-            city: '',
-            state: '',
-            country: '',
-            topLevel: '',
-            status: ''
-        };
   }
 
   loadSearchBy(){
     this.searchService.getSearchBy().subscribe(res=>{
-      this.searchByList = res;
+       this.searchByList = res;
        this.calcPlaceHolderForSearchValue();
     });
   }
 
+  loadIndustry(){
+    this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
+       this.industryList = res.industries;
+       console.log(res);
+    });
+  }
 }
 
 export class SearchDatabase {
    dataChange: BehaviorSubject<Array<CompanyModel>> = new BehaviorSubject<Array<CompanyModel>>([]);
    get data(): Array<CompanyModel> { return this.dataChange.value; }
-
+   get totalRecord(): number { return this.dataChange.value.length; }
+   
+   clear(){
+     this.dataChange.value.splice(0, this.totalRecord);
+   }
+   
    constructor(){}
 }
 

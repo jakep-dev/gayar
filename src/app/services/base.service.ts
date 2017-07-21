@@ -14,7 +14,6 @@ export abstract class BaseService {
     public Post<T>(endPoint: string, data: any): Observable<T>{
        return this.http.post(endPoint, data, this.headers)
                  .map((res: Response)=>{
-                     console.log(res.json());
                      return res.json() as T
                  })
                  .catch(this.handleException);
