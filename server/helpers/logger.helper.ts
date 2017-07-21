@@ -65,7 +65,7 @@ export class Logger {
     private handleLogger(){
         Logger.logger = new winston.Logger({
             transports: [
-                new (winston.transports.Console)(),
+                // new (winston.transports.Console)(),
                 new (winston.transports.DailyRotateFile)({ 
                     level: this.logModel.level,
                     dirname: this.logModel.dirName,

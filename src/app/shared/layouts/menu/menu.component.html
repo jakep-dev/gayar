@@ -44,7 +44,7 @@
           </div>
       </div>
     </div>
-    <div *ngIf="showShortMenu" style="width: 60px; max-width: 60px;" (mouseover)="shortMenuMouseOver()"  >
+    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;" (mouseover)="shortMenuMouseOver()"  >
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
           <md-icon class="md-18">hourglass_empty</md-icon>
       </md-toolbar>
@@ -90,15 +90,15 @@
   <md-toolbar color="accent" class="top-menu">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
         <div >
-          <button md-icon-button (click)="toggleMenu();" fxHide.lt-sm="true">
+          <button md-icon-button (click)="toggleMenu();">
             <md-icon class="md-24">menu</md-icon>
           </button>
-          <span class="bread-crumb" fxHide.lt-sm="true">{{breadCrumbName}}</span>
+          <span class="bread-crumb">{{breadCrumbName}}</span>
         </div>
         <div>
           <div fxFlex fxLayout="row" fxLayoutAlign="end center">
-             <span class="bread-crumb">{{searchCompanyName}}</span>
-             <button md-icon-button><md-icon>search</md-icon></button>
+             <span class="bread-crumb" >{{searchCompanyName}}</span>
+             <button md-icon-button routerLink="/search" (click)="onMenu('Search');"><md-icon>search</md-icon></button>
              <button md-icon-button><md-icon>home</md-icon></button>
              <button md-icon-button><md-icon>pie_chart</md-icon></button>
           </div>

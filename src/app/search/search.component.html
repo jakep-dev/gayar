@@ -1,0 +1,112 @@
+
+  <app-tile [title]="'SELECT COMPANY'">
+    <div header>
+        <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
+    </div>
+
+    <div front fxLayout="column" fxFlex fxLayoutAlign="center start" fxLayoutGap="10px" class="padding-left-10 padding-right-10">
+        <div fxLayout="row"  fxLayout.xs="column" fxLayoutAlign.xs="center start" fxLayoutGap.xs="10px" fxLayoutAlign="start center" fxFlex="100" style="width: 100%" fxLayoutGap="40px">
+          <md-select fxFlex="20"  placeholder="Select search by" [(ngModel)]="selectedSearchBy" (ngModelChange)="doSearchByChange()" floatPlaceholder="never">
+              <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
+          </md-select>
+            
+          <md-input-container fxFlex="80" floatPlaceholder="never" dividerColor="primary"  align="start" >
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus  type="text" placeholder="{{searchValuePlaceHolder}}">
+          </md-input-container>
+
+          <button md-raised-button (click)="doSearch()" color="accent">
+            Search
+          </button>
+        </div>
+        <div class="width-100">
+           <md-table #table [dataSource]="dataSource">
+            
+               <ng-container cdkColumnDef="depthScore">
+                <md-header-cell  class="table-header" *cdkHeaderCellDef> Data Depth </md-header-cell>
+                <md-cell  *cdkCellDef="let row"> {{row.depthScore}} </md-cell>
+              </ng-container>
+
+              <!-- Progress Column -->
+              <ng-container cdkColumnDef="companyName">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>Name </md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.companyName}} </md-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container  cdkColumnDef="city">
+                <md-header-cell class="table-header" *cdkHeaderCellDef> City </md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.city}} </md-cell>
+              </ng-container>
+
+              <!-- Color Column -->
+              <ng-container cdkColumnDef="state">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>State</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
+              </ng-container>
+
+               <!-- Color Column -->
+              <ng-container cdkColumnDef="country">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>Country</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.country}} </md-cell>
+              </ng-container>
+
+               <!-- Color Column -->
+              <ng-container cdkColumnDef="ticker">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>Ticker</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.ticker}} </md-cell>
+              </ng-container>
+
+               <!-- Color Column -->
+              <ng-container cdkColumnDef="exchange">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>Exchange</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.exchange}} </md-cell>
+              </ng-container>
+
+               <!-- Color Column -->
+              <ng-container cdkColumnDef="topLevel">
+                <md-header-cell class="table-header" *cdkHeaderCellDef>Top Level Company</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.topLevel}} </md-cell>
+              </ng-container>
+
+
+              <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+              <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+              
+            </md-table>
+        </div>
+    </div>
+  </app-tile>
+
+  <app-tile [title]="'PROGRAM STRUCTURE'">
+      <div header>
+          <span class="optional" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Optional)</span>
+      </div>
+      <div front fxLayout="row" fxFlex  class="padding-left-10">
+          <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
+              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
+                <input mdInput [(ngModel)]="selectedPremium" autofocus  type="text" placeholder="Enter Premium">
+             </md-input-container>
+
+             <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
+                <input mdInput [(ngModel)]="selectedRetention" autofocus  type="text" placeholder="Enter Retention">
+             </md-input-container>
+
+             <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
+                <input mdInput [(ngModel)]="selectedLimit" autofocus  type="text" placeholder="Enter Limit">
+             </md-input-container>
+          </div>
+      </div>
+  </app-tile>
+
+  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
+    <button md-raised-button (click)="onClick" color="accent">
+      <md-icon>speaker_notes</md-icon>
+      Assessment
+    </button>
+    
+    <button md-raised-button (click)="onClick" color="accent">
+      <md-icon>pie_chart</md-icon>
+      Report
+    </button>
+  </div>
+

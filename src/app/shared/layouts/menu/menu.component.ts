@@ -26,7 +26,6 @@ export class MenuComponent implements OnInit {
   }
 
   shortMenuMouseOver(){
-    console.log('Short Menu Mouse Over');
     this.sideNavMode = "over";
     if(this.sideNavMode){
       this.showShortMenu = false;
@@ -34,7 +33,6 @@ export class MenuComponent implements OnInit {
   }
 
   shortMenuMouseLeave(){
-    console.log(this.showShortMenu)
     if(!this.showShortMenu && this.sideNavMode === "over"){
       this.showShortMenu = true;
       this.sideNavMode = "side";

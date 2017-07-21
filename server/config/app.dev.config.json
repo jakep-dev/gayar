@@ -11,31 +11,31 @@
      },
      "api": {
            "protocol": "http",
-           "host": "dev-vm-websvc.advisen.com",
+           "host": "192.168.100.225",
            "port": "8080",
            "endPoints": [{
                             "name": "companySearch",
-                            "contract": "cybermetrix/util/companySearch"
+                            "contract": "/advwebservice/cybermetrix/util/companySearch"
                          },
                          {
                             "name": "revenueRangeList",
-                            "contract": "cybermetrix/util/getRangeList"
+                            "contract": "/advwebservice/cybermetrix/util/getRangeList"
                          },
                          {
                             "name": "getIndustries",
-                            "contract": "cybermetrix/util/getIndustries"
+                            "contract": "/advwebservice/cybermetrix/util/getIndustries"
                          },
                          {
                             "name": "getDistributionDataSet",
-                            "contract": "cybermetrix/chart/getDistributionDataset"
+                            "contract": "/advwebservice/cybermetrix/chart/getDistributionDataset"
                          },
                          {
                             "name": "ratePerMillion",
-                            "contract": "cybermetrix/chart/getRatePerMillionDataset"
+                            "contract": "/advwebservice/cybermetrix/chart/getRatePerMillionDataset"
                          },
                          {
                             "name": "getLimitAdequacy",
-                            "contract": "cybermetrix/chart/getLimitAdequacyDataset"
+                            "contract": "/advwebservice/cybermetrix/chart/getLimitAdequacyDataset"
                          }]
        },
        "log": {

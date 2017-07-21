@@ -8,6 +8,10 @@
     border-bottom-left-radius: 4px;
 }
 
+.tile-title{
+    font-size: 13px;
+}
+
 .tile-container{
     padding: 5px;
 }

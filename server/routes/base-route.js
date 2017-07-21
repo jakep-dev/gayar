@@ -32,6 +32,7 @@ var BaseRoute = (function () {
                 success(responseObject);
             });
             req.on('error', function (e) {
+                console.log(e);
                 helpers_1.Logger.error(e);
             });
         });

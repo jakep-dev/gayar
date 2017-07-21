@@ -1,7 +1,8 @@
 <div class="tile-container">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
-          <div>{{title}}</div>
+          <div class="tile-title">{{title}}</div>
+          <ng-content select="[header]" ></ng-content>
           <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.xs]="true">
             <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
@@ -28,8 +29,8 @@
       </div> 
   </md-toolbar>
   <div class="tile-content"  [@accordionContentAnimation]="accordionState">
-    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="space-around center" [@splitAnimation]="splitState" fxLayout.lt-md="column">
-      <ng-content select="[front]" *ngIf="!isFlipped || isSplitted" >
+    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
+      <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
       
       </ng-content>
 

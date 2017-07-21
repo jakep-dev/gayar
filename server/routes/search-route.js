@@ -24,8 +24,10 @@ var SearchRouter = (function (_super) {
     //SearchType = COMP_NAME | COMP_ID | TICKER | DUNS
     SearchRouter.prototype.doCompanySearch = function (req, res, next) {
         try {
+            console.log(req.body.searchType);
+            console.log(req.body.searchValue);
             _super.prototype.PerformGetRequest.call(this, "companySearch", {
-                'ssnid': req.body.token,
+                'ssnid': 'testtoken',
                 'search_type': req.body.searchType,
                 'search_value': req.body.searchValue
             }, function (data) {

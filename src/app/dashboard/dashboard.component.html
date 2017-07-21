@@ -1,14 +1,15 @@
 <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-  <app-tile fxFlex [isSplittable]="true" [isFlippable]="true">
+  <app-tile fxFlex [title]="'Tile 1'" [isSplittable]="true" 
+  [isFlippable]="true">
     <div front>
-      <app-impact></app-impact>
+      Chart 1 Place Holder
     </div>
     <div back>
       Chart 2 Place Holder
     </div>
   </app-tile>
 
-  <app-tile fxFlex>
+  <app-tile fxFlex [title]="'Tile 2'" >
     <div front>
       Chart 1 Place Holder
     </div>

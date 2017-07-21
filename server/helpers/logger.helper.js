@@ -52,7 +52,7 @@ var Logger = (function () {
     Logger.prototype.handleLogger = function () {
         Logger.logger = new winston.Logger({
             transports: [
-                new (winston.transports.Console)(),
+                // new (winston.transports.Console)(),
                 new (winston.transports.DailyRotateFile)({
                     level: this.logModel.level,
                     dirname: this.logModel.dirName,

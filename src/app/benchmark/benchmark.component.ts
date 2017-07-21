@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from '../shared/animations/animations';
+import { SearchService } from '../services/services';
 
 @Component({
   selector: 'app-benchmark',
@@ -10,9 +11,10 @@ import { FADE_ANIMATION} from '../shared/animations/animations';
 })
 export class BenchmarkComponent implements OnInit {
 
-  constructor() { }
+  constructor(private searchService: SearchService) { }
 
   ngOnInit() {
+      
   }
 
 }

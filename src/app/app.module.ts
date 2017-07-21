@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule  } from '@angular/material';
+import { CdkTableModule } from '@angular/cdk';
 
 // Application Components
 import { TileComponent } from './shared/shared';
@@ -17,6 +18,9 @@ import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
+import { SearchComponent } from './search/search.component';
+import { BenchmarkService, SearchService } from './services/services';
+import { TableComponent } from './shared/table/table.component';
 
 
 @NgModule({
@@ -25,7 +29,9 @@ import { MenuComponent } from './shared/layouts/menu/menu.component';
     AppComponent,
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
-    MenuComponent
+    MenuComponent,
+    SearchComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,
@@ -33,11 +39,13 @@ import { MenuComponent } from './shared/layouts/menu/menu.component';
     HttpModule,
     CommonModule,
     BrowserAnimationsModule,
+    NoopAnimationsModule,
     FlexLayoutModule,
     MaterialModule,
+    CdkTableModule,
     RouterModule.forRoot(APP_ROUTES)
   ],
-  providers: [],
+  providers: [ BenchmarkService, SearchService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

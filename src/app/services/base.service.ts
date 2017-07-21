@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers } from '@angular/http';
+import 'rxjs/add/operator/catch';
 
 export abstract class BaseService {
     private headers: Headers = new Headers({'Content-Type': 'application/json'});
@@ -13,7 +14,8 @@ export abstract class BaseService {
     public Post<T>(endPoint: string, data: any): Observable<T>{
        return this.http.post(endPoint, data, this.headers)
                  .map((res: Response)=>{
-                     return res.json().data as T
+                     console.log(res.json());
+                     return res.json() as T
                  })
                  .catch(this.handleException);
     }
@@ -25,7 +27,7 @@ export abstract class BaseService {
              
        return this.http.get(path, this.headers)
                  .map((res: Response)=>{
-                     return res.json().data as T
+                     return res.json() as T
                  })
                  .catch(this.handleException);
     }
@@ -33,7 +35,7 @@ export abstract class BaseService {
     public Put<T>(endPoint: string, data: any): Observable<T>{
        return this.http.put(endPoint, JSON.stringify(data), this.headers)
                  .map((res: Response)=>{
-                     return res.json().data as T
+                     return res.json() as T
                  })
                  .catch(this.handleException);
     }
@@ -42,7 +44,7 @@ export abstract class BaseService {
         let path = `${endPoint}/${data}`;
         return this.http.delete(path, this.headers)
                  .map((res: Response)=>{
-                     return res.json().data as T
+                     return res.json() as T
                  })
                  .catch(this.handleException);
     }
