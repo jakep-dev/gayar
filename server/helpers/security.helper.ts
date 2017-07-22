@@ -27,6 +27,7 @@ export class Security{
 
     private setupHeader(): void {
         this.express.use(cookieParser(this.securityModel.cookieParser));
+        this.express.set('trust proxy');
         this.express.use(this.getCsurfProtection(this.securityModel.isCookie, this.securityModel.httpOnly, this.securityModel.secure, this.securityModel.sameSite, this.securityModel.ignoreMethods));
         this.express.use(this.manageToken);
         this.express.use(this.manageTransactionId);
@@ -92,10 +93,10 @@ export class Security{
         let isHttps: boolean = this.serverModel.useCertificate;
         let server: any;
         if(isHttps){
-            server = https.createServer(this.getHttpsOptions, this.express).listen(this.serverModel.port, this.serverModel.host);
+            server = https.createServer(this.getHttpsOptions, this.express).listen(this.serverModel.port);
         }
         else{
-            server = http.createServer(this.express).listen(this.serverModel.port, this.serverModel.host);
+            server = http.createServer(this.express).listen(this.serverModel.port);
         }
         this.logServerDetails();
     }
