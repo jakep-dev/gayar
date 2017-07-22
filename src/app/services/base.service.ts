@@ -1,10 +1,11 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, RequestOptionsArgs } from '@angular/http';
 import 'rxjs/add/operator/catch';
 
 export abstract class BaseService {
     private headers: Headers = new Headers({'Content-Type': 'application/json'});
+    private requestOptions: RequestOptionsArgs = { headers: this.headers };
 
     constructor(private http: Http){
 
@@ -12,10 +13,10 @@ export abstract class BaseService {
     
     //Perform the post request operation
     public Post<T>(endPoint: string, data: any): Observable<T>{
-       return this.http.post(endPoint, data, this.headers)
+       return this.http.post(endPoint, data, this.requestOptions)
                  .map((res: Response)=>{
                      console.log(res.json());
-                     return res.json() as T
+                     return res.json() as T;
                  })
                  .catch(this.handleException);
     }
@@ -25,31 +26,31 @@ export abstract class BaseService {
         let dataString:string = JSON.stringify(data),
              path = `${endPoint}?${JSON.stringify(data)}`;
              
-       return this.http.get(path, this.headers)
+       return this.http.get(path, this.requestOptions)
                  .map((res: Response)=>{
-                     return res.json() as T
+                     return res.json() as T;
                  })
                  .catch(this.handleException);
     }
 
     public Put<T>(endPoint: string, data: any): Observable<T>{
-       return this.http.put(endPoint, JSON.stringify(data), this.headers)
+       return this.http.put(endPoint, JSON.stringify(data), this.requestOptions)
                  .map((res: Response)=>{
-                     return res.json() as T
+                     return res.json() as T;
                  })
                  .catch(this.handleException);
     }
 
     public Delete<T>(endPoint: string, data: any): Observable<T>{
         let path = `${endPoint}/${data}`;
-        return this.http.delete(path, this.headers)
+        return this.http.delete(path, this.requestOptions)
                  .map((res: Response)=>{
                      return res.json() as T
                  })
                  .catch(this.handleException);
     }
 
-    private handleException(error: Response | any): any{
+    private handleException(error: Response | any){
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';
