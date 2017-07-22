@@ -2,7 +2,7 @@
      "server": {
             "protocol":"http",
             "host": "localhost",
-            "port": 3000,
+            "port": 3002,
             "useCertificate": false,
             "certPath": "src/server/advisen.com2015.crt",
             "certKey": "src/server/advisen2015.key",
