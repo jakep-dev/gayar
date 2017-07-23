@@ -1,3 +1,20 @@
-<p>
-  benchmark works!
-</p>
+<div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+  <app-tile fxFlex [title]="'Benchmark'" [isSplittable]="true" 
+  [isFlippable]="true">
+    <div front>
+      <app-premium [componentData]="benchmarkPremiumDistributionInput"></app-premium>
+    </div>
+    <div back>
+      Chart 2 Place Holder
+    </div>
+  </app-tile>
+
+  <app-tile fxFlex [title]="'Tile 2'" >
+    <div front>
+      Chart 1 Place Holder
+    </div>
+    <div back>
+      Chart 2 Place Holder
+    </div>
+  </app-tile>
+</div>

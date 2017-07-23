@@ -73,12 +73,32 @@ export class BenchmarkRouter extends BaseRoute {
             Logger.error(e);
         }
     }
+
+    //Get Benchmark Distribution chart details
+    public getDistributionDataset(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getDistributionDataset", {
+                'client_value': req.body.clientValue,
+                'chart_type': req.body.chartType,
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }
     
     init(){
        this.app.post('/api/getChartDataByCompanyId', this.getChartDataByCompanyId);
        this.app.post('/api/getChartDataByManualInput', this.getChartDataByManualInput);
        this.app.post('/api/getRatePerMillion', this.getRatePerMillion);
        this.app.post('/api/getLimitAdequacy', this.getLimitAdequacy);
+       this.app.post('/api/getDistributionDataset', this.getDistributionDataset);
     }
 }
 

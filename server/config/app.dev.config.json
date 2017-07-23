@@ -13,7 +13,8 @@
            "protocol": "http",
            "host": "192.168.100.225",
            "port": "8080",
-           "endPoints": [{
+           "endPoints": [
+                        {
                             "name": "companySearch",
                             "contract": "/advwebservice/cybermetrix/util/companySearch"
                          },
@@ -36,7 +37,12 @@
                          {
                             "name": "getLimitAdequacy",
                             "contract": "/advwebservice/cybermetrix/chart/getLimitAdequacyDataset"
-                         }]
+                         },
+                         {
+                            "name": "getDistributionDataset",
+                            "contract": "/advwebservice/cybermetrix/chart/getDistributionDataset"
+                         }
+                    ]
        },
        "log": {
            "level": "debug",

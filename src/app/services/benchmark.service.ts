@@ -10,6 +10,33 @@ export class BenchmarkService extends BaseService {
         super(http);
     }
 
+    public getBenchmarkPremiumByCompanyId(clientValue: number, chartType: string, companyId: number) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'companyId': companyId
+           });    
+        }
+        catch(e){
+
+        }
+    }
+
+        public getBenchmarkPremiumByManualInput(clientValue: number, chartType: string, naics: number, revenueRange: string) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'naics': naics,
+               'revenueRange': revenueRange
+            });    
+        }
+        catch(e){
+
+        }
+    }
+
     public getChartDataByCompanyId(clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
         try{
            return super.Post<BenchmarkModel>('/api/getChartDataByCompanyId', {
