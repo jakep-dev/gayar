@@ -4,17 +4,30 @@
         <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
     </div>
 
-    <div front fxLayout="column" fxFlex fxLayoutAlign="center start" fxLayoutGap="10px" class="padding-left-10 padding-right-10">
-        <div fxLayout="row"  fxLayout.xs="column" fxLayoutAlign.xs="center start" fxLayoutGap.xs="10px" fxLayoutAlign="start center" fxFlex="100" class="width-100" fxLayoutGap="40px">
-          <md-select fxFlex="20"  placeholder="Select search by" [(ngModel)]="selectedSearchBy" (ngModelChange)="doSearchByChange()" floatPlaceholder="never">
+    <div front 
+         fxLayout="column" 
+         class="width-100 padding-left-10 padding-right-10"  
+         fxLayoutAlign="center start">
+
+        <div fxLayout="row"  
+             class="width-100"
+             fxLayout.xs="column"  
+             fxLayoutAlign.xs="center start" 
+             fxLayoutGap.xs="10px" 
+             fxLayoutAlign="space-between center" 
+             fxLayoutGap="20px">
+
+          <md-select  fxFlex="30" placeholder="Select search by" [(ngModel)]="selectedSearchBy"  
+               (ngModelChange)="doSearchByChange()" floatPlaceholder="never">
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
-          <md-select fxFlex="20" *ngIf="isManual"  placeholder="Select industry" [(ngModel)]="selectedIndustry" floatPlaceholder="never">
+          <md-select fxFlex="30"  *ngIf="isManual"  
+          placeholder="Select industry" [(ngModel)]="selectedIndustry" floatPlaceholder="never">
               <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.naicsDescription}}</md-option>
           </md-select>
-            
-          <md-input-container fxFlex="80" floatPlaceholder="never" dividerColor="primary"  align="start" >
+
+          <md-input-container fxFlex="30" floatPlaceholder="never" dividerColor="primary"  align="start" >
             <input mdInput [(ngModel)]="selectedSearchValue" autofocus  type="text" placeholder="{{searchValuePlaceHolder}}">
           </md-input-container>
 
@@ -23,81 +36,13 @@
           </button>
         </div>
 
-        <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-           <md-input-container fxFlex="20" floatPlaceholder="never" dividerColor="primary"  align="start" >
+         <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
+          fxLayoutGap="92px" fxLayout.xs="column"  
+             fxLayoutAlign.xs="center start" 
+             fxLayoutGap.xs="0" >
+          <md-input-container fxFlex="30" floatPlaceholder="never" dividerColor="primary"  align="start" >
             <input mdInput [(ngModel)]="selectedRevenue" autofocus  type="text" placeholder="Enter Revenue">
           </md-input-container>
-
-           <button md-raised-button (click)="doSearch()" color="accent">
-            Search
-          </button>
-        </div>
-
-        <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
-           <md-table #table [dataSource]="dataSource" fxFlex class="width-100">
-
-               <ng-container cdkColumnDef="companyId">
-                <md-header-cell  class="table-header" *cdkHeaderCellDef>#</md-header-cell>
-                <md-cell  *cdkCellDef="let row">
-                  <md-radio-button color="primary" value="1" (click)="selectedRow(row.companyId)"></md-radio-button> </md-cell>
-              </ng-container>
-
-               <ng-container cdkColumnDef="depthScore">
-                <md-header-cell  class="table-header" *cdkHeaderCellDef> Data Depth </md-header-cell>
-                <md-cell  *cdkCellDef="let row"> {{row.depthScore}} </md-cell>
-              </ng-container>
-
-              <!-- Progress Column -->
-              <ng-container cdkColumnDef="companyName">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Name </md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.companyName}} </md-cell>
-              </ng-container>
-
-              <!-- Name Column -->
-              <ng-container  cdkColumnDef="city">
-                <md-header-cell class="table-header" *cdkHeaderCellDef> City </md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.city}} </md-cell>
-              </ng-container>
-
-              <!-- Color Column -->
-              <ng-container cdkColumnDef="state">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>State</md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
-              </ng-container>
-
-               <!-- Color Column -->
-              <ng-container cdkColumnDef="country">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Country</md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.country}} </md-cell>
-              </ng-container>
-
-               <!-- Color Column -->
-              <ng-container cdkColumnDef="ticker">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Ticker</md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.ticker}} </md-cell>
-              </ng-container>
-
-               <!-- Color Column -->
-              <ng-container cdkColumnDef="exchange">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Exchange</md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.exchange}} </md-cell>
-              </ng-container>
-
-               <!-- Color Column -->
-              <ng-container cdkColumnDef="topLevel">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Top Level Company</md-header-cell>
-                <md-cell *cdkCellDef="let row"> {{row.topLevel}} </md-cell>
-              </ng-container>
-
-
-              <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-              <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-              
-            </md-table>
-
-            <div *ngIf="!searchResult"  fxLayoutAlign="center center" class="width-100 padding-15" style="background: white">
-              No data available
-            </div>
         </div>
     </div>
   </app-tile>

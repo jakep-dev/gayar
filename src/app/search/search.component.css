@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.min-width-25{
+    min-width: 25%;
+}
+
 .padding-left-10{
     padding-left: 10px;
 }
