@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {DataSource} from '@angular/cdk';
+import {MdSort} from '@angular/material';
 import { SearchService } from '../services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -33,6 +34,8 @@ export class SearchComponent implements OnInit {
   private searchDatabase = new SearchDatabase();
   private dataSource: SearchDataSource | null;
   private searchResult: Array<CompanyModel>;
+
+  @ViewChild(MdSort) sort: MdSort;
 
   constructor(private searchService: SearchService, private router: Router) { }
 
@@ -86,7 +89,7 @@ export class SearchComponent implements OnInit {
        this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
        this.searchDatabase.clear();
-       this.dataSource = new SearchDataSource(this.searchDatabase);
+       this.dataSource = new SearchDataSource(this.searchDatabase, this.sort);
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
        this.searchDatabase.dataChange.next(copiedData);
@@ -127,13 +130,46 @@ export class SearchDatabase {
 }
 
 export class SearchDataSource extends DataSource<any> {
-  constructor(private _searchDatabase: SearchDatabase) {
+  constructor(private _searchDatabase: SearchDatabase, private _sort: MdSort) {
     super();
   }
 
  /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Array<CompanyModel>> {
-    return this._searchDatabase.dataChange;
+    const displayDataChanges = [
+      this._searchDatabase.dataChange,
+      this._sort.mdSortChange,
+    ];
+    return Observable.merge(...displayDataChanges).map(() => {
+      return this.getSortedData();
+    });
+  }
+
+   /** Returns a sorted copy of the database data. */
+  getSortedData(): Array<CompanyModel> {
+    const data = this._searchDatabase.data.slice();
+    if (!this._sort.active || this._sort.direction == '') { return data; }
+
+    return data.sort((a, b) => {
+      let propertyA: number|string = '';
+      let propertyB: number|string = '';
+
+      switch (this._sort.active) {
+        case 'depthScore': [propertyA, propertyB] = [a.depthScore, b.depthScore]; break;
+        case 'companyName': [propertyA, propertyB] = [a.companyName, b.companyName]; break;
+        case 'city': [propertyA, propertyB] = [a.city, b.city]; break;
+        case 'state': [propertyA, propertyB] = [a.state, b.state]; break;
+        case 'country': [propertyA, propertyB] = [a.country, b.country]; break;
+        case 'ticker': [propertyA, propertyB] = [a.ticker, b.ticker]; break;
+        case 'exchange': [propertyA, propertyB] = [a.exchange, b.exchange]; break;
+        case 'topLevel': [propertyA, propertyB] = [a.topLevel, b.topLevel]; break;
+      }
+
+      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+    });
   }
 
   disconnect() {}

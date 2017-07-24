@@ -51,7 +51,7 @@
         </div>
 
          <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
-           <md-table #table [dataSource]="dataSource"  class="width-100">
+           <md-table #table [dataSource]="dataSource"  class="width-100" mdSort>
 
                <ng-container cdkColumnDef="companyId">
                 <md-header-cell  class="table-header" *cdkHeaderCellDef>#</md-header-cell>
@@ -60,49 +60,49 @@
               </ng-container>
 
                <ng-container cdkColumnDef="depthScore">
-                <md-header-cell  class="table-header" *cdkHeaderCellDef> Data Depth </md-header-cell>
+                <md-header-cell  class="table-header" *cdkHeaderCellDef md-sort-header> Data Depth </md-header-cell>
                 <md-cell  *cdkCellDef="let row"> {{row.depthScore}} </md-cell>
               </ng-container>
 
               <!-- Progress Column -->
               <ng-container cdkColumnDef="companyName">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Name </md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Name </md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.companyName}} </md-cell>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container  cdkColumnDef="city">
-                <md-header-cell class="table-header" *cdkHeaderCellDef> City </md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header> City </md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.city}} </md-cell>
               </ng-container>
 
               <!-- Color Column -->
               <ng-container cdkColumnDef="state">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>State</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>State</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="country">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Country</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Country</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.country}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="ticker">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Ticker</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Ticker</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.ticker}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="exchange">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Exchange</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Exchange</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.exchange}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="topLevel">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Top Level Company</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Top Level Company</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.topLevel}} </md-cell>
               </ng-container>
 
