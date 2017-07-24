@@ -2,41 +2,42 @@
   <md-sidenav #sidenav mode="{{sideNavMode}}" opened="true">
     <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-          <span>Cyber Suite</span>
+            <img style="width:90px; height: 50px" src="../assets/images/insite20twenty.png" alt="">
       </md-toolbar>
 
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="center center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">account_circle</md-icon>
                 <span>Sherin Dharmarajan</span>
             </button>
           <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');"
-             routerLinkActive="active" fxLayout="row" fxLayoutAlign="center center">
+             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="center center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="center center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">gamepad</md-icon>
                 <span>Impact</span>
             </button>
           <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" 
-          routerLinkActive="active" fxLayout="row" fxLayoutAlign="center center">
+          routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="center center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">pie_chart</md-icon>
                 <span>Report</span>
-            </button>
+          </button>
       </div>
     </div>
-    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;" (mouseover)="shortMenuMouseOver()"  >
+    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;" 
+          (mouseover)="shortMenuMouseOver()"  >
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-          <md-icon class="md-18">hourglass_empty</md-icon>
+           <img  src="../assets/images/insite_short.png" alt="">
       </md-toolbar>
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
           <button md-button (click)="onMenu()">

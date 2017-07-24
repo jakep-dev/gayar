@@ -26,14 +26,14 @@ export class MenuComponent implements OnInit {
   }
 
   shortMenuMouseOver(){
-    this.sideNavMode = "over";
+    this.sideNavMode = "side";
     if(this.sideNavMode){
       this.showShortMenu = false;
     }
   }
 
   shortMenuMouseLeave(){
-    if(!this.showShortMenu && this.sideNavMode === "over"){
+    if(!this.showShortMenu){
       this.showShortMenu = true;
       this.sideNavMode = "side";
     }

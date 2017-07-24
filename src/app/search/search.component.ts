@@ -81,13 +81,16 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch(){
-    this.searchDatabase.clear();
-    this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
+     this.searchDatabase.clear();
+    if(!this.isManual && this.selectedSearchValue.length >= 3){
+      console.log(this.selectedSearchValue);
+      this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
        this.searchDatabase.dataChange.next(copiedData);
     });
+    }
   }
 
   loadSearchBy(){
