@@ -13,6 +13,7 @@ export class TileComponent implements OnInit {
   @Input() isAccordion: boolean = true;
   @Input() isFlippable: boolean = false;
   @Input() isFullScreen: boolean = true;
+  @Input() showProgress: boolean = false;
 
 
   private isContent: boolean = true;

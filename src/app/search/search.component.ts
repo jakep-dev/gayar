@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit {
   private selectedLimit: string;
   private selectedRevenue: string;
   private isManual: boolean;
+  private isSearching: boolean;
   private searchByList: Array<SearchByModel>;
   private industryList: Array<IndustryModel>;
   private displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
@@ -82,15 +83,20 @@ export class SearchComponent implements OnInit {
   doSearch(){
     this.dataSource = null;
     if(!this.isManual && this.selectedSearchValue.length >= 3){
-      console.log(this.selectedSearchValue);
+      this.toggleProgress();
       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
        this.dataSource = new SearchDataSource(this.searchDatabase);
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
        this.searchDatabase.dataChange.next(copiedData);
+       this.toggleProgress();
     });
     }
+  }
+
+  toggleProgress(){
+    this.isSearching = !this.isSearching;
   }
 
   loadSearchBy(){
