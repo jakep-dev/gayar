@@ -9,6 +9,7 @@ export class MenuComponent implements OnInit {
   private breadCrumbName: string;
   private searchCompanyName: string;
   private showShortMenu: boolean = true;
+  private isMenuLock: boolean = false;
   private sideNavMode: string = 'side';
   constructor() { }
 
@@ -23,6 +24,7 @@ export class MenuComponent implements OnInit {
 
   toggleMenu(){
     this.showShortMenu = !this.showShortMenu;
+    this.isMenuLock = !this.isMenuLock;
   }
 
   shortMenuMouseOver(){
@@ -33,7 +35,7 @@ export class MenuComponent implements OnInit {
   }
 
   shortMenuMouseLeave(){
-    if(!this.showShortMenu){
+    if(!this.showShortMenu && !this.isMenuLock){
       this.showShortMenu = true;
       this.sideNavMode = "side";
     }
