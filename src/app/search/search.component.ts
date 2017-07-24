@@ -81,11 +81,11 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch(){
-    this.dataSource = null;
     if(!this.isManual && this.selectedSearchValue.length >= 3){
-      this.toggleProgress();
-      this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
+        this.toggleProgress();
+       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
+       this.searchDatabase.clear();
        this.dataSource = new SearchDataSource(this.searchDatabase);
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
@@ -120,9 +120,7 @@ export class SearchDatabase {
    get totalRecord(): number { return this.dataChange.value.length; }
    
    clear(){
-     console.log(this.dataChange.value)
-     this.dataChange.value.splice(0, this.totalRecord);
-     console.log(this.dataChange.value)
+     this.data.splice(0, this.totalRecord);
    }
    
    constructor(){}
