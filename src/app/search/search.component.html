@@ -29,10 +29,11 @@
           </md-select>
 
           <md-input-container fxFlex="30" floatPlaceholder="never" dividerColor="primary"  >
-            <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="start center" mdTooltip="Enter min of 3 char">
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (keyup)="doSearch($event)"
             type="text" placeholder="{{searchValuePlaceHolder}}" />
             <md-icon>search</md-icon>
+           
             </div>
           </md-input-container>
 
@@ -112,9 +113,9 @@
               
             </md-table>
 
-            <!--<div *ngIf="!searchResult"  fxLayoutAlign="center center" class="width-100 padding-15" style="background: white">
+            <div *ngIf="!searchResult"  fxLayoutAlign="center center" class="width-100 padding-15" style="background: white">
               No data available
-            </div>-->
+            </div>
          </div>
     </div>
   </app-tile>
