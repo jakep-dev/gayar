@@ -38,7 +38,6 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
      this.loadSearchBy();
      this.loadIndustry();
-     this.dataSource = new SearchDataSource(this.searchDatabase);
   }
 
   selectedRow(companyId){
@@ -81,11 +80,12 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch(){
-     this.searchDatabase.clear();
+    this.dataSource = null;
     if(!this.isManual && this.selectedSearchValue.length >= 3){
       console.log(this.selectedSearchValue);
       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
+       this.dataSource = new SearchDataSource(this.searchDatabase);
        const copiedData = this.searchDatabase.data.slice();
        res.companies.forEach(f=>copiedData.push(f));
        this.searchDatabase.dataChange.next(copiedData);
@@ -114,7 +114,9 @@ export class SearchDatabase {
    get totalRecord(): number { return this.dataChange.value.length; }
    
    clear(){
+     console.log(this.dataChange.value)
      this.dataChange.value.splice(0, this.totalRecord);
+     console.log(this.dataChange.value)
    }
    
    constructor(){}
