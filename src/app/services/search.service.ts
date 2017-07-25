@@ -48,7 +48,7 @@ export class SearchService extends BaseService {
 
 const SearchBy: Array<SearchByModel> = [{
     id: 1,
-    description: 'Advisen Number',
+    description: 'Advisen Company ID',
     type: 'SEARCH_BY_COMP_ID'
 },
 {
@@ -58,7 +58,7 @@ const SearchBy: Array<SearchByModel> = [{
 },
 {
     id: 3,
-    description: 'Duns',
+    description: 'DUNS Number',
     type: 'SEARCH_BY_DUNS'
 },
 {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {DataSource} from '@angular/cdk';
-import {MdSort} from '@angular/material';
+import { MdSort, MdPaginator, PageEvent} from '@angular/material';
 import { SearchService } from '../services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -17,7 +17,7 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  private selectedSearchBy: number = 2;
+  private selectedSearchBy: number = 4;
   private selectedSearchType: string;
   private selectedSearchValue: string;
   private searchValuePlaceHolder: string;
@@ -34,8 +34,10 @@ export class SearchComponent implements OnInit {
   private searchDatabase = new SearchDatabase();
   private dataSource: SearchDataSource | null;
   private searchResult: Array<CompanyModel>;
+  private pageEvent: PageEvent;
 
   @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(MdPaginator) paginator: MdPaginator;
 
   constructor(private searchService: SearchService, private router: Router) { }
 
@@ -83,9 +85,9 @@ export class SearchComponent implements OnInit {
     this.router.navigate(['/report']);
   }
 
-  doSearch(){
-    if(!this.isManual && this.selectedSearchValue && 
-    this.selectedSearchValue.trim().length >= 3){
+  doSearch(event, isReady){
+    console.log(event.keyCode);
+    if(!this.isManual && (event.keyCode === 13 || isReady)){
         this.toggleProgress();
        this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
        this.searchResult = res.companies;
@@ -104,8 +106,13 @@ export class SearchComponent implements OnInit {
 
   clearData(){
        this.searchDatabase.clear();
-       this.dataSource = new SearchDataSource(this.searchDatabase, this.sort);
+       this.dataSource = new SearchDataSource(this.searchDatabase, this.sort, this.paginator);
        
+  }
+  
+  loadData(event){
+    console.log(event);
+    
   }
 
   toggleProgress(){
@@ -140,7 +147,9 @@ export class SearchDatabase {
 }
 
 export class SearchDataSource extends DataSource<any> {
-  constructor(private _searchDatabase: SearchDatabase, private _sort: MdSort) {
+  constructor(private _searchDatabase: SearchDatabase, 
+              private _sort: MdSort, 
+              private _paginator: MdPaginator) {
     super();
   }
 
@@ -149,7 +158,9 @@ export class SearchDataSource extends DataSource<any> {
     const displayDataChanges = [
       this._searchDatabase.dataChange,
       this._sort.mdSortChange,
+      this._paginator.page
     ];
+    console.log('Hey');
     return Observable.merge(...displayDataChanges).map(() => {
       return this.getSortedData();
     });
@@ -159,8 +170,9 @@ export class SearchDataSource extends DataSource<any> {
   getSortedData(): Array<CompanyModel> {
     const data = this._searchDatabase.data.slice();
     if (!this._sort.active || this._sort.direction == '') { return data; }
-
-    return data.sort((a, b) => {
+    console.log('Paginator details');
+    console.log(this._paginator);
+    data.sort((a, b) => {
       let propertyA: number|string = '';
       let propertyB: number|string = '';
 
@@ -180,6 +192,12 @@ export class SearchDataSource extends DataSource<any> {
 
       return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
     });
+
+    return data;
+  }
+
+  getPaginationData(): Array<CompanyModel> {
+    return null;
   }
 
   disconnect() {}
