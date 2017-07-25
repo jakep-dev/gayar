@@ -156,9 +156,7 @@ export class SearchComponent implements OnInit {
 
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
-      console.log(res.industries)
        this.industryList = res.industries;
-       
     });
   }
 }
