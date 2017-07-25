@@ -39,16 +39,6 @@ export class SearchComponent implements OnInit {
      this.loadSearchBy();
      this.loadIndustry();
      this.dataSource = new SearchDataSource(this.searchDatabase);
-
-     //  this.searchService.companyId = 100063;
-    //  this.searchService.clientValue = 3000000;
-    //  this.searchService.naics = null;
-    //  this.searchService.revenueRange = null;
-
-      this.searchService.companyId = null;
-      this.searchService.clientValue = 3000000;
-      this.searchService.naics = 42;
-      this.searchService.revenueRange = '25000000-100000000';
   }
 
   selectedRow(companyId){

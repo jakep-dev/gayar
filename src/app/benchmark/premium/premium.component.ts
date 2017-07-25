@@ -179,7 +179,7 @@ export class PremiumComponent implements OnInit {
     }
 
   @Input() set componentData(data: BenchmarkPremiumDistributionInput) {
-      if(data.companyId) {
+      if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
         this.benchmarkService.getBenchmarkPremiumByCompanyId(data.clientValue, data.chartType, data.companyId)
           .subscribe(chartData => this.setChartData(chartData));
       } else {

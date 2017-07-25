@@ -10,10 +10,6 @@ import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, Search
 export class SearchService extends BaseService {
     public selectedCompany: CompanyModel;
     public searchCriteria: SearchCriteriaModel;
-    public companyId: number = null;
-    public clientValue: number = null;
-    public naics: number = null;
-    public revenueRange: string = null;
 
     constructor(http: Http) {
         super(http);

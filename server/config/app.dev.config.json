@@ -16,31 +16,27 @@
            "endPoints": [
                         {
                             "name": "companySearch",
-                            "contract": "/advwebservice/cybermetrix/util/companySearch"
+                            "contract": "/cybermetrix/util/companySearch"
                          },
                          {
                             "name": "revenueRangeList",
-                            "contract": "/advwebservice/cybermetrix/util/getRangeList"
+                            "contract": "/cybermetrix/util/getRangeList"
                          },
                          {
                             "name": "getIndustries",
-                            "contract": "/advwebservice/cybermetrix/util/getIndustries"
+                            "contract": "/cybermetrix/util/getIndustries"
                          },
                          {
                             "name": "getDistributionDataSet",
-                            "contract": "/advwebservice/cybermetrix/chart/getDistributionDataset"
+                            "contract": "/cybermetrix/chart/getDistributionDataset"
                          },
                          {
                             "name": "ratePerMillion",
-                            "contract": "/advwebservice/cybermetrix/chart/getRatePerMillionDataset"
+                            "contract": "/cybermetrix/chart/getRatePerMillionDataset"
                          },
                          {
                             "name": "getLimitAdequacy",
-                            "contract": "/advwebservice/cybermetrix/chart/getLimitAdequacyDataset"
-                         },
-                         {
-                            "name": "getDistributionDataset",
-                            "contract": "/advwebservice/cybermetrix/chart/getDistributionDataset"
+                            "contract": "/cybermetrix/chart/getLimitAdequacyDataset"
                          }
                     ]
        },

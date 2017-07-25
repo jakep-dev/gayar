@@ -4,37 +4,47 @@ import { SearchService } from '../services/services';
 import { BenchmarkPremiumDistributionInput } from '../model/benchmark.model';
 
 @Component({
-  selector: 'app-benchmark',
-  templateUrl: './benchmark.component.html',
-  styleUrls: ['./benchmark.component.scss'],
-  animations: [FADE_ANIMATION],
-  host: { '[@routerTransition]': '' }
+    selector: 'app-benchmark',
+    templateUrl: './benchmark.component.html',
+    styleUrls: ['./benchmark.component.scss'],
+    animations: [FADE_ANIMATION],
+    host: { '[@routerTransition]': '' }
 })
 export class BenchmarkComponent implements OnInit {
 
-  public companyId: number;
-  public clientValue: number;
-  public naics: number;
-  public revenueRange: string;
+    public searchType: string;
+    public chartType: string;
+    public companyId: number;
+    public clientValue: string;
+    public naics: string;
+    public revenueRange: string;
 
-  public benchmarkPremiumDistributionInput: BenchmarkPremiumDistributionInput;
+    public benchmarkPremiumDistributionInput: BenchmarkPremiumDistributionInput;
 
 
-  constructor(private searchService: SearchService) { }
+    constructor(private searchService: SearchService) { }
 
-  ngOnInit() {
-       this.companyId = this.searchService.companyId;
-       this.clientValue = this.searchService.clientValue;
-       this.naics = this.searchService.naics;
-       this.revenueRange = this.searchService.revenueRange;
+    ngOnInit() {
+        this.searchType = this.searchService.searchCriteria.type;
+        this.companyId = this.searchService.selectedCompany.companyId;
+        this.chartType = 'PREMIUM';
+        if (this.chartType === 'PREMIUM'){
+            this.clientValue = this.searchService.searchCriteria.premium;
+        } else {
+            this.clientValue = this.searchService.searchCriteria.retention;
+        }
+        
+        this.naics = this.searchService.searchCriteria.industry;
+        this.revenueRange = this.searchService.searchCriteria.revenue;
 
         this.benchmarkPremiumDistributionInput = {
-          companyId: this.companyId,
-          chartType: 'PREMIUM',
-          clientValue: this.clientValue,
-          naics: this.naics,
-          revenueRange: this.revenueRange
+            searchType: this.searchType,
+            companyId: this.companyId,
+            chartType: this.chartType,
+            clientValue: this.clientValue,
+            naics: this.naics,
+            revenueRange: this.revenueRange
         }
-  }
+    }
 
 }

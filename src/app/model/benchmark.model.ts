@@ -12,9 +12,10 @@ export interface BenchmarkGroup {
 }
 
 export interface BenchmarkPremiumDistributionInput {
-  companyId: number;
-  chartType: string;
-  clientValue: number;
-  naics: number;
-  revenueRange: string;
+    searchType: string;
+    companyId: number;
+    chartType: string;
+    clientValue: string;
+    naics: string;
+    revenueRange: string;
 }
