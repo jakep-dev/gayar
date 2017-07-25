@@ -24,13 +24,13 @@
 
           <md-select fxFlex="30"  *ngIf="isManual"  
               placeholder="Select industry" [(ngModel)]="selectedIndustry" 
-              floatPlaceholder="never">
+              floatPlaceholder="never" (ngModelChange)="doValidation()">
               <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.naicsDescription}}</md-option>
           </md-select>
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
           <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
-            <input mdInput [(ngModel)]="selectedSearchValue" autofocus   (keypress)="doSearch($event, false)"
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
             type="{{searchRule}}" placeholder="{{searchValuePlaceHolder}}" />
           </md-input-container>
           <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
@@ -42,7 +42,7 @@
           fxLayoutGap="92px" fxLayout.xs="column"  
              fxLayoutAlign.xs="center start" 
              fxLayoutGap.xs="0">
-          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue"  
+          <md-select  fxFlex="30" placeholder="Select revenue" (ngModelChange)="doValidation()" [(ngModel)]="selectedRevenue"  
                floatPlaceholder="never">
               <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
           </md-select>
@@ -111,7 +111,7 @@
             </md-table>
 
             <div *ngIf="!searchResult"  fxLayoutAlign="center center" class="width-100 padding-15" style="background: white">
-              No data available
+              {{this.message}}
             </div>
 
             <md-paginator [length]="100" 
@@ -144,12 +144,12 @@
   </app-tile>
 
   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
-    <button md-raised-button (click)="doAssessment()" color="accent">
+    <button md-raised-button (click)="doAssessment()" color="accent" [disabled]="!isActionEnabled">
       <md-icon>speaker_notes</md-icon>
       Assessment
     </button>
     
-    <button md-raised-button (click)="doReport()" color="accent">
+    <button md-raised-button (click)="doReport()" color="accent" [disabled]="!isActionEnabled">
       <md-icon>pie_chart</md-icon>
       Report
     </button>

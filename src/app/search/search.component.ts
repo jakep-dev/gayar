@@ -29,9 +29,11 @@ export class SearchComponent implements OnInit {
   private selectedRevenue: number;
   private isManual: boolean;
   private isSearching: boolean;
+  private isActionEnabled:boolean;
   private searchByList: Array<SearchByModel>;
   private industryList: Array<IndustryModel>;
   private revenueModellist: Array<RevenueModel>;
+  private message: string;
   private displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
   private searchDatabase = new SearchDatabase();
   private dataSource: SearchDataSource | null;
@@ -91,6 +93,15 @@ export class SearchComponent implements OnInit {
     this.router.navigate(['/report']);
   }
 
+  doValidation(){
+    if(this.isManual){
+      this.isActionEnabled = (this.selectedIndustry !== '' && this.selectedRevenue !== 0 && this.selectedSearchValue !== '');
+      return;
+    }
+    
+    this.isActionEnabled = (this.selectedSearchValue !== '' && this.searchService.selectedCompany != null);
+  }
+
   doSearch(event, isReady){
     if(!this.isManual && (event.keyCode === 13 || isReady)){
       this.toggleProgress();
@@ -102,12 +113,16 @@ export class SearchComponent implements OnInit {
         res.companies.forEach(f=>copiedData.push(f));
         this.searchDatabase.dataChange.next(copiedData);
       }
+      else{
+        this.message = "Your search did not match any company. Please refine your search";
+      }
       this.toggleProgress();
       });
     }
     else{
       this.clearData();
        this.searchResult = null;
+       this.searchService.selectedCompany = null;
     }
   }
 
@@ -141,6 +156,7 @@ export class SearchComponent implements OnInit {
 
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
+      console.log(res.industries)
        this.industryList = res.industries;
        
     });
