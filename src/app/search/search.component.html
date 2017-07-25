@@ -30,23 +30,22 @@
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
           <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
-            <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (keypress)="doSearch($event, false)"
-            type="text" placeholder="{{searchValuePlaceHolder}}" />
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus   (keypress)="doSearch($event, false)"
+            type="{{searchRule}}" placeholder="{{searchValuePlaceHolder}}" />
           </md-input-container>
-          <button md-icon-button (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
+          <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
           </div>
-          <!--<button md-raised-button (click)="doSearch()" color="accent" *ngIf="!isManual">
-            Search
-          </button>-->
+        
         </div>
 
          <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
           fxLayoutGap="92px" fxLayout.xs="column"  
              fxLayoutAlign.xs="center start" 
-             fxLayoutGap.xs="0" >
-          <md-input-container fxFlex="30" floatPlaceholder="never" dividerColor="primary"  align="start" >
-            <input mdInput [(ngModel)]="selectedRevenue" autofocus  type="text" placeholder="Enter Revenue">
-          </md-input-container>
+             fxLayoutGap.xs="0">
+          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue"  
+               floatPlaceholder="never">
+              <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
+          </md-select>
         </div>
 
          <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">

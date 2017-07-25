@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import {DataSource} from '@angular/cdk';
 import { MdSort, MdPaginator, PageEvent} from '@angular/material';
 import { SearchService } from '../services/services';
-import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel } from '../model/model';
+import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -20,16 +20,18 @@ export class SearchComponent implements OnInit {
   private selectedSearchBy: number = 4;
   private selectedSearchType: string;
   private selectedSearchValue: string;
+  private searchRule: string = "number";
   private searchValuePlaceHolder: string;
   private selectedIndustry: string;
   private selectedPremium: string;
   private selectedRetention: string;
   private selectedLimit: string;
-  private selectedRevenue: string;
+  private selectedRevenue: number;
   private isManual: boolean;
   private isSearching: boolean;
   private searchByList: Array<SearchByModel>;
   private industryList: Array<IndustryModel>;
+  private revenueModellist: Array<RevenueModel>;
   private displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
   private searchDatabase = new SearchDatabase();
   private dataSource: SearchDataSource | null;
@@ -44,6 +46,7 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
      this.loadSearchBy();
      this.loadIndustry();
+     this.loadRevenueModel();
   }
 
   selectedRow(companyId){
@@ -53,9 +56,10 @@ export class SearchComponent implements OnInit {
 
   calcPlaceHolderForSearchValue(){
     let searchByModel: SearchByModel =  this.searchByList.find(f=>f.id === this.selectedSearchBy);
-    this.searchValuePlaceHolder = `Enter ${searchByModel.description}`;
+    this.searchRule = searchByModel.rule;
     this.selectedSearchType = searchByModel.type;
     this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
+    this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
     if(this.isManual){
       this.searchDatabase.clear();
       this.searchResult = null;
@@ -69,15 +73,17 @@ export class SearchComponent implements OnInit {
   }
 
   doAssessment(){
+    let revenueModel: RevenueModel = this.revenueModellist.find(f=>f.id == this.selectedRevenue);
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
       value: this.selectedSearchValue,
       industry: this.selectedIndustry,
-      revenue: this.selectedRevenue,
+      revenue: revenueModel.value,
       limit: this.selectedLimit,
       premium: this.selectedPremium,
       retention: this.selectedRetention
     };
+    console.log(this.searchService.searchCriteria );
     this.router.navigate(['/dashboard']);
   }
 
@@ -86,7 +92,6 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch(event, isReady){
-    console.log(event.keyCode);
     if(!this.isManual && (event.keyCode === 13 || isReady)){
         this.toggleProgress();
        this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
@@ -111,7 +116,7 @@ export class SearchComponent implements OnInit {
   }
   
   loadData(event){
-    console.log(event);
+    
     
   }
 
@@ -126,10 +131,16 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  loadRevenueModel(){
+     this.searchService.getRevenueModel().subscribe(res=>{
+       this.revenueModellist = res;
+    });
+  }
+
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
        this.industryList = res.industries;
-       console.log(res);
+       
     });
   }
 }
@@ -160,7 +171,7 @@ export class SearchDataSource extends DataSource<any> {
       this._sort.mdSortChange,
       this._paginator.page
     ];
-    console.log('Hey');
+    
     return Observable.merge(...displayDataChanges).map(() => {
       return this.getSortedData();
     });

@@ -42,4 +42,11 @@ export interface SearchByModel {
     id: number;
     description: string;
     type: string;
+    rule: string;
+}
+
+export interface RevenueModel {
+    id: number;
+    description: string;
+    value: string;
 }
