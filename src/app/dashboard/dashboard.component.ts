@@ -14,7 +14,9 @@ export class DashboardComponent implements OnInit {
   constructor(private searchService: SearchService) { }
 
   ngOnInit() {
+    console.log('Inside Dashboard');
     console.log(this.searchService.selectedCompany);
+    console.log(this.searchService.searchCriteria);
   }
 
 }

@@ -78,7 +78,7 @@ export class SearchComponent implements OnInit {
       type: this.selectedSearchType,
       value: this.selectedSearchValue,
       industry: this.selectedIndustry,
-      revenue: revenueModel.value,
+      revenue: revenueModel ? revenueModel.value : '',
       limit: this.selectedLimit,
       premium: this.selectedPremium,
       retention: this.selectedRetention
@@ -93,14 +93,16 @@ export class SearchComponent implements OnInit {
 
   doSearch(event, isReady){
     if(!this.isManual && (event.keyCode === 13 || isReady)){
-        this.toggleProgress();
-       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
-       this.searchResult = res.companies;
-        this.clearData();
-       const copiedData = this.searchDatabase.data.slice();
-       res.companies.forEach(f=>copiedData.push(f));
-       this.searchDatabase.dataChange.next(copiedData);
-       this.toggleProgress();
+      this.toggleProgress();
+      this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
+      this.searchResult = res.companies;
+      this.clearData();
+      if(res.companies){
+        const copiedData = this.searchDatabase.data.slice();
+        res.companies.forEach(f=>copiedData.push(f));
+        this.searchDatabase.dataChange.next(copiedData);
+      }
+      this.toggleProgress();
       });
     }
     else{

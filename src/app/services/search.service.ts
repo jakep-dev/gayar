@@ -77,7 +77,7 @@ const SearchBy: Array<SearchByModel> = [{
     id: 4,
     description: 'Ticker',
     type: 'SEARCH_BY_TICKER',
-    rule: 'number'
+    rule: 'text'
 },
 {
     id: 5,

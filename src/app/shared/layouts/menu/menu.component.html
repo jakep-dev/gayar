@@ -34,7 +34,7 @@
           </button>
       </div>
     </div>
-    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;" 
+    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important" 
           (mouseover)="shortMenuMouseOver()"  >
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
            <img  src="../assets/images/insite_short.png" alt="">
@@ -76,7 +76,8 @@
           <span class="bread-crumb">{{breadCrumbName}}</span>
         </div>
         <div>
-          <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+          
+          <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
              <button md-icon-button routerLink="/search" (click)="onMenu('Search');"><md-icon>search</md-icon></button>
              <button md-icon-button><md-icon>home</md-icon></button>
