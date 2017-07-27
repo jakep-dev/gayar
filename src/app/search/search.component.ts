@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {DataSource} from '@angular/cdk';
 import { MdSort, MdPaginator, PageEvent} from '@angular/material';
-import { SearchService } from '../services/services';
+import { SearchService, SessionService } from '../services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
@@ -43,9 +43,15 @@ export class SearchComponent implements OnInit {
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild(MdPaginator) paginator: MdPaginator;
 
-  constructor(private searchService: SearchService, private router: Router) { }
+  constructor(private searchService: SearchService, 
+              private sessionService: SessionService,
+              private router: Router, 
+              private route: ActivatedRoute) { 
+      
+  }
 
   ngOnInit() {
+     
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();

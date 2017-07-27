@@ -34,7 +34,7 @@
     "material-design-icon-fonts": "^3.0.1",
     "ng2-dnd": "^4.2.0",
     "ngx-perfect-scrollbar": "^4.3.0",
-    "rxjs": "^5.0.1",
+    "rxjs": "^5.4.2",
     "ts-helpers": "^1.1.1",
     "typescript": "^2.3.4",
     "web-animations-js": "^2.2.5",
