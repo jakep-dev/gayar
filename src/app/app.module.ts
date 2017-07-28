@@ -69,21 +69,14 @@ import { SsoComponent } from './sso/sso.component';
     ChartModule,
     RouterModule.forRoot(APP_ROUTES)
   ],
-<<<<<<< HEAD
   providers: [
     {
       provide: HighchartsStatic,
       //useValue: highcharts
       useFactory: highchartsFactory
     },
-    BenchmarkService, 
-    SearchService 
-  ],
-=======
-  providers: [ 
     BLOCK_SERVICES
-     ],
->>>>>>> feature/cm-22
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
