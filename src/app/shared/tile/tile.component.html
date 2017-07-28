@@ -28,8 +28,9 @@
           </div>
       </div> 
   </md-toolbar>
+  <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
   <div class="tile-content"  [@accordionContentAnimation]="accordionState">
-    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
+    <div *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
       <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
       
       </ng-content>

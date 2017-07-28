@@ -37,8 +37,11 @@
                          {
                             "name": "getLimitAdequacy",
                             "contract": "/cybermetrix/chart/getLimitAdequacyDataset"
-                         }
-                    ]
+                         },
+                         {
+                             "name": "getActiveSession",
+                             "contract": "/cybermetrix/getActiveSession"
+                         }]
        },
        "log": {
            "level": "debug",

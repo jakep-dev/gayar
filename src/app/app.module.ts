@@ -32,26 +32,29 @@ export function highchartsFactory() {
 }
 
 // Application Components
-import { TileComponent } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
-import { BenchmarkService, SearchService } from './services/services';
+import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
+import { SsoComponent } from './sso/sso.component';
 
 
 @NgModule({
   declarations: [
-    TileComponent,
+    BLOCK_SHARED,
+    BLOCK_ERRORS,
     AppComponent,
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
     MenuComponent,
     SearchComponent,
-    TableComponent
+    TableComponent,
+    SsoComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +69,7 @@ import { TableComponent } from './shared/table/table.component';
     ChartModule,
     RouterModule.forRoot(APP_ROUTES)
   ],
+<<<<<<< HEAD
   providers: [
     {
       provide: HighchartsStatic,
@@ -75,6 +79,11 @@ import { TableComponent } from './shared/table/table.component';
     BenchmarkService, 
     SearchService 
   ],
+=======
+  providers: [ 
+    BLOCK_SERVICES
+     ],
+>>>>>>> feature/cm-22
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,6 +7,7 @@
    
 }
 
+
  .top-menu{
         border-bottom: 1px solid lightgray;
 }
@@ -30,4 +31,17 @@
 
 .mat-sidenav{
     min-width: 0px;
+}
+
+.logo-image {
+        display: block;
+        width: 125px;
+        min-width: 125px;
+        height: 70px;
+        line-height: 32px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        color: #FFFFFF;
+        border-radius: 2px;
 }

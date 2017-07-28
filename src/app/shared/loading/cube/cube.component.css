@@ -1,41 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-@import "assets/theme/theme.icon";
-@import "assets/theme/app.theme";
 
-$toolbar-height: 48px;
-
-body{
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    background: rgba(0,0,0,0.87);
-}
-
-html, body, material-app, md-sidenav-container, .my-content {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-
-}
-
-.ng-draggable {
-  cursor: move;
-}
-
-.mat-toolbar-row {
-    height: $toolbar-height;
-    min-height: $toolbar-height;
-    max-height: $toolbar-height;
-}
-
-.mat-toolbar{
-  height: $toolbar-height !important;
-  min-height: $toolbar-height !important;
-  max-height: $toolbar-height !important;
-}
-
-
-
-// Loading Animation
+ /*Loading Animation*/
 
 .center-div
 {
