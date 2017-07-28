@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { 401Component } from './401.component';
+import { E401Component } from './e-401.component';
 
-describe('401Component', () => {
-  let component: 401Component;
-  let fixture: ComponentFixture<401Component>;
+describe('E401Component', () => {
+  let component: E401Component;
+  let fixture: ComponentFixture<E401Component>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ 401Component ]
+      declarations: [ E401Component ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(401Component);
+    fixture = TestBed.createComponent(E401Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

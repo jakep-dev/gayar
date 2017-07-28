@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {DataSource} from '@angular/cdk';
 import { MdSort, MdPaginator, PageEvent} from '@angular/material';
-import { SearchService, SessionService } from '../services/services';
+import { SearchService, SessionService, MenuService } from '../services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from '../model/model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
@@ -44,6 +44,7 @@ export class SearchComponent implements OnInit {
   @ViewChild(MdPaginator) paginator: MdPaginator;
 
   constructor(private searchService: SearchService, 
+              private menuService: MenuService,
               private sessionService: SessionService,
               private router: Router, 
               private route: ActivatedRoute) { 
@@ -51,7 +52,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-     
+     this.menuService.breadCrumbName = 'Search';
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();

@@ -37,8 +37,25 @@ export class SessionService extends BaseService {
         return this.currentIdentity.fullName;
     }
 
+    public restoreIdentity() {
+        if(!this.currentIdentity){
+            let identity: string = localStorage.getItem("identity");
+            if(identity && identity.trim() !== ''){
+                this.currentIdentity = JSON.parse(identity) as SessionModel;
+            }
+        }
+    }
+
+    public removeAuth(){
+        localStorage.removeItem("identity");
+    }
+
     public isLoggedIn(): Observable<boolean> {
         return this.isLogin.asObservable().share();
+    }
+
+    public isLoggedInCheck() : boolean{
+        return this.hasToken();
     }
 
     private setAuth(){

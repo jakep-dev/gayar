@@ -12,7 +12,7 @@ import { MaterialModule  } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 // Application Components
-import { BLOCK_SHARED } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
@@ -27,6 +27,7 @@ import { SsoComponent } from './sso/sso.component';
 @NgModule({
   declarations: [
     BLOCK_SHARED,
+    BLOCK_ERRORS,
     AppComponent,
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
@@ -47,7 +48,9 @@ import { SsoComponent } from './sso/sso.component';
     CdkTableModule,
     RouterModule.forRoot(APP_ROUTES)
   ],
-  providers: [ BLOCK_SERVICES ],
+  providers: [ 
+    BLOCK_SERVICES
+     ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
