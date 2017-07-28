@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuService } from 'app/services/services';
 
 @Component({
   selector: 'app-e-401',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class E401Component implements OnInit {
 
-  constructor() { }
+  constructor(private menuService: MenuService) { }
 
   ngOnInit() {
+    this.menuService.isFullScreen = true;
   }
 
 }
