@@ -11,7 +11,6 @@ import { SessionModel, SessionResponseModel } from 'app/model/model';
 
 @Injectable()
 export class SessionService extends BaseService {
-    private currentIdentity: SessionModel;
     private isLogin = new BehaviorSubject<boolean>(this.hasToken());
 
     constructor(http: Http) {

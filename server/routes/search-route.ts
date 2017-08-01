@@ -13,8 +13,11 @@ export class SearchRouter extends BaseRoute {
     //SearchType = COMP_NAME | COMP_ID | TICKER | DUNS
     public doCompanySearch(req: Request, res: Response, next: NextFunction){
         try{
+            console.log(req.body.token)
+            console.log(req.body.searchType)
+            console.log(req.body.searchValue)
             super.PerformGetRequest("companySearch", {
-                'ssnid': 'testtoken',
+                'ssnid': req.body.token,
                 'search_type': req.body.searchType,
                 'search_value': req.body.searchValue
             }, (data)=>{
