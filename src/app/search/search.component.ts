@@ -61,6 +61,7 @@ export class SearchComponent implements OnInit {
   selectedRow(companyId){
     let company: CompanyModel =  this.searchResult.find(f=>f.companyId === companyId);
     this.searchService.selectedCompany = company;
+    this.doValidation();
   }
 
   calcPlaceHolderForSearchValue(){
