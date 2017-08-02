@@ -33,7 +33,7 @@ export class SearchRouter extends BaseRoute {
     public getIndustries(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getIndustries", {
-                'ssnid': 'testtoken'
+                'ssnid': req.body.token
             }, (data)=>{
                 res.send(data);
             });

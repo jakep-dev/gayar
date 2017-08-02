@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChartModule } from 'angular2-highcharts';
 import { BenchmarkService } from '../../services/services';
 import { BenchmarkModel, BenchmarkPremiumDistributionInput } from 'app/model/model';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-premium',
@@ -11,6 +12,7 @@ import { BenchmarkModel, BenchmarkPremiumDistributionInput } from 'app/model/mod
 export class PremiumComponent implements OnInit {
 
   public static defaultLineColor: string = 'black';
+  public static CLIENT_LINE: string = "Client Line";
 
   chartOptions: any;
 
@@ -20,11 +22,13 @@ export class PremiumComponent implements OnInit {
     this.seriesColor = [];
     this.seriesColor["Above Client"] = '#F68C20';
     this.seriesColor["Below Client"] = '#B1D23B';
-    this.seriesColor["Client Line"] = '#487AA1';
+    this.seriesColor[PremiumComponent.CLIENT_LINE] = '#487AA1';
 
     this.chartOptions = {
         chart: {
             type: 'column',
+            marginLeft:75,
+            marginRight:25,
             width: 600,
             height: 400
         },
@@ -32,15 +36,38 @@ export class PremiumComponent implements OnInit {
             enabled: false
         },
         title: {
-            text: 'Placeholder Title'
+            text: 'Placeholder Title',
+            style: {
+                fontSize: '14px'
+            }
         },
         subtitle: {
             text: 'Placeholder Sub-Title'
         },
         xAxis: {
+            type: 'category',
             categories: [],
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '11px',
+                    fontFamily: 'Verdana, sans-serif',
+                },
+                //Set specific xaxis series text color
+                formatter: function () {
+                    if ('5M-10M' === this.value) {
+                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
+                    } else {
+                        return this.value;
+                    }
+                }
+
+            },
             title: {
-                text: 'Range (USD)'
+                text: 'Range (USD)',
+                style: {
+                    fontSize: '11px'
+                }
             }
         },
         yAxis: {
@@ -57,7 +84,13 @@ export class PremiumComponent implements OnInit {
         },
         plotOptions: {
             series: {
-                marker: { enabled: false },
+                marker: { 
+                    enabled: false,
+                    radius: 8
+                },
+                scatter: {
+                    enableMouseTracking: false
+                },
                 events: {
                     legendItemClick: function () {
                         //return false to disable hiding of series when legend item is click
@@ -156,6 +189,9 @@ export class PremiumComponent implements OnInit {
         var j: number;
         var n2: number;
         var series;
+        var clientCategoryLabel : any;
+        clientCategoryLabel = new Object({value : ''});
+
         n2 = this.chartOptions.xAxis.categories.length;
         n1 = groupNames.length;
         for(i = 0; i < n1; i++) {
@@ -165,6 +201,9 @@ export class PremiumComponent implements OnInit {
             series.data = new Array();
             for(j = 0; j < n2; j++) {
                 if(group[this.chartOptions.xAxis.categories[j]]) {
+                    if(series.name === PremiumComponent.CLIENT_LINE) {
+                        clientCategoryLabel.value = this.chartOptions.xAxis.categories[j];
+                    }
                     series.data.push(group[this.chartOptions.xAxis.categories[j]]);
                 } else {
                     series.data.push(null);
@@ -174,6 +213,18 @@ export class PremiumComponent implements OnInit {
         }
         this.chartOptions.title.text = this.chartData.chartTitle;
         this.chartOptions.subtitle.text = this.chartData.filterDescription;
+
+        if (clientCategoryLabel.value) {
+            this.chartOptions.xAxis.labels.formatter = 
+                function () {
+                    if (clientCategoryLabel.value === this.value) {
+                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
+                    } else {
+                        return this.value;
+                    }
+                }
+        }
+
         console.log(this.chartData);
         this.loadChartData();
     }
