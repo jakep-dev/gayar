@@ -8,11 +8,11 @@ import { MenuService, SessionService } from 'app/services/services';
 })
 export class MenuComponent implements OnInit {
   
-  private searchCompanyName: string;
-  private showShortMenu: boolean = true;
-  private isMenuLock: boolean = false;
-  private sideNavMode: string = 'side';
-  constructor(private menuService: MenuService, private sessionService: SessionService) { 
+  searchCompanyName: string;
+  showShortMenu: boolean = true;
+  isMenuLock: boolean = false;
+  sideNavMode: string = 'side';
+  constructor(public menuService: MenuService, private sessionService: SessionService) { 
 
   }
 

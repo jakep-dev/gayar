@@ -16,12 +16,11 @@ export class TileComponent implements OnInit {
   @Input() showProgress: boolean = false;
 
 
-  private isContent: boolean = true;
-  private accordionState: string = "up";
-
-  private isFlipped: boolean = false;
-  private isSplitted: boolean = false;
-  private splitState: string = "split";
+  isContent: boolean = true;
+  accordionState: string = "up";
+  isFlipped: boolean = false;
+  isSplitted: boolean = false;
+  splitState: string = "split";
 
   constructor() { }
 
