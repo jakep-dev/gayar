@@ -18,7 +18,7 @@ export abstract class BaseService {
         if(!this.currentIdentity){
             this.getToken();
         }
-       data.token = this.currentIdentity.token || null;
+       data.token = this.currentIdentity ? this.currentIdentity.token || null : null;
        console.log('Identity');
        console.log(this.currentIdentity);
        console.log(data);
