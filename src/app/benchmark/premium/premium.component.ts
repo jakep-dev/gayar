@@ -1,241 +1,196 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartModule } from 'angular2-highcharts';
 import { BenchmarkService } from '../../services/services';
-import { BenchmarkModel, BenchmarkPremiumDistributionInput } from 'app/model/model';
-import {Observable} from 'rxjs/Observable';
+import { ChartUtility } from '../../shared/chart-utility/chart-utility';
+import { BenchmarkModel, BenchmarkDistributionInput } from 'app/model/model';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-premium',
-  templateUrl: './premium.component.html',
-  styleUrls: ['./premium.component.scss']
+	selector: 'app-premium',
+	templateUrl: './premium.component.html',
+	styleUrls: ['./premium.component.scss']
 })
 export class PremiumComponent implements OnInit {
 
-  public static defaultLineColor: string = 'black';
-  public static CLIENT_LINE: string = "Client Line";
+	public static CHART_UTIL: ChartUtility = new ChartUtility();
+	public static CLIENT_LINE: string = "Client Line";
 
-  chartOptions: any;
+	chart: any;
+	chartData: any;
+    chartOptions: any;
+    isDataLoaded: boolean;
 
-  seriesColor: string[];
+	constructor(private benchmarkService: BenchmarkService) {
+        this.isDataLoaded = false;
+		this.chartOptions = PremiumComponent.CHART_UTIL.getCommonChartOptions();
+		this.setChartOptions();
+	}
 
-  constructor(private benchmarkService: BenchmarkService) { 
-    this.seriesColor = [];
-    this.seriesColor["Above Client"] = '#F68C20';
-    this.seriesColor["Below Client"] = '#B1D23B';
-    this.seriesColor[PremiumComponent.CLIENT_LINE] = '#487AA1';
+	ngOnInit() {
+	}
 
-    this.chartOptions = {
-        chart: {
-            type: 'column',
-            marginLeft:75,
-            marginRight:25,
-            width: 600,
-            height: 400
-        },
-        credits: {
-            enabled: false
-        },
-        title: {
-            text: 'Placeholder Title',
-            style: {
-                fontSize: '14px'
-            }
-        },
-        subtitle: {
-            text: 'Placeholder Sub-Title'
-        },
-        xAxis: {
-            type: 'category',
-            categories: [],
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '11px',
-                    fontFamily: 'Verdana, sans-serif',
-                },
-                //Set specific xaxis series text color
-                formatter: function () {
-                    if ('5M-10M' === this.value) {
-                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
-                    } else {
-                        return this.value;
-                    }
-                }
+	@Input() set componentData(data: BenchmarkDistributionInput) {
+		if (data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+			this.benchmarkService.getBenchmarkPremiumByCompanyId(data.premiumValue, 'PREMIUM', data.companyId)
+				.subscribe(chartData => this.setChartData(chartData));
+		} else {
+			this.benchmarkService.getBenchmarkPremiumByManualInput(data.premiumValue, 'PREMIUM', data.naics, data.revenueRange)
+				.subscribe(chartData => this.setChartData(chartData));
+		}
+	}
 
-            },
-            title: {
-                text: 'Range (USD)',
-                style: {
-                    fontSize: '11px'
-                }
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Program Counts'
-            }
-        },
-        legend: {
-            shadow: false
-        },
-        tooltip: {
-            shared: true
-        },
-        plotOptions: {
-            series: {
-                marker: { 
-                    enabled: false,
-                    radius: 8
-                },
-                scatter: {
-                    enableMouseTracking: false
-                },
-                events: {
-                    legendItemClick: function () {
-                        //return false to disable hiding of series when legend item is click
-                        return false;
-                    }
-                }
-            },
-            column: {
-                grouping: false,
-                shadow: false,
-                borderWidth: 0
-            }
-        },
-        lang: {
-            noData: "No Data Available"
-        },
-        noData: {
-            style: {
-                fontWeight: 'bold',
-                fontSize: '15px',
-                color: '#FF0000'
-            }
-        },
-        series: [
-        ],
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        }
-    };
+	private setChartOptions() {
+		this.chartOptions.plotOptions = {
+			scatter: {
+				enableMouseTracking: false,
+			},
+			series: {
+				marker: {
+					radius: 8,
+				}
+			}
+		};
 
-  }
+		this.chartOptions.xAxis = {
+			type: 'category',
+			categories: [],
+			labels: {
+				rotation: -45,
+				style: {
+					fontSize: '11px',
+					fontFamily: 'Verdana, sans-serif',
+				}
+			},
+			title: {
+				text: '',
+				style: {
+					fontSize: '11px'
+				}
+			}
+		};
 
-  ngOnInit() {
-  }
+		this.chartOptions.yAxis = {
+			min: 0,
+			title: {
+				text: '',
+				style: {
+					fontSize: '11px'
+				}
+			}
+		};
 
-    chart: any;
-    public setChart(chart) {
-        this.chart = chart;
-        console.log('Chart loaded.');
-    }
+		this.chartOptions.tooltip = {
+			headerFormat: '<b>{point.key}</b><br>',
+			pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+		};
+	}
 
-    private loadChartData() {
-        var i;
-        var n1;
-        n1 = this.chart.series.length;
-        for(i =  n1 -1; i >= 0; i--) {
-            this.chart.series[i].remove();
-        }
-        //this.chart.xAxis[0].setCategories(this.chartOptions.xAxis.categories);
-        // this.chart.title.update({text: this.chartData.chartTitle});
-        // this.chart.subtitle.update({text: this.chartData.filterDescription});
+	public setChart(chart) {
+		this.chart = chart;
+	}
 
-        n1 = this.chartOptions.series.length;
-        for(i = 0; i < n1; i++) {
-            this.chart.addSeries(
-                {
-                    id: this.chartOptions.series[i].name,
-                    name: this.chartOptions.series[i].name,
-                    type: 'column',
-                    color: this.getSeriesColor(this.chartOptions.series[i].name),
-                    data: this.chartOptions.series[i].data
-                }
-            );
-        }
-        this.chart.update(this.chartOptions, true);
-    }
+	private loadChartData() {
+		var i;
+		var n1;
+		n1 = this.chart.series.length;
+		for (i = n1 - 1; i >= 0; i--) {
+			this.chart.series[i].remove();
+		}
 
-    private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || PremiumComponent.defaultLineColor;
-    }
+		n1 = this.chartOptions.series.length;
+		for (i = 0; i < n1; i++) {
+			this.chart.addSeries(
+				{
+					id: this.chartOptions.series[i].name,
+					name: this.chartOptions.series[i].name,
+					color: PremiumComponent.CHART_UTIL.getSeriesColor(this.chartOptions.series[i].name),
+					data: this.chartOptions.series[i].data,
+					type: 'column',
+					stack: 'male',
+					pointWidth: 20,
+					borderWidth: 0,
+					pointPlacement: -0.20
+				}
+			);
+		}
+		this.chart.update(this.chartOptions, true);
 
-    chartData: any;
-    public setChartData(data: BenchmarkModel) {
-        this.chartData = data;
-        var i: number;
-        var n1: number;
-        var groups = new Array();
-        var groupNames = new Array();
-        n1 = this.chartData.buckets.length;
-        var bucket: any;
-        this.chartOptions.xAxis.categories.length = 0;
-        for(i = 0; i < n1; i++) {
-            bucket = this.chartData.buckets[i];
-            this.chartOptions.xAxis.categories.push(bucket.label);
-            if(!groups[bucket.group]) {
-                groups[bucket.group] = new Array();
-                groupNames.push(bucket.group);
-            }
-            groups[bucket.group][bucket.label] = bucket.count;
-        }
+		PremiumComponent.CHART_UTIL.addChartLabel(
+			this.chart,
+			this.chartData.displayText,
+			10,
+			this.chart.chartHeight - 10,
+			'#000000',
+			10,
+			null
+		);
 
-        var groupName: string;
-        var group: any;
-        var j: number;
-        var n2: number;
-        var series;
-        var clientCategoryLabel : any;
-        clientCategoryLabel = new Object({value : ''});
+		PremiumComponent.CHART_UTIL.addChartImage(this.chart, 'https://www.advisen.com/img/advisen-logo.png', this.chart.chartWidth - 80, this.chart.chartHeight - 20, 69, 17);
+	}
 
-        n2 = this.chartOptions.xAxis.categories.length;
-        n1 = groupNames.length;
-        for(i = 0; i < n1; i++) {
-            group = groups[groupNames[i]];
-            series = new Object();
-            series.name = groupNames[i];
-            series.data = new Array();
-            for(j = 0; j < n2; j++) {
-                if(group[this.chartOptions.xAxis.categories[j]]) {
-                    if(series.name === PremiumComponent.CLIENT_LINE) {
-                        clientCategoryLabel.value = this.chartOptions.xAxis.categories[j];
-                    }
-                    series.data.push(group[this.chartOptions.xAxis.categories[j]]);
-                } else {
-                    series.data.push(null);
-                }
-            }
-            this.chartOptions.series.push(series);
-        }
-        this.chartOptions.title.text = this.chartData.chartTitle;
-        this.chartOptions.subtitle.text = this.chartData.filterDescription;
+	public setChartData(data: BenchmarkModel) {
+		this.chartData = data;
+		var i: number;
+		var n1: number;
+		var groups = new Array();
+		var groupNames = new Array();
+		n1 = this.chartData.buckets.length;
+		var bucket: any;
+		this.chartOptions.xAxis.categories.length = 0;
+		for (i = 0; i < n1; i++) {
+			bucket = this.chartData.buckets[i];
+			this.chartOptions.xAxis.categories.push(bucket.label);
+			if (!groups[bucket.group]) {
+				groups[bucket.group] = new Array();
+				groupNames.push(bucket.group);
+			}
+			groups[bucket.group][bucket.label] = bucket.count;
+		}
 
-        if (clientCategoryLabel.value) {
-            this.chartOptions.xAxis.labels.formatter = 
-                function () {
-                    if (clientCategoryLabel.value === this.value) {
-                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
-                    } else {
-                        return this.value;
-                    }
-                }
-        }
+		var groupName: string;
+		var group: any;
+		var j: number;
+		var n2: number;
+		var series;
+		var clientCategoryLabel: any;
+		clientCategoryLabel = new Object({ value: '' });
 
-        console.log(this.chartData);
+		n2 = this.chartOptions.xAxis.categories.length;
+		n1 = groupNames.length;
+		for (i = 0; i < n1; i++) {
+			group = groups[groupNames[i]];
+			series = new Object();
+			series.name = groupNames[i];
+			series.data = new Array();
+			for (j = 0; j < n2; j++) {
+				if (group[this.chartOptions.xAxis.categories[j]]) {
+					if (series.name === PremiumComponent.CLIENT_LINE) {
+						clientCategoryLabel.value = this.chartOptions.xAxis.categories[j];
+					}
+					series.data.push(group[this.chartOptions.xAxis.categories[j]]);
+				} else {
+					series.data.push(null);
+				}
+			}
+			this.chartOptions.series.push(series);
+		}
+		this.chartOptions.title.text = this.chartData.chartTitle;
+		this.chartOptions.subtitle.text = this.chartData.filterDescription;
+		this.chartOptions.xAxis.title.text = this.chartData.xAxis;
+		this.chartOptions.yAxis.title.text = this.chartData.yAxis;
+
+		if (clientCategoryLabel.value) {
+			this.chartOptions.xAxis.labels.formatter =
+				function () {
+					if (clientCategoryLabel.value === this.value) {
+						return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
+					} else {
+						return this.value;
+					}
+				}
+		}
+
         this.loadChartData();
-    }
-
-  @Input() set componentData(data: BenchmarkPremiumDistributionInput) {
-      if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-        this.benchmarkService.getBenchmarkPremiumByCompanyId(data.clientValue, data.chartType, data.companyId)
-          .subscribe(chartData => this.setChartData(chartData));
-      } else {
-        this.benchmarkService.getBenchmarkPremiumByManualInput(data.clientValue, data.chartType, data.naics, data.revenueRange)
-          .subscribe(chartData => this.setChartData(chartData));
-      }
-    }
+        this.isDataLoaded = true;
+	}
 }

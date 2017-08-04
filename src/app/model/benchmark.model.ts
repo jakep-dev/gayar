@@ -2,6 +2,9 @@ export interface BenchmarkModel {
     
     chartTitle: string;
     filterDescription: string;
+    displayText: string;
+    xAxis: string;
+    yAxis: string;
     buckets: BenchmarkGroup[];
 }
 
@@ -11,11 +14,12 @@ export interface BenchmarkGroup {
     group: string;
 }
 
-export interface BenchmarkPremiumDistributionInput {
+export interface BenchmarkDistributionInput {
     searchType: string;
     companyId: number;
-    chartType: string;
-    clientValue: string;
+    premiumValue: string;
+    limitValue: string;
+    retentionValue: string;
     naics: string;
     revenueRange: string;
 }
