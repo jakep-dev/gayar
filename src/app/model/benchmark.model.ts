@@ -19,3 +19,11 @@ export interface BenchmarkPremiumDistributionInput {
     naics: string;
     revenueRange: string;
 }
+
+export interface LimitAdequacyChart {
+    searchType: string;
+    companyId: number;
+    limits: string;
+    naics: string;
+    revenue_range: string
+}

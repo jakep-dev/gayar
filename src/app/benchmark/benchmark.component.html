@@ -9,9 +9,10 @@
     </div>
   </app-tile>
 
-  <app-tile fxFlex [title]="'Tile 2'" >
+  <app-tile fxFlex [title]="'Benchmark'" [isSplittable]="true" 
+  [isFlippable]="true">
     <div front>
-      Chart 1 Place Holder
+      <app-peer-group-loss [componentData]="getLimitAdequacyChartByManualInput"></app-peer-group-loss>
     </div>
     <div back>
       Chart 2 Place Holder
