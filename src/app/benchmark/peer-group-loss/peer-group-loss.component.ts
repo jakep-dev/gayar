@@ -216,11 +216,12 @@ export class PeerGroupLossComponent implements OnInit {
 		for (i = 0; i < this.chartData.losses.length; i++) {
 			this.chartOptions.series[0].data.push(this.chartData.losses[i].lossAboveLimit);
 			this.chartOptions.series[1].data.push(this.chartData.losses[i].lossBelowLimit);
-			this.chartOptions.yAxis.plotLines[0].value = this.chartData.losses[i].medianPeerProgramLimit;
-			this.chartOptions.yAxis.plotLines[1].value = this.chartData.losses[i].clientLimit;
 		}
 
 		this.chartOptions.title.text = this.chartData.chartTitle;
+		this.chartOptions.yAxis.plotLines[0].value = this.chartData.medianLimit;
+		this.chartOptions.yAxis.plotLines[1].value = this.chartData.clientLimit;
+		
 		this.loadChartData();
 		this.renderLabel(this.chart);
 	}
