@@ -42,6 +42,8 @@ import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
+import { BarChartComponent } from './shared/charts/bar-chart/bar-chart.component';
+import { DistributionDirective } from './shared/behavior/distribution.directive';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import { SsoComponent } from './sso/sso.component';
     MenuComponent,
     SearchComponent,
     TableComponent,
-    SsoComponent
+    SsoComponent,
+    BarChartComponent,
+    DistributionDirective
   ],
   imports: [
     BrowserModule,

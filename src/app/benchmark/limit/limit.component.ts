@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { BenchmarkModel, ChartData, BenchmarkPremiumDistributionInput } from 'app/model/model';
 
 @Component({
   selector: 'app-limit',
@@ -6,10 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./limit.component.css']
 })
 export class LimitComponent implements OnInit {
+  
+  @Input() componentData: BenchmarkPremiumDistributionInput;
+  chartData: ChartData;
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  getChartData($event) {
+    console.log('LIMIT getChartOptions', $event);
+    this.chartData = $event;
   }
 
 }
