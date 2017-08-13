@@ -3,6 +3,8 @@ export interface BenchmarkModel {
     chartTitle: string;
     filterDescription: string;
     buckets: BenchmarkGroup[];
+    xAxis: string;
+    yAxis: string;
 }
 
 export interface BenchmarkGroup {

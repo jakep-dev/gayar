@@ -1,7 +1,7 @@
 <bar-chart 
     distribution-behavior
-    (getChartData)="getChartData($event)"
+    [modelData]="modelData"
     [chartData]="chartData"
-    [componentData]="componentData"
+    (onDataComplete)="onDataComplete($event)"
     >
 </bar-chart> 

@@ -45,7 +45,6 @@ import { SsoComponent } from './sso/sso.component';
 import { BarChartComponent } from './shared/charts/bar-chart/bar-chart.component';
 import { DistributionDirective } from './shared/behavior/distribution.directive';
 
-
 @NgModule({
   declarations: [
     BLOCK_SHARED,
