@@ -1,7 +1,7 @@
 <bar-chart 
     distribution-behavior
     [modelData]="modelData"
-    [chartData]="chartData"
+    [chartData]="chartData$ | async"
     (onDataComplete)="onDataComplete($event)"
     >
 </bar-chart> 

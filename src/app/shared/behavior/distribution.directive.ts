@@ -75,7 +75,7 @@ export class DistributionDirective {
                     }
                 };
             }
-            setTimeout(() => {this.onDataComplete.emit(tempChartData);});
+            this.onDataComplete.emit(tempChartData);
         }
     }
 

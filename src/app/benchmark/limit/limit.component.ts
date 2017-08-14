@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import { BenchmarkModel, ChartData, BenchmarkPremiumDistributionInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 
@@ -17,7 +19,8 @@ export class LimitComponent implements OnInit {
         this.modelData = modelData;
     }
 
-    chartData: ChartData = null;
+    private chartData: BehaviorSubject<ChartData>;
+    chartData$: Observable<ChartData>;
 
     @Input() set componentData(data: BenchmarkPremiumDistributionInput) {
       this.searchParms = data;
@@ -31,10 +34,23 @@ export class LimitComponent implements OnInit {
     }
 
     onDataComplete(newChartData : ChartData) {
-        this.chartData = newChartData;
+        this.chartData.next(newChartData);
     }
 
-    constructor(private benchmarkService: BenchmarkService) {}
+    constructor(private benchmarkService: BenchmarkService) {
+        this.chartData = new BehaviorSubject<ChartData>(
+            {
+                categories: [],
+                series: [],
+                subtitle: '',
+                title: '',
+                xAxisFormatter: null,
+                xAxisLabel: '',
+                yAxisLabel: ''
+            }
+        );
+        this.chartData$ = this.chartData.asObservable();
+    }
 
     ngOnInit() {}
 

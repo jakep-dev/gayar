@@ -1,16 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import {  ChartData } from 'app/model/model';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 @Component({
     selector: 'bar-chart',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './bar-chart.component.html',
-    styleUrls: ['./bar-chart.component.scss']
+    styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent extends BaseChartComponent implements OnInit {
 
     @Input('chartData') set setChartData(data: ChartData) {
-        if(data) {
+        if(data && data.categories.length > 0 && data.series.length > 0) {
             let i: number;
             let n1: number;
             //clear out old series before adding new series data
