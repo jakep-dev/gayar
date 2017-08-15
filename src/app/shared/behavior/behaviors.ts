@@ -1,7 +1,7 @@
-import { BenchmarkPremiumDistributionDirective } from './benchmark-premium-distribution';
-import { BenchmarkRateDistributionDirective } from './benchmark-rate-distribution';
-import { BenchmarkRetentionDistributionDirective } from './benchmark-retention-distribution';
-import { BenchmarkLimitDistributionDirective } from './distribution.directive';
+import { BenchmarkPremiumDistributionDirective } from './benchmark-premium-distribution.directive';
+import { BenchmarkRateDistributionDirective } from './benchmark-rate-distribution.directive';
+import { BenchmarkRetentionDistributionDirective } from './benchmark-retention-distribution.directive';
+import { BenchmarkLimitDistributionDirective } from './benchmark-limit-distribution.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,

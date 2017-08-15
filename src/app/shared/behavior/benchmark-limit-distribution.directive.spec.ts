@@ -1,9 +1,8 @@
-/*import { DistributionDirective } from './distribution.directive';
+import { BenchmarkLimitDistributionDirective } from './benchmark-limit-distribution.directive';
 
-describe('DistributionDirective', () => {
+describe('BenchmarkLimitDistributionDirective', () => {
   it('should create an instance', () => {
-    const directive = new DistributionDirective();
+    const directive = new BenchmarkLimitDistributionDirective();
     expect(directive).toBeTruthy();
   });
 });
-*/
