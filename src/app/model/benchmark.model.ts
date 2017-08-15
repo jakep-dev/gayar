@@ -2,10 +2,10 @@ export interface BenchmarkModel {
     
     chartTitle: string;
     filterDescription: string;
-    buckets: BenchmarkGroup[];
+    displayText: string;
     xAxis: string;
     yAxis: string;
-    displayText: string;
+    buckets: BenchmarkGroup[];
 }
 
 export interface BenchmarkGroup {

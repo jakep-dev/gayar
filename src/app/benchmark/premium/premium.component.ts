@@ -5,9 +5,9 @@ import { BenchmarkModel, ChartData, BenchmarkDistributionInput } from 'app/model
 import { BenchmarkService } from '../../services/services';
 
 @Component({
-  selector: 'app-premium',
-  templateUrl: './premium.component.html',
-  styleUrls: ['./premium.component.scss']
+	selector: 'app-premium',
+	templateUrl: './premium.component.html',
+	styleUrls: ['./premium.component.scss']
 })
 export class PremiumComponent implements OnInit {
     searchParms: BenchmarkDistributionInput;

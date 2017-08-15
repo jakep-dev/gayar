@@ -11,8 +11,6 @@ import { BenchmarkService } from '../../services/services';
 })
 export class RateComponent implements OnInit {
 
-  //@Input() companyId: number;
-
     searchParms: number;
 
     modelData: BenchmarkRateModel;
