@@ -69,11 +69,14 @@ export class BaseChartComponent {
                 type: 'line',
                 marginLeft: 75,
                 marginRight: 25,
+                spacingBottom: 20,
                 width: 600,
                 height: 400
             },
             credits: {
-                enabled: false
+                enabled: false,
+                text: '<span style="color:transparent;font-size:12px;">placeholder</span>',
+                href: 'javascript:window.open("https://www.advisenltd.com", "_blank")'
             },
             title: {
                 text: 'Placeholder Title',
@@ -106,16 +109,27 @@ export class BaseChartComponent {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Y-Axis Placeholder'
+                    text: 'Y-Axis Placeholder',
+                    style: {
+                        fontSize: '11px'
+                    }
                 }
             },
             legend: {
-                shadow: false
+                shadow: false,
+                enabled: true,
+                itemStyle: {
+                    fontSize: '11px',
+                    color: '#000000'
+                }
             },
             tooltip: {
                 shared: true
             },
             plotOptions: {
+                scatter: {
+                    enableMouseTracking: false,
+                },
                 series: {
                     marker: {
                         enabled: false,
@@ -156,4 +170,37 @@ export class BaseChartComponent {
             }
         };
     }
+
+    public static addChartLabel(chart: any, text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight: string) {
+
+        chart.renderer.text(text, xPos, yPos)
+            .css({
+                color: color || '#000',
+                fontSize: (fontSize || 12) + 'px',
+                fontWeight: fontWeight || 'normal'
+            })
+            .attr({
+                zIndex: 999
+            }).add();
+    }
+
+    public static addChartImage(chart: any, link: string, xPos: number, yPos: number, width: number, height: number) {
+
+        chart.renderer.image(link, xPos, yPos, width, height).add();
+    }
+
+    public static getYAxisPosition(chart: any, yPoint: number) {
+        let yOffSet = chart.chartHeight - chart.marginBottom; //position of Y axis
+        let heightPerUnit = chart.plotHeight / chart.yAxis[0].max; //height per y-axis unit
+
+        return yOffSet - Math.round(yPoint * heightPerUnit);
+    }
+
+    public static getXAxisPosition(chart: any, xPoint: number) {
+        let xOffSet = chart.plotLeft; //position of Y axis
+        let widthPerUnit = chart.plotWidth / chart.xAxis[0].categories.length; //width per x-axis unit
+
+        return xOffSet + Math.round(xPoint * widthPerUnit);
+    }
+
 }

@@ -3,12 +3,12 @@ import {  ChartData } from 'app/model/model';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 @Component({
-    selector: 'bar-chart',
+    selector: 'boxplot-chart',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: './bar-chart.component.html',
-    styleUrls: ['./bar-chart.component.scss'],
+    templateUrl: './boxplot-chart.component.html',
+    styleUrls: ['./boxplot-chart.component.scss'],
 })
-export class BarChartComponent extends BaseChartComponent implements OnInit {
+export class BoxPlotChartComponent extends BaseChartComponent implements OnInit {
 
     @Input('chartData') set setChartData(data: ChartData) {
         //Check to see if we have at least one data point
@@ -37,12 +37,10 @@ export class BarChartComponent extends BaseChartComponent implements OnInit {
                     {
                         id: data.series[i].name,
                         name: data.series[i].name,
-                        type: 'column',
-                        color: data.series[i].color,
+                        type: 'boxplot',
                         data: data.series[i].data,
                         pointWidth: data.series[i].pointWidth,
-                        borderWidth: data.series[i].borderWidth,
-                        pointPlacement: data.series[i].pointPlacement
+                        whiskerLength: data.series[i].whiskerLength
                     }
                 );
             }
@@ -57,7 +55,17 @@ export class BarChartComponent extends BaseChartComponent implements OnInit {
 
     constructor() {
         super();
-        this.setDefaultChartType('column');
+        this.setDefaultChartType('boxplot');
+        this.chartOptions.plotOptions = {
+            boxplot: {
+                colorByPoint: false,
+                fillColor: '#ffffff',
+                color: '#464646',
+                medianColor: '#000000',
+                medianWidth: 2,
+                lineWidth: 2
+            }
+        };
         this.hasRedrawActions = false;
     }
 

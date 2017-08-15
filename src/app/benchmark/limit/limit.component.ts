@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkModel, ChartData, BenchmarkPremiumDistributionInput } from 'app/model/model';
+import { BenchmarkModel, ChartData, BenchmarkDistributionInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 
 @Component({
@@ -11,7 +11,7 @@ import { BenchmarkService } from '../../services/services';
 })
 export class LimitComponent implements OnInit {
   
-    searchParms: BenchmarkPremiumDistributionInput;
+    searchParms: BenchmarkDistributionInput;
 
     modelData: BenchmarkModel;
 
@@ -22,19 +22,34 @@ export class LimitComponent implements OnInit {
     private chartData: BehaviorSubject<ChartData>;
     chartData$: Observable<ChartData>;
 
-    @Input() set componentData(data: BenchmarkPremiumDistributionInput) {
-      this.searchParms = data;
-      if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-        this.benchmarkService.getBenchmarkPremiumByCompanyId(data.clientValue, data.chartType, data.companyId)
-          .subscribe(modelData => this.setModelData(modelData));
-      } else {
-        this.benchmarkService.getBenchmarkPremiumByManualInput(data.clientValue, data.chartType, data.naics, data.revenueRange)
-          .subscribe(modelData => this.setModelData(modelData));
-      }
+    @Input() set componentData(data: BenchmarkDistributionInput) {
+        if(data) {
+            this.searchParms = data;
+            if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.benchmarkService.getBenchmarkPremiumByCompanyId(data.limitValue, 'LIMIT', data.companyId)
+                .subscribe(modelData => this.setModelData(modelData));
+            } else {
+                this.benchmarkService.getBenchmarkPremiumByManualInput(data.limitValue, 'LIMIT', data.naics, data.revenueRange)
+                .subscribe(modelData => this.setModelData(modelData));
+            }
+        }
     }
 
     onDataComplete(newChartData : ChartData) {
         this.chartData.next(newChartData);
+    }
+
+    private chartObject: BehaviorSubject<any>;
+    
+    chartObject$: Observable<any>;
+    
+    onChartReDraw(chartObject: any) {
+        this.chartObject.next(
+            {
+                isObjectValid: true,
+                highChartObject: chartObject
+            }
+        );
     }
 
     constructor(private benchmarkService: BenchmarkService) {
@@ -44,12 +59,22 @@ export class LimitComponent implements OnInit {
                 series: [],
                 subtitle: '',
                 title: '',
+                displayText: '',
                 xAxisFormatter: null,
                 xAxisLabel: '',
-                yAxisLabel: ''
+                yAxisLabel: '',
+                customChartSettings: null,
+                hasRedrawActions: false
             }
         );
         this.chartData$ = this.chartData.asObservable();
+        this.chartObject = new BehaviorSubject<any>(
+            {
+                isObjectValid: false,
+                highChartObject: null
+            }
+        );
+        this.chartObject$ = this.chartObject.asObservable();
     }
 
     ngOnInit() {}

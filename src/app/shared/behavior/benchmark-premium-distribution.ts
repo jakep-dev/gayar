@@ -3,9 +3,9 @@ import { BenchmarkModel, ChartData } from 'app/model/model';
 import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
 
 @Directive({
-    selector: '[benchmark-limit-distribution-behavior]'
+    selector: '[benchmark-premium-distribution-behavior]'
 })
-export class BenchmarkLimitDistributionDirective {
+export class BenchmarkPremiumDistributionDirective {
 
     @Input('modelData') set setChartData(data: BenchmarkModel) {
 
@@ -69,7 +69,7 @@ export class BenchmarkLimitDistributionDirective {
                 series.data = new Array();
                 for(j = 0; j < n2; j++) {
                     if((group[tempChartData.categories[j]] != undefined) && (group[tempChartData.categories[j]] != null)) {
-                        if(series.name === BenchmarkLimitDistributionDirective.CLIENT_LINE) {
+                        if(series.name === BenchmarkPremiumDistributionDirective.CLIENT_LINE) {
                             clientCategoryLabel.value = tempChartData.categories[j];
                         }
                         series.data.push(group[tempChartData.categories[j]]);
@@ -130,11 +130,11 @@ export class BenchmarkLimitDistributionDirective {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
-        this.seriesColor[BenchmarkLimitDistributionDirective.CLIENT_LINE] = '#487AA1';
+        this.seriesColor[BenchmarkPremiumDistributionDirective.CLIENT_LINE] = '#487AA1';
     }
 
     private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkLimitDistributionDirective.defaultLineColor;
+        return this.seriesColor[seriesName] || BenchmarkPremiumDistributionDirective.defaultLineColor;
     }
 
     ngOnInit() {}

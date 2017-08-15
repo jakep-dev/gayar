@@ -1,3 +1,9 @@
-<div style="min-height: 275px;">
-    <chart [options]="chartOptions" (load)="setChart($event.context)"></chart>
-</div>
+<bar-chart 
+    benchmark-premium-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</bar-chart>
