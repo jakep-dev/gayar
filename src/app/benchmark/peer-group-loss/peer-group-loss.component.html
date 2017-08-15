@@ -1,3 +1,9 @@
-<p>
-  peer-group-loss works!
-</p>
+<bar-chart 
+    benchmark-peergrouploss-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</bar-chart>

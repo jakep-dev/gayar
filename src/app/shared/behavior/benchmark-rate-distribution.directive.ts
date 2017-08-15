@@ -24,7 +24,7 @@ export class BenchmarkRateDistributionDirective {
                 customChartSettings: {
                     xAxis: {
                         title: {
-                            text: '',
+                            text: 'Entire Peer Group',
                             margin: 20
                         },
                         labels: {
@@ -33,7 +33,7 @@ export class BenchmarkRateDistributionDirective {
                     },
                     yAxis: {
                         title: {
-                            text: ''
+                            text: 'Rate per Million'
                         },
                         min: 0,
                         tickInterval: 2500,
@@ -47,6 +47,9 @@ export class BenchmarkRateDistributionDirective {
                                 zIndex: 100
                             }
                         ]
+                    },
+                    legend: {
+                        enabled: false
                     },
                     tooltip: {
                         enabled: false

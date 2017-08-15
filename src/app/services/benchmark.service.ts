@@ -74,7 +74,7 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getLimitAdequacy(companyId: number, limit: number): Observable<any>{
+    public getLimitAdequacy(companyId: number, limit: string): Observable<any>{
         try{
             return super.Post<any>('/api/getLimitAdequacy', {
                'companyId': companyId,
@@ -85,4 +85,18 @@ export class BenchmarkService extends BaseService {
 
         }
     }
+
+    public getLimitAdequacyChartByManualInput(limit: string, naics: string, revenue_range: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getLimitAdequacy', {
+                'limit': limit,
+                'naics': naics,
+                'revenue_range': revenue_range
+           });
+        }
+        catch(e){
+
+        }
+    }
+
 }

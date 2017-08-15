@@ -24,6 +24,14 @@ export interface BenchmarkDistributionInput {
     revenueRange: string;
 }
 
+export interface BenchmarkLimitAdequacyInput {
+    searchType: string;
+    companyId: number;
+    limits: string;
+    naics: string;
+    revenueRange: string
+}
+
 export interface BenchmarkRateModel {
     chartTitle: string;
     filterDescription: string;
@@ -42,4 +50,23 @@ export interface RateQuartile {
     median_KMB: string;
     fourthQuartile: number;
     fourthQuartile_KMB: string;
+}
+
+export interface BenchmarkLimitModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    xAxis: string;
+    yAxis: string;
+    clientLimit: string;
+    medianLimit: string;
+    losses: LimitLosses[];
+}
+
+export interface LimitLosses {
+
+    lossAmount: number,
+    lossBelowLimit: number,
+    lossAboveLimit: number
 }
