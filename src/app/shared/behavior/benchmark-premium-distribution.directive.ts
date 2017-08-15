@@ -1,5 +1,5 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
-import { BenchmarkModel, ChartData } from 'app/model/model';
+import { BenchmarkModel, BarChartData } from 'app/model/model';
 import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
 
 @Directive({
@@ -10,7 +10,7 @@ export class BenchmarkPremiumDistributionDirective {
     @Input('modelData') set setChartData(data: BenchmarkModel) {
 
         if(data) {
-            let tempChartData: ChartData = {
+            let tempChartData: BarChartData = {
                 series: [],
                 title: data.chartTitle,
                 subtitle: data.filterDescription,
@@ -92,7 +92,7 @@ export class BenchmarkPremiumDistributionDirective {
         }
     }
 
-    @Output() onDataComplete = new EventEmitter<ChartData>();
+    @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input('chartObject') set setChartObject(chartObject: any) {
         if(chartObject && chartObject.isObjectValid) {

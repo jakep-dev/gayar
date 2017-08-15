@@ -1,4 +1,4 @@
-export interface BarChartData {
+export interface BoxPlotChartData {
     series: any;
     title: string;
     subtitle: string;

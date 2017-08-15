@@ -1,5 +1,5 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
-import { BenchmarkRateModel, RateQuartile, ChartData } from 'app/model/model';
+import { BenchmarkRateModel, RateQuartile, BoxPlotChartData } from 'app/model/model';
 import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
 import { SearchService } from '../../services/services';
 
@@ -12,7 +12,7 @@ export class BenchmarkRateDistributionDirective {
 
         if(data) {
             this.quartile = data.quartile;
-            let tempChartData: ChartData = {
+            let tempChartData: BoxPlotChartData = {
                 series: [],
                 title: data.chartTitle,
                 subtitle: data.filterDescription,
@@ -72,7 +72,7 @@ export class BenchmarkRateDistributionDirective {
         }
     }
 
-    @Output() onDataComplete = new EventEmitter<ChartData>();
+    @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
 
     @Input('chartObject') set setChartObject(chartObject: any) {
         if(chartObject && chartObject.isObjectValid) {

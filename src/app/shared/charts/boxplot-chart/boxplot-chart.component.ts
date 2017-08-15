@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import {  ChartData } from 'app/model/model';
+import { BoxPlotChartData } from 'app/model/model';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 @Component({
@@ -10,7 +10,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
 })
 export class BoxPlotChartComponent extends BaseChartComponent implements OnInit {
 
-    @Input('chartData') set setChartData(data: ChartData) {
+    @Input('chartData') set setChartData(data: BoxPlotChartData) {
         //Check to see if we have at least one data point
         if(data && data.categories.length > 0 && data.series.length > 0) {
             //update simple settings

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkModel, ChartData, BenchmarkDistributionInput } from 'app/model/model';
+import { BenchmarkModel, BarChartData, BenchmarkDistributionInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 
 @Component({
@@ -18,8 +18,8 @@ export class PremiumComponent implements OnInit {
         this.modelData = modelData;
     }
 
-    private chartData: BehaviorSubject<ChartData>;
-    chartData$: Observable<ChartData>;
+    private chartData: BehaviorSubject<BarChartData>;
+    chartData$: Observable<BarChartData>;
 
     @Input() set componentData(data: BenchmarkDistributionInput) {
         if(data) {
@@ -34,7 +34,7 @@ export class PremiumComponent implements OnInit {
         }
     }
 
-    onDataComplete(newChartData : ChartData) {
+    onDataComplete(newChartData : BarChartData) {
         this.chartData.next(newChartData);
     }
 
@@ -52,7 +52,7 @@ export class PremiumComponent implements OnInit {
     }
 
     constructor(private benchmarkService: BenchmarkService) {
-        this.chartData = new BehaviorSubject<ChartData>(
+        this.chartData = new BehaviorSubject<BarChartData>(
             {
                 categories: [],
                 series: [],
