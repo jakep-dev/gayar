@@ -1,20 +1,28 @@
-<div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-  <app-tile fxFlex [title]="'Benchmark'" [isSplittable]="true" 
-  [isFlippable]="true">
-    <div front>
-      <app-premium [componentData]="benchmarkPremiumDistributionInput"></app-premium>
-    </div>
-    <div back>
-      Chart 2 Place Holder
-    </div>
-  </app-tile>
+<div front fxLayout="column" fxFlex fxLayoutAlign="start start" fxLayoutGap="10px" class="padding-left-10 padding-right-10"> 
+  <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlex="100">
+    <app-tile fxFlex [title]="'Benchmark Premium'">
+      <div front>
+        <app-premium [componentData]="benchmarkDistributionInput"></app-premium>
+      </div>
+    </app-tile>
 
-  <app-tile fxFlex [title]="'Tile 2'" >
-    <div front>
-      Chart 1 Place Holder
-    </div>
-    <div back>
-      Chart 2 Place Holder
-    </div>
-  </app-tile>
+    <app-tile fxFlex [title]="'Benchmark Limit'" >
+      <div front>
+        <app-limit [componentData]="benchmarkDistributionInput"></app-limit>
+      </div>
+    </app-tile>
+  </div>
+  <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlex="100">
+    <app-tile fxFlex [title]="'Benchmark Retention'">
+      <div front>
+        <app-retention [componentData]="benchmarkDistributionInput"></app-retention>
+      </div>
+    </app-tile>
+
+    <app-tile fxFlex [title]="'Benchmark Rate'" >
+      <div front>
+        <app-rate [companyId]="companyId"></app-rate>
+      </div>
+    </app-tile>
+  </div>
 </div>

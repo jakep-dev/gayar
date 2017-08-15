@@ -1,3 +1,9 @@
-<p>
-  rate works!
-</p>
+<boxplot-chart 
+    benchmark-rate-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</boxplot-chart>

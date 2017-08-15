@@ -1,3 +1,9 @@
-<p>
-  retention works!
-</p>
+<bar-chart 
+    benchmark-retention-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</bar-chart>

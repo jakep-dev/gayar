@@ -19,13 +19,13 @@ export function highchartsFactory() {
     var hc = require('highcharts');
     // var dd = require('highcharts/modules/drilldown');
     var nd = require('highcharts/modules/no-data-to-display');
-    // var hcm = require('highcharts/highcharts-more');
-     var exp = require('highcharts/modules/exporting');
+    var hcm = require('highcharts/highcharts-more');
+    var exp = require('highcharts/modules/exporting');
     // var ct = require('highcharts/modules/canvas-tools');
 
     // dd(hc);
     nd(hc);
-    // hcm(hc);
+    hcm(hc);
     exp(hc);
     // ct(hc);
     return hc;
@@ -42,7 +42,8 @@ import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
-
+import { BLOCK_CHART_TYPES } from './shared/charts/chart-types';
+import { BLOCK_CHART_BEHAVIORS } from './shared/behavior/behaviors';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,9 @@ import { SsoComponent } from './sso/sso.component';
     MenuComponent,
     SearchComponent,
     TableComponent,
-    SsoComponent
+    SsoComponent,
+    BLOCK_CHART_TYPES,
+    BLOCK_CHART_BEHAVIORS
   ],
   imports: [
     BrowserModule,

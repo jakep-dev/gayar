@@ -1,3 +1,9 @@
-<p>
-  limit works!
-</p>
+<bar-chart 
+    benchmark-limit-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</bar-chart>

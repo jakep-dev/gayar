@@ -1,241 +1,81 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChartModule } from 'angular2-highcharts';
+import { Component, OnInit, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { BenchmarkModel, BarChartData, BenchmarkDistributionInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
-import { BenchmarkModel, BenchmarkPremiumDistributionInput } from 'app/model/model';
-import {Observable} from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-premium',
-  templateUrl: './premium.component.html',
-  styleUrls: ['./premium.component.scss']
+	selector: 'app-premium',
+	templateUrl: './premium.component.html',
+	styleUrls: ['./premium.component.scss']
 })
 export class PremiumComponent implements OnInit {
+    searchParms: BenchmarkDistributionInput;
 
-  public static defaultLineColor: string = 'black';
-  public static CLIENT_LINE: string = "Client Line";
+    modelData: BenchmarkModel;
 
-  chartOptions: any;
-
-  seriesColor: string[];
-
-  constructor(private benchmarkService: BenchmarkService) { 
-    this.seriesColor = [];
-    this.seriesColor["Above Client"] = '#F68C20';
-    this.seriesColor["Below Client"] = '#B1D23B';
-    this.seriesColor[PremiumComponent.CLIENT_LINE] = '#487AA1';
-
-    this.chartOptions = {
-        chart: {
-            type: 'column',
-            marginLeft:75,
-            marginRight:25,
-            width: 600,
-            height: 400
-        },
-        credits: {
-            enabled: false
-        },
-        title: {
-            text: 'Placeholder Title',
-            style: {
-                fontSize: '14px'
-            }
-        },
-        subtitle: {
-            text: 'Placeholder Sub-Title'
-        },
-        xAxis: {
-            type: 'category',
-            categories: [],
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '11px',
-                    fontFamily: 'Verdana, sans-serif',
-                },
-                //Set specific xaxis series text color
-                formatter: function () {
-                    if ('5M-10M' === this.value) {
-                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
-                    } else {
-                        return this.value;
-                    }
-                }
-
-            },
-            title: {
-                text: 'Range (USD)',
-                style: {
-                    fontSize: '11px'
-                }
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Program Counts'
-            }
-        },
-        legend: {
-            shadow: false
-        },
-        tooltip: {
-            shared: true
-        },
-        plotOptions: {
-            series: {
-                marker: { 
-                    enabled: false,
-                    radius: 8
-                },
-                scatter: {
-                    enableMouseTracking: false
-                },
-                events: {
-                    legendItemClick: function () {
-                        //return false to disable hiding of series when legend item is click
-                        return false;
-                    }
-                }
-            },
-            column: {
-                grouping: false,
-                shadow: false,
-                borderWidth: 0
-            }
-        },
-        lang: {
-            noData: "No Data Available"
-        },
-        noData: {
-            style: {
-                fontWeight: 'bold',
-                fontSize: '15px',
-                color: '#FF0000'
-            }
-        },
-        series: [
-        ],
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        }
-    };
-
-  }
-
-  ngOnInit() {
-  }
-
-    chart: any;
-    public setChart(chart) {
-        this.chart = chart;
-        console.log('Chart loaded.');
+    setModelData(modelData: BenchmarkModel) {
+        this.modelData = modelData;
     }
 
-    private loadChartData() {
-        var i;
-        var n1;
-        n1 = this.chart.series.length;
-        for(i =  n1 -1; i >= 0; i--) {
-            this.chart.series[i].remove();
-        }
-        //this.chart.xAxis[0].setCategories(this.chartOptions.xAxis.categories);
-        // this.chart.title.update({text: this.chartData.chartTitle});
-        // this.chart.subtitle.update({text: this.chartData.filterDescription});
+    private chartData: BehaviorSubject<BarChartData>;
+    chartData$: Observable<BarChartData>;
 
-        n1 = this.chartOptions.series.length;
-        for(i = 0; i < n1; i++) {
-            this.chart.addSeries(
-                {
-                    id: this.chartOptions.series[i].name,
-                    name: this.chartOptions.series[i].name,
-                    type: 'column',
-                    color: this.getSeriesColor(this.chartOptions.series[i].name),
-                    data: this.chartOptions.series[i].data
-                }
-            );
-        }
-        this.chart.update(this.chartOptions, true);
-    }
-
-    private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || PremiumComponent.defaultLineColor;
-    }
-
-    chartData: any;
-    public setChartData(data: BenchmarkModel) {
-        this.chartData = data;
-        var i: number;
-        var n1: number;
-        var groups = new Array();
-        var groupNames = new Array();
-        n1 = this.chartData.buckets.length;
-        var bucket: any;
-        this.chartOptions.xAxis.categories.length = 0;
-        for(i = 0; i < n1; i++) {
-            bucket = this.chartData.buckets[i];
-            this.chartOptions.xAxis.categories.push(bucket.label);
-            if(!groups[bucket.group]) {
-                groups[bucket.group] = new Array();
-                groupNames.push(bucket.group);
+    @Input() set componentData(data: BenchmarkDistributionInput) {
+        if(data) {
+            this.searchParms = data;
+            if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.benchmarkService.getBenchmarkPremiumByCompanyId(data.premiumValue, 'PREMIUM', data.companyId)
+                .subscribe(modelData => this.setModelData(modelData));
+            } else {
+                this.benchmarkService.getBenchmarkPremiumByManualInput(data.premiumValue, 'PREMIUM', data.naics, data.revenueRange)
+                .subscribe(modelData => this.setModelData(modelData));
             }
-            groups[bucket.group][bucket.label] = bucket.count;
         }
+    }
 
-        var groupName: string;
-        var group: any;
-        var j: number;
-        var n2: number;
-        var series;
-        var clientCategoryLabel : any;
-        clientCategoryLabel = new Object({value : ''});
+    onDataComplete(newChartData : BarChartData) {
+        this.chartData.next(newChartData);
+    }
 
-        n2 = this.chartOptions.xAxis.categories.length;
-        n1 = groupNames.length;
-        for(i = 0; i < n1; i++) {
-            group = groups[groupNames[i]];
-            series = new Object();
-            series.name = groupNames[i];
-            series.data = new Array();
-            for(j = 0; j < n2; j++) {
-                if(group[this.chartOptions.xAxis.categories[j]]) {
-                    if(series.name === PremiumComponent.CLIENT_LINE) {
-                        clientCategoryLabel.value = this.chartOptions.xAxis.categories[j];
-                    }
-                    series.data.push(group[this.chartOptions.xAxis.categories[j]]);
-                } else {
-                    series.data.push(null);
-                }
+    private chartObject: BehaviorSubject<any>;
+    
+    chartObject$: Observable<any>;
+    
+    onChartReDraw(chartObject: any) {
+        this.chartObject.next(
+            {
+                isObjectValid: true,
+                highChartObject: chartObject
             }
-            this.chartOptions.series.push(series);
-        }
-        this.chartOptions.title.text = this.chartData.chartTitle;
-        this.chartOptions.subtitle.text = this.chartData.filterDescription;
-
-        if (clientCategoryLabel.value) {
-            this.chartOptions.xAxis.labels.formatter = 
-                function () {
-                    if (clientCategoryLabel.value === this.value) {
-                        return '<span style="fill: #487AA1;font-size:11px;font-weight:bold;">' + this.value + '</span>';
-                    } else {
-                        return this.value;
-                    }
-                }
-        }
-
-        console.log(this.chartData);
-        this.loadChartData();
+        );
     }
 
-  @Input() set componentData(data: BenchmarkPremiumDistributionInput) {
-      if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-        this.benchmarkService.getBenchmarkPremiumByCompanyId(data.clientValue, data.chartType, data.companyId)
-          .subscribe(chartData => this.setChartData(chartData));
-      } else {
-        this.benchmarkService.getBenchmarkPremiumByManualInput(data.clientValue, data.chartType, data.naics, data.revenueRange)
-          .subscribe(chartData => this.setChartData(chartData));
-      }
+    constructor(private benchmarkService: BenchmarkService) {
+        this.chartData = new BehaviorSubject<BarChartData>(
+            {
+                categories: [],
+                series: [],
+                subtitle: '',
+                title: '',
+                displayText: '',
+                xAxisFormatter: null,
+                xAxisLabel: '',
+                yAxisLabel: '',
+                customChartSettings: null,
+                hasRedrawActions: false
+            }
+        );
+        this.chartData$ = this.chartData.asObservable();
+        this.chartObject = new BehaviorSubject<any>(
+            {
+                isObjectValid: false,
+                highChartObject: null
+            }
+        );
+        this.chartObject$ = this.chartObject.asObservable();
     }
+
+    ngOnInit() {}
+
 }
