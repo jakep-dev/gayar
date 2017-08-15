@@ -98,5 +98,4 @@ export class BenchmarkService extends BaseService {
 
         }
     }
-
 }
