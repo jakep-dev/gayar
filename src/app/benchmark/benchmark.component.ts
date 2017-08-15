@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from '../shared/animations/animations';
 import { SearchService } from '../services/services';
-import { BenchmarkDistributionInput } from '../model/benchmark.model';
+import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput } from '../model/benchmark.model';
 
 @Component({
     selector: 'app-benchmark',
@@ -13,12 +13,12 @@ import { BenchmarkDistributionInput } from '../model/benchmark.model';
 export class BenchmarkComponent implements OnInit {
 
     public searchType: string;
-    public chartType: string;
     public companyId: number;
     public naics: string;
     public revenueRange: string;
 
     public benchmarkDistributionInput: BenchmarkDistributionInput;
+    public benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
     
     constructor(private searchService: SearchService) { }
 
@@ -36,6 +36,13 @@ export class BenchmarkComponent implements OnInit {
             retentionValue: this.searchService.searchCriteria.retention,
             naics: this.naics,
             revenueRange: this.revenueRange
+        }
+        this.benchmarkLimitAdequacyInput = {
+          searchType: this.searchType,
+          companyId: this.companyId,
+          limits: this.searchService.searchCriteria.limit,
+          naics: this.naics,
+          revenueRange: this.revenueRange
         }
     }
 

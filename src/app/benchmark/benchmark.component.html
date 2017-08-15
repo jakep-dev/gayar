@@ -12,6 +12,7 @@
       </div>
     </app-tile>
   </div>
+
   <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlex="100">
     <app-tile fxFlex [title]="'Benchmark Retention'">
       <div front>
@@ -19,6 +20,14 @@
       </div>
     </app-tile>
 
+    <app-tile fxFlex [title]="'Benchmark Peer Group Loss'">
+      <div front>
+        <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+      </div>
+    </app-tile>
+  </div>
+
+  <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" fxFlex="100">
     <app-tile fxFlex [title]="'Benchmark Rate'" >
       <div front>
         <app-rate [companyId]="companyId"></app-rate>
