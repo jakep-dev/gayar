@@ -32,9 +32,18 @@ export interface BenchmarkLimitAdequacyInput {
     revenueRange: string
 }
 
+export interface BenchmarkRateInput {
+    companyId: number;
+    premiumValue: string;
+    limitValue: string;
+    naics: string;
+    revenueRange: string;
+}
+
 export interface BenchmarkRateModel {
     chartTitle: string;
     filterDescription: string;
+    displayText: string;
     quartile: RateQuartile;
 }
 
@@ -43,7 +52,9 @@ export interface RateQuartile {
     clientRPMPercentileValue: number;
     clientRPMPercentileValue_KMB: string;
     maxRPM: number;
+    maxRPM_KMB: string;
     minRPM: number;
+    minRPM_KMB: string;
     firstQuartile: number;
     firstQuartile_KMB: string;
     median: number;

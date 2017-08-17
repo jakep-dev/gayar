@@ -63,10 +63,14 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getRatePerMillion(companyId: number): Observable<any>{
+    public getRatePerMillion(companyId: number, premium: string, limit: string, revenueRange: string, naics: string): Observable<any>{
         try{
             return super.Post<any>('/api/getRatePerMillion', {
-               'companyId': companyId
+               'companyId': companyId,
+               'premium': premium,
+               'limit': limit,
+               'revenueRange': revenueRange,
+               'naics': naics
            });
         }
         catch(e){

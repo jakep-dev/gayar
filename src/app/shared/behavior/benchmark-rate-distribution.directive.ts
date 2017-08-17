@@ -12,6 +12,7 @@ export class BenchmarkRateDistributionDirective {
 
         if(data) {
             this.quartile = data.quartile;
+            this.displayText = data.displayText;
             let tempChartData: BoxPlotChartData = {
                 series: [],
                 title: data.chartTitle,
@@ -22,6 +23,10 @@ export class BenchmarkRateDistributionDirective {
                 yAxisLabel: '',
                 xAxisFormatter: null,
                 customChartSettings: {
+                    chart: {
+                        spacingBottom: 50,
+                        spacingLeft: 30
+                    },
                     xAxis: {
                         title: {
                             text: 'Entire Peer Group',
@@ -82,6 +87,15 @@ export class BenchmarkRateDistributionDirective {
             let chart = chartObject.highChartObject;
             BaseChartComponent.addChartLabel(
                 chart, 
+                'Min ' + this.quartile.minRPM_KMB,
+                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34, 
+                BaseChartComponent.getYAxisPosition(chart, this.quartile.minRPM) + 10,
+                null,
+                10,
+                'bold'
+            );
+            BaseChartComponent.addChartLabel(
+                chart, 
                 '25th% ' + this.quartile.firstQuartile_KMB,
                 BaseChartComponent.getXAxisPosition(chart, 2.5) - 34, 
                 BaseChartComponent.getYAxisPosition(chart, this.quartile.firstQuartile) + 10,
@@ -108,6 +122,16 @@ export class BenchmarkRateDistributionDirective {
                 10,
                 'bold'
             );
+            BaseChartComponent.addChartLabel(
+                chart,
+                'Max ' + this.quartile.maxRPM_KMB,
+                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34,
+                BaseChartComponent.getYAxisPosition(chart, this.quartile.maxRPM) - 5,
+                null,
+                10,
+                'bold'
+            );
+
 
             BaseChartComponent.addChartLabel(
                 chart,
@@ -117,6 +141,25 @@ export class BenchmarkRateDistributionDirective {
                 null,
                 10,
                 'bold'
+            );
+            BaseChartComponent.addChartLabel(
+                chart, 
+                this.displayText, 
+                10, 
+                chart.chartHeight - 40, 
+                '#000000',
+                10,
+                null,
+                chart.chartWidth - 75
+            );
+            
+            BaseChartComponent.addChartImage(
+                chart, 
+                'https://www.advisen.com/img/advisen-logo.png', 
+                chart.chartWidth - 80, 
+                chart.chartHeight - 20, 
+                69, 
+                17
             );
 
             if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
@@ -141,6 +184,8 @@ export class BenchmarkRateDistributionDirective {
     seriesColor: string[];
 
     quartile: RateQuartile;
+
+    displayText: string = '';
 
     constructor(private searchService: SearchService) {
         this.seriesColor = [];
