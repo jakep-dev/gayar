@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkRateModel, BoxPlotChartData  } from 'app/model/model';
+import { BenchmarkRateModel, BoxPlotChartData, BenchmarkRateInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 
 @Component({
@@ -11,7 +11,7 @@ import { BenchmarkService } from '../../services/services';
 })
 export class RateComponent implements OnInit {
 
-    searchParms: number;
+    searchParms: BenchmarkRateInput;
 
     modelData: BenchmarkRateModel;
 
@@ -22,12 +22,10 @@ export class RateComponent implements OnInit {
     private chartData: BehaviorSubject<BoxPlotChartData>;
     chartData$: Observable<BoxPlotChartData>;
 
-    @Input() set companyId(companyId: number) {
-        this.searchParms = companyId;
-        if(companyId) {
-            this.benchmarkService.getRatePerMillion(companyId)
+    @Input() set componentData(data: BenchmarkRateInput) {
+        this.searchParms = data;
+            this.benchmarkService.getRatePerMillion(data.companyId, data.premiumValue, data.limitValue, data.revenueRange, data.naics)
             .subscribe(modelData => this.setModelData(modelData));
-        }
     }
 
     onDataComplete(newChartData : BoxPlotChartData) {
