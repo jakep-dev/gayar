@@ -27,11 +27,35 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                         data: []
                     },
                     {
+                        name: 'Loss Amount - Above Client Limit',
+                        type: 'line', 
+                        color: '#F68C20',
+                        marker: {
+                            symbol: 'circle',
+                            enabled: true,
+                            radius : 12
+		        		},
+                        
+                    },
+                    {
+                        name: 'Loss Amount - Below Client Limit',
+                        type: 'line', 
+                        color: '#B1D23B',
+                        marker: {
+                            symbol: 'circle',
+                            enabled: true,
+                            radius : 12
+		        		},
+                        
+                    },
+                    {
                         name: 'Client Limit',
                         type: 'line',
                         color: '#487AA1',
                         marker: {
-        					symbol: 'circle'
+                            symbol: 'circle',
+                            enabled: true,
+                            radius : 12
 		        		},
 				        marginBottom: 30
                     }, 
@@ -40,9 +64,11 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                         type: 'line',
                         color: '#000000',
                         marker: {
-                            symbol: 'circle'
-                        },
-                        marginBottom: 30
+                            symbol: 'circle',
+                            enabled: true,
+                            radius : 12
+		        		},
+				        marginBottom: 30
                     }
                 ],
                 title: data.chartTitle,
@@ -55,7 +81,9 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                 customChartSettings: {
                     chart: {
                         spacingRight: 20,
-                        spacingLeft: 20
+                        spacingLeft: 20,
+                        spacingBottom: 40,
+                        marginBottom: 100,
                     },
                     credits: {
                         enabled: true
@@ -82,8 +110,6 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                     },
                     yAxis: {
                         allowDecimals: false,
-                        max: 250000000,
-                        tickInterval: 50000000,
                         plotLines: [
                             {
                                 color: '#000000',
@@ -144,10 +170,11 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                 chart, 
                 this.displayText, 
                 10, 
-                chart.chartHeight - 10, 
+                chart.chartHeight - 30, 
                 '#000000',
                 10,
-                null
+                null,
+                500
             );
             BaseChartComponent.addChartImage(
                 chart, 
