@@ -37,12 +37,14 @@ export class BarChartComponent extends BaseChartComponent implements OnInit {
                     {
                         id: data.series[i].name,
                         name: data.series[i].name,
-                        type: 'column',
+                        type: data.series[i].type || 'column',
                         color: data.series[i].color,
                         data: data.series[i].data,
                         pointWidth: data.series[i].pointWidth,
                         borderWidth: data.series[i].borderWidth,
-                        pointPlacement: data.series[i].pointPlacement
+                        pointPlacement: data.series[i].pointPlacement,
+                        showInLegend: data.series[i].showInLegend,  
+                        marker: data.series[i].marker
                     }
                 );
             }

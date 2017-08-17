@@ -69,7 +69,7 @@ export class BaseChartComponent {
                 type: 'line',
                 marginLeft: 75,
                 marginRight: 25,
-                spacingBottom: 20,
+                spacingBottom: 35,
                 width: 600,
                 height: 400
             },
