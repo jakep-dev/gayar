@@ -171,17 +171,27 @@ export class BaseChartComponent {
         };
     }
 
-    public static addChartLabel(chart: any, text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight: string) {
+    //fontWeight & width are optional parameters
+    public static addChartLabel(chart: any, text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight?: string, width?: number) {
 
-        chart.renderer.text(text, xPos, yPos)
-            .css({
-                color: color || '#000',
-                fontSize: (fontSize || 12) + 'px',
-                fontWeight: fontWeight || 'normal'
-            })
-            .attr({
-                zIndex: 999
-            }).add();
+        let render = chart.renderer.text(text, xPos, yPos);
+        let css = {
+            color: color || '#000',
+            fontSize: (fontSize || 12) + 'px',
+            fontWeight: fontWeight || 'normal'
+        };
+        
+        let attr = {
+            zIndex: 999
+        };
+
+        if(width) {
+            css['width'] = width + 'px';
+        }
+        
+        render.css(css)
+        render.attr(attr);
+        render.add();
     }
 
     public static addChartImage(chart: any, link: string, xPos: number, yPos: number, width: number, height: number) {
