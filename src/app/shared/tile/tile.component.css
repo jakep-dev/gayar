@@ -8,15 +8,29 @@
     border-bottom-left-radius: 4px;
 }
 
+.tile-title-parent{
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+}
+
 .tile-title{
     font-size: 13px;
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    overflow:hidden;
 }
 
 .tile-container{
     padding: 5px;
+    min-width: 400px;
 }
 
 .tile-toolbar{
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
+}
+
+.tile-buttons {
+    min-width: 160px;
 }
