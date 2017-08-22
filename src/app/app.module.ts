@@ -42,7 +42,6 @@ import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
-import { BenchmarkRetentionDistributionDirective } from './shared/behavior/benchmarksss/benchmark-retention-distribution.directive';
 
 @NgModule({
   declarations: [
@@ -56,8 +55,7 @@ import { BenchmarkRetentionDistributionDirective } from './shared/behavior/bench
     TableComponent,
     SsoComponent,
     BLOCK_CHART_TYPES,
-    BLOCK_CHART_BEHAVIORS,
-    BenchmarkRetentionDistributionDirective
+    BLOCK_CHART_BEHAVIORS
   ],
   imports: [
     BrowserModule,
