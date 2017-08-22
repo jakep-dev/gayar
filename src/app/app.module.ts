@@ -32,7 +32,7 @@ export function highchartsFactory() {
 }
 
 // Application Components
-import { BLOCK_SHARED, BLOCK_ERRORS } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CHART_BEHAVIORS} from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
@@ -42,8 +42,7 @@ import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
-import { BLOCK_CHART_TYPES } from './shared/charts/chart-types';
-import { BLOCK_CHART_BEHAVIORS } from './shared/behavior/behaviors';
+import { BenchmarkRetentionDistributionDirective } from './shared/behavior/benchmarksss/benchmark-retention-distribution.directive';
 
 @NgModule({
   declarations: [
@@ -57,7 +56,8 @@ import { BLOCK_CHART_BEHAVIORS } from './shared/behavior/behaviors';
     TableComponent,
     SsoComponent,
     BLOCK_CHART_TYPES,
-    BLOCK_CHART_BEHAVIORS
+    BLOCK_CHART_BEHAVIORS,
+    BenchmarkRetentionDistributionDirective
   ],
   imports: [
     BrowserModule,

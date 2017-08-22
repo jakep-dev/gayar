@@ -1,6 +1,6 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkLimitModel, BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
+import { BaseChartComponent } from './../../charts/base-chart/base-chart.component';
 
 @Directive({
     selector: '[benchmark-peergrouploss-distribution-behavior]'

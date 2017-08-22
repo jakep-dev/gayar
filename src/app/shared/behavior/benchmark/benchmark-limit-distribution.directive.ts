@@ -1,11 +1,11 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
+import { BaseChartComponent } from './../../charts/base-chart/base-chart.component';
 
 @Directive({
-    selector: '[benchmark-retention-distribution-behavior]'
+    selector: '[benchmark-limit-distribution-behavior]'
 })
-export class BenchmarkRetentionDistributionDirective {
+export class BenchmarkLimitDistributionDirective {
 
     @Input('modelData') set setChartData(data: BenchmarkModel) {
 
@@ -69,7 +69,7 @@ export class BenchmarkRetentionDistributionDirective {
                 series.data = new Array();
                 for(j = 0; j < n2; j++) {
                     if((group[tempChartData.categories[j]] != undefined) && (group[tempChartData.categories[j]] != null)) {
-                        if(series.name === BenchmarkRetentionDistributionDirective.CLIENT_LINE) {
+                        if(series.name === BenchmarkLimitDistributionDirective.CLIENT_LINE) {
                             clientCategoryLabel.value = tempChartData.categories[j];
                         }
                         series.data.push(group[tempChartData.categories[j]]);
@@ -130,11 +130,11 @@ export class BenchmarkRetentionDistributionDirective {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
-        this.seriesColor[BenchmarkRetentionDistributionDirective.CLIENT_LINE] = '#487AA1';
+        this.seriesColor[BenchmarkLimitDistributionDirective.CLIENT_LINE] = '#487AA1';
     }
 
     private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkRetentionDistributionDirective.defaultLineColor;
+        return this.seriesColor[seriesName] || BenchmarkLimitDistributionDirective.defaultLineColor;
     }
 
     ngOnInit() {}

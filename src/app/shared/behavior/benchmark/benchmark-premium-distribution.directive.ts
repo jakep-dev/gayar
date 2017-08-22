@@ -1,6 +1,6 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
+import { BaseChartComponent } from './../../charts/base-chart/base-chart.component';
 
 @Directive({
     selector: '[benchmark-premium-distribution-behavior]'

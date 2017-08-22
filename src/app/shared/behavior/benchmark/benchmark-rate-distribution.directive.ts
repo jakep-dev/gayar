@@ -1,7 +1,7 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkRateModel, RateQuartile, BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
-import { SearchService } from '../../services/services';
+import { BaseChartComponent } from './../../charts/base-chart/base-chart.component';
+import { SearchService } from './../../../services/services';
 
 @Directive({
     selector: '[benchmark-rate-distribution-behavior]'
