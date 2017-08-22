@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FADE_ANIMATION} from '../shared/animations/animations';
+import { FADE_ANIMATION } from '../shared/animations/animations';
 import { SearchService } from '../services/services';
 import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput } from '../model/benchmark.model';
 
@@ -20,39 +20,68 @@ export class BenchmarkComponent implements OnInit {
     public benchmarkDistributionInput: BenchmarkDistributionInput;
     public benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
     public benchmarkRateInput: BenchmarkRateInput;
-    
+
     constructor(private searchService: SearchService) { }
 
     ngOnInit() {
-        this.searchType = this.searchService.searchCriteria.type;
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId)? this.searchService.selectedCompany.companyId : null;
-        this.naics = this.searchService.searchCriteria.industry;
-        this.revenueRange = this.searchService.searchCriteria.revenue;
+        this.setupDistributionInput();
+        this.setupLimitAdequacyInput();
+        this.setupRateInput();
+    }
+
+    /**
+     * create distribution chart input
+     */
+    setupDistributionInput() {
+        let searchType = this.searchService.searchCriteria.type;
+        let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
+        let naics = this.searchService.searchCriteria.industry;
+        let revenueRange = this.searchService.searchCriteria.revenue;
 
         this.benchmarkDistributionInput = {
-            searchType: this.searchType,
-            companyId: this.companyId,
+            searchType: searchType,
+            companyId: companyId,
             premiumValue: this.searchService.searchCriteria.premium,
             limitValue: this.searchService.searchCriteria.limit,
             retentionValue: this.searchService.searchCriteria.retention,
-            naics: this.naics,
-            revenueRange: this.revenueRange
+            naics: naics,
+            revenueRange: revenueRange
         }
+    }
+
+    /**
+     * create limit adequacy chart input
+     */
+    setupLimitAdequacyInput() {
+        let searchType = this.searchService.searchCriteria.type;
+        let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
+        let naics = this.searchService.searchCriteria.industry;
+        let revenueRange = this.searchService.searchCriteria.revenue;
+
         this.benchmarkLimitAdequacyInput = {
-          searchType: this.searchType,
-          companyId: this.companyId,
-          limits: this.searchService.searchCriteria.limit,
-          naics: this.naics,
-          revenueRange: this.revenueRange
-        }
-        
+            searchType: searchType,
+            companyId: companyId,
+            limits: this.searchService.searchCriteria.limit,
+            naics: naics,
+            revenueRange: revenueRange
+        };
+    }
+
+    /**
+     * create rate per million chart input
+     */
+    setupRateInput() {
+        let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
+        let naics = this.searchService.searchCriteria.industry;
+        let revenueRange = this.searchService.searchCriteria.revenue;
+
         this.benchmarkRateInput = {
-            companyId: this.companyId,
+            companyId: companyId,
             premiumValue: this.searchService.searchCriteria.premium,
             limitValue: this.searchService.searchCriteria.limit,
-            naics: this.naics,
-            revenueRange: this.revenueRange
-        }
+            naics: naics,
+            revenueRange: revenueRange
+        };
     }
 
 }
