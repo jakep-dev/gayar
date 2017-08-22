@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../base-chart/base-chart.component';
+import { BaseChart } from '../base-chart';
 
 @Component({
     selector: 'boxplot-chart',
@@ -8,7 +8,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
     templateUrl: './boxplot-chart.component.html',
     styleUrls: ['./boxplot-chart.component.scss'],
 })
-export class BoxPlotChartComponent extends BaseChartComponent implements OnInit {
+export class BoxPlotChartComponent extends BaseChart implements OnInit {
 
     @Input('chartData') set setChartData(data: BoxPlotChartData) {
         //Check to see if we have at least one data point

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { BarChartData } from 'app/model/model';
-import { BaseChartComponent } from '../base-chart/base-chart.component';
+import { BaseChart } from '../base-chart';
 
 @Component({
     selector: 'bar-chart',
@@ -8,7 +8,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent extends BaseChartComponent implements OnInit {
+export class BarChartComponent extends BaseChart implements OnInit {
 
     @Input('chartData') set setChartData(data: BarChartData) {
         //Check to see if we have at least one data point
