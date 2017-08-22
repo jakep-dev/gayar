@@ -1,6 +1,6 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
-import { BaseChartComponent } from './../../charts/base-chart/base-chart.component';
+import { BaseChart } from './../../charts/base-chart';
 
 @Directive({
     selector: '[benchmark-retention-distribution-behavior]'
@@ -97,7 +97,7 @@ export class BenchmarkRetentionDistributionDirective {
     @Input('chartObject') set setChartObject(chartObject: any) {
         if (chartObject && chartObject.isObjectValid) {
             let chart = chartObject.highChartObject;
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart,
                 this.displayText,
                 10,
@@ -106,7 +106,7 @@ export class BenchmarkRetentionDistributionDirective {
                 10,
                 null
             );
-            BaseChartComponent.addChartImage(
+            BaseChart.addChartImage(
                 chart,
                 'https://www.advisen.com/img/advisen-logo.png',
                 chart.chartWidth - 80,
