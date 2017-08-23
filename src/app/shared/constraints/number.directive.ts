@@ -5,12 +5,7 @@ import { Directive, HostListener } from '@angular/core';
 })
 export class NumberDirective {
   @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
-    if(event.keyCode >=48 && event.keyCode <= 57){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return (event.keyCode >=48 && event.keyCode <= 57);
   }
 
   constructor() { 
