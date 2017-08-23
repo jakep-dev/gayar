@@ -31,11 +31,12 @@
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
           <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
             <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
-            type="{{searchRule}}" placeholder="{{searchValuePlaceHolder}}" />
+            type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+            type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
           </md-input-container>
           <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
           </div>
-        
         </div>
 
          <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
