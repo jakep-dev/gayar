@@ -13,7 +13,6 @@ import { CdkTableModule } from '@angular/cdk';
 
 import {ChartModule} from 'angular2-highcharts';
 import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-//import * as highcharts from 'highcharts';
 
 export function highchartsFactory() {
     var hc = require('highcharts');
@@ -32,7 +31,7 @@ export function highchartsFactory() {
 }
 
 // Application Components
-import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CHART_BEHAVIORS} from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS} from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
@@ -51,11 +50,12 @@ import { SsoComponent } from './sso/sso.component';
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
     MenuComponent,
-    SearchComponent,
+    SearchComponent,  
     TableComponent,
     SsoComponent,
     BLOCK_CHART_TYPES,
-    BLOCK_CHART_BEHAVIORS
+    BLOCK_CHART_BEHAVIORS,
+    BLOCK_CONSTRAINTS
   ],
   imports: [
     BrowserModule,
