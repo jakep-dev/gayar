@@ -43,8 +43,8 @@
           fxLayoutGap="92px" fxLayout.xs="column"  
              fxLayoutAlign.xs="center start" 
              fxLayoutGap.xs="0">
-          <md-select  fxFlex="30" placeholder="Select revenue" (ngModelChange)="doValidation()" [(ngModel)]="selectedRevenue"  
-               floatPlaceholder="never">
+          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
+             (ngModelChange)="doValidation()" floatPlaceholder="never">
               <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
           </md-select>
         </div>

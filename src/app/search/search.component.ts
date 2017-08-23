@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit {
   selectedPremium: string;
   selectedRetention: string;
   selectedLimit: string;
-  selectedRevenue: number;
+  selectedRevenue: number = -1;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -83,7 +83,7 @@ export class SearchComponent implements OnInit {
   }
 
   doAssessment(){
-    let revenueModel: RevenueModel = this.revenueModellist.find(f=>f.id == this.selectedRevenue);
+    let revenueModel: RevenueModel = this.revenueModellist.find(f=>f.id === this.selectedRevenue);
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
       value: this.selectedSearchValue,
@@ -103,7 +103,12 @@ export class SearchComponent implements OnInit {
 
   doValidation(){
     if(this.isManual){
-      this.isActionEnabled = (this.selectedIndustry !== '' && this.selectedRevenue !== 0 && this.selectedSearchValue !== '');
+      this.isActionEnabled = (this.selectedIndustry && 
+                              this.selectedRevenue && 
+                              this.selectedSearchValue &&
+                              this.selectedIndustry !== '' && 
+                              this.selectedRevenue !== -1 && 
+                              this.selectedSearchValue !== '');
       return;
     }
     
@@ -159,6 +164,7 @@ export class SearchComponent implements OnInit {
   loadRevenueModel(){
      this.searchService.getRevenueModel().subscribe(res=>{
        this.revenueModellist = res;
+       console.log(this.revenueModellist);
     });
   }
 
