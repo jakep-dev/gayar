@@ -12,7 +12,7 @@ import { BLOCK_CHART_BEHAVIORS } from './behavior/behaviors';
 import { BLOCK_CHART_TYPES } from './charts/charts';
 import { BLOCK_CONSTRAINTS } from './constraints/constraints';
 
-export const BLOCK_SHARED = [
+export const BLOCK_SHARED = [    
     TileComponent,
     CubeComponent,
     BLOCK_ERRORS,

@@ -12,23 +12,7 @@ import { MaterialModule  } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 import {ChartModule} from 'angular2-highcharts';
-import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-
-export function highchartsFactory() {
-    var hc = require('highcharts');
-    // var dd = require('highcharts/modules/drilldown');
-    var nd = require('highcharts/modules/no-data-to-display');
-    var hcm = require('highcharts/highcharts-more');
-    var exp = require('highcharts/modules/exporting');
-    // var ct = require('highcharts/modules/canvas-tools');
-
-    // dd(hc);
-    nd(hc);
-    hcm(hc);
-    exp(hc);
-    // ct(hc);
-    return hc;
-}
+import { HighchartsProvider } from './shared/highchart/highchart';
 
 // Application Components
 import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS} from './shared/shared';
@@ -72,10 +56,7 @@ import { SsoComponent } from './sso/sso.component';
   ],
 
   providers: [
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
+    HighchartsProvider,
     BLOCK_SERVICES
   ],
 
