@@ -31,7 +31,7 @@ export function highchartsFactory() {
 }
 
 // Application Components
-import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CONSTRAINTS } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS} from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
@@ -41,8 +41,6 @@ import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
-import { BLOCK_CHART_TYPES } from './shared/charts/chart-types';
-import { BLOCK_CHART_BEHAVIORS } from './shared/behavior/behaviors';
 
 @NgModule({
   declarations: [

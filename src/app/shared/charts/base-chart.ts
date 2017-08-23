@@ -1,67 +1,89 @@
 
-export class BaseChartComponent {
+export abstract class BaseChart {
 
     chart: any;
-    
-    getHighChart(): any {
-      return this.chart;
-    }
-    setHighChart(chart: any) {
-      this.chart = chart;
+    chartOptions: any;
+
+    constructor() {
+        this.initializeChart();
     }
 
-    chartOptions: any;
-    getChartOptions(): any {
-      return this.chartOptions;
+    getHighChart(): any {
+        return this.chart;
     }
+
+    setHighChart(chart: any) {
+        this.chart = chart;
+    }
+
+    getChartOptions(): any {
+        return this.chartOptions;
+    }
+
     setChartOptions(chartOptions: any) {
-      this.chartOptions = chartOptions;
+        this.chartOptions = chartOptions;
     }
 
     getTitle(): string {
         return this.chartOptions.title.text;
     }
+
     setTitle(title: string) {
         this.chartOptions.title.text = title;
     }
+
     getSubTitle(): string {
         return this.chartOptions.subtitle.text;
     }
+
     setSubTitle(subTitle: string) {
         this.chartOptions.subtitle.text = subTitle;
     }
+
     getXAxisTitle(): string {
         return this.chartOptions.xAxis.title.text;
     }
+
     setXAxisTitle(title: string) {
         this.chartOptions.xAxis.title.text = title;
     }
+
     getYAxisTitle(): string {
         return this.chartOptions.yAxis.title.text;
     }
+
     setYAxisTitle(title: string) {
         this.chartOptions.yAxis.title.text = title;
     }
+
     getDefaultChartType(): string {
         return this.chartOptions.chart.type;
     }
+
     setDefaultChartType(type: string) {
         this.chartOptions.chart.type = type;
     }
+
     getChartWidth(): number {
         return this.chartOptions.chart.width;
     }
+
     setChartWidth(width: number) {
         this.chartOptions.chart.width = width;
     }
+
     getChartHeight(): number {
         return this.chartOptions.chart.height;
     }
+
     setChartHeight(height: number) {
         this.chartOptions.chart.height = height;
     }
 
-    constructor() {
+    /**
+     * initialize common options for all chart types
+     */
+    initializeChart() {
         this.chartOptions = {
             chart: {
                 //default chart type is line
@@ -171,7 +193,17 @@ export class BaseChartComponent {
         };
     }
 
-    //fontWeight & width are optional parameters
+    /**
+     * Add text labels on chart
+     * @param chart - Highchart object
+     * @param text - text to add
+     * @param xPos - x position of the chart
+     * @param yPos - y position of the chart
+     * @param color - text color
+     * @param fontSize - text font size
+     * @param fontWeight - text font weight
+     * @param width - width of the container of the text
+     */
     public static addChartLabel(chart: any, text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight?: string, width?: number) {
 
         let render = chart.renderer.text(text, xPos, yPos);
@@ -180,25 +212,39 @@ export class BaseChartComponent {
             fontSize: (fontSize || 12) + 'px',
             fontWeight: fontWeight || 'normal'
         };
-        
+
         let attr = {
             zIndex: 999
         };
 
-        if(width) {
+        if (width) {
             css['width'] = width + 'px';
         }
-        
+
         render.css(css)
         render.attr(attr);
         render.add();
     }
 
+    /**
+     * Add image on the chart
+     * @param chart Highchart object
+     * @param link - chart's url
+     * @param xPos - x position of the chart
+     * @param yPos - y position of the chart
+     * @param width - width of the chart
+     * @param height - height of the chart
+     */
     public static addChartImage(chart: any, link: string, xPos: number, yPos: number, width: number, height: number) {
 
         chart.renderer.image(link, xPos, yPos, width, height).add();
     }
 
+    /**
+     * Get the Y-axis position based on the y point
+     * @param chart - Highchart object
+     * @param yPoint - y point
+     */
     public static getYAxisPosition(chart: any, yPoint: number) {
         let yOffSet = chart.chartHeight - chart.marginBottom; //position of Y axis
         let heightPerUnit = chart.plotHeight / chart.yAxis[0].max; //height per y-axis unit
@@ -206,6 +252,11 @@ export class BaseChartComponent {
         return yOffSet - Math.round(yPoint * heightPerUnit);
     }
 
+    /**
+     * Get the X-axis position based on the x point
+     * @param chart - Highchart object
+     * @param xPoint - x point
+     */
     public static getXAxisPosition(chart: any, xPoint: number) {
         let xOffSet = chart.plotLeft; //position of Y axis
         let widthPerUnit = chart.plotWidth / chart.xAxis[0].categories.length; //width per x-axis unit

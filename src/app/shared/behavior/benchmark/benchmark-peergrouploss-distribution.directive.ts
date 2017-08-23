@@ -1,6 +1,6 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkLimitModel, BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
+import { BaseChart } from './../../charts/base-chart';
 
 @Directive({
     selector: '[benchmark-peergrouploss-distribution-behavior]'
@@ -166,7 +166,7 @@ export class BenchmarkPeerGroupLossDistributionDirective {
     @Input('chartObject') set setChartObject(chartObject: any) {
         if(chartObject && chartObject.isObjectValid) {
             let chart = chartObject.highChartObject;
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart, 
                 this.displayText, 
                 10, 
@@ -176,7 +176,7 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                 null,
                 500
             );
-            BaseChartComponent.addChartImage(
+            BaseChart.addChartImage(
                 chart, 
                 'https://www.advisen.com/img/advisen-logo.png', 
                 chart.chartWidth - 80, 

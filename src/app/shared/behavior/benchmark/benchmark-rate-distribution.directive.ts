@@ -1,7 +1,7 @@
 import { Directive, Output, Input, EventEmitter } from '@angular/core';
 import { BenchmarkRateModel, RateQuartile, BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../charts/base-chart/base-chart.component';
-import { SearchService } from '../../services/services';
+import { BaseChart } from './../../charts/base-chart';
+import { SearchService } from './../../../services/services';
 
 @Directive({
     selector: '[benchmark-rate-distribution-behavior]'
@@ -85,64 +85,64 @@ export class BenchmarkRateDistributionDirective {
     @Input('chartObject') set setChartObject(chartObject: any) {
         if(chartObject && chartObject.isObjectValid) {
             let chart = chartObject.highChartObject;
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart, 
                 'Min ' + this.quartile.minRPM_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34, 
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.minRPM) + 10,
+                BaseChart.getXAxisPosition(chart, 2.5) - 34, 
+                BaseChart.getYAxisPosition(chart, this.quartile.minRPM) + 10,
                 null,
                 10,
                 'bold'
             );
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart, 
                 '25th% ' + this.quartile.firstQuartile_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34, 
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.firstQuartile) + 10,
+                BaseChart.getXAxisPosition(chart, 2.5) - 34, 
+                BaseChart.getYAxisPosition(chart, this.quartile.firstQuartile) + 10,
                 null,
                 10,
                 'bold'
             );
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart,
                 'Median ' + this.quartile.median_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 2) - (('Median ' + this.quartile.median_KMB).length * 7),
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.median) + 3,
+                BaseChart.getXAxisPosition(chart, 2) - (('Median ' + this.quartile.median_KMB).length * 7),
+                BaseChart.getYAxisPosition(chart, this.quartile.median) + 3,
                 null,
                 10,
                 'bold'
             );
 
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart,
                 '75th% ' + this.quartile.fourthQuartile_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34,
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.fourthQuartile) - 5,
+                BaseChart.getXAxisPosition(chart, 2.5) - 34,
+                BaseChart.getYAxisPosition(chart, this.quartile.fourthQuartile) - 5,
                 null,
                 10,
                 'bold'
             );
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart,
                 'Max ' + this.quartile.maxRPM_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 2.5) - 34,
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.maxRPM) - 5,
+                BaseChart.getXAxisPosition(chart, 2.5) - 34,
+                BaseChart.getYAxisPosition(chart, this.quartile.maxRPM) - 5,
                 null,
                 10,
                 'bold'
             );
 
 
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart,
                 this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
-                BaseChartComponent.getXAxisPosition(chart, 0.5),
-                BaseChartComponent.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
+                BaseChart.getXAxisPosition(chart, 0.5),
+                BaseChart.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
                 null,
                 10,
                 'bold'
             );
-            BaseChartComponent.addChartLabel(
+            BaseChart.addChartLabel(
                 chart, 
                 this.displayText, 
                 10, 
@@ -153,7 +153,7 @@ export class BenchmarkRateDistributionDirective {
                 chart.chartWidth - 75
             );
             
-            BaseChartComponent.addChartImage(
+            BaseChart.addChartImage(
                 chart, 
                 'https://www.advisen.com/img/advisen-logo.png', 
                 chart.chartWidth - 80, 
@@ -163,11 +163,11 @@ export class BenchmarkRateDistributionDirective {
             );
 
             if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
-                BaseChartComponent.addChartLabel(
+                BaseChart.addChartLabel(
                     chart,
                     this.searchService.selectedCompany.companyName,
-                    BaseChartComponent.getXAxisPosition(chart, 3.5),
-                    BaseChartComponent.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
+                    BaseChart.getXAxisPosition(chart, 3.5),
+                    BaseChart.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
                     null,
                     10,
                     'bold'

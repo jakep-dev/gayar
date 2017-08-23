@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { BarChartData } from 'app/model/model';
-import { BaseChartComponent } from '../base-chart/base-chart.component';
+import { BaseChart } from '../base-chart';
 
 @Component({
     selector: 'bar-chart',
@@ -8,7 +8,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent extends BaseChartComponent implements OnInit {
+export class BarChartComponent extends BaseChart implements OnInit {
 
     @Input('chartData') set setChartData(data: BarChartData) {
         //Check to see if we have at least one data point
@@ -23,28 +23,28 @@ export class BarChartComponent extends BaseChartComponent implements OnInit {
             //update chart but don't redraw chart yet
             this.chart.update(this.chartOptions, false);
 
-            let i: number;
-            let n1: number;
+            let seriesIndex: number;
+            let seriesLength: number;
             //clear out old series before adding new series data
-            n1 = this.chart.series.length;
-            for(i =  n1 -1; i >= 0; i--) {
-                this.chart.series[i].remove();
+            seriesLength = this.chart.series.length;
+            for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
+                this.chart.series[seriesIndex].remove();
             }
             //add in new series data
-            n1 = data.series.length;
-            for (i = 0; i < n1; i++) {
+            seriesLength = data.series.length;
+            for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
                 this.chart.addSeries(
                     {
-                        id: data.series[i].name,
-                        name: data.series[i].name,
-                        type: data.series[i].type || 'column',
-                        color: data.series[i].color,
-                        data: data.series[i].data,
-                        pointWidth: data.series[i].pointWidth,
-                        borderWidth: data.series[i].borderWidth,
-                        pointPlacement: data.series[i].pointPlacement,
-                        showInLegend: data.series[i].showInLegend,  
-                        marker: data.series[i].marker
+                        id: data.series[seriesIndex].name,
+                        name: data.series[seriesIndex].name,
+                        type: data.series[seriesIndex].type || 'column',
+                        color: data.series[seriesIndex].color,
+                        data: data.series[seriesIndex].data,
+                        pointWidth: data.series[seriesIndex].pointWidth,
+                        borderWidth: data.series[seriesIndex].borderWidth,
+                        pointPlacement: data.series[seriesIndex].pointPlacement,
+                        showInLegend: data.series[seriesIndex].showInLegend,  
+                        marker: data.series[seriesIndex].marker
                     }
                 );
             }

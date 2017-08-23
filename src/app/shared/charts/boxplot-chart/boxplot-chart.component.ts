@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { BoxPlotChartData } from 'app/model/model';
-import { BaseChartComponent } from '../base-chart/base-chart.component';
+import { BaseChart } from '../base-chart';
 
 @Component({
     selector: 'boxplot-chart',
@@ -8,7 +8,7 @@ import { BaseChartComponent } from '../base-chart/base-chart.component';
     templateUrl: './boxplot-chart.component.html',
     styleUrls: ['./boxplot-chart.component.scss'],
 })
-export class BoxPlotChartComponent extends BaseChartComponent implements OnInit {
+export class BoxPlotChartComponent extends BaseChart implements OnInit {
 
     @Input('chartData') set setChartData(data: BoxPlotChartData) {
         //Check to see if we have at least one data point
@@ -23,24 +23,24 @@ export class BoxPlotChartComponent extends BaseChartComponent implements OnInit 
             //update chart but don't redraw chart yet
             this.chart.update(this.chartOptions, false);
 
-            let i: number;
-            let n1: number;
+            let seriesIndex: number;
+            let seriesLength: number;
             //clear out old series before adding new series data
-            n1 = this.chart.series.length;
-            for(i =  n1 -1; i >= 0; i--) {
-                this.chart.series[i].remove();
+            seriesLength = this.chart.series.length;
+            for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
+                this.chart.series[seriesIndex].remove();
             }
             //add in new series data
-            n1 = data.series.length;
-            for (i = 0; i < n1; i++) {
+            seriesLength = data.series.length;
+            for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
                 this.chart.addSeries(
                     {
-                        id: data.series[i].name,
-                        name: data.series[i].name,
+                        id: data.series[seriesIndex].name,
+                        name: data.series[seriesIndex].name,
                         type: 'boxplot',
-                        data: data.series[i].data,
-                        pointWidth: data.series[i].pointWidth,
-                        whiskerLength: data.series[i].whiskerLength
+                        data: data.series[seriesIndex].data,
+                        pointWidth: data.series[seriesIndex].pointWidth,
+                        whiskerLength: data.series[seriesIndex].whiskerLength
                     }
                 );
             }
