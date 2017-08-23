@@ -25,25 +25,26 @@
           <md-select fxFlex="30"  *ngIf="isManual"  
               placeholder="Select industry" [(ngModel)]="selectedIndustry" 
               floatPlaceholder="never" (ngModelChange)="doValidation()">
-              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.naicsDescription}}</md-option>
+              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
           </md-select>
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
           <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
             <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
-            type="{{searchRule}}" placeholder="{{searchValuePlaceHolder}}" />
+            type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+            type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
           </md-input-container>
           <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
           </div>
-        
         </div>
 
          <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
           fxLayoutGap="92px" fxLayout.xs="column"  
              fxLayoutAlign.xs="center start" 
              fxLayoutGap.xs="0">
-          <md-select  fxFlex="30" placeholder="Select revenue" (ngModelChange)="doValidation()" [(ngModel)]="selectedRevenue"  
-               floatPlaceholder="never">
+          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
+             (ngModelChange)="doValidation()" floatPlaceholder="never">
               <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
           </md-select>
         </div>
@@ -129,15 +130,15 @@
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
               <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedPremium" autofocus  type="text" placeholder="Enter Premium">
+                <input mdInput [(ngModel)]="selectedPremium" autofocus  kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedRetention" autofocus  type="text" placeholder="Enter Retention">
+                <input mdInput [(ngModel)]="selectedRetention" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
 
              <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedLimit" autofocus  type="text" placeholder="Enter Limit">
+                <input mdInput [(ngModel)]="selectedLimit" autofocus kmbConversion type="text" placeholder="Enter Limit">
              </md-input-container>
           </div>
       </div>

@@ -36,6 +36,7 @@ export interface SearchCriteriaModel {
 export interface IndustryModel {
     naics: string;
     naicsDescription: string;
+    displayName: string;
 }
 
 export interface SearchByModel {
