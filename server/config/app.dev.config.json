@@ -38,6 +38,10 @@
                             "name": "getLimitAdequacy",
                             "contract": "/cybermetrix/chart/getLimitAdequacyDataset"
                          },
+                        {
+                            "name": "getBenchmarkScore",
+                            "contract": "/cybermetrix/chart/getBenchmarkScore"
+                         },
                          {
                              "name": "getActiveSession",
                              "contract": "/cybermetrix/getActiveSession"
