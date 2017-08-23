@@ -1,3 +1,9 @@
-<p>
-  BenchMark Chart
-</p>
+<gauge-chart 
+    benchmark-score
+    [modelData]="modelData"
+    [chartData]="chartData$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    [chartObject]="chartObject$ | async"
+    (onChartRedraw)="onChartReDraw($event)"
+    >
+</gauge-chart>
