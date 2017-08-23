@@ -1,4 +1,4 @@
-import { Directive, HostListener, HostBinding, ElementRef } from '@angular/core';
+import { Directive, Output, EventEmitter, HostListener, HostBinding, ElementRef } from '@angular/core';
 
 @Directive({
   selector: '[kmbConversion]'
@@ -7,6 +7,8 @@ export class KmbConversionDirective {
   validNumberRegExp: string = '^[-+]?[0-9]*\.?[0-9]+$';
 
   @HostBinding('value') value = ''; 
+
+  @Output('ngModelChange') valueChange = new EventEmitter<string>();
 
   @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent, el: ElementRef){
     return (event.keyCode >=48 && event.keyCode <= 57 || 
@@ -21,6 +23,7 @@ export class KmbConversionDirective {
     let value = input.value;
     let splitChar = this.getSplitChar(value);
     input.value = this.computeKmbConversion(value, this.getSplitChar(value));
+    this.valueChange.emit(input.value);
     return true;
   }
 
