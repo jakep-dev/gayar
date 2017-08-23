@@ -25,7 +25,7 @@
           <md-select fxFlex="30"  *ngIf="isManual"  
               placeholder="Select industry" [(ngModel)]="selectedIndustry" 
               floatPlaceholder="never" (ngModelChange)="doValidation()">
-              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.naicsDescription}}</md-option>
+              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
           </md-select>
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">

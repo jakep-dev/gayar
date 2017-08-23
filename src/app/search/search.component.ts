@@ -165,6 +165,9 @@ export class SearchComponent implements OnInit {
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
        this.industryList = res.industries;
+       this.industryList.forEach(f=>{
+         f.displayName = `${f.naics} ${f.naicsDescription}`;
+       });
     });
   }
 }
@@ -205,8 +208,7 @@ export class SearchDataSource extends DataSource<any> {
   getSortedData(): Array<CompanyModel> {
     const data = this._searchDatabase.data.slice();
     if (!this._sort.active || this._sort.direction == '') { return data; }
-    console.log('Paginator details');
-    console.log(this._paginator);
+
     data.sort((a, b) => {
       let propertyA: number|string = '';
       let propertyB: number|string = '';
