@@ -1,9 +1,9 @@
 <div class="tile-container">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
-          <div class="tile-title">{{title}}</div>
+          <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
           <ng-content select="[header]" ></ng-content>
-          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.xs]="true">
+          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.xs]="true" class="tile-buttons">
             <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
             <button md-icon-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
@@ -11,7 +11,7 @@
                 <md-icon>expand_less</md-icon>
             </button>
           </div>
-          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.gt-xs]="true">
+          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.gt-xs]="true" class="tile-buttons">
             <button md-icon-button [mdMenuTriggerFor]="menu" ><md-icon>more_vert</md-icon></button>
               <md-menu #menu="mdMenu">
                 <div fxLayout="column" fxLayoutAlign="center start">
@@ -28,8 +28,9 @@
           </div>
       </div> 
   </md-toolbar>
+  <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
   <div class="tile-content"  [@accordionContentAnimation]="accordionState">
-    <div *ngIf="isContent" fxFlex fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
+    <div *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
       <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
       
       </ng-content>

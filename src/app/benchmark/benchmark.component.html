@@ -1,3 +1,51 @@
-<p>
-  benchmark works!
-</p>
+<div front flex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px" class="padding-left-10 padding-right-10"> 
+  <div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div>
+        <app-tile  [title]="'Benchmark Premium'" [isSplittable]="false" [isFlippable]="false">
+          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkDistributionInput">
+            <app-premium [componentData]="benchmarkDistributionInput"></app-premium>
+          </div>
+        </app-tile>
+      </div>
+      <div>
+        <app-tile  [title]="'Benchmark Limit'" [isSplittable]="false" [isFlippable]="false">
+          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkDistributionInput">
+            <app-limit [componentData]="benchmarkDistributionInput"></app-limit>
+          </div>
+        </app-tile>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div fxflex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div>
+        <app-tile  [title]="'Benchmark Retention'" [isSplittable]="false" [isFlippable]="false">
+          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkDistributionInput">
+            <app-retention [componentData]="benchmarkDistributionInput"></app-retention>
+          </div>
+        </app-tile>
+      </div>
+      <div>
+        <app-tile  [title]="'Benchmark Peer Group Loss'" [isSplittable]="false" [isFlippable]="false">
+          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkLimitAdequacyInput">
+            <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+          </div>
+        </app-tile>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div fxflex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <div>
+        <app-tile  [title]="'Benchmark Rate'" [isSplittable]="false" [isFlippable]="false">
+          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkRateInput">
+            <app-rate [componentData]="benchmarkRateInput"></app-rate>
+          </div>
+        </app-tile>
+      </div>
+    </div>
+  </div>
+</div>

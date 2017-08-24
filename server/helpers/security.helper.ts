@@ -20,7 +20,7 @@ export class Security{
     }
 
     init(): void {
-        //this.setupHeader();
+        this.setupHeader();
         this.setupServer();
     }
 

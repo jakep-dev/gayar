@@ -9,6 +9,9 @@ export class TableComponent implements OnInit {
   @Input() columns;
   @Input() data;
 
+  displayedColumns = [];
+  dataSource: null;
+
   constructor() { }
 
   ngOnInit() {

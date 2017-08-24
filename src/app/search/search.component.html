@@ -1,40 +1,56 @@
 
-  <app-tile [title]="'SELECT COMPANY'">
+  <app-tile [title]="'SELECT COMPANY'" [showProgress]="isSearching">
     <div header>
         <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
     </div>
 
-    <div front fxLayout="column" fxFlex fxLayoutAlign="center start" fxLayoutGap="10px" class="padding-left-10 padding-right-10">
-        <div fxLayout="row"  fxLayout.xs="column" fxLayoutAlign.xs="center start" fxLayoutGap.xs="10px" fxLayoutAlign="start center" fxFlex="100" class="width-100" fxLayoutGap="40px">
-          <md-select fxFlex="20"  placeholder="Select search by" [(ngModel)]="selectedSearchBy" (ngModelChange)="doSearchByChange()" floatPlaceholder="never">
+    <div front 
+         fxLayout="column" 
+         class="width-100 padding-left-10 padding-right-10"  
+         fxLayoutAlign="center start">
+
+        <div fxLayout="row"  
+             class="width-100"
+             fxLayout.xs="column"  
+             fxLayoutAlign.xs="center start" 
+             fxLayoutGap.xs="10px" 
+             fxLayoutAlign="start center" 
+             fxLayoutGap="20px">
+
+          <md-select  fxFlex="30" placeholder="Select search by" [(ngModel)]="selectedSearchBy"  
+               (ngModelChange)="doSearchByChange()" floatPlaceholder="never">
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
-          <md-select fxFlex="20" *ngIf="isManual"  placeholder="Select industry" [(ngModel)]="selectedIndustry" floatPlaceholder="never">
-              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.naicsDescription}}</md-option>
+          <md-select fxFlex="30"  *ngIf="isManual"  
+              placeholder="Select industry" [(ngModel)]="selectedIndustry" 
+              floatPlaceholder="never" (ngModelChange)="doValidation()">
+              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
           </md-select>
-            
-          <md-input-container fxFlex="80" floatPlaceholder="never" dividerColor="primary"  align="start" >
-            <input mdInput [(ngModel)]="selectedSearchValue" autofocus  type="text" placeholder="{{searchValuePlaceHolder}}">
-          </md-input-container>
 
-          <button md-raised-button (click)="doSearch()" color="accent" *ngIf="!isManual">
-            Search
-          </button>
+          <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
+          <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+            type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
+            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+            type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
+          </md-input-container>
+          <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
+          </div>
         </div>
 
-        <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-           <md-input-container fxFlex="20" floatPlaceholder="never" dividerColor="primary"  align="start" >
-            <input mdInput [(ngModel)]="selectedRevenue" autofocus  type="text" placeholder="Enter Revenue">
-          </md-input-container>
-
-           <button md-raised-button (click)="doSearch()" color="accent">
-            Search
-          </button>
+         <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
+          fxLayoutGap="92px" fxLayout.xs="column"  
+             fxLayoutAlign.xs="center start" 
+             fxLayoutGap.xs="0">
+          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
+             (ngModelChange)="doValidation()" floatPlaceholder="never">
+              <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
+          </md-select>
         </div>
 
-        <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
-           <md-table #table [dataSource]="dataSource" fxFlex class="width-100">
+         <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
+           <md-table #table [dataSource]="dataSource"  class="width-100" mdSort>
 
                <ng-container cdkColumnDef="companyId">
                 <md-header-cell  class="table-header" *cdkHeaderCellDef>#</md-header-cell>
@@ -43,50 +59,55 @@
               </ng-container>
 
                <ng-container cdkColumnDef="depthScore">
-                <md-header-cell  class="table-header" *cdkHeaderCellDef> Data Depth </md-header-cell>
+                <md-header-cell  class="table-header" *cdkHeaderCellDef md-sort-header> Data Depth </md-header-cell>
                 <md-cell  *cdkCellDef="let row"> {{row.depthScore}} </md-cell>
               </ng-container>
 
               <!-- Progress Column -->
               <ng-container cdkColumnDef="companyName">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Name </md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Name </md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.companyName}} </md-cell>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container  cdkColumnDef="city">
-                <md-header-cell class="table-header" *cdkHeaderCellDef> City </md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header> City </md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.city}} </md-cell>
               </ng-container>
 
               <!-- Color Column -->
               <ng-container cdkColumnDef="state">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>State</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>State</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.state}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="country">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Country</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Country</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.country}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="ticker">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Ticker</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Ticker</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.ticker}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="exchange">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Exchange</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Exchange</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.exchange}} </md-cell>
               </ng-container>
 
                <!-- Color Column -->
               <ng-container cdkColumnDef="topLevel">
-                <md-header-cell class="table-header" *cdkHeaderCellDef>Top Level Company</md-header-cell>
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Top Level Company</md-header-cell>
                 <md-cell *cdkCellDef="let row"> {{row.topLevel}} </md-cell>
+              </ng-container>
+
+               <ng-container cdkColumnDef="status">
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Status</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.status}} </md-cell>
               </ng-container>
 
 
@@ -96,9 +117,14 @@
             </md-table>
 
             <div *ngIf="!searchResult"  fxLayoutAlign="center center" class="width-100 padding-15" style="background: white">
-              No data available
+              {{this.message}}
             </div>
-        </div>
+
+            <md-paginator [length]="100" 
+                          [pageSize]="10" fxLayoutAlign="end center" class="width-100 padding-15 table-pagination"
+                          [pageSizeOptions]="[5, 10, 25, 100]"  (page)="loadData($event)">
+            </md-paginator>
+         </div>
     </div>
   </app-tile>
 
@@ -109,27 +135,27 @@
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
               <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedPremium" autofocus  type="text" placeholder="Enter Premium">
+                <input mdInput [(ngModel)]="selectedPremium" autofocus  kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedRetention" autofocus  type="text" placeholder="Enter Retention">
+                <input mdInput [(ngModel)]="selectedRetention" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
 
              <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedLimit" autofocus  type="text" placeholder="Enter Limit">
+                <input mdInput [(ngModel)]="selectedLimit" autofocus kmbConversion type="text" placeholder="Enter Limit">
              </md-input-container>
           </div>
       </div>
   </app-tile>
 
   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
-    <button md-raised-button (click)="doAssessment()" color="accent">
+    <button md-raised-button (click)="doAssessment()" color="accent" [disabled]="!isActionEnabled">
       <md-icon>speaker_notes</md-icon>
       Assessment
     </button>
     
-    <button md-raised-button (click)="doReport()" color="accent">
+    <button md-raised-button (click)="doReport()" color="accent" [disabled]="!isActionEnabled">
       <md-icon>pie_chart</md-icon>
       Report
     </button>

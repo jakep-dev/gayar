@@ -1,3 +1,11 @@
-<p>
-  rate works!
-</p>
+<div *ngIf='modelData'>
+    <boxplot-chart 
+        benchmark-rate-distribution-behavior
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
+    >
+    </boxplot-chart>
+</div>

@@ -1,3 +1,11 @@
-<p>
-  limit works!
-</p>
+<div *ngIf='modelData'>
+    <bar-chart
+        benchmark-limit-distribution-behavior
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
+    >
+    </bar-chart>
+</div>

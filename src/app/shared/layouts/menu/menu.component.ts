@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuService, SessionService } from 'app/services/services';
 
 @Component({
   selector: 'app-menu',
@@ -6,34 +7,37 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  private breadCrumbName: string;
-  private searchCompanyName: string;
-  private showShortMenu: boolean = true;
-  private sideNavMode: string = 'side';
-  constructor() { }
+  
+  searchCompanyName: string;
+  showShortMenu: boolean = true;
+  isMenuLock: boolean = false;
+  sideNavMode: string = 'side';
+  constructor(public menuService: MenuService, private sessionService: SessionService) { 
+
+  }
 
   ngOnInit() {
-    this.breadCrumbName = "Dashboard";
     this.sideNavMode = "side";
   }
 
   onMenu(name) {
-    this.breadCrumbName = name;
+    this.menuService.breadCrumbName = name;
   }
 
   toggleMenu(){
     this.showShortMenu = !this.showShortMenu;
+    this.isMenuLock = !this.isMenuLock;
   }
 
   shortMenuMouseOver(){
-    this.sideNavMode = "over";
+    this.sideNavMode = "side";
     if(this.sideNavMode){
       this.showShortMenu = false;
     }
   }
 
   shortMenuMouseLeave(){
-    if(!this.showShortMenu && this.sideNavMode === "over"){
+    if(!this.showShortMenu && !this.isMenuLock){
       this.showShortMenu = true;
       this.sideNavMode = "side";
     }

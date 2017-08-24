@@ -1,3 +1,11 @@
-<p>
-  BenchMark Chart
-</p>
+<div *ngIf='modelData'>
+    <gauge-chart 
+        benchmark-score
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
+    >
+    </gauge-chart>
+</div>

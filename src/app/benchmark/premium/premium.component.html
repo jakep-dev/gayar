@@ -1,3 +1,11 @@
-<p>
-  premium works!
-</p>
+<div *ngIf='modelData'>
+    <bar-chart 
+        benchmark-premium-distribution-behavior
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
+    >
+    </bar-chart>
+</div>

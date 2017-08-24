@@ -11,27 +11,35 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule  } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
+import {ChartModule} from 'angular2-highcharts';
+import { HighchartsProvider } from './shared/highchart/highchart';
+
 // Application Components
-import { TileComponent } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS} from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
-import { BenchmarkService, SearchService } from './services/services';
+import { BLOCK_SERVICES } from './services/services';
 import { TableComponent } from './shared/table/table.component';
-
+import { SsoComponent } from './sso/sso.component';
 
 @NgModule({
   declarations: [
-    TileComponent,
+    BLOCK_SHARED,
+    BLOCK_ERRORS,
     AppComponent,
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
     MenuComponent,
-    SearchComponent,
-    TableComponent
+    SearchComponent,  
+    TableComponent,
+    SsoComponent,
+    BLOCK_CHART_TYPES,
+    BLOCK_CHART_BEHAVIORS,
+    BLOCK_CONSTRAINTS
   ],
   imports: [
     BrowserModule,
@@ -43,9 +51,15 @@ import { TableComponent } from './shared/table/table.component';
     FlexLayoutModule,
     MaterialModule,
     CdkTableModule,
+    ChartModule,
     RouterModule.forRoot(APP_ROUTES)
   ],
-  providers: [ BenchmarkService, SearchService ],
+
+  providers: [
+    HighchartsProvider,
+    BLOCK_SERVICES
+  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

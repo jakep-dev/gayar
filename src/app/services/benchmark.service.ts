@@ -10,6 +10,33 @@ export class BenchmarkService extends BaseService {
         super(http);
     }
 
+    public getBenchmarkPremiumByCompanyId(clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'companyId': companyId
+           });    
+        }
+        catch(e){
+
+        }
+    }
+
+        public getBenchmarkPremiumByManualInput(clientValue: string, chartType: string, naics: string, revenueRange: string) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'naics': naics,
+               'revenueRange': revenueRange
+            });    
+        }
+        catch(e){
+
+        }
+    }
+
     public getChartDataByCompanyId(clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
         try{
            return super.Post<BenchmarkModel>('/api/getChartDataByCompanyId', {
@@ -36,10 +63,14 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getRatePerMillion(companyId: number): Observable<any>{
+    public getRatePerMillion(companyId: number, premium: string, limit: string, revenueRange: string, naics: string): Observable<any>{
         try{
             return super.Post<any>('/api/getRatePerMillion', {
-               'companyId': companyId
+               'companyId': companyId,
+               'premium': premium,
+               'limit': limit,
+               'revenueRange': revenueRange,
+               'naics': naics
            });
         }
         catch(e){
@@ -47,11 +78,24 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getLimitAdequacy(companyId: number, limit: number): Observable<any>{
+    public getLimitAdequacy(companyId: number, limit: string): Observable<any>{
         try{
             return super.Post<any>('/api/getLimitAdequacy', {
                'companyId': companyId,
                'limit': limit
+           });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getLimitAdequacyChartByManualInput(limit: string, naics: string, revenue_range: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getLimitAdequacy', {
+                'limit': limit,
+                'naics': naics,
+                'revenue_range': revenue_range
            });
         }
         catch(e){

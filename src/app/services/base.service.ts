@@ -1,18 +1,27 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers, RequestOptionsArgs } from '@angular/http';
+import { SessionModel } from 'app/model/model';
 import 'rxjs/add/operator/catch';
 
 export abstract class BaseService {
     private headers: Headers = new Headers({'Content-Type': 'application/json'});
     private requestOptions: RequestOptionsArgs = { headers: this.headers };
+    public currentIdentity: SessionModel;
 
     constructor(private http: Http){
-
+      
     }
-    
+
     //Perform the post request operation
     public Post<T>(endPoint: string, data: any): Observable<T>{
+        if(!this.currentIdentity){
+            this.getToken();
+        }
+       data.token = this.currentIdentity ? this.currentIdentity.token || null : null;
+       console.log('Identity');
+       console.log(this.currentIdentity);
+       console.log(data);
        return this.http.post(endPoint, data, this.requestOptions)
                  .map((res: Response)=>{
                      return res.json() as T
@@ -60,5 +69,14 @@ export abstract class BaseService {
         }
         console.error(errMsg);
         return Observable.throw(errMsg);
+    }
+
+    private getToken(){
+        if(!this.currentIdentity){
+            let identity: string = localStorage.getItem("identity");
+            if(identity && identity.trim() !== ''){
+                this.currentIdentity = JSON.parse(identity) as SessionModel;
+            }
+        }
     }
 }
