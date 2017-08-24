@@ -105,6 +105,11 @@
                 <md-cell *cdkCellDef="let row"> {{row.topLevel}} </md-cell>
               </ng-container>
 
+               <ng-container cdkColumnDef="status">
+                <md-header-cell class="table-header" *cdkHeaderCellDef md-sort-header>Status</md-header-cell>
+                <md-cell *cdkCellDef="let row"> {{row.status}} </md-cell>
+              </ng-container>
+
 
               <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
               <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>

@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
   message: string;
-  displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
+  displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel', 'status'];
   searchDatabase = new SearchDatabase();
   dataSource: SearchDataSource | null;
   searchResult: Array<CompanyModel>;
@@ -120,6 +120,7 @@ export class SearchComponent implements OnInit {
       this.toggleProgress();
       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
       this.searchResult = res.companies;
+      console.log(res.companies);
       this.clearData();
       if(res.companies){
         const copiedData = this.searchDatabase.data.slice();
@@ -228,6 +229,7 @@ export class SearchDataSource extends DataSource<any> {
         case 'ticker': [propertyA, propertyB] = [a.ticker, b.ticker]; break;
         case 'exchange': [propertyA, propertyB] = [a.exchange, b.exchange]; break;
         case 'topLevel': [propertyA, propertyB] = [a.topLevel, b.topLevel]; break;
+        case 'status': [propertyA, propertyB] = [a.status, b.status]; break;
       }
 
       let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
