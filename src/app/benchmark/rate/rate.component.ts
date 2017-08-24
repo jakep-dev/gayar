@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { BenchmarkRateModel, BoxPlotChartData, BenchmarkRateInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
+import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
   selector: 'app-rate',
@@ -11,65 +12,49 @@ import { BenchmarkService } from '../../services/services';
 })
 export class RateComponent implements OnInit {
 
-    searchParms: BenchmarkRateInput;
-
     modelData: BenchmarkRateModel;
 
     setModelData(modelData: BenchmarkRateModel) {
         this.modelData = modelData;
     }
 
-    private chartData: BehaviorSubject<BoxPlotChartData>;
-    chartData$: Observable<BoxPlotChartData>;
+    chartData: BoxPlotChartData;
 
-    @Input() set componentData(data: BenchmarkRateInput) {
-        this.searchParms = data;
-            this.benchmarkService.getRatePerMillion(data.companyId, data.premiumValue, data.limitValue, data.revenueRange, data.naics)
-            .subscribe(modelData => this.setModelData(modelData));
-    }
+    @Input() componentData: BenchmarkRateInput;
 
+    /**
+     * Event handler to indicate the construction of the BoxPlotChart's required data is built 
+     * @param newChartData BoxPlotChart's required data
+     */
     onDataComplete(newChartData : BoxPlotChartData) {
-        this.chartData.next(newChartData);
+        this.chartData = newChartData;
     }
 
-    private chartObject: BehaviorSubject<any>;
+    chartComponent: BaseChart
     
-    chartObject$: Observable<any>;
-    
-    onChartReDraw(chartObject: any) {
-        this.chartObject.next(
-            {
-                isObjectValid: true,
-                highChartObject: chartObject
-            }
-        );
+    /**
+     * Event handler to indicate the chart is loaded 
+     * @param chart The chart commponent
+     */
+    onChartReDraw(chart: BaseChart) {
+        this.chartComponent = chart;
     }
 
     constructor(private benchmarkService: BenchmarkService) {
-        this.chartData = new BehaviorSubject<BoxPlotChartData>(
-            {
-                categories: [],
-                series: [],
-                subtitle: '',
-                title: '',
-                displayText: '',
-                xAxisFormatter: null,
-                xAxisLabel: '',
-                yAxisLabel: '',
-                customChartSettings: null,
-                hasRedrawActions: false
-            }
-        );
-        this.chartData$ = this.chartData.asObservable();
-        this.chartObject = new BehaviorSubject<any>(
-            {
-                isObjectValid: false,
-                highChartObject: null
-            }
-        );
-        this.chartObject$ = this.chartObject.asObservable();
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getBenchmarkRateData();
+    }
+
+    /**
+     * Get Benchmark Rate Data from back end nodejs server
+     */
+    getBenchmarkRateData() {
+        if(this.componentData) {
+            this.benchmarkService.getRatePerMillion(this.componentData.companyId, this.componentData.premiumValue, this.componentData.limitValue, this.componentData.revenueRange, this.componentData.naics)
+            .subscribe(modelData => this.setModelData(modelData));            
+        }
+    }
 
 }

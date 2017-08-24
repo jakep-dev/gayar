@@ -3,7 +3,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
       <div>
         <app-tile  [title]="'Row 1 Tile 1'" [isSplittable]="false" [isFlippable]="false">
-          <div front style='width: 100%; height: 100%;'>
+          <div front style='width: 100%; height: 100%;' *ngIf="getBenchmarkScoreByManualInput">
               <dashboard-benchmark-score [componentData]="getBenchmarkScoreByManualInput"></dashboard-benchmark-score>
           </div>
           <div back style='width: 100%; height: 100%;'>

@@ -1,4 +1,4 @@
-import { Directive, Output, Input, EventEmitter } from '@angular/core';
+import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkRateModel, RateQuartile, BoxPlotChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
 import { SearchService } from './../../../services/services';
@@ -6,17 +6,132 @@ import { SearchService } from './../../../services/services';
 @Directive({
     selector: '[benchmark-rate-distribution-behavior]'
 })
-export class BenchmarkRateDistributionDirective {
+export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
 
-    @Input('modelData') set setChartData(data: BenchmarkRateModel) {
+    @Input() modelData : BenchmarkRateModel;
 
-        if(data) {
-            this.quartile = data.quartile;
-            this.displayText = data.displayText;
+    @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
+
+    @Input() chartComponent: BaseChart;
+    
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
+            this.chartComponent = changes['chartComponent'].currentValue;
+            this.chartComponent.addChartLabel(
+                'Min ' + this.quartile.minRPM_KMB,
+                this.chartComponent.getXAxisPosition(2.5) - 34, 
+                this.chartComponent.getYAxisPosition(this.quartile.minRPM) + 10,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addChartLabel(
+                '25th% ' + this.quartile.firstQuartile_KMB,
+                this.chartComponent.getXAxisPosition(2.5) - 34, 
+                this.chartComponent.getYAxisPosition(this.quartile.firstQuartile) + 10,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addChartLabel(
+                'Median ' + this.quartile.median_KMB,
+                this.chartComponent.getXAxisPosition(2) - (('Median ' + this.quartile.median_KMB).length * 7),
+                this.chartComponent.getYAxisPosition(this.quartile.median) + 3,
+                null,
+                10,
+                'bold'
+            );
+
+            this.chartComponent.addChartLabel(
+                '75th% ' + this.quartile.fourthQuartile_KMB,
+                this.chartComponent.getXAxisPosition(2.5) - 34,
+                this.chartComponent.getYAxisPosition(this.quartile.fourthQuartile) - 5,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addChartLabel(
+                'Max ' + this.quartile.maxRPM_KMB,
+                this.chartComponent.getXAxisPosition(2.5) - 34,
+                this.chartComponent.getYAxisPosition(this.quartile.maxRPM) - 5,
+                null,
+                10,
+                'bold'
+            );
+
+            this.chartComponent.addChartLabel(
+                this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
+                this.chartComponent.getXAxisPosition(0.5),
+                this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addChartLabel(
+                this.displayText, 
+                10, 
+                this.chartComponent.chart.chartHeight - 40, 
+                '#000000',
+                10,
+                null,
+                this.chartComponent.chart.chartWidth - 75
+            );
+            
+            this.chartComponent.addChartImage(
+                'https://www.advisen.com/img/advisen-logo.png', 
+                this.chartComponent.chart.chartWidth - 80, 
+                this.chartComponent.chart.chartHeight - 20, 
+                69, 
+                17
+            );
+
+            if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+                this.chartComponent.addChartLabel(
+                    this.searchService.selectedCompany.companyName,
+                    this.chartComponent.getXAxisPosition(3.5),
+                    this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
+                    null,
+                    10,
+                    'bold'
+                );
+            }
+        }
+    }
+
+    public static defaultLineColor: string = 'black';
+
+    static CLIENT_LINE: string = "Client Line";
+
+    seriesColor: string[];
+
+    quartile: RateQuartile;
+
+    displayText: string = '';
+
+    constructor(private searchService: SearchService) {
+        this.seriesColor = [];
+        this.seriesColor[BenchmarkRateDistributionDirective.CLIENT_LINE] = '#487AA1';
+    }
+
+    private getSeriesColor(seriesName: string) {
+        return this.seriesColor[seriesName] || BenchmarkRateDistributionDirective.defaultLineColor;
+    }
+
+    ngOnInit() {
+        this.buildHighChartObject();
+    }
+
+    /**
+     * Use chart data from web service to build parts of Highchart chart options object
+     */
+    buildHighChartObject() {
+        if(this.modelData) {
+            this.quartile = this.modelData.quartile;
+            this.displayText = this.modelData.displayText;
             let tempChartData: BoxPlotChartData = {
                 series: [],
-                title: data.chartTitle,
-                subtitle: data.filterDescription,
+                title: this.modelData.chartTitle,
+                subtitle: this.modelData.filterDescription,
                 displayText: null,
                 categories: ['1', '2', '3', '4', '5'],
                 xAxisLabel: '',
@@ -47,7 +162,7 @@ export class BenchmarkRateDistributionDirective {
                         plotLines: [
                             {
                                 color: this.getSeriesColor(BenchmarkRateDistributionDirective.CLIENT_LINE),
-                                value: data.quartile.clientRPMPercentileValue,
+                                value: this.modelData.quartile.clientRPMPercentileValue,
                                 width: '2',
                                 zIndex: 100
                             }
@@ -70,7 +185,7 @@ export class BenchmarkRateDistributionDirective {
                     data: [
                         [null, null, null, null, null],
                         [null, null, null, null, null],
-                        [data.quartile.minRPM, data.quartile.firstQuartile, data.quartile.median, data.quartile.fourthQuartile, data.quartile.maxRPM],
+                        [this.modelData.quartile.minRPM, this.modelData.quartile.firstQuartile, this.modelData.quartile.median, this.modelData.quartile.fourthQuartile, this.modelData.quartile.maxRPM],
                         [null, null, null, null, null],
                         [null, null, null, null, null],
                     ]
@@ -78,124 +193,6 @@ export class BenchmarkRateDistributionDirective {
             );
             this.onDataComplete.emit(tempChartData);
         }
-    }
+   }
 
-    @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
-
-    @Input('chartObject') set setChartObject(chartObject: any) {
-        if(chartObject && chartObject.isObjectValid) {
-            let chart = chartObject.highChartObject;
-            BaseChart.addChartLabel(
-                chart, 
-                'Min ' + this.quartile.minRPM_KMB,
-                BaseChart.getXAxisPosition(chart, 2.5) - 34, 
-                BaseChart.getYAxisPosition(chart, this.quartile.minRPM) + 10,
-                null,
-                10,
-                'bold'
-            );
-            BaseChart.addChartLabel(
-                chart, 
-                '25th% ' + this.quartile.firstQuartile_KMB,
-                BaseChart.getXAxisPosition(chart, 2.5) - 34, 
-                BaseChart.getYAxisPosition(chart, this.quartile.firstQuartile) + 10,
-                null,
-                10,
-                'bold'
-            );
-            BaseChart.addChartLabel(
-                chart,
-                'Median ' + this.quartile.median_KMB,
-                BaseChart.getXAxisPosition(chart, 2) - (('Median ' + this.quartile.median_KMB).length * 7),
-                BaseChart.getYAxisPosition(chart, this.quartile.median) + 3,
-                null,
-                10,
-                'bold'
-            );
-
-            BaseChart.addChartLabel(
-                chart,
-                '75th% ' + this.quartile.fourthQuartile_KMB,
-                BaseChart.getXAxisPosition(chart, 2.5) - 34,
-                BaseChart.getYAxisPosition(chart, this.quartile.fourthQuartile) - 5,
-                null,
-                10,
-                'bold'
-            );
-            BaseChart.addChartLabel(
-                chart,
-                'Max ' + this.quartile.maxRPM_KMB,
-                BaseChart.getXAxisPosition(chart, 2.5) - 34,
-                BaseChart.getYAxisPosition(chart, this.quartile.maxRPM) - 5,
-                null,
-                10,
-                'bold'
-            );
-
-
-            BaseChart.addChartLabel(
-                chart,
-                this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
-                BaseChart.getXAxisPosition(chart, 0.5),
-                BaseChart.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
-                null,
-                10,
-                'bold'
-            );
-            BaseChart.addChartLabel(
-                chart, 
-                this.displayText, 
-                10, 
-                chart.chartHeight - 40, 
-                '#000000',
-                10,
-                null,
-                chart.chartWidth - 75
-            );
-            
-            BaseChart.addChartImage(
-                chart, 
-                'https://www.advisen.com/img/advisen-logo.png', 
-                chart.chartWidth - 80, 
-                chart.chartHeight - 20, 
-                69, 
-                17
-            );
-
-            if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
-                BaseChart.addChartLabel(
-                    chart,
-                    this.searchService.selectedCompany.companyName,
-                    BaseChart.getXAxisPosition(chart, 3.5),
-                    BaseChart.getYAxisPosition(chart, this.quartile.clientRPMPercentileValue) - 5,
-                    null,
-                    10,
-                    'bold'
-                );
-            }
-            chartObject.isObjectValid = false;
-        }
-    }
-
-    public static defaultLineColor: string = 'black';
-
-    static CLIENT_LINE: string = "Client Line";
-
-    seriesColor: string[];
-
-    quartile: RateQuartile;
-
-    displayText: string = '';
-
-    constructor(private searchService: SearchService) {
-        this.seriesColor = [];
-        this.seriesColor[BenchmarkRateDistributionDirective.CLIENT_LINE] = '#487AA1';
-    }
-
-    private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkRateDistributionDirective.defaultLineColor;
-    }
-
-    ngOnInit() {}
-    
 }

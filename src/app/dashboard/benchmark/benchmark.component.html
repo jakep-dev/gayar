@@ -1,9 +1,11 @@
-<gauge-chart 
-    benchmark-score
-    [modelData]="modelData"
-    [chartData]="chartData$ | async"
-    (onDataComplete)="onDataComplete($event)"
-    [chartObject]="chartObject$ | async"
-    (onChartRedraw)="onChartReDraw($event)"
+<div *ngIf='modelData'>
+    <gauge-chart 
+        benchmark-score
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
     >
-</gauge-chart>
+    </gauge-chart>
+</div>

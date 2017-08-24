@@ -1,15 +1,68 @@
-import { Directive, Output, Input, EventEmitter } from '@angular/core';
+import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkLimitModel, BoxPlotChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
 
 @Directive({
     selector: '[benchmark-peergrouploss-distribution-behavior]'
 })
-export class BenchmarkPeerGroupLossDistributionDirective {
+export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnChanges {
 
-    @Input('modelData') set setChartData(data: BenchmarkLimitModel) {
+    @Input() modelData: BenchmarkLimitModel;
 
-        if(data) {
+    @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
+
+    @Input() chartComponent: BaseChart;
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
+            this.chartComponent = changes['chartComponent'].currentValue;
+            this.chartComponent.addChartLabel(
+                this.displayText, 
+                10, 
+                this.chartComponent.chart.chartHeight - 30, 
+                '#000000',
+                10,
+                null,
+                500
+            );
+            this.chartComponent.addChartImage(
+                'https://www.advisen.com/img/advisen-logo.png', 
+                this.chartComponent.chart.chartWidth - 80, 
+                this.chartComponent.chart.chartHeight - 20, 
+                69, 
+                17
+            );
+        }
+    }
+
+    public static defaultLineColor: string = 'black';
+
+    static CLIENT_LINE: string = "Client Line";
+
+    seriesColor: string[];
+
+    displayText: string = '';
+
+    constructor() {
+        this.seriesColor = [];
+        this.seriesColor["Above Client"] = '#F68C20';
+        this.seriesColor["Below Client"] = '#B1D23B';
+        this.seriesColor[BenchmarkPeerGroupLossDistributionDirective.CLIENT_LINE] = '#487AA1';
+    }
+
+    private getSeriesColor(seriesName: string) {
+        return this.seriesColor[seriesName] || BenchmarkPeerGroupLossDistributionDirective.defaultLineColor;
+    }
+
+    ngOnInit() {
+        this.buildHighChartObject();
+    }
+
+    /**
+     * Use chart data from web service to build parts of Highchart chart options object
+     */
+    buildHighChartObject() {
+        if(this.modelData) {
             let tempChartData: BoxPlotChartData = {
                 series: [
                     {
@@ -71,12 +124,12 @@ export class BenchmarkPeerGroupLossDistributionDirective {
 				        marginBottom: 30
                     }
                 ],
-                title: data.chartTitle,
-                subtitle: data.filterDescription,
-                displayText: data.displayText,
+                title: this.modelData.chartTitle,
+                subtitle: this.modelData.filterDescription,
+                displayText: this.modelData.displayText,
                 categories: ['1', '2'],
-                xAxisLabel: data.xAxis,
-                yAxisLabel: data.yAxis,
+                xAxisLabel: this.modelData.xAxis,
+                yAxisLabel: this.modelData.yAxis,
                 xAxisFormatter: null,
                 customChartSettings: {
                     chart: {
@@ -113,7 +166,7 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                         plotLines: [
                             {
                                 color: '#000000',
-                                value: data.medianLimit, // For Median Peer Program Limit
+                                value: this.modelData.medianLimit, // For Median Peer Program Limit
                                 width: '2',
                                 zIndex: 5
                             },
@@ -121,7 +174,7 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                                 color: '#487AA1',
                                 width: '2',
                                 zIndex: 5,
-                                value: data.clientLimit // For Client Limit
+                                value: this.modelData.clientLimit // For Client Limit
                             }
                         ]
                     },
@@ -152,61 +205,13 @@ export class BenchmarkPeerGroupLossDistributionDirective {
                 },
                 hasRedrawActions: true
             }
-            this.displayText = data.displayText;
-            for (let i = 0; i < data.losses.length; i++) {
-                tempChartData.series[0].data.push(data.losses[i].lossAboveLimit);
-                tempChartData.series[1].data.push(data.losses[i].lossBelowLimit);
+            this.displayText = this.modelData.displayText;
+            for (let i = 0; i < this.modelData.losses.length; i++) {
+                tempChartData.series[0].data.push(this.modelData.losses[i].lossAboveLimit);
+                tempChartData.series[1].data.push(this.modelData.losses[i].lossBelowLimit);
             }
             this.onDataComplete.emit(tempChartData);
         }
     }
 
-    @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
-
-    @Input('chartObject') set setChartObject(chartObject: any) {
-        if(chartObject && chartObject.isObjectValid) {
-            let chart = chartObject.highChartObject;
-            BaseChart.addChartLabel(
-                chart, 
-                this.displayText, 
-                10, 
-                chart.chartHeight - 30, 
-                '#000000',
-                10,
-                null,
-                500
-            );
-            BaseChart.addChartImage(
-                chart, 
-                'https://www.advisen.com/img/advisen-logo.png', 
-                chart.chartWidth - 80, 
-                chart.chartHeight - 20, 
-                69, 
-                17
-            );
-            chartObject.isObjectValid = false;
-        }
-    }
-
-    public static defaultLineColor: string = 'black';
-
-    static CLIENT_LINE: string = "Client Line";
-
-    seriesColor: string[];
-
-    displayText: string = '';
-
-    constructor() {
-        this.seriesColor = [];
-        this.seriesColor["Above Client"] = '#F68C20';
-        this.seriesColor["Below Client"] = '#B1D23B';
-        this.seriesColor[BenchmarkPeerGroupLossDistributionDirective.CLIENT_LINE] = '#487AA1';
-    }
-
-    private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkPeerGroupLossDistributionDirective.defaultLineColor;
-    }
-
-    ngOnInit() {}
-    
 }

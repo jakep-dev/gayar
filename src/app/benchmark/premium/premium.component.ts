@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { BenchmarkModel, BarChartData, BenchmarkDistributionInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
+import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
 	selector: 'app-premium',
@@ -10,7 +11,6 @@ import { BenchmarkService } from '../../services/services';
 	styleUrls: ['./premium.component.scss']
 })
 export class PremiumComponent implements OnInit {
-    searchParms: BenchmarkDistributionInput;
 
     modelData: BenchmarkModel;
 
@@ -18,64 +18,48 @@ export class PremiumComponent implements OnInit {
         this.modelData = modelData;
     }
 
-    private chartData: BehaviorSubject<BarChartData>;
-    chartData$: Observable<BarChartData>;
+    chartData: BarChartData;
 
-    @Input() set componentData(data: BenchmarkDistributionInput) {
-        if(data) {
-            this.searchParms = data;
-            if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-                this.benchmarkService.getBenchmarkPremiumByCompanyId(data.premiumValue, 'PREMIUM', data.companyId)
+    @Input() componentData: BenchmarkDistributionInput;
+
+    /**
+     * Event handler to indicate the construction of the BarChart's required data is built 
+     * @param newChartData BarChart's required data
+     */
+    onDataComplete(newChartData : BarChartData) {
+        this.chartData = newChartData;
+    }
+
+    chartComponent: BaseChart
+    
+    /**
+     * Event handler to indicate the chart is loaded 
+     * @param chart The chart commponent
+     */
+    onChartReDraw(chart: BaseChart) {
+        this.chartComponent = chart;
+    }
+    
+    constructor(private benchmarkService: BenchmarkService) {
+    }
+
+    ngOnInit() {
+        this.getBenchmarkPremiumData();
+    }
+
+    /**
+     * Get Benchmark Premium Data from back end nodejs server
+     */
+    getBenchmarkPremiumData() {
+        if(this.componentData) {
+            if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.benchmarkService.getBenchmarkPremiumByCompanyId(this.componentData.premiumValue, 'PREMIUM', this.componentData.companyId)
                 .subscribe(modelData => this.setModelData(modelData));
             } else {
-                this.benchmarkService.getBenchmarkPremiumByManualInput(data.premiumValue, 'PREMIUM', data.naics, data.revenueRange)
+                this.benchmarkService.getBenchmarkPremiumByManualInput(this.componentData.premiumValue, 'PREMIUM', this.componentData.naics, this.componentData.revenueRange)
                 .subscribe(modelData => this.setModelData(modelData));
             }
         }
     }
-
-    onDataComplete(newChartData : BarChartData) {
-        this.chartData.next(newChartData);
-    }
-
-    private chartObject: BehaviorSubject<any>;
     
-    chartObject$: Observable<any>;
-    
-    onChartReDraw(chartObject: any) {
-        this.chartObject.next(
-            {
-                isObjectValid: true,
-                highChartObject: chartObject
-            }
-        );
-    }
-
-    constructor(private benchmarkService: BenchmarkService) {
-        this.chartData = new BehaviorSubject<BarChartData>(
-            {
-                categories: [],
-                series: [],
-                subtitle: '',
-                title: '',
-                displayText: '',
-                xAxisFormatter: null,
-                xAxisLabel: '',
-                yAxisLabel: '',
-                customChartSettings: null,
-                hasRedrawActions: false
-            }
-        );
-        this.chartData$ = this.chartData.asObservable();
-        this.chartObject = new BehaviorSubject<any>(
-            {
-                isObjectValid: false,
-                highChartObject: null
-            }
-        );
-        this.chartObject$ = this.chartObject.asObservable();
-    }
-
-    ngOnInit() {}
-
 }
