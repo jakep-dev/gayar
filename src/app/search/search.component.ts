@@ -70,11 +70,6 @@ export class SearchComponent implements OnInit {
     this.selectedSearchType = searchByModel.type;
     this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
     this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
-    if(this.isManual){
-      this.searchDatabase.clear();
-      this.searchResult = [];
-      
-    }
   }
 
   doSearchByChange(){
@@ -94,6 +89,7 @@ export class SearchComponent implements OnInit {
       retention: this.selectedRetention
     };
     console.log(this.searchService.searchCriteria );
+    console.log(this.searchService.selectedCompany);
     this.router.navigate(['/dashboard']);
   }
 
@@ -135,8 +131,6 @@ export class SearchComponent implements OnInit {
       });
     }
     else{
-      this.clearData();
-       this.searchResult = null;
        this.searchService.selectedCompany = null;
     }
   }
@@ -148,8 +142,6 @@ export class SearchComponent implements OnInit {
   }
   
   loadData(event){
-    
-    
   }
 
   toggleProgress(){
