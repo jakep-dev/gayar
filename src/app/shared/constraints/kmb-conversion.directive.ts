@@ -4,7 +4,9 @@ import { Directive, Output, EventEmitter, HostListener, HostBinding, ElementRef 
   selector: '[kmbConversion]'
 })
 export class KmbConversionDirective {
-  validNumberRegExp: string = '^[-+]?[0-9]*\.?[0-9]+$';
+  validKmbRegExpression: string = '^[-+]?[0-9]*\.?[0-9]+([KMB|kmb])?$';
+  removeCommaRegExpression: any = /[, ]+/g;
+  addCommaRegExpression: any =  /\d{1,3}(?=(\d{3})+(?!\d))/g;
 
   @HostBinding('value') value = ''; 
 
@@ -18,7 +20,10 @@ export class KmbConversionDirective {
   }
 
   @HostListener('input', ['$event']) onInput(event: KeyboardEvent, el: ElementRef){
-    let regExp = new RegExp(this.validNumberRegExp);
+    let regExp = new RegExp(this.validKmbRegExpression);
+    
+
+
     const input = event.target as HTMLInputElement;
     let value = input.value;
     let splitChar = this.getSplitChar(value);
@@ -54,17 +59,18 @@ export class KmbConversionDirective {
     if(!splittedVal || splittedVal.length === 0){
       return '';
     }
-    console.log('Float - ', splittedVal[0])
+    let floatNumber: any = parseFloat(splittedVal[0].replace(this.removeCommaRegExpression, ""));
+
 
     switch(splitChar){
       case 'K':
-        return (parseFloat(splittedVal[0]) * 1000).toString();
+        return (floatNumber * 1000).toString().replace(this.addCommaRegExpression , "$&,");
 
       case 'M':
-        return (parseFloat(splittedVal[0]) * 1000000).toString();
+        return (floatNumber * 1000000).toString().replace( this.addCommaRegExpression , "$&,");
 
       case 'B':
-        return (parseFloat(splittedVal[0]) * 1000000000).toString();
+        return (floatNumber * 1000000000).toString().replace( this.addCommaRegExpression , "$&,");
 
       default: 
         return '';
