@@ -72,7 +72,7 @@ export class SearchComponent implements OnInit {
     this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
     if(this.isManual){
       this.searchDatabase.clear();
-      this.searchResult = null;
+      this.searchResult = [];
       
     }
   }
@@ -122,12 +122,13 @@ export class SearchComponent implements OnInit {
       this.searchResult = res.companies;
       console.log(res.companies);
       this.clearData();
-      if(res.companies){
+      if(res.companies && res.companies.length > 0){
         const copiedData = this.searchDatabase.data.slice();
         res.companies.forEach(f=>copiedData.push(f));
         this.searchDatabase.dataChange.next(copiedData);
       }
       else{
+        this.searchResult = null;
         this.message = "Your search did not match any company. Please refine your search";
       }
       this.toggleProgress();
