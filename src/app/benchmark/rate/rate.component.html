@@ -1,9 +1,11 @@
-<boxplot-chart 
-    benchmark-rate-distribution-behavior
-    [modelData]="modelData"
-    [chartData]="chartData$ | async"
-    (onDataComplete)="onDataComplete($event)"
-    [chartObject]="chartObject$ | async"
-    (onChartRedraw)="onChartReDraw($event)"
+<div *ngIf='modelData'>
+    <boxplot-chart 
+        benchmark-rate-distribution-behavior
+        [modelData]="modelData"
+        [chartData]="chartData"
+        [chartComponent]="chartComponent"
+        (onDataComplete)="onDataComplete($event)"
+        (onChartRedraw)="onChartReDraw($event)"
     >
-</boxplot-chart>
+    </boxplot-chart>
+</div>

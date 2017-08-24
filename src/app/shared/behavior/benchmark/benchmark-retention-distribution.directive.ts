@@ -1,23 +1,75 @@
-import { Directive, Output, Input, EventEmitter } from '@angular/core';
+import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
 
 @Directive({
     selector: '[benchmark-retention-distribution-behavior]'
 })
-export class BenchmarkRetentionDistributionDirective {
+export class BenchmarkRetentionDistributionDirective implements OnInit, OnChanges {
 
-    @Input('modelData') set setChartData(data: BenchmarkModel) {
+    @Input() modelData: BenchmarkModel;
 
-        if (data) {
+    @Output() onDataComplete = new EventEmitter<BarChartData>();
+
+    @Input() chartComponent: BaseChart;
+    
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
+            this.chartComponent = changes['chartComponent'].currentValue;
+            this.chartComponent.addChartLabel(
+                this.displayText,
+                10,
+                this.chartComponent.chart.chartHeight - 10,
+                '#000000',
+                10,
+                null
+            );
+            this.chartComponent.addChartImage(
+                'https://www.advisen.com/img/advisen-logo.png',
+                this.chartComponent.chart.chartWidth - 80,
+                this.chartComponent.chart.chartHeight - 20,
+                69,
+                17
+            );
+        }
+    }
+
+    public static defaultLineColor: string = 'black';
+
+    static CLIENT_LINE: string = "Client Line";
+
+    seriesColor: string[];
+
+    displayText: string = '';
+
+    constructor() {
+        this.seriesColor = [];
+        this.seriesColor["Above Client"] = '#F68C20';
+        this.seriesColor["Below Client"] = '#B1D23B';
+        this.seriesColor[BenchmarkRetentionDistributionDirective.CLIENT_LINE] = '#487AA1';
+    }
+
+    private getSeriesColor(seriesName: string) {
+        return this.seriesColor[seriesName] || BenchmarkRetentionDistributionDirective.defaultLineColor;
+    }
+
+    ngOnInit() {
+        this.buildHighChartObject();
+    }
+
+    /**
+     * Use chart data from web service to build parts of Highchart chart options object
+     */
+    buildHighChartObject() {
+        if (this.modelData) {
             let tempChartData: BarChartData = {
                 series: [],
-                title: data.chartTitle,
-                subtitle: data.filterDescription,
-                displayText: data.displayText,
+                title: this.modelData.chartTitle,
+                subtitle: this.modelData.filterDescription,
+                displayText: this.modelData.displayText,
                 categories: [],
-                xAxisLabel: data.xAxis,
-                yAxisLabel: data.yAxis,
+                xAxisLabel: this.modelData.xAxis,
+                yAxisLabel: this.modelData.yAxis,
                 xAxisFormatter: null,
                 customChartSettings: {
                     tooltip: {
@@ -27,17 +79,17 @@ export class BenchmarkRetentionDistributionDirective {
                 },
                 hasRedrawActions: true
             }
-            this.displayText = data.displayText;
+            this.displayText = this.modelData.displayText;
 
             let seriesIndex: number;
             let seriesLength: number;
             let groups = new Array();
             let groupNames = new Array();
-            seriesLength = data.buckets.length;
+            seriesLength = this.modelData.buckets.length;
             let bucket: any;
 
             for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
-                bucket = data.buckets[seriesIndex];
+                bucket = this.modelData.buckets[seriesIndex];
                 tempChartData.categories.push(bucket.label);
                 if (!groups[bucket.group]) {
                     groups[bucket.group] = new Array();
@@ -89,54 +141,7 @@ export class BenchmarkRetentionDistributionDirective {
                 };
             }
             this.onDataComplete.emit(tempChartData);
-        }
+       }
     }
-
-    @Output() onDataComplete = new EventEmitter<BarChartData>();
-
-    @Input('chartObject') set setChartObject(chartObject: any) {
-        if (chartObject && chartObject.isObjectValid) {
-            let chart = chartObject.highChartObject;
-            BaseChart.addChartLabel(
-                chart,
-                this.displayText,
-                10,
-                chart.chartHeight - 10,
-                '#000000',
-                10,
-                null
-            );
-            BaseChart.addChartImage(
-                chart,
-                'https://www.advisen.com/img/advisen-logo.png',
-                chart.chartWidth - 80,
-                chart.chartHeight - 20,
-                69,
-                17
-            );
-            chartObject.isObjectValid = false;
-        }
-    }
-
-    public static defaultLineColor: string = 'black';
-
-    static CLIENT_LINE: string = "Client Line";
-
-    seriesColor: string[];
-
-    displayText: string = '';
-
-    constructor() {
-        this.seriesColor = [];
-        this.seriesColor["Above Client"] = '#F68C20';
-        this.seriesColor["Below Client"] = '#B1D23B';
-        this.seriesColor[BenchmarkRetentionDistributionDirective.CLIENT_LINE] = '#487AA1';
-    }
-
-    private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkRetentionDistributionDirective.defaultLineColor;
-    }
-
-    ngOnInit() { }
 
 }

@@ -195,7 +195,6 @@ export abstract class BaseChart {
 
     /**
      * Add text labels on chart
-     * @param chart - Highchart object
      * @param text - text to add
      * @param xPos - x position of the chart
      * @param yPos - y position of the chart
@@ -204,9 +203,9 @@ export abstract class BaseChart {
      * @param fontWeight - text font weight
      * @param width - width of the container of the text
      */
-    public static addChartLabel(chart: any, text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight?: string, width?: number) {
+    public addChartLabel(text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight?: string, width?: number) {
 
-        let render = chart.renderer.text(text, xPos, yPos);
+        let render = this.chart.renderer.text(text, xPos, yPos);
         let css = {
             color: color || '#000',
             fontSize: (fontSize || 12) + 'px',
@@ -228,38 +227,35 @@ export abstract class BaseChart {
 
     /**
      * Add image on the chart
-     * @param chart Highchart object
      * @param link - chart's url
      * @param xPos - x position of the chart
      * @param yPos - y position of the chart
      * @param width - width of the chart
      * @param height - height of the chart
      */
-    public static addChartImage(chart: any, link: string, xPos: number, yPos: number, width: number, height: number) {
+    public addChartImage(link: string, xPos: number, yPos: number, width: number, height: number) {
 
-        chart.renderer.image(link, xPos, yPos, width, height).add();
+        this.chart.renderer.image(link, xPos, yPos, width, height).add();
     }
 
     /**
      * Get the Y-axis position based on the y point
-     * @param chart - Highchart object
      * @param yPoint - y point
      */
-    public static getYAxisPosition(chart: any, yPoint: number) {
-        let yOffSet = chart.chartHeight - chart.marginBottom; //position of Y axis
-        let heightPerUnit = chart.plotHeight / chart.yAxis[0].max; //height per y-axis unit
+    public getYAxisPosition(yPoint: number) {
+        let yOffSet = this.chart.chartHeight - this.chart.marginBottom; //position of Y axis
+        let heightPerUnit = this.chart.plotHeight / this.chart.yAxis[0].max; //height per y-axis unit
 
         return yOffSet - Math.round(yPoint * heightPerUnit);
     }
 
     /**
      * Get the X-axis position based on the x point
-     * @param chart - Highchart object
      * @param xPoint - x point
      */
-    public static getXAxisPosition(chart: any, xPoint: number) {
-        let xOffSet = chart.plotLeft; //position of Y axis
-        let widthPerUnit = chart.plotWidth / chart.xAxis[0].categories.length; //width per x-axis unit
+    public getXAxisPosition(xPoint: number) {
+        let xOffSet = this.chart.plotLeft; //position of Y axis
+        let widthPerUnit = this.chart.plotWidth / this.chart.xAxis[0].categories.length; //width per x-axis unit
 
         return xOffSet + Math.round(xPoint * widthPerUnit);
     }

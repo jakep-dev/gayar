@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { BenchmarkLimitModel, BoxPlotChartData, BenchmarkLimitAdequacyInput } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
+import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
   selector: 'app-peer-group-loss',
@@ -11,72 +12,54 @@ import { BenchmarkService } from '../../services/services';
 })
 export class PeerGroupLossComponent implements OnInit {
 
-    searchParms: BenchmarkLimitAdequacyInput;
-
     modelData: BenchmarkLimitModel;
 
     setModelData(modelData: BenchmarkLimitModel) {
         this.modelData = modelData;
     }
 
-    private chartData: BehaviorSubject<BoxPlotChartData>;
-    chartData$: Observable<BoxPlotChartData>;
+    chartData: BoxPlotChartData;
 
-    @Input() set componentData(data: BenchmarkLimitAdequacyInput) {
-        if(data) {
-            this.searchParms = data;
-            if(data.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-                this.benchmarkService.getLimitAdequacy(data.companyId, data.limits)
+    @Input() componentData: BenchmarkLimitAdequacyInput;
+
+    /**
+     * Event handler to indicate the construction of the BoxPlotChart's required data is built 
+     * @param newChartData BoxPlotChart's required data
+     */
+    onDataComplete(newChartData : BoxPlotChartData) {
+        this.chartData = newChartData;
+    }
+
+    chartComponent: BaseChart
+
+    /**
+     * Event handler to indicate the chart is loaded 
+     * @param chart The chart commponent
+     */
+    onChartReDraw(chart: BaseChart) {
+        this.chartComponent = chart;
+    }
+
+    constructor(private benchmarkService: BenchmarkService) {
+    }
+
+    ngOnInit() {
+        this.getBenchmarkPeerGroupLossData();
+    }
+
+    /**
+     * Get Benchmark Peer Group Loss Data from back end nodejs server
+     */
+    getBenchmarkPeerGroupLossData() {
+        if(this.componentData) {
+            if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.benchmarkService.getLimitAdequacy(this.componentData.companyId, this.componentData.limits)
                 .subscribe(modelData => this.setModelData(modelData));
             } else {
-                this.benchmarkService.getLimitAdequacyChartByManualInput(data.limits, data.naics, data.revenueRange)
+                this.benchmarkService.getLimitAdequacyChartByManualInput(this.componentData.limits, this.componentData.naics, this.componentData.revenueRange)
                 .subscribe(modelData => this.setModelData(modelData));
             }
         }
     }
-
-    onDataComplete(newChartData : BoxPlotChartData) {
-        this.chartData.next(newChartData);
-    }
-
-    private chartObject: BehaviorSubject<any>;
-    
-    chartObject$: Observable<any>;
-    
-    onChartReDraw(chartObject: any) {
-        this.chartObject.next(
-            {
-                isObjectValid: true,
-                highChartObject: chartObject
-            }
-        );
-    }
-
-    constructor(private benchmarkService: BenchmarkService) {
-        this.chartData = new BehaviorSubject<BoxPlotChartData>(
-            {
-                categories: [],
-                series: [],
-                subtitle: '',
-                title: '',
-                displayText: '',
-                xAxisFormatter: null,
-                xAxisLabel: '',
-                yAxisLabel: '',
-                customChartSettings: null,
-                hasRedrawActions: false
-            }
-        );
-        this.chartData$ = this.chartData.asObservable();
-        this.chartObject = new BehaviorSubject<any>(
-            {
-                isObjectValid: false,
-                highChartObject: null
-            }
-        );
-        this.chartObject$ = this.chartObject.asObservable();
-    }
-
-    ngOnInit() {}
 
 }

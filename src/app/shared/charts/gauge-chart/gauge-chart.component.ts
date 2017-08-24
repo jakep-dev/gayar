@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { GaugeChartData } from 'app/model/model';
 import { BaseChart } from '../base-chart';
 
@@ -11,69 +11,75 @@ import { BaseChart } from '../base-chart';
 
 export class GaugeChartComponent extends BaseChart implements OnInit {
 
-    @Input('chartData') set setChartData(data: GaugeChartData) {
-        //Check to see if we have at least one data point
-
-        if(data && data.series.length > 0 && data.customChartSettings !== null) {
-            this.setTitle(data.title);
-            this.setSubTitle(data.subtitle);
-            this.setXAxisTitle(data.xAxisLabel);
-            this.setYAxisTitle(data.yAxisLabel);
-            //update chart but don't redraw chart yet
-            this.chart.update(this.chartOptions, false);
-
-            
-            let seriesIndex: number;
-            let seriesLength: number;
-            //clear out old series before adding new series data
-            seriesLength = this.chart.series.length;
-            for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
-                this.chart.series[seriesIndex].remove();
-            }
-            //add in new series data
-            seriesLength = data.customChartSettings.series.length;
-            for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
-                this.chart.addSeries(
-                    {
-                        id: data.series[seriesIndex].name,
-                        name: data.series[seriesIndex].name,
-                        type: 'solidgauge',
-                        data: data.series[seriesIndex].data,
-                        pane: data.customChartSettings.pane
-                    }
-                );
-            }
-            this.hasRedrawActions = data.hasRedrawActions;
-            if(data.customChartSettings) {
-                this.chart.update(data.customChartSettings, true);
-            } else {
-                this.chart.update(this.chartOptions, true);
-            }
-        }
-    }
+    @Input() chartData: GaugeChartData;
 
     constructor() {
         super();
         this.setDefaultChartType('solidgauge');
         this.hasRedrawActions = false;
-        //this.onRedraw(this.chart);
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.initializeBarChart();
+    }
+
+    /**
+     * Initialze simple barchart settings that doens't require the underlying HighChart chart object
+     */
+    initializeBarChart() {
+        this.setTitle(this.chartData.title);
+        this.setSubTitle(this.chartData.subtitle);
+        this.setXAxisTitle(this.chartData.xAxisLabel);
+        this.setYAxisTitle(this.chartData.yAxisLabel);
+        this.hasRedrawActions = this.chartData.hasRedrawActions;        
+    }
+
+    /**
+     * Load barchart settings and data that requires the underlying HighChart chart object
+     */
+    loadBarChartData() {
+        let seriesIndex: number;
+        let seriesLength: number;
+        //clear out old series before adding new series data
+        seriesLength = this.chart.series.length;
+        for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
+            this.chart.series[seriesIndex].remove();
+        }
+        //add in new series data
+        seriesLength = this.chartData.customChartSettings.series.length;
+        for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
+            this.chart.addSeries(
+                {
+                    id: this.chartData.series[seriesIndex].name,
+                    name: this.chartData.series[seriesIndex].name,
+                    type: 'solidgauge',
+                    data: this.chartData.series[seriesIndex].data,
+                    pane: this.chartData.customChartSettings.pane
+                }
+            );
+        }
+
+        if(this.chartData.customChartSettings) {
+            this.chart.update(this.chartData.customChartSettings, true);
+        } else {
+            this.chart.update(this.chartOptions, true);
+        }
+    }
 
     setChart(chart: any) {
         this.chart = chart;
+        this.loadBarChartData();
     }
 
     hasRedrawActions: boolean;
 
-    @Output() onChartRedraw = new EventEmitter<any>();
-
-    //@HostListener("redraw", ["$event"]) 
-    onRedraw(chart: any) {
+    @Output() onChartRedraw = new EventEmitter<BaseChart>();
+    
+    onRedraw(chart: BaseChart) {
         if(this.hasRedrawActions) {
-            this.onChartRedraw.emit(chart);
+            this.onChartRedraw.emit(this);
             this.hasRedrawActions = false;
         }
     }
+
 }
