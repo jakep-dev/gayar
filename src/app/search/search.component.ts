@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
   message: string;
-  displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel'];
+  displayedColumns = ['companyId', 'depthScore',  'companyName', 'city', 'state', 'country', 'ticker', 'exchange', 'topLevel', 'status'];
   searchDatabase = new SearchDatabase();
   dataSource: SearchDataSource | null;
   searchResult: Array<CompanyModel>;
@@ -70,11 +70,6 @@ export class SearchComponent implements OnInit {
     this.selectedSearchType = searchByModel.type;
     this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
     this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
-    if(this.isManual){
-      this.searchDatabase.clear();
-      this.searchResult = null;
-      
-    }
   }
 
   doSearchByChange(){
@@ -94,6 +89,7 @@ export class SearchComponent implements OnInit {
       retention: this.selectedRetention
     };
     console.log(this.searchService.searchCriteria );
+    console.log(this.searchService.selectedCompany);
     this.router.navigate(['/dashboard']);
   }
 
@@ -120,21 +116,21 @@ export class SearchComponent implements OnInit {
       this.toggleProgress();
       this.searchService.getSearchResult(this.selectedSearchType, this.selectedSearchValue).subscribe((res: SearchModel)=>{
       this.searchResult = res.companies;
+      console.log(res.companies);
       this.clearData();
-      if(res.companies){
+      if(res.companies && res.companies.length > 0){
         const copiedData = this.searchDatabase.data.slice();
         res.companies.forEach(f=>copiedData.push(f));
         this.searchDatabase.dataChange.next(copiedData);
       }
       else{
+        this.searchResult = null;
         this.message = "Your search did not match any company. Please refine your search";
       }
       this.toggleProgress();
       });
     }
     else{
-      this.clearData();
-       this.searchResult = null;
        this.searchService.selectedCompany = null;
     }
   }
@@ -146,8 +142,6 @@ export class SearchComponent implements OnInit {
   }
   
   loadData(event){
-    
-    
   }
 
   toggleProgress(){
@@ -228,6 +222,7 @@ export class SearchDataSource extends DataSource<any> {
         case 'ticker': [propertyA, propertyB] = [a.ticker, b.ticker]; break;
         case 'exchange': [propertyA, propertyB] = [a.exchange, b.exchange]; break;
         case 'topLevel': [propertyA, propertyB] = [a.topLevel, b.topLevel]; break;
+        case 'status': [propertyA, propertyB] = [a.status, b.status]; break;
       }
 
       let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
