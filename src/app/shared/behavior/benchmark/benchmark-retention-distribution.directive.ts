@@ -14,15 +14,18 @@ export class BenchmarkRetentionDistributionDirective implements OnInit, OnChange
     @Input() chartComponent: BaseChart;
     
     ngOnChanges(changes: SimpleChanges) {
+        let maxCharactersPerLine = 105; //approximate max characters per line
+        let labelHeight = ((Math.ceil(this.displayText.length / maxCharactersPerLine)) * 10);
         if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
             this.chartComponent.addChartLabel(
                 this.displayText,
                 10,
-                this.chartComponent.chart.chartHeight - 10,
+                this.chartComponent.chart.chartHeight - labelHeight,
                 '#000000',
                 10,
-                null
+                null,
+                this.chartComponent.chart.chartWidth - 85
             );
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png',
