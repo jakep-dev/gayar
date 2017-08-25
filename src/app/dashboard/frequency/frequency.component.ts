@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-frequency',
+  selector: 'app-dashboard-frequency',
   templateUrl: './frequency.component.html',
   styleUrls: ['./frequency.component.css']
 })

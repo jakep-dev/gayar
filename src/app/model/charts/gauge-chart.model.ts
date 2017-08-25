@@ -7,7 +7,6 @@ export interface GaugeChartData {
     xAxisLabel: string;
     yAxisLabel: string;
     xAxisFormatter: any;
-    score: number;
 
     //Custom HighChart Settings that will be merged with current chart's options
     customChartSettings: any;

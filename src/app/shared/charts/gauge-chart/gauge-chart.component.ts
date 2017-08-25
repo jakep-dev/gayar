@@ -41,28 +41,37 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
         let seriesIndex: number;
         let seriesLength: number;
         //clear out old series before adding new series data
-        seriesLength = this.chart.series.length;
-        for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
-            this.chart.series[seriesIndex].remove();
-        }
-        //add in new series data
-        seriesLength = this.chartData.customChartSettings.series.length;
-        for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
-            this.chart.addSeries(
-                {
-                    id: this.chartData.series[seriesIndex].name,
-                    name: this.chartData.series[seriesIndex].name,
-                    type: 'solidgauge',
-                    data: this.chartData.series[seriesIndex].data,
-                    pane: this.chartData.customChartSettings.pane
-                }
-            );
-        }
+        
+        if (this.chartData && this.chartData.series.length > 0
+            && this.chartData.series.data !== null 
+            && this.chartData.customChartSettings !== null) {
 
-        if(this.chartData.customChartSettings) {
-            this.chart.update(this.chartData.customChartSettings, true);
-        } else {
-            this.chart.update(this.chartOptions, true);
+            seriesLength = this.chart.series.length;
+
+            for (seriesIndex = seriesLength - 1; seriesIndex >= 0; seriesIndex--) {
+                this.chart.series[seriesIndex].remove();
+            }
+            //add in new series data
+            seriesLength = this.chartData.customChartSettings.series.length;
+
+            for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
+                this.chart.addSeries(
+                    {
+                        id: this.chartData.series[seriesIndex].name,
+                        name: this.chartData.series[seriesIndex].name,
+                        type: 'solidgauge',
+                        data: this.chartData.series[seriesIndex].data,
+                        pane: this.chartData.customChartSettings.pane
+                    }
+                );
+            }
+
+            
+            if (this.chartData.customChartSettings) {
+                this.chart.update(this.chartData.customChartSettings, true);
+            } else {
+                this.chart.update(this.chartOptions, true);
+            }
         }
     }
 
