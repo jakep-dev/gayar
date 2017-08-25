@@ -14,10 +14,9 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
     @Input() chartComponent: BaseChart;
     
     ngOnChanges(changes: SimpleChanges) {
-        let maxCharactersPerLine = 105; //approximate max characters per line
-        let labelHeight = ((Math.ceil(this.displayText.length / maxCharactersPerLine)) * 10);
         if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
+            let labelHeight = ((Math.ceil(this.displayText.length / BenchmarkPremiumDistributionDirective.maxCharactersPerLine)) * 10);
             this.chartComponent.addChartLabel(
                 this.displayText,
                 10,
@@ -38,6 +37,8 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
     }
 
     public static defaultLineColor: string = 'black';
+
+    static maxCharactersPerLine: number = 105; //approximate max characters per line
 
     static CLIENT_LINE: string = "Client Line";
 
