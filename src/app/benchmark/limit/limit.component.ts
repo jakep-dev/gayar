@@ -27,7 +27,6 @@ export class LimitComponent implements OnInit {
      * @param newChartData BarChart's required data
      */
     onDataComplete(newChartData : BarChartData) {
-        //this.chartData.next(newChartData);
         this.chartData = newChartData;
     }
 
