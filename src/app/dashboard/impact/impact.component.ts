@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-impact',
+  selector: 'app-dashboard-impact',
   templateUrl: './impact.component.html',
   styleUrls: ['./impact.component.css']
 })

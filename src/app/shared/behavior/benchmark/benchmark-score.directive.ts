@@ -64,11 +64,10 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
     buildHighChartObject() {
         if (this.modelData) {
             let tempChartData: GaugeChartData = {
-                score: this.modelData.score.finalScore,
                 categories: [],
                 series: [
                     {
-                        data: this.modelData.score
+                        data: []
                     }
                 ],
                 subtitle: '',
@@ -115,8 +114,6 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                         labels: {
                             y: 16
                         },
-                        min: 0,
-                        max: 100
                     },
                     plotOptions: {
                         solidgauge: {
@@ -133,7 +130,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                     series: [
                         {
                             name: '',
-                            data: [this.modelData.score.finalScore],
+                            data: [],
                             dataLabels: {
                               format: null
                             },
@@ -145,6 +142,15 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                 }, 
                 hasRedrawActions: true,
             }
+
+            if (this.modelData && this.modelData.score !== null && this.modelData.score.finalScore !== null) {
+                tempChartData.series[0].data.push(this.modelData.score.finalScore);
+                tempChartData.customChartSettings.series[0].data.push(this.modelData.score.finalScore);
+                tempChartData.customChartSettings.yAxis.min = 0;
+                tempChartData.customChartSettings.yAxis.max = 100;
+
+            }
+            
             this.displayText = this.modelData.displayText;
             this.onDataComplete.emit(tempChartData);
         }

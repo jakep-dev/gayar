@@ -16,13 +16,15 @@ export class BenchmarkRetentionDistributionDirective implements OnInit, OnChange
     ngOnChanges(changes: SimpleChanges) {
         if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
+            let labelHeight = ((Math.ceil(this.displayText.length / BenchmarkRetentionDistributionDirective.maxCharactersPerLine)) * 10);
             this.chartComponent.addChartLabel(
                 this.displayText,
                 10,
-                this.chartComponent.chart.chartHeight - 10,
+                this.chartComponent.chart.chartHeight - labelHeight,
                 '#000000',
                 10,
-                null
+                null,
+                this.chartComponent.chart.chartWidth - 85
             );
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png',
@@ -36,6 +38,8 @@ export class BenchmarkRetentionDistributionDirective implements OnInit, OnChange
 
     public static defaultLineColor: string = 'black';
 
+    static maxCharactersPerLine: number = 105; //approximate max characters per line
+    
     static CLIENT_LINE: string = "Client Line";
 
     seriesColor: string[];
