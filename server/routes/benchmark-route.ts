@@ -48,7 +48,11 @@ export class BenchmarkRouter extends BaseRoute {
         try{
             super.PerformGetRequest("ratePerMillion", {
                 'company_id': req.body.companyId,
-                'ssnid': req.body.token
+                'ssnid': req.body.token,
+                'limit': req.body.limit,
+                'premium': req.body.premium,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
             }, (data)=>{
                 res.send(data);
             });   

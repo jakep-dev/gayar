@@ -67,10 +67,12 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 10,
                 'bold'
             );
+            
+            let xPosition = (this.searchService.searchCriteria.premium && this.searchService.searchCriteria.limit)? this.chartComponent.chart.chartHeight - 10 : this.chartComponent.chart.chartHeight - 40;
             this.chartComponent.addChartLabel(
                 this.displayText, 
                 10, 
-                this.chartComponent.chart.chartHeight - 40, 
+                xPosition, 
                 '#000000',
                 10,
                 null,
