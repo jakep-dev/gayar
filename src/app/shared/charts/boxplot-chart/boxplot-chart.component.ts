@@ -50,32 +50,35 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
      * Load barchart settings and data that requires the underlying HighChart chart object
      */
     loadBarChartData() {
-        let seriesIndex: number;
-        let seriesLength: number;
-        //clear out old series before adding new series data
-        seriesLength = this.chart.series.length;
-        for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
-            this.chart.series[seriesIndex].remove();
-        }
-        //add in new series data
-        seriesLength = this.chartData.series.length;
-        for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
-            this.chart.addSeries(
-                {
-                    id: this.chartData.series[seriesIndex].name,
-                    name: this.chartData.series[seriesIndex].name,
-                    type: 'boxplot',
-                    data: this.chartData.series[seriesIndex].data,
-                    pointWidth: this.chartData.series[seriesIndex].pointWidth,
-                    whiskerLength: this.chartData.series[seriesIndex].whiskerLength
+        if (this.chartData) {
+            if(this.chartData.series.length > 0) {
+                let seriesIndex: number;
+                let seriesLength: number;
+                //clear out old series before adding new series data
+                seriesLength = this.chart.series.length;
+                for(seriesIndex =  seriesLength -1; seriesIndex >= 0; seriesIndex--) {
+                    this.chart.series[seriesIndex].remove();
                 }
-            );
-        }
-
-        if(this.chartData.customChartSettings) {
-            this.chart.update(this.chartData.customChartSettings, true);
-        } else {
-            this.chart.update(this.chartOptions, true);
+                //add in new series data
+                seriesLength = this.chartData.series.length;
+                for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
+                    this.chart.addSeries(
+                        {
+                            id: this.chartData.series[seriesIndex].name,
+                            name: this.chartData.series[seriesIndex].name,
+                            type: 'boxplot',
+                            data: this.chartData.series[seriesIndex].data,
+                            pointWidth: this.chartData.series[seriesIndex].pointWidth,
+                            whiskerLength: this.chartData.series[seriesIndex].whiskerLength
+                        }
+                    );
+                }
+            }
+            if (this.chartData.customChartSettings) {
+                this.chart.update(this.chartData.customChartSettings, true);
+            } else {
+                this.chart.update(this.chartOptions, true);
+            }
         }
     }        
 

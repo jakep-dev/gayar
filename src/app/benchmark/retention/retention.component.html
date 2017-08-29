@@ -3,7 +3,7 @@
         benchmark-retention-distribution-behavior
         [modelData]="modelData"
         [chartData]="chartData"
-        [chartComponent]="chartComponent"
+        [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)"
         (onChartRedraw)="onChartReDraw($event)"
     >

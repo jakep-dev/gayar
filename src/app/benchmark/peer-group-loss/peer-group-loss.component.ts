@@ -30,14 +30,16 @@ export class PeerGroupLossComponent implements OnInit {
         this.chartData = newChartData;
     }
 
-    chartComponent: BaseChart
+    private chartComponent = new BehaviorSubject<BaseChart>(null);
+    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
-        this.chartComponent = chart;
+        //this.chartComponent = chart;
+        this.chartComponent.next(chart);
     }
 
     constructor(private benchmarkService: BenchmarkService) {
