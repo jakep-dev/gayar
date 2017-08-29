@@ -19,11 +19,11 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
             this.chartComponent.addChartLabel(
                 this.displayText, 
                 10, 
-                this.chartComponent.chart.chartHeight - 30, 
+                this.chartComponent.chart.chartHeight - 50, 
                 '#000000',
                 10,
                 null,
-                500
+                this.chartComponent.chart.chartWidth - 75
             );
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png', 
@@ -110,7 +110,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                             enabled: true,
                             radius : 12
 		        		},
-				        marginBottom: 30
+                        marginBottom: 50,
                     }, 
                     {
                         name: 'Median Peer Program Limit',
@@ -121,7 +121,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                             enabled: true,
                             radius : 12
 		        		},
-				        marginBottom: 30
+                        marginBottom: 50,
+                                
                     }
                 ],
                 title: this.modelData.chartTitle,
@@ -136,7 +137,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                         spacingRight: 20,
                         spacingLeft: 20,
                         spacingBottom: 40,
-                        marginBottom: 100,
+                        marginBottom: 150,
                     },
                     credits: {
                         enabled: true
@@ -152,10 +153,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                             enabled: false
                         },
                         title: {
-                            //align: 'center',
-                            //verticalAlign: 'bottom',
-                            //margin: 15,
-                            //floating: true,
+                            margin: 20,
                             style: {
                                 padding: '5px'
                             }
@@ -179,7 +177,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                         ]
                     },
                     legend: {
-                        margin: 10
+                        margin: 10,
+                        y: -30
                     },
                     tooltip: {
                         shared: false,
