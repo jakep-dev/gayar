@@ -40,14 +40,13 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
     loadBarChartData() {
         let seriesIndex: number;
         let seriesLength: number;
-        //clear out old series before adding new series data
         
         if (this.chartData && this.chartData.series.length > 0
             && this.chartData.series.data !== null 
             && this.chartData.customChartSettings !== null) {
 
+            //clear out old series before adding new series data
             seriesLength = this.chart.series.length;
-
             for (seriesIndex = seriesLength - 1; seriesIndex >= 0; seriesIndex--) {
                 this.chart.series[seriesIndex].remove();
             }
