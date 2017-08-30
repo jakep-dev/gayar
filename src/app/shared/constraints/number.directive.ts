@@ -14,8 +14,10 @@ export class NumberDirective {
     let input = event.target as HTMLInputElement;
     let validNumberRegExp = new RegExp(this.validNumRegExp);
     console.log(input.value);
+    let filteredValue = input.value.replace(/\D/g, '');
+    console.log(filteredValue);
     if(!validNumberRegExp.test(input.value)){
-      input.value = ''
+      input.value = filteredValue || '';
     }
     return true;
   }
