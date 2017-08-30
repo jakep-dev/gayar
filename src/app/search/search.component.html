@@ -22,25 +22,27 @@
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
-          <md-select fxFlex="30"  *ngIf="isManual"  
-              placeholder="Select industry" [(ngModel)]="selectedIndustry" 
-              floatPlaceholder="never" (ngModelChange)="doValidation()">
-              <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
-          </md-select>
-
+          <div *ngIf="isManual" fxFlex="30"  >
+            <md-select fxFlex
+            placeholder="Select industry" [(ngModel)]="selectedIndustry" 
+            floatPlaceholder="never" (ngModelChange)="doValidation()">
+            <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
+            </md-select>
+          </div>
+          
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
-          <md-input-container  fxFlex="60" floatPlaceholder="never" dividerColor="primary"  >
-            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
-            type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
-            <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
-            type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
-          </md-input-container>
-          <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
+            <md-input-container  fxFlex="90" floatPlaceholder="never" dividerColor="primary"  >
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+              type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="doValidation()"  (keypress)="doSearch($event, false)"
+              type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
+            </md-input-container>
+            <button md-icon-button *ngIf="!isManual" (click)="doSearch($event, true)"> <md-icon>search</md-icon></button>
           </div>
         </div>
 
          <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
-          fxLayoutGap="92px" fxLayout.xs="column"  
+            fxLayoutGap="92px" fxLayout.xs="column"  
              fxLayoutAlign.xs="center start" 
              fxLayoutGap.xs="0">
           <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
