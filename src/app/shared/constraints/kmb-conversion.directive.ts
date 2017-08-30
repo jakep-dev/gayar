@@ -17,11 +17,8 @@ export class KmbConversionDirective {
             event.keyCode === 77 || event.keyCode === 66);
   }
 
-  @HostListener('input', ['$event']) onInput(event: KeyboardEvent, el: ElementRef){
+  @HostListener('input', ['$event']) onInput(event: KeyboardEvent){
     let regExp = new RegExp(this.validKmbRegExpression);
-    
-
-
     const input = event.target as HTMLInputElement;
     let value = input.value;
     let splitChar = this.getSplitChar(value);
