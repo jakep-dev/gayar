@@ -10,6 +10,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 
+const No_Result = 'Your search did not match any company. Please refine your search.';
 
 @Component({
   selector: 'app-search',
@@ -125,7 +126,7 @@ export class SearchComponent implements OnInit {
       }
       else{
         this.searchResult = null;
-        this.message = "Your search did not match any company. Please refine your search";
+        this.message = No_Result;
       }
       this.toggleProgress();
       });
