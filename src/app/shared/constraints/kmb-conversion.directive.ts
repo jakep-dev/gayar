@@ -62,7 +62,7 @@ export class KmbConversionDirective {
       return '';
     }
     return floatNumber.toString().replace(this.addCommaRegExpression , "$&,");
-  }
+  } 
 
   /*
     Compute Kmb Conversion

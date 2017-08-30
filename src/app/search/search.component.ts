@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {DataSource} from '@angular/cdk';
 import { MdSort, MdPaginator, PageEvent} from '@angular/material';
-import { SearchService, SessionService, MenuService } from '../services/services';
-import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from '../model/model';
+import { SearchService, SessionService, MenuService } from 'app/services/services';
+import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
+import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -80,14 +81,15 @@ export class SearchComponent implements OnInit {
 
   doAssessment(){
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>f.id === this.selectedRevenue);
+    
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
       value: this.selectedSearchValue,
       industry: this.selectedIndustry,
       revenue: revenueModel ? revenueModel.value : '',
-      limit: this.selectedLimit.replace(',',''),
-      premium: this.selectedPremium.replace(',',''),
-      retention: this.selectedRetention.replace(',','')
+      limit: new KmbConversionPipe().transform(this.selectedLimit).toString(),
+      premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
+      retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
     console.log(this.searchService.searchCriteria );
     console.log(this.searchService.selectedCompany);
