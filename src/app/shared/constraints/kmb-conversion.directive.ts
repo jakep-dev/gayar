@@ -21,12 +21,20 @@ export class KmbConversionDirective {
     let regExp = new RegExp(this.validKmbRegExpression);
     const input = event.target as HTMLInputElement;
     let value = input.value;
-    let splitChar = this.getSplitChar(value);
-    input.value = this.computeKmbConversion(value, this.getSplitChar(value));
+    let splitChar = this.checkForKmbConversion(value);
+    if(!splitChar){
+      input.value = this.computeCommas(input.value);
+      return true;
+    }
+    input.value = this.computeKmbConversion(value, splitChar);
     return true;
   }
 
-  private getSplitChar(value): string{
+  /**
+   * Checks for KMB Conversion
+   * @param value 
+   */
+  private checkForKmbConversion (value): string{
       value = value.toUpperCase();
       if(value.indexOf('K') !== -1){
         return 'K';
@@ -42,6 +50,18 @@ export class KmbConversionDirective {
       }
   }
 
+  /**
+   * Compute the value with comma separated.
+   * @param value 
+   */
+  private computeCommas (value) : string {
+    let floatNumber: any = parseFloat(value.replace(this.removeCommaRegExpression, ""));
+    if(isNaN(floatNumber)){
+      return '';
+    }
+    return floatNumber.toString().replace(this.addCommaRegExpression , "$&,");
+  }
+
   /*
     Compute Kmb Conversion
   */
@@ -50,7 +70,9 @@ export class KmbConversionDirective {
       return value;
     }
     let splittedVal = value.toUpperCase().split(splitChar);
-    if(!splittedVal || splittedVal.length === 0){
+    console.log('SplittedValue', splittedVal);
+    if(!splittedVal || splittedVal.length === 0 || 
+       (splittedVal.length > 0 && splittedVal[0].trim() === '')){
       return '';
     }
     let floatNumber: any = parseFloat(splittedVal[0].replace(this.removeCommaRegExpression, ""));
