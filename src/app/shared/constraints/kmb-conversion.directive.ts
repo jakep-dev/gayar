@@ -4,7 +4,7 @@ import { Directive, HostListener, HostBinding, ElementRef } from '@angular/core'
   selector: '[kmbConversion]'
 })
 export class KmbConversionDirective {
-  validKmbRegExpression: string = '^[-+]?[0-9]*\.?[0-9]+([KMB|kmb])?$';
+  validKmbRegExpression: any = /^[-+]?[0-9]*\.?[0-9]+([KMB|kmb])?$/;
   removeCommaRegExpression: any = /[, ]+/g;
   addCommaRegExpression: any =  /\d{1,3}(?=(\d{3})+(?!\d))/g;
 
@@ -23,6 +23,7 @@ export class KmbConversionDirective {
     let value = input.value;
     let splitChar = this.checkForKmbConversion(value);
     if(!splitChar){
+      console.log(input.value);
       input.value = this.computeCommas(input.value);
       return true;
     }
@@ -55,7 +56,7 @@ export class KmbConversionDirective {
    * @param value 
    */
   private computeCommas (value) : string {
-    let floatNumber: any = parseFloat(value.replace(this.removeCommaRegExpression, ""));
+    let floatNumber: any = value.replace(this.removeCommaRegExpression, "");
     if(isNaN(floatNumber)){
       return '';
     }
@@ -75,8 +76,11 @@ export class KmbConversionDirective {
        (splittedVal.length > 0 && splittedVal[0].trim() === '')){
       return '';
     }
+    
     let floatNumber: any = parseFloat(splittedVal[0].replace(this.removeCommaRegExpression, ""));
-
+    if(isNaN(floatNumber)){
+      return '';
+    }
 
     switch(splitChar){
       case 'K':
