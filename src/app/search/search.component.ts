@@ -85,9 +85,9 @@ export class SearchComponent implements OnInit {
       value: this.selectedSearchValue,
       industry: this.selectedIndustry,
       revenue: revenueModel ? revenueModel.value : '',
-      limit: this.selectedLimit,
-      premium: this.selectedPremium,
-      retention: this.selectedRetention
+      limit: this.selectedLimit.replace(',',''),
+      premium: this.selectedPremium.replace(',',''),
+      retention: this.selectedRetention.replace(',','')
     };
     console.log(this.searchService.searchCriteria );
     console.log(this.searchService.selectedCompany);
