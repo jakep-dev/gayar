@@ -70,7 +70,7 @@ export class BenchmarkRouter extends BaseRoute {
                 'ssnid': req.body.token,
                 'limit': req.body.limit,
                 'naics': req.body.naics,
-                'revenue_range': req.body.revenue_range
+                'revenue_range': req.body.revenueRange
             }, (data)=>{
                 res.send(data);
             });

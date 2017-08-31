@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
             chartType: this.chartType,
             companyId: this.companyId,
             naics: this.naics,
-            revenue_range: this.revenueRange,
+            revenueRange: this.revenueRange,
             limit: this.searchService.searchCriteria.limit,
             retention: this.searchService.searchCriteria.retention,
         }

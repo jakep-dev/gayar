@@ -16,7 +16,7 @@ export class DashboardRouter extends BaseRoute {
                 'ssnid': req.body.token,
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
-                'revenue_range': req.body.revenue_range,
+                'revenue_range': req.body.revenueRange,
                 'limit': req.body.limit,
                 'retention': req.body.retention
             }, (data)=>{
