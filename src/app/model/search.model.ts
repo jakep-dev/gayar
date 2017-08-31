@@ -26,8 +26,8 @@ export interface CompanyModel {
 export interface SearchCriteriaModel {
     type: string;
     value: string;
-    revenue: string;
-    industry: string;
+    revenue: RevenueModel;
+    industry: IndustryModel;
     premium: string;
     retention: string;
     limit: string;
