@@ -32,7 +32,7 @@ export class KmbConversionPipe implements PipeTransform {
         return (filteredValue * 1000000000);
 
       default: 
-        return 0;
+        return filteredValue;
     }
   }
 

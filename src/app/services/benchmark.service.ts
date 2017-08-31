@@ -90,12 +90,12 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getLimitAdequacyChartByManualInput(limit: string, naics: string, revenue_range: string): Observable<any>{
+    public getLimitAdequacyChartByManualInput(limit: string, naics: string, revenueRange: string): Observable<any>{
         try{
             return super.Post<any>('/api/getLimitAdequacy', {
                 'limit': limit,
                 'naics': naics,
-                'revenue_range': revenue_range
+                'revenueRange': revenueRange
            });
         }
         catch(e){
