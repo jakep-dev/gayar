@@ -23,12 +23,12 @@ export class DashboardService extends BaseService {
         }
     }
 
-    public getBenchmarkScoreByManualInput(chartType: string, naics: string, revenue_range: string, limit: string, retention: string): Observable<any>{
+    public getBenchmarkScoreByManualInput(chartType: string, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
         try{
             return super.Post<any>('/api/getBenchmarkScore', {
                 'chartType': chartType,
                 'naics': naics,
-                'revenue_range': revenue_range,
+                'revenueRange': revenueRange,
                 'limit': limit,
                 'retention': retention
            });

@@ -14,7 +14,7 @@ export interface BenchmarkScore {
     searchType: string;
     companyId: number;
     naics: string;
-    revenue_range: string;
+    revenueRange: string;
     limit: string;
     retention: string
 }

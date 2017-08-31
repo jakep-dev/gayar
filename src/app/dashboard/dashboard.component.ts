@@ -37,15 +37,15 @@ export class DashboardComponent implements OnInit {
         }
 
         this.chartType = 'BENCHMARK';
-        this.naics = this.searchService.searchCriteria.industry;
-        this.revenueRange = this.searchService.searchCriteria.revenue;
+        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.description)? this.searchService.searchCriteria.revenue.description : null; 
 
         this.getBenchmarkScoreByManualInput = {
             searchType: this.searchType,
             chartType: this.chartType,
             companyId: this.companyId,
             naics: this.naics,
-            revenue_range: this.revenueRange,
+            revenueRange: this.revenueRange,
             limit: this.searchService.searchCriteria.limit,
             retention: this.searchService.searchCriteria.retention,
         }

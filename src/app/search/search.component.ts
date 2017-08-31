@@ -24,11 +24,11 @@ export class SearchComponent implements OnInit {
   selectedSearchValue: string;
   searchRule: string = "number";
   searchValuePlaceHolder: string;
-  selectedIndustry: string;
+  selectedIndustry: IndustryModel;
   selectedPremium: string;
   selectedRetention: string;
   selectedLimit: string;
-  selectedRevenue: number = -1;
+  selectedRevenue: RevenueModel;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -80,13 +80,13 @@ export class SearchComponent implements OnInit {
   }
 
   doAssessment(){
-    let revenueModel: RevenueModel = this.revenueModellist.find(f=>f.id === this.selectedRevenue);
+    let revenueModel:RevenueModel = this.selectedRevenue;
     
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
       value: this.selectedSearchValue,
       industry: this.selectedIndustry,
-      revenue: revenueModel ? revenueModel.value : '',
+      revenue: revenueModel,
       limit: new KmbConversionPipe().transform(this.selectedLimit).toString(),
       premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
@@ -105,8 +105,10 @@ export class SearchComponent implements OnInit {
       this.isActionEnabled = (this.selectedIndustry && 
                               this.selectedRevenue && 
                               this.selectedSearchValue &&
-                              this.selectedIndustry !== '' && 
-                              this.selectedRevenue !== -1 && 
+                              this.selectedIndustry.naics && 
+                              this.selectedIndustry.naics !== '' && 
+                              this.selectedRevenue.id && 
+                              this.selectedRevenue.id !== -1 && 
                               this.selectedSearchValue !== '');
       return;
     }

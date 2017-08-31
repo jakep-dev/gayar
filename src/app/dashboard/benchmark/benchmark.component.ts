@@ -57,7 +57,7 @@ export class BenchmarkComponent implements OnInit {
             this.dashboardService.getBenchmarkScore(this.componentData.companyId, this.componentData.chartType, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
             } else {
-            this.dashboardService.getBenchmarkScoreByManualInput(this.componentData.chartType, this.componentData.naics, this.componentData.revenue_range, this.componentData.limit, this.componentData.retention)
+            this.dashboardService.getBenchmarkScoreByManualInput(this.componentData.chartType, this.componentData.naics, this.componentData.revenueRange, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
         }
     }        
