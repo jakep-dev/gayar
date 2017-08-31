@@ -68,7 +68,9 @@ export class BenchmarkRouter extends BaseRoute {
             super.PerformGetRequest("getLimitAdequacy", {
                 'company_id': req.body.companyId,
                 'ssnid': req.body.token,
-                'limit': req.body.limit
+                'limit': req.body.limit,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenue_range
             }, (data)=>{
                 res.send(data);
             });

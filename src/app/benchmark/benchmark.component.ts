@@ -35,9 +35,9 @@ export class BenchmarkComponent implements OnInit {
     setupDistributionInput() {
         let searchType = this.searchService.searchCriteria.type;
         let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        let naics = this.searchService.searchCriteria.industry;
-        let revenueRange = this.searchService.searchCriteria.revenue;
-
+        let naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.description)? this.searchService.searchCriteria.revenue.description: null; 
+        
         this.benchmarkDistributionInput = {
             searchType: searchType,
             companyId: companyId,
@@ -55,8 +55,8 @@ export class BenchmarkComponent implements OnInit {
     setupLimitAdequacyInput() {
         let searchType = this.searchService.searchCriteria.type;
         let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        let naics = this.searchService.searchCriteria.industry;
-        let revenueRange = this.searchService.searchCriteria.revenue;
+        let naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.id)? this.searchService.searchCriteria.revenue.id + '': null; 
 
         this.benchmarkLimitAdequacyInput = {
             searchType: searchType,
@@ -72,8 +72,8 @@ export class BenchmarkComponent implements OnInit {
      */
     setupRateInput() {
         let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        let naics = this.searchService.searchCriteria.industry;
-        let revenueRange = this.searchService.searchCriteria.revenue;
+        let naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.id)? this.searchService.searchCriteria.revenue.id + '' : null; 
 
         this.benchmarkRateInput = {
             companyId: companyId,
