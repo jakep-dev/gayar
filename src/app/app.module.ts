@@ -8,7 +8,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule  } from '@angular/material';
+import { MaterialModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 import {ChartModule} from 'angular2-highcharts';
@@ -23,9 +23,9 @@ import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
-import { TableComponent } from './shared/table/table.component';
 import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
+import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
 
 @NgModule({
   declarations: [
@@ -36,12 +36,12 @@ import { BLOCK_PIPES } from './shared/pipes/pipes';
     BLOCK_BENCHMARK,
     MenuComponent,
     SearchComponent,  
-    TableComponent,
     SsoComponent,
     BLOCK_CHART_TYPES,
     BLOCK_CHART_BEHAVIORS,
     BLOCK_CONSTRAINTS,
-    BLOCK_PIPES
+    BLOCK_PIPES,
+    SearchTableComponent
   ],
   imports: [
     BrowserModule,
