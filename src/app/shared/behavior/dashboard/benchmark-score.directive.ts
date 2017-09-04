@@ -112,8 +112,14 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                             text: null
                         },
                         labels: {
-                            y: 16
-                        },
+                            style:{
+                                color: "#000000",
+                                fontSize: "15px"
+                            },
+                            // Bottom Label Offset
+                            y: 20,
+                            distance: -43,
+                        }
                     },
                     plotOptions: {
                         solidgauge: {
@@ -132,7 +138,8 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                             name: '',
                             data: [],
                             dataLabels: {
-                              format: null
+                              format: '<div style="text-align:center"><span style="font-size:50px;color:' +
+                                    'black">{y}</span><br/></div>'
                             },
                             tooltip: {
                               valueSuffix: null
