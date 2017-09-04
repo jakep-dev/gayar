@@ -1,6 +1,7 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
+import { SearchService } from './../../../services/services';
 
 @Directive({
     selector: '[benchmark-limit-distribution-behavior]'
@@ -42,14 +43,17 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
 
     static CLIENT_LINE: string = "Client Line";
 
+    companyName: string = '';
+
     seriesColor: string[];
 
     displayText: string = '';
     
-    constructor() {
+    constructor(private searchService: SearchService) {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
+        this.seriesColor["Distribution"] = '#B1D23B';
         this.seriesColor[BenchmarkLimitDistributionDirective.CLIENT_LINE] = '#487AA1';
     }
 
@@ -58,7 +62,16 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        this.getCompanyName();
         this.buildHighChartObject();
+    }    
+
+    getCompanyName() {
+        if(this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+            this.companyName = this.searchService.selectedCompany.companyName;
+        } else if(this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
+            this.companyName = this.searchService.searchCriteria.value;
+        }
     }
 
     /**
@@ -79,6 +92,11 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',
                         pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                    },
+                    legend: {
+                        itemStyle: {
+                            'cursor': 'default'
+                        }
                     }
                 },
                 hasRedrawActions: true
@@ -94,12 +112,16 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
 
             for (seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
                 bucket = this.modelData.buckets[seriesIndex];
-                tempChartData.categories.push(bucket.label);
+
                 if (!groups[bucket.group]) {
                     groups[bucket.group] = new Array();
                     groupNames.push(bucket.group);
                 }
-                groups[bucket.group][bucket.label] = bucket.count;
+                
+                if(bucket.label) {
+                    tempChartData.categories.push(bucket.label);
+                    groups[bucket.group][bucket.label] = bucket.count;
+                }
             }
 
             let groupName: string;
@@ -127,6 +149,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                     if ((group[tempChartData.categories[categoryIndex]] != undefined) && (group[tempChartData.categories[categoryIndex]] != null)) {
                         if (series.name === BenchmarkLimitDistributionDirective.CLIENT_LINE) {
                             clientCategoryLabel.value = tempChartData.categories[categoryIndex];
+                            series.name = this.companyName;
                         }
                         series.data.push(group[tempChartData.categories[categoryIndex]]);
                     } else {

@@ -12,6 +12,7 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class LimitComponent implements OnInit {
   
+    chartHeader:string = '';
     modelData: BenchmarkModel;
 
     setModelData(modelData: BenchmarkModel) {
@@ -28,6 +29,7 @@ export class LimitComponent implements OnInit {
      */
     onDataComplete(newChartData : BarChartData) {
         this.chartData = newChartData;
+        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
