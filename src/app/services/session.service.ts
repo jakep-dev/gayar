@@ -11,7 +11,7 @@ import { SessionModel, SessionResponseModel } from 'app/model/model';
 
 @Injectable()
 export class SessionService extends BaseService {
-    private isLogin = new BehaviorSubject<boolean>(this.hasToken());
+    private isLogin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
 
     constructor(http: Http) {
         super(http);
@@ -49,12 +49,8 @@ export class SessionService extends BaseService {
         localStorage.removeItem("identity");
     }
 
-    public isLoggedIn(): Observable<boolean> {
-        return this.isLogin.asObservable().share();
-    }
-
-    public isLoggedInCheck() : boolean{
-        return this.hasToken();
+    public isLoggedIn(): boolean {
+        return this.isLogin.value;
     }
 
     private setAuth(){

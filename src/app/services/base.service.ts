@@ -19,9 +19,6 @@ export abstract class BaseService {
             this.getToken();
         }
        data.token = this.currentIdentity ? this.currentIdentity.token || null : null;
-       console.log('Identity');
-       console.log(this.currentIdentity);
-       console.log(data);
        return this.http.post(endPoint, data, this.requestOptions)
                  .map((res: Response)=>{
                      return res.json() as T
