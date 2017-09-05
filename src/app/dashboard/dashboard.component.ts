@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FADE_ANIMATION} from '../shared/animations/animations';
-import { SearchService } from '../services/services';
-import {BenchmarkScore} from '../model/model';
+import { FADE_ANIMATION} from 'app/shared/animations/animations';
+import { SearchService, MenuService } from 'app/services/services';
+import {BenchmarkScore} from 'app/model/model';
 
 @Component({
     selector: 'app-dashboard',
@@ -20,7 +20,9 @@ export class DashboardComponent implements OnInit {
 
     public getBenchmarkScoreByManualInput: BenchmarkScore;
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService,
+                private menuService: MenuService) {
+        this.menuService.breadCrumb = 'Dashboard';
     }
 
     ngOnInit() {

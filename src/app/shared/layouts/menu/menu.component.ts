@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService, SessionService } from 'app/services/services';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-menu',
@@ -8,20 +9,22 @@ import { MenuService, SessionService } from 'app/services/services';
 })
 export class MenuComponent implements OnInit {
   
+  isFullScreen: boolean;
   searchCompanyName: string;
   showShortMenu: boolean = true;
   isMenuLock: boolean = false;
   sideNavMode: string = 'side';
-  constructor(public menuService: MenuService, private sessionService: SessionService) { 
-
+  constructor(private menuService: MenuService, 
+              private sessionService: SessionService) { 
+      
   }
-
+  
   ngOnInit() {
     this.sideNavMode = "side";
   }
 
   onMenu(name) {
-    this.menuService.breadCrumbName = name;
+    this.menuService.breadCrumb = name;
   }
 
   toggleMenu(){

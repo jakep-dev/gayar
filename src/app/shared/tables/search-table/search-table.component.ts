@@ -95,7 +95,6 @@ export class SearchTableComponent implements OnInit {
             this.noResultMsg = No_Result;
             return;
           }
-          console.log('Data ', data);
           this.searchTableDatabase.addRecord(data.companies);
         });
   }

@@ -14,8 +14,15 @@ export class AuthRouteActivatorService implements CanActivate {
 
     }
 
+    /**
+     * Secures the route by checking the logged in user.
+     * @param route - current active route.
+     * @param state - current state of the route.
+     */
      canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : boolean {
         if(this.sessionService.isLoggedIn()){
+            this.menuService.isFullScreen = false;
+            this.menuService.containerBgColor ="#fafafa"; 
             this.sessionService.restoreIdentity();
             return true;
         }

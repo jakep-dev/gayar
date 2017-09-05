@@ -18,18 +18,19 @@ export class SsoComponent implements OnInit {
 
   ngOnInit() {
     this.menuService.isFullScreen = true;
-    this.menuService.containerBgColor = "#000000"
+    this.menuService.containerBgColor = "#000000";
     this.getCurrentIdentity();
   }
 
+  /**
+   * Get current identity from the server.
+   */
   private getCurrentIdentity(){
       let userId: string  = this.route.snapshot.params['userId'];
       if(userId){
           this.sessionService.getCurrentIdentity(userId).subscribe((res: SessionModel)=>{
             if(this.sessionService.isLoggedIn()){
-               this.menuService.isFullScreen = false;
-               this.menuService.containerBgColor = "#fafafa"; 
-               this.router.navigate(['/search']);
+              this.router.navigate(['/search']);    
               }
               else{
                 this.router.navigate(['/401']);
