@@ -41,9 +41,9 @@ export class BenchmarkComponent implements OnInit {
         this.benchmarkDistributionInput = {
             searchType: searchType,
             companyId: companyId,
-            premiumValue: this.searchService.searchCriteria.premium,
-            limitValue: this.searchService.searchCriteria.limit,
-            retentionValue: this.searchService.searchCriteria.retention,
+            premiumValue: (this.searchService.searchCriteria.premium && this.searchService.searchCriteria.premium != '0')? this.searchService.searchCriteria.premium: null,
+            limitValue: (this.searchService.searchCriteria.limit && this.searchService.searchCriteria.limit != '0')? this.searchService.searchCriteria.limit: null,
+            retentionValue: (this.searchService.searchCriteria.retention && this.searchService.searchCriteria.retention != '0')? this.searchService.searchCriteria.retention: null,
             naics: naics,
             revenueRange: revenueRange
         }
