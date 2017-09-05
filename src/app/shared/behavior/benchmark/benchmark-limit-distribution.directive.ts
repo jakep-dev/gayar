@@ -91,7 +91,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                 customChartSettings: {
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',
-                        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
                     },
                     legend: {
                         itemStyle: {
