@@ -39,12 +39,8 @@
 
   <div>
     <div fxflex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-      <div>
-        <app-tile  [title]="'Benchmark Rate'" [isSplittable]="false" [isFlippable]="false">
-          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkRateInput">
-            <app-rate [componentData]="benchmarkRateInput"></app-rate>
-          </div>
-        </app-tile>
+      <div *ngIf="benchmarkRateInput">
+        <app-rate [componentData]="benchmarkRateInput"></app-rate>
       </div>
     </div>
   </div>

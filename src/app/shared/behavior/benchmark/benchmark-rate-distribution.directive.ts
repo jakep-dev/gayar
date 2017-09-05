@@ -8,18 +8,18 @@ import { SearchService } from './../../../services/services';
 })
 export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
 
-    @Input() modelData : BenchmarkRateModel;
+    @Input() modelData: BenchmarkRateModel;
 
     @Output() onDataComplete = new EventEmitter<BoxPlotChartData>();
 
     @Input() chartComponent: BaseChart;
-    
+
     ngOnChanges(changes: SimpleChanges) {
-        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
+        if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
             this.chartComponent.addChartLabel(
                 'Min ' + this.quartile.minRPM_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34, 
+                this.chartComponent.getXAxisPosition(2.5) - 34,
                 this.chartComponent.getYAxisPosition(this.quartile.minRPM) + 10,
                 null,
                 10,
@@ -27,7 +27,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             );
             this.chartComponent.addChartLabel(
                 '25th% ' + this.quartile.firstQuartile_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34, 
+                this.chartComponent.getXAxisPosition(2.5) - 34,
                 this.chartComponent.getYAxisPosition(this.quartile.firstQuartile) + 10,
                 null,
                 10,
@@ -59,43 +59,46 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 'bold'
             );
 
+            let xPosition = (this.hasClientLimit) ? this.chartComponent.chart.chartHeight - 20 : this.chartComponent.chart.chartHeight - 40;
             this.chartComponent.addChartLabel(
-                this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
-                this.chartComponent.getXAxisPosition(0.5),
-                this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
-                null,
+                this.displayText,
                 10,
-                'bold'
-            );
-            
-            let xPosition = (this.searchService.searchCriteria.premium && this.searchService.searchCriteria.limit)? this.chartComponent.chart.chartHeight - 10 : this.chartComponent.chart.chartHeight - 40;
-            this.chartComponent.addChartLabel(
-                this.displayText, 
-                10, 
-                xPosition, 
+                xPosition,
                 '#000000',
                 10,
                 null,
-                this.chartComponent.chart.chartWidth - 75
+                this.chartComponent.chart.chartWidth - 80
             );
-            
+
             this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png', 
-                this.chartComponent.chart.chartWidth - 80, 
-                this.chartComponent.chart.chartHeight - 20, 
-                69, 
+                'https://www.advisen.com/img/advisen-logo.png',
+                this.chartComponent.chart.chartWidth - 80,
+                this.chartComponent.chart.chartHeight - 20,
+                69,
                 17
             );
 
-            if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+            if (this.hasClientLimit) {
+
                 this.chartComponent.addChartLabel(
-                    this.searchService.selectedCompany.companyName,
+                    this.companyName,
                     this.chartComponent.getXAxisPosition(3.5),
                     this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
                     null,
                     10,
                     'bold'
                 );
+
+                this.chartComponent.addChartLabel(
+                    this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
+                    this.chartComponent.getXAxisPosition(0.2),
+                    this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
+                    null,
+                    10,
+                    'bold'
+                );
+
+
             }
         }
     }
@@ -110,6 +113,10 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
 
     displayText: string = '';
 
+    companyName: string = '';
+
+    hasClientLimit: boolean = false;
+
     constructor(private searchService: SearchService) {
         this.seriesColor = [];
         this.seriesColor[BenchmarkRateDistributionDirective.CLIENT_LINE] = '#487AA1';
@@ -120,16 +127,47 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        this.getCompanyName();
         this.buildHighChartObject();
+    }
+
+    getCompanyName() {
+        if(this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+            this.companyName = this.searchService.selectedCompany.companyName;
+        } else if(this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
+            this.companyName = this.searchService.searchCriteria.value;
+        }
     }
 
     /**
      * Use chart data from web service to build parts of Highchart chart options object
      */
     buildHighChartObject() {
-        if(this.modelData) {
+        if (this.modelData) {
             this.quartile = this.modelData.quartile;
             this.displayText = this.modelData.displayText;
+
+            this.hasClientLimit = this.searchService.searchCriteria.premium &&
+                this.searchService.searchCriteria.premium != '0' &&
+                this.searchService.searchCriteria.limit &&
+                this.searchService.searchCriteria.limit != '0';
+
+            let yPlotLines = new Array();
+            let max = null;
+
+            if (this.hasClientLimit) {
+                yPlotLines.push({
+                    color: this.getSeriesColor(BenchmarkRateDistributionDirective.CLIENT_LINE),
+                    value: this.modelData.quartile.clientRPMPercentileValue,
+                    width: '2',
+                    zIndex: 100
+                });
+            }
+
+            if (this.modelData.quartile.clientRPMPercentileValue > this.modelData.quartile.maxRPM) {
+                max = this.modelData.quartile.clientRPMPercentileValue + 100;
+            }
+
             let tempChartData: BoxPlotChartData = {
                 series: [],
                 title: this.modelData.chartTitle,
@@ -142,7 +180,8 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 customChartSettings: {
                     chart: {
                         spacingBottom: 50,
-                        spacingLeft: 30
+                        spacingLeft: 30,
+                        marginLeft: 90
                     },
                     xAxis: {
                         title: {
@@ -158,17 +197,23 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                             text: 'Rate per Million'
                         },
                         min: 0,
-                        tickInterval: 2500,
+                        max: max,
                         startOnTick: true,
                         endOnTick: true,
-                        plotLines: [
-                            {
-                                color: this.getSeriesColor(BenchmarkRateDistributionDirective.CLIENT_LINE),
-                                value: this.modelData.quartile.clientRPMPercentileValue,
-                                width: '2',
-                                zIndex: 100
+                        plotLines: yPlotLines,
+                        labels: {
+                            formatter: function() {
+                                if(this.value > 1000000000 - 1) {
+                                    return (this.value / 1000000000).toFixed(1) + 'B';
+                                } else if(this.value > 1000000 - 1) {
+                                    return (this.value / 1000000).toFixed(1) + 'M';
+                                } else if(this.value > 1000 - 1) {
+                                    return (this.value / 1000).toFixed(1) + 'k';
+                                } else {
+                                    return this.value;
+                                }
                             }
-                        ]
+                        }
                     },
                     legend: {
                         enabled: false
@@ -195,6 +240,6 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             );
             this.onDataComplete.emit(tempChartData);
         }
-   }
+    }
 
 }
