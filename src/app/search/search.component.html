@@ -26,7 +26,7 @@
             <md-select fxFlex
             placeholder="Select industry" [(ngModel)]="selectedIndustry" 
             floatPlaceholder="never" (ngModelChange)="onValidation()">
-            <md-option *ngFor="let item of industryList" [value]="item.naics">{{item.displayName}}</md-option>
+            <md-option *ngFor="let item of industryList" [value]="item">{{item.displayName}}</md-option>
             </md-select>
           </div>
           
@@ -47,7 +47,7 @@
              fxLayoutGap.xs="0">
           <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
              (ngModelChange)="onValidation()" floatPlaceholder="never">
-              <md-option *ngFor="let item of revenueModellist" [value]="item.id">{{item.description}}</md-option>
+              <md-option *ngFor="let item of revenueModellist" [value]="item">{{item.description}}</md-option>
           </md-select>
         </div>
 
