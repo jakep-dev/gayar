@@ -15,7 +15,7 @@ export class AuthRouteActivatorService implements CanActivate {
     }
 
      canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : boolean {
-        if(this.sessionService.isLoggedInCheck()){
+        if(this.sessionService.isLoggedIn()){
             this.sessionService.restoreIdentity();
             return true;
         }

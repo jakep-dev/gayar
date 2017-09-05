@@ -26,7 +26,7 @@ export class SsoComponent implements OnInit {
       let userId: string  = this.route.snapshot.params['userId'];
       if(userId){
           this.sessionService.getCurrentIdentity(userId).subscribe((res: SessionModel)=>{
-            if(this.sessionService.isLoggedIn().take(1)){
+            if(this.sessionService.isLoggedIn()){
                this.menuService.isFullScreen = false;
                this.menuService.containerBgColor = "#fafafa"; 
                this.router.navigate(['/search']);
