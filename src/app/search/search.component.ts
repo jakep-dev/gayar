@@ -40,7 +40,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.menuService.breadCrumbName = 'Search';
+     this.menuService.breadCrumb = 'Search';
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
@@ -86,7 +86,6 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch(event, isReady){
-    console.log('Fired')
     if(!this.isManual && (event.keyCode === 13 || isReady)){
        this.isTriggerSearch.next(true);
     }
