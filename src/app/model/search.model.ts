@@ -51,3 +51,8 @@ export interface RevenueModel {
     description: string;
     value: string;
 }
+
+export interface ValidationMessageModel {
+    resp: ResponseModel, 
+    message: string
+}

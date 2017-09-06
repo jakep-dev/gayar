@@ -112,7 +112,6 @@ export class SearchComponent implements OnInit {
    * Build SearchCriteria and Navigate to dashboard
    */
   onAssessment(){
-    console.log(this.selectedRevenue);
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
@@ -123,10 +122,6 @@ export class SearchComponent implements OnInit {
       premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
-
-    console.log(this.searchService.searchCriteria);
-    console.log(this.searchService.selectedCompany);
-
     this.router.navigate(['/dashboard']);
   }
 

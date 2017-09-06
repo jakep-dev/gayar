@@ -45,6 +45,10 @@
             {
                 "name": "getActiveSession",
                 "contract": "/cybermetrix/getActiveSession"
+            },
+            {
+                "name": "checkForRevenueAndIndustry",
+                "contract": "/cybermetrix/util/peergroupValidation"
             }
         ]
     },
