@@ -12,6 +12,7 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class BenchmarkComponent implements OnInit {
 
+    chartHeader:string = '';
     modelData: BenchmarkScoreModel;
 
     setModelData(modelData: BenchmarkScoreModel) {
@@ -28,6 +29,7 @@ export class BenchmarkComponent implements OnInit {
      */
     onDataComplete(newChartData : GaugeChartData) {
         this.chartData = newChartData;
+        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
