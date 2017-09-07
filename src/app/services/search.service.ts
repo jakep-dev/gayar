@@ -113,6 +113,6 @@ const RevenueModel: Array<RevenueModel> = [{
 },
 {
     id: 6,
-    description: '$1B to Greater',
+    description: '$1B or Greater',
     value: '1000000000-'
 }];
