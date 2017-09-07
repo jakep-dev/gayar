@@ -36,7 +36,7 @@ export class BenchmarkComponent implements OnInit {
         let searchType = this.searchService.searchCriteria.type;
         let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
         let naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.description)? this.searchService.searchCriteria.revenue.description: null; 
+        let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
         
         this.benchmarkDistributionInput = {
             searchType: searchType,

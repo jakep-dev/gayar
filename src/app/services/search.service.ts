@@ -3,7 +3,7 @@ import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import  { Subject } from 'rxjs/Subject';
-import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, SearchCriteriaModel, RevenueModel} from 'app/model/model';
+import { SearchModel, IndustryResponseModel, RevenueRangeResponseModel, SearchByModel, CompanyModel, SearchCriteriaModel, RevenueModel} from 'app/model/model';
 
 
 @Injectable()
@@ -24,13 +24,14 @@ export class SearchService extends BaseService {
         return subject;
     }
 
-    public getRevenueModel(): Observable<Array<RevenueModel>>{
-        let subject = new Subject<Array<RevenueModel>>();
-        setTimeout(()=>{
-                subject.next(RevenueModel);
-                subject.complete();
-        }, 1);
-        return subject;
+    public getRevenueModel(): Observable<RevenueRangeResponseModel>{
+        try{
+            return super.Post<RevenueRangeResponseModel>('/api/getRangeList', {
+            });    
+         }
+         catch(e){
+ 
+         }
     }
 
     public getSearchResult(searchByType: string, searchValue: string): Observable<SearchModel>{
@@ -84,35 +85,4 @@ const SearchBy: Array<SearchByModel> = [{
     description: 'Manual Input',
     type: 'SEARCH_BY_MANUAL_INPUT',
     rule: 'text'
-}];
-
-const RevenueModel: Array<RevenueModel> = [{
-    id: 1,
-    description: 'Less than $25M',
-    value: '0-25000000'
-},
-{
-    id: 2,
-    description: '$25M to < $100M',
-    value: '25000000-100000000'
-},
-{
-    id: 3,
-    description: '$100M to < $250M',
-    value: '100000000-250000000'
-},
-{
-    id: 4,
-    description: '$250M to < $500M',
-    value: '250000000-500000000'
-},
-{
-    id: 5,
-    description: '$500M to < $1B',
-    value: '500000000-1000000000'
-},
-{
-    id: 6,
-    description: '$1B to Greater',
-    value: '1000000000-'
 }];

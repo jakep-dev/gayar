@@ -2,14 +2,9 @@
   <div>
     <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
       <div>
-        <app-tile  [title]="'Benchmarking'" [isSplittable]="false" [isFlippable]="false">
-          <div front style='width: 100%; height: 100%;' *ngIf="getBenchmarkScoreByManualInput">
+          <div *ngIf="getBenchmarkScoreByManualInput">
               <dashboard-benchmark-score [componentData]="getBenchmarkScoreByManualInput"></dashboard-benchmark-score>
           </div>
-          <div back style='width: 100%; height: 100%;'>
-              Row 1 Tile 2 Chart 2 Place Holder
-          </div>
-        </app-tile>
       </div>
       <div>
         <app-tile  [title]="'Frequency'" [isSplittable]="false" [isFlippable]="false">

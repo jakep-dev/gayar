@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService, SessionService, MenuService } from 'app/services/services';
-import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
+import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, RevenueRangeResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
 import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
@@ -151,8 +151,12 @@ export class SearchComponent implements OnInit {
    * Load RevenueModel details from SearchService
    */
   loadRevenueModel(){
-     this.searchService.getRevenueModel().subscribe(res=>{
-       this.revenueModellist = res;
+     this.searchService.getRevenueModel().subscribe((res: RevenueRangeResponseModel) =>{
+       console.log('revenue range', res)
+       this.revenueModellist = res.rangeList;
+       this.revenueModellist.forEach((revenue, index)=>{
+          revenue.id = index + 1;
+      });
     });
   }
 
