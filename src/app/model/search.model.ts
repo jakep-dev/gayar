@@ -10,6 +10,11 @@ export interface IndustryResponseModel{
     resp: ResponseModel
 }
 
+export interface RevenueRangeResponseModel{
+    rangeList: Array<RevenueModel>,
+    resp: ResponseModel
+}
+
 export interface CompanyModel {
     companyId: number;
     ticker: string;
@@ -48,6 +53,6 @@ export interface SearchByModel {
 
 export interface RevenueModel {
     id: number;
-    description: string;
-    value: string;
+    rangeDisplay: string;
+    range: string;
 }

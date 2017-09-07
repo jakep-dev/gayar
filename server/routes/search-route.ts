@@ -43,10 +43,25 @@ export class SearchRouter extends BaseRoute {
         }   
     }
 
+    //Get all revenue range
+    public getRangeList(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("revenueRangeList", {
+                'ssnid': req.body.token
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }   
+    }
+
     //Initialize all the api call endpoints
     init(){
        this.app.post('/api/doCompanySearch', this.doCompanySearch);
        this.app.post('/api/getIndustries', this.getIndustries);
+       this.app.post('/api/getRangeList', this.getRangeList);
     }
 }
 
