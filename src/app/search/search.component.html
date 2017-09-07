@@ -47,7 +47,7 @@
              fxLayoutGap.xs="0">
           <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
              (ngModelChange)="onValidation()" floatPlaceholder="never">
-              <md-option *ngFor="let item of revenueModellist" [value]="item">{{item.description}}</md-option>
+              <md-option *ngFor="let item of revenueModellist" [value]="item">{{item.rangeDisplay}}</md-option>
           </md-select>
         </div>
 
