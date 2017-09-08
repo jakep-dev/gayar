@@ -17,43 +17,122 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
+
+            let lineColor = 'gray';
+            let lineWidth = 1;
+            let label = '';
+            let xPos = 0;
+            let yPos = 0;
+            let companyNameHeight = 0;
+            let yCompanyPosition = 0;
+
+            if (this.hasClientLimit) {
+                companyNameHeight = (Math.ceil((this.companyName.length * 6) / 150)) * 10;
+                yCompanyPosition = this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 4;
+                this.chartComponent.addChartLabel(
+                    this.companyName,
+                    this.chartComponent.getXAxisPosition(3.5),
+                    yCompanyPosition,
+                    null,
+                    10,
+                    'bold',
+                    150
+                );
+
+                this.chartComponent.addChartLabel(
+                    this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
+                    this.chartComponent.getXAxisPosition(0.2),
+                    yCompanyPosition,
+                    null,
+                    10,
+                    'bold'
+                );
+            }
+
+            label = 'Min ' + this.quartile.minRPM_KMB;
+            xPos = this.chartComponent.getXAxisPosition(2) - (label.length * 7);
+            yPos = this.chartComponent.getYAxisPosition(this.quartile.minRPM) + 15;
+
             this.chartComponent.addChartLabel(
-                'Min ' + this.quartile.minRPM_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34,
-                this.chartComponent.getYAxisPosition(this.quartile.minRPM) + 10,
+                label,
+                xPos,
+                yPos,
                 null,
                 10,
                 'bold'
             );
+            this.chartComponent.addLine([xPos + (label.length * 7), yPos - 3],
+                [xPos + (label.length * 7) + 10, yPos - 3, this.chartComponent.getXAxisPosition(2.3), this.chartComponent.getYAxisPosition(this.quartile.minRPM)],
+                lineColor,
+                lineWidth);
+
+            label = 'Max ' + this.quartile.maxRPM_KMB;
+            xPos = this.chartComponent.getXAxisPosition(2) - (label.length * 7);
+            yPos = this.chartComponent.getYAxisPosition(this.quartile.maxRPM) - 10;
+
             this.chartComponent.addChartLabel(
-                '25th% ' + this.quartile.firstQuartile_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34,
-                this.chartComponent.getYAxisPosition(this.quartile.firstQuartile) + 10,
+                label,
+                xPos,
+                yPos,
                 null,
                 10,
                 'bold'
             );
+            this.chartComponent.addLine([xPos + (label.length * 7), yPos - 3],
+                [xPos + (label.length * 7) + 10, yPos - 3, this.chartComponent.getXAxisPosition(2.3), this.chartComponent.getYAxisPosition(this.quartile.maxRPM) - 1],
+                lineColor,
+                lineWidth);
+
+            label = '25th% ' + this.quartile.firstQuartile_KMB;
+            xPos = this.chartComponent.getXAxisPosition(3.3);
+            yPos = this.chartComponent.getYAxisPosition(this.quartile.firstQuartile) + 15;
+
+            if(this.hasClientLimit 
+                && yPos >= yCompanyPosition
+                && yPos <= yCompanyPosition + companyNameHeight) {
+                yPos = yCompanyPosition + companyNameHeight + 15;
+            }
+
+            this.chartComponent.addChartLabel(
+                label,
+                xPos,
+                yPos,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addLine([xPos, yPos - 3],
+                [xPos - 10, yPos - 3, this.chartComponent.getXAxisPosition(3), this.chartComponent.getYAxisPosition(this.quartile.firstQuartile)],
+                lineColor,
+                lineWidth);
+
+            label = '75th% ' + this.quartile.fourthQuartile_KMB;
+            xPos = this.chartComponent.getXAxisPosition(3.3);
+            yPos = this.chartComponent.getYAxisPosition(this.quartile.fourthQuartile) - 10;
+
+            if(this.hasClientLimit 
+                && yPos >= yCompanyPosition
+                && yPos <= yCompanyPosition + companyNameHeight) {
+                yPos = yCompanyPosition - 15;
+            }
+
+            this.chartComponent.addChartLabel(
+                label,
+                xPos,
+                yPos,
+                null,
+                10,
+                'bold'
+            );
+            this.chartComponent.addLine([xPos, yPos - 3],
+                [xPos - 10, yPos - 3, this.chartComponent.getXAxisPosition(3), this.chartComponent.getYAxisPosition(this.quartile.fourthQuartile) - 1],
+                lineColor,
+                lineWidth);
+
             this.chartComponent.addChartLabel(
                 'Median ' + this.quartile.median_KMB,
                 this.chartComponent.getXAxisPosition(2) - (('Median ' + this.quartile.median_KMB).length * 7),
                 this.chartComponent.getYAxisPosition(this.quartile.median) + 3,
-                null,
-                10,
-                'bold'
-            );
-
-            this.chartComponent.addChartLabel(
-                '75th% ' + this.quartile.fourthQuartile_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34,
-                this.chartComponent.getYAxisPosition(this.quartile.fourthQuartile) - 5,
-                null,
-                10,
-                'bold'
-            );
-            this.chartComponent.addChartLabel(
-                'Max ' + this.quartile.maxRPM_KMB,
-                this.chartComponent.getXAxisPosition(2.5) - 34,
-                this.chartComponent.getYAxisPosition(this.quartile.maxRPM) - 5,
                 null,
                 10,
                 'bold'
@@ -77,29 +156,6 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 69,
                 17
             );
-
-            if (this.hasClientLimit) {
-
-                this.chartComponent.addChartLabel(
-                    this.companyName,
-                    this.chartComponent.getXAxisPosition(3.5),
-                    this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
-                    null,
-                    10,
-                    'bold'
-                );
-
-                this.chartComponent.addChartLabel(
-                    this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
-                    this.chartComponent.getXAxisPosition(0.2),
-                    this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 5,
-                    null,
-                    10,
-                    'bold'
-                );
-
-
-            }
         }
     }
 
@@ -132,9 +188,9 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
     }
 
     getCompanyName() {
-        if(this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+        if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
             this.companyName = this.searchService.selectedCompany.companyName;
-        } else if(this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
+        } else if (this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
             this.companyName = this.searchService.searchCriteria.value;
         }
     }
@@ -154,6 +210,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
 
             let yPlotLines = new Array();
             let max = null;
+            let min = this.modelData.quartile.minRPM - (this.modelData.quartile.maxRPM * .1);
 
             if (this.hasClientLimit) {
                 yPlotLines.push({
@@ -165,7 +222,8 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             }
 
             if (this.modelData.quartile.clientRPMPercentileValue > this.modelData.quartile.maxRPM) {
-                max = this.modelData.quartile.clientRPMPercentileValue + 100;
+                max = this.modelData.quartile.clientRPMPercentileValue + (this.modelData.quartile.clientRPMPercentileValue * .1);
+                min = this.modelData.quartile.minRPM - (this.modelData.quartile.clientRPMPercentileValue * .1);
             }
 
             let tempChartData: BoxPlotChartData = {
@@ -196,18 +254,18 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                         title: {
                             text: 'Rate per Million'
                         },
-                        min: 0,
+                        min: min,
                         max: max,
                         startOnTick: true,
                         endOnTick: true,
                         plotLines: yPlotLines,
                         labels: {
-                            formatter: function() {
-                                if(this.value > 1000000000 - 1) {
+                            formatter: function () {
+                                if (Math.abs(this.value) > 1000000000 - 1) {
                                     return (this.value / 1000000000).toFixed(1) + 'B';
-                                } else if(this.value > 1000000 - 1) {
+                                } else if (Math.abs(this.value) > 1000000 - 1) {
                                     return (this.value / 1000000).toFixed(1) + 'M';
-                                } else if(this.value > 1000 - 1) {
+                                } else if (Math.abs(this.value) > 1000 - 1) {
                                     return (this.value / 1000).toFixed(1) + 'k';
                                 } else {
                                     return this.value;
