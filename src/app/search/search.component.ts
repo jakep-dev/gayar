@@ -6,6 +6,7 @@ import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
+import { MdDialog } from '@angular/material';
 
 @Component({
   selector: 'app-search',
@@ -35,7 +36,8 @@ export class SearchComponent implements OnInit {
               private menuService: MenuService,
               private sessionService: SessionService,
               private router: Router, 
-              private route: ActivatedRoute) { 
+              private route: ActivatedRoute,
+              private mdDialog: MdDialog) { 
       
   }
 
@@ -157,9 +159,11 @@ export class SearchComponent implements OnInit {
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
        this.industryList = res.industries;
-       this.industryList.forEach(f=>{
-         f.displayName = `${f.naics} ${f.naicsDescription}`;
-       });
+       if(this.industryList){
+        this.industryList.map(f=>{
+          f.displayName = `${f.naics} ${f.naicsDescription}`;
+        });
+       }
     });
   }
 

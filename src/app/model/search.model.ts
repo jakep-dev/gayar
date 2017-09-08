@@ -11,6 +11,7 @@ export interface IndustryResponseModel{
 }
 
 export interface CompanyModel {
+    isSelected: boolean;
     companyId: number;
     ticker: string;
     exchange: string;

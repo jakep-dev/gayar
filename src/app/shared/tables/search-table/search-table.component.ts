@@ -77,8 +77,8 @@ export class SearchTableComponent implements OnInit {
    * @param companyModel - Selected CompanyModel
    */
   onRowSelection (companyModel: CompanyModel) {
-    this.searchService.selectedCompany = companyModel
-    console.log(this.searchService.selectedCompany);
+    companyModel.isSelected = true;
+    this.searchService.selectedCompany = companyModel;
     this.onSelectionCompleted.emit(companyModel);
   }
 

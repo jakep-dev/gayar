@@ -10,3 +10,26 @@
 md-input-container .md-errors-spacer {
     min-height: 0;
 }
+
+.table-header{
+    font-size: 13px;;
+    color: #b1d23b;
+ }
+
+ md-header-cell  {
+    color: #b1d23b;
+ }
+ 
+ md-row:hover {
+    background: yellow;
+    font-weight: bold;
+    cursor: pointer;
+ }
+
+ md-header-row {
+    background: rgba(0, 0, 0, 0.87);
+ }
+
+ md-row {
+  
+ }
