@@ -239,14 +239,40 @@ export abstract class BaseChart {
     }
 
     /**
+     * Add line on the chart
+     * @param startPoint - starting point of the line [x, y]
+     * @param linePoints - connecting points to create line
+     * @param color - color of the line
+     * @param width - width of the line
+     */
+    public addLine(startPoint:Array<number>, linePoints:Array<number>, color?: string, width?: number) {
+        if(startPoint && startPoint.length > 0 &&
+            linePoints && linePoints.length > 0) {
+                let pathArray = ['M', 'L'];
+                pathArray.splice(1, 0, ...startPoint);
+                pathArray.splice(pathArray.length, 0 , ...linePoints);
+
+                this.chart.renderer.path(pathArray)
+                    .attr({
+                        stroke: color || 'black',
+                        'stroke-width': width || 1,
+                        zIndex: 999
+                    })
+                    .add();
+            }
+    }
+
+    /**
      * Get the Y-axis position based on the y point
      * @param yPoint - y point
      */
     public getYAxisPosition(yPoint: number) {
         let yOffSet = this.chart.chartHeight - this.chart.marginBottom; //position of Y axis
-        let heightPerUnit = this.chart.plotHeight / this.chart.yAxis[0].max; //height per y-axis unit
+        let minYAxis = Math.abs(this.chart.yAxis[0].min); // 
+        let maxYAxis = this.chart.yAxis[0].max;
+        let heightPerUnit = this.chart.plotHeight / ( maxYAxis + minYAxis); //height per y-axis unit
 
-        return yOffSet - Math.round(yPoint * heightPerUnit);
+        return yOffSet - Math.round((yPoint + minYAxis) * heightPerUnit);
     }
 
     /**
