@@ -79,7 +79,8 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                 customChartSettings: {
                     chart: {
                         type: 'solidgauge',
-                        marginLeft: 30
+                        marginLeft: 30,
+                        marginRight:30
                     },
                     title: null,
                     pane: {
