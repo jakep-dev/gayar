@@ -89,6 +89,10 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
                 yAxisLabel: this.modelData.yAxis,
                 xAxisFormatter: null,
                 customChartSettings: {
+                    chart: {
+                        marginLeft: 75,
+                        marginRight: 25,
+                    },
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',
                         pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'

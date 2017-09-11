@@ -134,8 +134,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 xAxisFormatter: null,
                 customChartSettings: {
                     chart: {
-                        spacingRight: 20,
-                        spacingLeft: 20,
+                        marginLeft: 75,
+                        marginRight: 25,
                         spacingBottom: 40,
                         marginBottom: 150,
                     },

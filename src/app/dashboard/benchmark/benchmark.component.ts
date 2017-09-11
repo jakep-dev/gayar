@@ -29,7 +29,7 @@ export class BenchmarkComponent implements OnInit {
      */
     onDataComplete(newChartData : GaugeChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title;
+        this.chartHeader = newChartData.title || 'Benchmark';
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
