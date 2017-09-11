@@ -21,22 +21,23 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             let lineColor = 'gray';
             let lineWidth = 1;
             let label = '';
+            let labelHeight = 10;
             let xPos = 0;
             let yPos = 0;
             let companyNameHeight = 0;
             let yCompanyPosition = 0;
 
             if (this.hasClientLimit) {
-                companyNameHeight = (Math.ceil((this.companyName.length * 6) / 150)) * 10;
+                companyNameHeight = (Math.ceil((this.companyName.length * 6) / 200)) * labelHeight;
                 yCompanyPosition = this.chartComponent.getYAxisPosition(this.quartile.clientRPMPercentileValue) - 4;
                 this.chartComponent.addChartLabel(
                     this.companyName,
-                    this.chartComponent.getXAxisPosition(3.5),
+                    this.chartComponent.getXAxisPosition(3.2),
                     yCompanyPosition,
                     null,
-                    10,
+                    labelHeight,
                     'bold',
-                    150
+                    200
                 );
 
                 this.chartComponent.addChartLabel(
@@ -44,7 +45,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                     this.chartComponent.getXAxisPosition(0.2),
                     yCompanyPosition,
                     null,
-                    10,
+                    labelHeight,
                     'bold'
                 );
             }
@@ -58,7 +59,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 xPos,
                 yPos,
                 null,
-                10,
+                labelHeight,
                 'bold'
             );
             this.chartComponent.addLine([xPos + (label.length * 7), yPos - 3],
@@ -75,7 +76,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 xPos,
                 yPos,
                 null,
-                10,
+                labelHeight,
                 'bold'
             );
             this.chartComponent.addLine([xPos + (label.length * 7), yPos - 3],
@@ -88,7 +89,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             yPos = this.chartComponent.getYAxisPosition(this.quartile.firstQuartile) + 15;
 
             if(this.hasClientLimit 
-                && yPos >= yCompanyPosition
+                && yPos + labelHeight >= yCompanyPosition
                 && yPos <= yCompanyPosition + companyNameHeight) {
                 yPos = yCompanyPosition + companyNameHeight + 15;
             }
@@ -98,7 +99,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 xPos,
                 yPos,
                 null,
-                10,
+                labelHeight,
                 'bold'
             );
             this.chartComponent.addLine([xPos, yPos - 3],
@@ -111,7 +112,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             yPos = this.chartComponent.getYAxisPosition(this.quartile.fourthQuartile) - 10;
 
             if(this.hasClientLimit 
-                && yPos >= yCompanyPosition
+                && yPos + labelHeight >= yCompanyPosition
                 && yPos <= yCompanyPosition + companyNameHeight) {
                 yPos = yCompanyPosition - 15;
             }
@@ -121,7 +122,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 xPos,
                 yPos,
                 null,
-                10,
+                labelHeight,
                 'bold'
             );
             this.chartComponent.addLine([xPos, yPos - 3],
@@ -134,7 +135,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 this.chartComponent.getXAxisPosition(2) - (('Median ' + this.quartile.median_KMB).length * 7),
                 this.chartComponent.getYAxisPosition(this.quartile.median) + 3,
                 null,
-                10,
+                labelHeight,
                 'bold'
             );
 
@@ -144,7 +145,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 10,
                 xPosition,
                 '#000000',
-                10,
+                labelHeight,
                 null,
                 this.chartComponent.chart.chartWidth - 80
             );
@@ -192,6 +193,10 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             this.companyName = this.searchService.selectedCompany.companyName;
         } else if (this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
             this.companyName = this.searchService.searchCriteria.value;
+        }
+
+        if(this.companyName && this.companyName.length > 30) {
+            this.companyName = this.companyName.substring(0, 30) + '...';
         }
     }
 
