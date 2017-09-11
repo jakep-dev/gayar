@@ -89,8 +89,8 @@ export abstract class BaseChart {
                 //default chart type is line
                 //chart type used when no chart type is specified under series
                 type: 'line',
-                marginLeft: 75,
-                marginRight: 25,
+                marginLeft: 30,
+                marginRight: 30,
                 spacingBottom: 35,
                 width: 600,
                 height: 400
