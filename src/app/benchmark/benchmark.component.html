@@ -16,11 +16,9 @@
         <app-retention [componentData]="benchmarkDistributionInput"></app-retention>
       </div>
       <div>
-        <app-tile  [title]="'Benchmark Peer Group Loss'" [isSplittable]="false" [isFlippable]="false">
-          <div front style='width: 100%; height: 100%;' *ngIf="benchmarkLimitAdequacyInput">
-            <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-          </div>
-        </app-tile>
+        <div *ngIf="benchmarkLimitAdequacyInput">
+          <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+        </div>
       </div>
     </div>
   </div>

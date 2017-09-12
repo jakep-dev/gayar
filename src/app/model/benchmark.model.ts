@@ -70,9 +70,18 @@ export interface BenchmarkLimitModel {
     displayText: string;
     xAxis: string;
     yAxis: string;
-    clientLimit: string;
-    medianLimit: string;
+    clientLimit: any;
+    medianLimit: any;
     losses: LimitLosses[];
+    lossAboveMedianLimitLabel: string,
+    lossBelowMedianLimitLabel: string,
+    lossAmountAboveLabel: string,
+    lossAmountBelowLabel: string,
+    clientLimitLabel : string;
+    medianLimitLabel : string;
+    lossAmountLabel : string;
+    maxLoss: number;
+    minLoss: number;
 }
 
 export interface LimitLosses {
