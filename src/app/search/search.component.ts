@@ -176,7 +176,6 @@ export class SearchComponent implements OnInit {
    */
   loadRevenueModel(){
      this.searchService.getRevenueModel().subscribe((res: RevenueRangeResponseModel) =>{
-       console.log('revenue range', res)
        this.revenueModellist = res.rangeList;
        this.revenueModellist.forEach((revenue, index)=>{
           revenue.id = index + 1;

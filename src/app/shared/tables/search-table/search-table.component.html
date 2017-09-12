@@ -74,6 +74,9 @@
   <div *ngIf="noResultMsg" fxFlexFill  style="padding:10px 0px 10px 0px; text-align: center ;background: white; border: 1px solid lightgrey; border-top: none">
     {{noResultMsg}}
   </div>
+  <div *ngIf="isProcessing" fxFlexFill style="background: lightgrey; padding:10px 0px 10px 0px; text-align: center;">
+    Processing...
+  </div>
   <md-paginator #paginator fxFlexFill style="border: 1px solid lightgrey; border-top: none; border-bottom: none; padding: 0px"
       [length]="searchTableDatabase.data.length"
       [pageIndex]="0"

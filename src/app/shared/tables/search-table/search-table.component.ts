@@ -33,6 +33,7 @@ export class SearchTableComponent implements OnInit {
   searchTableDatabase = new SearchTableDatabase();
   dataSource: SearchTableDataSoruce | null;
   noResultMsg: string = null;
+  isProcessing: boolean = false;
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
   @ViewChild(MdSort) sort: MdSort;
@@ -44,6 +45,13 @@ export class SearchTableComponent implements OnInit {
     this.dataSource = new SearchTableDataSoruce(this.searchTableDatabase, this.paginator, this.sort);
     this.watchForFilter();
     this.onTriggerSearchEvent();
+  }
+
+  /**
+   * Toggle the isprocessing flag helps to display the message on table
+   */
+  private _toggleProcessing() {
+    this.isProcessing = !this.isProcessing;
   }
 
   /**
@@ -87,11 +95,13 @@ export class SearchTableComponent implements OnInit {
    * Get company details based on searchType and searchValue
    */
   getCompanyDetails () {
+    this._toggleProcessing();
     this.searchTableDatabase.deleteAllRecords();
     this.searchService
         .getSearchResult(this.searchType, this.searchValue)
         .subscribe((data: SearchModel) =>
         {
+          this._toggleProcessing();
           if(!data || !data.companies || data.companies.length == 0){
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
@@ -143,7 +153,6 @@ export class SearchTableDataSoruce extends DataSource<any> {
     if (!this.sort.active || this.sort.direction == '') { return data; }
 
     return data.sort((a,b)=>{
-      debugger;
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch(this.sort.active){
