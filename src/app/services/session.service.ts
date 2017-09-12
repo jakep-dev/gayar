@@ -23,7 +23,9 @@ export class SessionService extends BaseService {
                'userId': userId
            }).map((res: SessionResponseModel)=>{
                this.currentIdentity = res.userinfo;
-               this.setAuth();
+               if(this.currentIdentity && this.currentIdentity.token){
+                this.setAuth();
+               }
                return this.currentIdentity;
            });
         }

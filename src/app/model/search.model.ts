@@ -16,6 +16,7 @@ export interface RevenueRangeResponseModel{
 }
 
 export interface CompanyModel {
+    isSelected: boolean;
     companyId: number;
     ticker: string;
     exchange: string;
@@ -55,4 +56,9 @@ export interface RevenueModel {
     id: number;
     rangeDisplay: string;
     range: string;
+}
+
+export interface ValidationMessageModel {
+    resp: ResponseModel, 
+    message: string
 }

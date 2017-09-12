@@ -43,14 +43,3 @@
 md-cell{
     font-size: 12px;
 }
-
-.table-header{
-   font-size: 13px;;
-    color: #b1d23b;
-}
-
-.table-pagination{
-    border-top:1px solid rgba(0, 0, 0, 0.12); 
-    height: 45px; 
-    min-height: 45px
-}

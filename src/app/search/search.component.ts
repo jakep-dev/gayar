@@ -6,6 +6,7 @@ import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'app-search',
@@ -31,12 +32,13 @@ export class SearchComponent implements OnInit {
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
 
-  constructor(private searchService: SearchService, 
+  constructor(private searchService: SearchService,
               private menuService: MenuService,
               private sessionService: SessionService,
-              private router: Router, 
-              private route: ActivatedRoute) { 
-      
+              private router: Router,
+              private route: ActivatedRoute,
+              private snackBarService: SnackBarService) {
+
   }
 
   ngOnInit() {
@@ -68,17 +70,17 @@ export class SearchComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
   onValidation(){
     if(this.isManual){
-      this.isActionEnabled = (this.selectedIndustry && 
-                              this.selectedRevenue && 
+      this.isActionEnabled = (this.selectedIndustry &&
+                              this.selectedRevenue &&
                               this.selectedSearchValue &&
-                              this.selectedIndustry.naics && 
-                              this.selectedIndustry.naics !== '' && 
-                              this.selectedRevenue.id && 
-                              this.selectedRevenue.id !== -1 && 
+                              this.selectedIndustry.naics &&
+                              this.selectedIndustry.naics !== '' &&
+                              this.selectedRevenue.id &&
+                              this.selectedRevenue.id !== -1 &&
                               this.selectedSearchValue !== '');
       return;
     }
@@ -112,7 +114,39 @@ export class SearchComponent implements OnInit {
    * Build SearchCriteria and Navigate to dashboard
    */
   onAssessment(){
-    console.log(this.selectedRevenue);
+    if(this.isManual){
+      this._setSelectedSearchCriteria();
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+    this._validateRevenueAndIndustry();
+  }
+
+
+  /**
+   * validateRevenueAndIndustry - description
+   *
+   * @return {type}  description
+   */
+  private _validateRevenueAndIndustry () {
+    const selectedCompany = this.searchService.selectedCompany;
+    this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId).subscribe((data)=>{
+        if(data && data.message){
+          this.snackBarService.Simple(data.message);
+        }else{
+          this._setSelectedSearchCriteria();
+          this.router.navigate(['/dashboard']);
+        }
+    });
+  }
+
+
+  /**
+   * private _setSelectedSearchCriteria - set the selected/entered search criteria
+   *
+   * @return {type}  description
+   */
+  private _setSelectedSearchCriteria () {
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
@@ -123,11 +157,6 @@ export class SearchComponent implements OnInit {
       premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
-
-    console.log(this.searchService.searchCriteria);
-    console.log(this.searchService.selectedCompany);
-
-    this.router.navigate(['/dashboard']);
   }
 
   /**
@@ -152,7 +181,6 @@ export class SearchComponent implements OnInit {
    */
   loadRevenueModel(){
      this.searchService.getRevenueModel().subscribe((res: RevenueRangeResponseModel) =>{
-       console.log('revenue range', res)
        this.revenueModellist = res.rangeList;
        this.revenueModellist.forEach((revenue, index)=>{
           revenue.id = index + 1;
@@ -166,9 +194,11 @@ export class SearchComponent implements OnInit {
   loadIndustry(){
     this.searchService.getIndustry().subscribe((res: IndustryResponseModel) =>{
        this.industryList = res.industries;
-       this.industryList.forEach(f=>{
-         f.displayName = `${f.naics} ${f.naicsDescription}`;
-       });
+       if(this.industryList){
+        this.industryList.map(f=>{
+          f.displayName = `${f.naics} ${f.naicsDescription}`;
+        });
+       }
     });
   }
 
