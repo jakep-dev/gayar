@@ -114,6 +114,11 @@ export class SearchComponent implements OnInit {
    * Build SearchCriteria and Navigate to dashboard
    */
   onAssessment(){
+    if(this.isManual){
+      this._setSelectedSearchCriteria();
+      this.router.navigate(['/dashboard']);
+      return;
+    }
     this._validateRevenueAndIndustry();
   }
 
