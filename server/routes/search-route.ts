@@ -9,13 +9,15 @@ export class SearchRouter extends BaseRoute {
         this.init();
     }
 
-    //Perform the company search based on searchtype and searchvalue
-    //SearchType = COMP_NAME | COMP_ID | TICKER | DUNS
+    /**
+     * Perform the company search based on searchtype and searchvalue
+     * COMP_NAME | COMP_ID | TICKER | DUNS
+     * @param req - Request details
+     * @param res - Response details
+     * @param next - Execute next functionalities
+     */
     public doCompanySearch(req: Request, res: Response, next: NextFunction){
         try{
-            console.log(req.body.token)
-            console.log(req.body.searchType)
-            console.log(req.body.searchValue)
             super.PerformGetRequest("companySearch", {
                 'ssnid': req.body.token,
                 'search_type': req.body.searchType,
@@ -29,7 +31,12 @@ export class SearchRouter extends BaseRoute {
         }
     }
 
-    //Get all available industries
+    /**
+     * Get all available industries
+     * @param req - Request details
+     * @param res - Response details
+     * @param next - Execute next functionality
+     */
     public getIndustries(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getIndustries", {
@@ -43,7 +50,32 @@ export class SearchRouter extends BaseRoute {
         }   
     }
 
-    //Get all revenue range
+    /**
+     * Check for revenue and industry
+     * @param req - Request details
+     * @param res - Response details
+     * @param next - Execute next functionality
+     */
+    public checkForRevenueAndIndustry(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("checkForRevenueAndIndustry", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        } 
+    }
+
+    /**
+     * Get the needed Range List
+     * @param req - Request details
+     * @param res - Response details
+     * @param next - Execute next functionality
+     */
     public getRangeList(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("revenueRangeList", {
@@ -57,10 +89,13 @@ export class SearchRouter extends BaseRoute {
         }   
     }
 
-    //Initialize all the api call endpoints
+    /**
+     * Initialize all the api call endpoints
+     */
     init(){
        this.app.post('/api/doCompanySearch', this.doCompanySearch);
        this.app.post('/api/getIndustries', this.getIndustries);
+       this.app.post('/api/checkForRevenueAndIndustry', this.checkForRevenueAndIndustry);
        this.app.post('/api/getRangeList', this.getRangeList);
     }
 }

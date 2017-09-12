@@ -8,14 +8,15 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule, MdSnackBarModule, MdDialogModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
-import {ChartModule} from 'angular2-highcharts';
+import { ChartModule } from 'angular2-highcharts';
 import { HighchartsProvider } from './shared/highchart/highchart';
 
 // Application Components
-import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS} from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , 
+         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS, BLOCK_SHARED_SERVICE } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
@@ -26,6 +27,7 @@ import { BLOCK_SERVICES } from './services/services';
 import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
+import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { SearchTableComponent } from './shared/tables/search-table/search-table.
     BLOCK_CHART_BEHAVIORS,
     BLOCK_CONSTRAINTS,
     BLOCK_PIPES,
-    SearchTableComponent
+    SearchTableComponent,
+    SearchTableMobileComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,8 @@ import { SearchTableComponent } from './shared/tables/search-table/search-table.
     NoopAnimationsModule,
     FlexLayoutModule,
     MaterialModule,
+    MdSnackBarModule,
+    MdDialogModule,
     CdkTableModule,
     ChartModule,
     RouterModule.forRoot(APP_ROUTES)
@@ -59,7 +64,8 @@ import { SearchTableComponent } from './shared/tables/search-table/search-table.
 
   providers: [
     HighchartsProvider,
-    BLOCK_SERVICES
+    BLOCK_SERVICES,
+    BLOCK_SHARED_SERVICE
   ],
 
   bootstrap: [AppComponent]

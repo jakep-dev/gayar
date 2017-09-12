@@ -3,7 +3,8 @@ import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import  { Subject } from 'rxjs/Subject';
-import { SearchModel, IndustryResponseModel, RevenueRangeResponseModel, SearchByModel, CompanyModel, SearchCriteriaModel, RevenueModel} from 'app/model/model';
+import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, 
+         SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel } from 'app/model/model';
 
 
 @Injectable()
@@ -15,6 +16,9 @@ export class SearchService extends BaseService {
         super(http);
     }
     
+    /**
+     * Get all search by value details
+     */
     public getSearchBy(): Observable<Array<SearchByModel>>{
         let subject = new Subject<Array<SearchByModel>>();
         setTimeout(()=>{
@@ -24,6 +28,9 @@ export class SearchService extends BaseService {
         return subject;
     }
 
+    /**
+     * Get revenue model details
+     */
     public getRevenueModel(): Observable<RevenueRangeResponseModel>{
         try{
             return super.Post<RevenueRangeResponseModel>('/api/getRangeList', {
@@ -34,6 +41,11 @@ export class SearchService extends BaseService {
          }
     }
 
+    /**
+     * Get the search result for respective searchByType and searchValue
+     * @param searchByType - COMP_NAME | COMP_ID | TICKER | DUNS
+     * @param searchValue  - Searching value
+     */
     public getSearchResult(searchByType: string, searchValue: string): Observable<SearchModel>{
         try{
            return super.Post<SearchModel>('/api/doCompanySearch', {
@@ -46,12 +58,29 @@ export class SearchService extends BaseService {
         }
     }
 
+    /**
+     * Get all industry details
+     */
     public getIndustry(): Observable<IndustryResponseModel>{
         try{
            return super.Post<IndustryResponseModel>('/api/getIndustries', {});    
         }
         catch(e){
 
+        }
+    }
+
+    /**
+     * Check for company revenue and industry
+     * @param companyId - Selected company Id
+     */
+    public checkForRevenueAndIndustry(companyId: number): Observable<ValidationMessageModel> {
+        try {
+            return super.Post<ValidationMessageModel>('/api/checkForRevenueAndIndustry', {
+                'company_id': companyId
+            })
+        } catch (e) {
+            
         }
     }
 }

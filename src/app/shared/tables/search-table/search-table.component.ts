@@ -2,10 +2,11 @@ import { Component, OnInit, OnChanges, ViewChild, ElementRef, Output, Input, Eve
 import { DataSource } from '@angular/cdk';
 import { MdPaginator, MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'; 
-import { AsyncSubject } from 'rxjs/AsyncSubject'; 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { CompanyModel, SearchModel } from 'app/model/model';
 import { SearchService } from 'app/services/services';
+import { APPCONSTANTS } from 'app/app.const';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -14,12 +15,12 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 
-const No_Result = 'Your search did not match any company. Please refine your search.';
+const { SEARCH_SCREEN_NO_RESULT } = APPCONSTANTS;
 
 @Component({
   selector: 'app-search-table',
   templateUrl: './search-table.component.html',
-  styleUrls: ['./search-table.component.css'],
+  styleUrls: ['./search-table.component.scss'],
   providers: [ SearchService ]
 })
 export class SearchTableComponent implements OnInit {
@@ -36,7 +37,7 @@ export class SearchTableComponent implements OnInit {
   @ViewChild(MdPaginator) paginator: MdPaginator;
   @ViewChild(MdSort) sort: MdSort;
   @ViewChild('filter') filter: ElementRef;
-  
+
 
   constructor(private searchService: SearchService) { }
   ngOnInit() {
@@ -73,12 +74,12 @@ export class SearchTableComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * @param companyModel - Selected CompanyModel
    */
   onRowSelection (companyModel: CompanyModel) {
-    this.searchService.selectedCompany = companyModel
-    console.log(this.searchService.selectedCompany);
+    companyModel.isSelected = true;
+    this.searchService.selectedCompany = companyModel;
     this.onSelectionCompleted.emit(companyModel);
   }
 
@@ -89,10 +90,10 @@ export class SearchTableComponent implements OnInit {
     this.searchTableDatabase.deleteAllRecords();
     this.searchService
         .getSearchResult(this.searchType, this.searchValue)
-        .subscribe((data: SearchModel) => 
+        .subscribe((data: SearchModel) =>
         {
           if(!data || !data.companies || data.companies.length == 0){
-            this.noResultMsg = No_Result;
+            this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
           }
           this.searchTableDatabase.addRecord(data.companies);
@@ -115,7 +116,7 @@ export class SearchTableDataSoruce extends DataSource<any> {
   get filter(): string { return this.filterChange.value; }
   set filter(filter: string) { this.filterChange.next(filter);}
 
-  constructor (private searchTableDatabase: SearchTableDatabase, 
+  constructor (private searchTableDatabase: SearchTableDatabase,
                private paginator: MdPaginator,
                private sort: MdSort) {
     super();
@@ -130,7 +131,7 @@ export class SearchTableDataSoruce extends DataSource<any> {
     ];
     return Observable.merge(...displayDataChanges).map(()=>{
         let data = this.getFilteredData().slice();
-            data = this.getSortedData(data).slice();  
+            data = this.getSortedData(data).slice();
         const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
         return data.splice(startIndex, this.paginator.pageSize);
     });
@@ -140,8 +141,9 @@ export class SearchTableDataSoruce extends DataSource<any> {
 
   private getSortedData (data: Array<CompanyModel>) : Array<CompanyModel> {
     if (!this.sort.active || this.sort.direction == '') { return data; }
-    
+
     return data.sort((a,b)=>{
+      debugger;
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch(this.sort.active){
@@ -156,11 +158,28 @@ export class SearchTableDataSoruce extends DataSource<any> {
         case 'ticker': [propertyA, propertyB] = [a.ticker, b.ticker]; break;
         case 'topLevel': [propertyA, propertyB] = [a.topLevel, b.topLevel]; break;
       }
-        let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-        let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-
-        return (valueA < valueB ? -1 : 1) * (this.sort.direction == 'asc' ? 1 : -1);
+        var multi = (this.sort.direction == 'asc' ? 1 : -1);
+        return this._sorter(propertyA, propertyB, multi);
     });
+  }
+
+  private _sorter(a, b, multi){
+      if (a === b)
+        return 0;
+    else if (a === null) 
+      return 1;
+    else if (b === null)  
+      return -1;
+    else        {
+      let valueA = isNaN(+a) ? a : +a;
+      let valueB = isNaN(+b) ? b : +b;
+      if(isNaN(valueA)){
+        return valueA.localeCompare(valueB) * multi;
+      }
+      else{
+        return ((valueA < valueB) ? -1 : 1) * multi;
+      }
+    }
   }
 
   private getFilteredData () : Array<CompanyModel> {
@@ -175,7 +194,7 @@ export class SearchTableDataSoruce extends DataSource<any> {
 }
 
 /**
- * SearchTableDatabase
+ * SearchTableDatabase helps to hold the record details
  */
 export class SearchTableDatabase {
   dataChange: BehaviorSubject<CompanyModel[]> = new BehaviorSubject<CompanyModel[]>([]);

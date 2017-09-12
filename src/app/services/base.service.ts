@@ -9,9 +9,7 @@ export abstract class BaseService {
     private requestOptions: RequestOptionsArgs = { headers: this.headers };
     public currentIdentity: SessionModel;
 
-    constructor(private http: Http){
-      
-    }
+    constructor(private http: Http){}
 
     //Perform the post request operation
     public Post<T>(endPoint: string, data: any): Observable<T>{
@@ -30,7 +28,7 @@ export abstract class BaseService {
     public Get<T>(endPoint: string, data: any): Observable<T>{
         let dataString:string = JSON.stringify(data),
              path = `${endPoint}?${JSON.stringify(data)}`;
-             
+
        return this.http.get(path, this.requestOptions)
                  .map((res: Response)=>{
                      return res.json() as T;
