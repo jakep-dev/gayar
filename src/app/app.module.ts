@@ -27,6 +27,7 @@ import { BLOCK_SERVICES } from './services/services';
 import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
+import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SearchTableComponent } from './shared/tables/search-table/search-table.
     BLOCK_CHART_BEHAVIORS,
     BLOCK_CONSTRAINTS,
     BLOCK_PIPES,
-    SearchTableComponent
+    SearchTableComponent,
+    SearchTableMobileComponent
   ],
   imports: [
     BrowserModule,

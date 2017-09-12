@@ -77,7 +77,7 @@ export class SnackBarService {
      */
     private _configureSnackBar () {
         snackBarConfiguration = new MdSnackBarConfig();
-        snackBarConfiguration.duration = 2000;
+        snackBarConfiguration.duration = 4000;
         snackBarConfiguration.politeness = "off";
     }
 }

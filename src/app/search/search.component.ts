@@ -6,7 +6,7 @@ import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
-import { MdDialog } from '@angular/material';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'app-search',
@@ -32,13 +32,13 @@ export class SearchComponent implements OnInit {
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
 
-  constructor(private searchService: SearchService, 
+  constructor(private searchService: SearchService,
               private menuService: MenuService,
               private sessionService: SessionService,
-              private router: Router, 
+              private router: Router,
               private route: ActivatedRoute,
-              private mdDialog: MdDialog) { 
-      
+              private snackBarService: SnackBarService) {
+
   }
 
   ngOnInit() {
@@ -70,17 +70,17 @@ export class SearchComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
   onValidation(){
     if(this.isManual){
-      this.isActionEnabled = (this.selectedIndustry && 
-                              this.selectedRevenue && 
+      this.isActionEnabled = (this.selectedIndustry &&
+                              this.selectedRevenue &&
                               this.selectedSearchValue &&
-                              this.selectedIndustry.naics && 
-                              this.selectedIndustry.naics !== '' && 
-                              this.selectedRevenue.id && 
-                              this.selectedRevenue.id !== -1 && 
+                              this.selectedIndustry.naics &&
+                              this.selectedIndustry.naics !== '' &&
+                              this.selectedRevenue.id &&
+                              this.selectedRevenue.id !== -1 &&
                               this.selectedSearchValue !== '');
       return;
     }
@@ -114,6 +114,34 @@ export class SearchComponent implements OnInit {
    * Build SearchCriteria and Navigate to dashboard
    */
   onAssessment(){
+    this._validateRevenueAndIndustry();
+  }
+
+
+  /**
+   * validateRevenueAndIndustry - description
+   *
+   * @return {type}  description
+   */
+  private _validateRevenueAndIndustry () {
+    const selectedCompany = this.searchService.selectedCompany;
+    this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId).subscribe((data)=>{
+        if(data && data.message){
+          this.snackBarService.Simple(data.message);
+        }else{
+          this._setSelectedSearchCriteria();
+          this.router.navigate(['/dashboard']);
+        }
+    });
+  }
+
+
+  /**
+   * private _setSelectedSearchCriteria - set the selected/entered search criteria
+   *
+   * @return {type}  description
+   */
+  private _setSelectedSearchCriteria () {
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
@@ -124,7 +152,6 @@ export class SearchComponent implements OnInit {
       premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
-    this.router.navigate(['/dashboard']);
   }
 
   /**

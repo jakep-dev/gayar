@@ -23,7 +23,7 @@
                 <md-icon class="md-18">gamepad</md-icon>
                 <span>Severity</span>
             </button>
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" 
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');"
           routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
@@ -34,7 +34,7 @@
           </button>
       </div>
     </div>
-    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important" 
+    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important"
           (mouseover)="shortMenuMouseOver()"  >
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
            <img  src="../assets/images/insite_short.png" alt="">
@@ -45,24 +45,24 @@
             </button>
           <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
-                
+
             </button>
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">wifi</md-icon>
-               
+
             </button>
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">gamepad</md-icon>
-                
+
             </button>
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" 
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');"
           routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
-                
+
             </button>
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">pie_chart</md-icon>
-               
+
             </button>
       </div>
     </div>
@@ -76,7 +76,7 @@
           <span class="bread-crumb">Search</span>
         </div>
         <div>
-          
+
           <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
              <button md-icon-button routerLink="/search" (click)="onMenu('Search');"><md-icon>search</md-icon></button>
