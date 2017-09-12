@@ -12,6 +12,7 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class PeerGroupLossComponent implements OnInit {
 
+    chartHeader:string = '';
     modelData: BenchmarkLimitModel;
 
     setModelData(modelData: BenchmarkLimitModel) {
@@ -28,6 +29,7 @@ export class PeerGroupLossComponent implements OnInit {
      */
     onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
+        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
