@@ -19,7 +19,7 @@ export class KmbConversionPipe implements PipeTransform {
 
   transformFromKmb(value): number {
     let kmbChar = this.getKmbChar(value);
-    let filteredValue = parseFloat(value.replace(/\D\.?\D/g, ''));
+    let filteredValue = parseFloat(value.replace(/[^\d\.?\d]/g, ''));
 
     switch(kmbChar){
       case 'K':
