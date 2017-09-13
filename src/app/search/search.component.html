@@ -37,6 +37,7 @@
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onValidation()"  (keypress)="onSearch($event, false)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
             </md-input-container>
+            <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px"> <md-icon>close</md-icon></button>  
             <button md-icon-button *ngIf="!isManual" (click)="onSearch($event, true)"> <md-icon>search</md-icon></button>
           </div>
         </div>

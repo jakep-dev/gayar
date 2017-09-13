@@ -128,6 +128,9 @@ export class SearchTableComponent implements OnInit {
     this.paginator.pageSize = 10;
   }
 
+  /**
+   * Set the default sorting order
+   */
   private _defaultSort () {
     this.sort.disableClear = true;
     this.sort.direction = 'desc';

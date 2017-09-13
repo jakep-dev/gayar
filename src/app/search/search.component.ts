@@ -122,6 +122,10 @@ export class SearchComponent implements OnInit {
     this._validateRevenueAndIndustry();
   }
 
+  onClearSearchValue () {
+    this.selectedSearchValue = "";
+  }
+
 
   /**
    * validateRevenueAndIndustry - description
