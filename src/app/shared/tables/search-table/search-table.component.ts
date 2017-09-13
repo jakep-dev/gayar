@@ -44,6 +44,7 @@ export class SearchTableComponent implements OnInit {
 
   constructor(private searchService: SearchService) { }
   ngOnInit() {
+    this._defaultSort();
     this.dataSource = new SearchTableDataSoruce(this.searchTableDatabase, this.paginator, this.sort);
     this.watchForFilter();
     this.onTriggerSearchEvent();
@@ -112,7 +113,9 @@ export class SearchTableComponent implements OnInit {
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
           }
+          
           this.searchTableDatabase.addRecord(data.companies);
+         
         })
   }
 
@@ -123,6 +126,12 @@ export class SearchTableComponent implements OnInit {
   private _resetPagination () {
     this.paginator.pageIndex = 0;
     this.paginator.pageSize = 10;
+  }
+
+  private _defaultSort () {
+    this.sort.disableClear = true;
+    this.sort.direction = 'desc';
+    this.sort.active = "depthScore";
   }
 
 
