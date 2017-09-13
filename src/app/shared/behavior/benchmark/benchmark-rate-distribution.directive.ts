@@ -41,7 +41,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 );
 
                 this.chartComponent.addChartLabel(
-                    this.quartile.clientRPMPercentile + 'th% ' + this.quartile.clientRPMPercentileValue_KMB,
+                    this.ordinalSuffix(this.quartile.clientRPMPercentile) + '% ' + this.quartile.clientRPMPercentileValue_KMB,
                     this.chartComponent.getXAxisPosition(0.2),
                     yCompanyPosition,
                     null,
@@ -305,6 +305,24 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
             );
             this.onDataComplete.emit(tempChartData);
         }
+    }
+
+    ordinalSuffix(i) {
+        var j = i % 10,
+            k = i % 100;
+        if(i == 0) {
+            return i;
+        }
+        if (j == 1 && k != 11) {
+            return i + "st";
+        }
+        if (j == 2 && k != 12) {
+            return i + "nd";
+        }
+        if (j == 3 && k != 13) {
+            return i + "rd";
+        }
+        return i + "th";
     }
 
 }
