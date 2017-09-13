@@ -61,7 +61,7 @@ export class BenchmarkComponent implements OnInit {
         this.benchmarkLimitAdequacyInput = {
             searchType: searchType,
             companyId: companyId,
-            limits: this.searchService.searchCriteria.limit,
+            limits: (this.searchService.searchCriteria.limit && this.searchService.searchCriteria.limit != '0')? this.searchService.searchCriteria.limit: null,
             naics: naics,
             revenueRange: revenueRange
         };
