@@ -23,7 +23,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 '#000000',
                 10,
                 null,
-                this.chartComponent.chart.chartWidth - 70
+                this.chartComponent.chart.chartWidth - 73
             );
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png', 
@@ -130,9 +130,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                 }
                             }
                         },
-                        max : (this.modelData.clientLimit > this.modelData.medianLimit ) ? 
-                                 this.modelData.clientLimit + 10000 :
-                                 this.modelData.medianLimit + 10000,
+                        max : this.getMaxYAxisLimit(),
                     },
                     legend: {
                         margin: 10,
@@ -178,22 +176,22 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
 
             let seriesIndex : number;
             let seriesLength: number;
-            let series1: any;
-            let series2: any;
-            series1 = new Object();
-            series2 = new Object();
-            series1.data = new Array();
-            series2.data = new Array();
+            let dataLossAbove: any;
+            let dataLossBelow: any;
+            dataLossAbove = new Object();
+            dataLossBelow = new Object();
+            dataLossAbove.data = new Array();
+            dataLossBelow.data = new Array();
 
             seriesLength = this.modelData.losses.length;
 
             for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
                 
-                series1.data.push(this.modelData.losses[seriesIndex].lossAboveLimit);
-                series2.data.push(this.modelData.losses[seriesIndex].lossBelowLimit);
+                dataLossAbove.data.push(this.modelData.losses[seriesIndex].lossAboveLimit);
+                dataLossBelow.data.push(this.modelData.losses[seriesIndex].lossBelowLimit);
                 
                 // scenario 1
-                if(((this.modelData.clientLimit > 0 && (this.modelData.clientLimit < this.modelData.maxLoss)
+                if(((this.modelData.clientLimit > 0 && (this.modelData.clientLimit <= this.modelData.maxLoss)
                     && (this.modelData.medianLimit !== 0
                     && (this.modelData.clientLimit > this.modelData.medianLimit ||
                         this.modelData.clientLimit < this.modelData.medianLimit))))){ 
@@ -205,7 +203,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             this.modelData.clientLimitLabel,
                                             this.modelData.medianLimitLabel,
                                             false,
-                                            series1.data, series2.data);
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 }
@@ -219,7 +217,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             this.modelData.clientLimitLabel,
                                             this.modelData.medianLimitLabel,
                                             false,
-                                            series1.data, series2.data);
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].width = 3.7;
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
@@ -235,12 +233,13 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             this.modelData.medianLimitLabel,
                                             false,
-                                            series1.data, series2.data);
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                 }
                 // scenario 4
-                if(this.modelData.clientLimit !== null && this.modelData.medianLimit !== 0 && this.modelData.medianLimit < this.modelData.maxLoss
+                if(this.modelData.clientLimit !== null && this.modelData.medianLimit !== 0 
+                    && this.modelData.medianLimit < this.modelData.maxLoss
                     && this.modelData.clientLimit > this.modelData.maxLoss){
                             console.log('scenario4');
                             tempChartData.series = this.seriesData(false,
@@ -250,7 +249,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             this.modelData.clientLimitLabel,
                                             this.modelData.medianLimitLabel,
                                             false,
-                                            series1.data, series2.data);
+                                            dataLossAbove.data, dataLossBelow.data);
                         tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                         tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 }
@@ -264,7 +263,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             this.modelData.lossAmountBelowLabel,
                                             this.modelData.clientLimitLabel,
                                             false,
-                                            false, series1.data, series2.data);
+                                            false, 
+                                            dataLossAbove.data, dataLossBelow.data);
                         tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 }
                 // scenario 6
@@ -277,7 +277,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             this.modelData.clientLimitLabel,
                                             false,
-                                            this.modelData.lossAmountLabel, series1.data, series2.data);
+                                            this.modelData.lossAmountLabel, 
+                                            dataLossAbove.data, dataLossBelow.data);
                         tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 }
                 // scenario 7
@@ -291,7 +292,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             this.modelData.clientLimitLabel,
                                             this.modelData.medianLimitLabel,
-                                            this.modelData.lossAmountLabel, series1.data, series2.data);    
+                                            this.modelData.lossAmountLabel,
+                                            dataLossAbove.data, dataLossBelow.data);    
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 }
@@ -306,12 +308,13 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             this.modelData.clientLimitLabel,
                                             this.modelData.medianLimitLabel,
-                                            this.modelData.lossAmountLabel, series1.data, series2.data);
+                                            this.modelData.lossAmountLabel, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;  
                 }
                 // scenario 9
-                if(this.modelData.clientLimit === null 
+                if(this.modelData.maxLoss !== null && this.modelData.clientLimit === null 
                         && this.modelData.medianLimit > this.modelData.maxLoss){
                     console.log('scenario9');
                     tempChartData.series = this.seriesData(false,
@@ -320,7 +323,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             this.modelData.medianLimitLabel,
-                                            this.modelData.lossAmountLabel, series1.data, series2.data);
+                                            this.modelData.lossAmountLabel, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
@@ -335,7 +339,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             false,
-                                            this.modelData.lossAmountLabel, series1.data, series2.data);
+                                            this.modelData.lossAmountLabel, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
@@ -349,7 +354,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             false,
-                                            false, series1.data, series2.data);
+                                            false, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
@@ -364,7 +370,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             false,
-                                            false, series1.data, series2.data);
+                                            false, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
@@ -378,7 +385,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             false,
-                                            false, series1.data, series2.data);
+                                            false, 
+                                            dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
@@ -388,26 +396,34 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
         }
     }
 
-    seriesData(s1?,s2?,s3?,s4?,s5?,s6?,s7?, data1?, data2?){
+    getMaxYAxisLimit(){
+        var max = Math.max(this.modelData.clientLimit,
+                        this.modelData.medianLimit,
+                        this.modelData.maxLoss,
+                        );
+        return max + (max * .1);
+    }
+
+    seriesData(series1?,series2?,series3?,series4?,series5?,series6?,series7?, lossAboveData?, lossBelowData?){
         let data = [
             {
                 name: this.modelData.lossAmountAboveLabel, //Loss Amount - Above Client Limit
                 showInLegend: false,  
                 color: '#F68C20',
                 stack: 'male',
-                data: data1
+                data: lossAboveData
             }, 
             {
                 name: this.modelData.lossAmountBelowLabel, //Loss Amount - Below Client Limit
                 showInLegend: false,
                 color: '#B1D23B',
                 stack: 'male',
-                data: data2
+                data: lossBelowData
             },
             {
-                name: s1, //Loss Amount - Above Client Limit
+                name: series1, //Loss Amount - Above Client Limit
                 type: 'line', 
-                showInLegend: (s1 === false) ? false: true,
+                showInLegend: (series1 === false) ? false: true,
                 color: '#F68C20',
                 marker: {
                     symbol: 'circle',
@@ -416,9 +432,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 },
             },
             {
-                name: s2, //Loss Amount - Below Client Limit
+                name: series2, //Loss Amount - Below Client Limit
                 type: 'line', 
-                showInLegend: (s2 === false) ? false: true,
+                showInLegend: (series2 === false) ? false: true,
                 color: '#B1D23B',
                 marker: {
                     symbol: 'circle',
@@ -427,9 +443,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 },
             },
             {
-                name: s3, //Loss Amount - Above Median Limit
+                name: series3, //Loss Amount - Above Median Limit
                 type: 'line', 
-                showInLegend: (s3 === false) ? false: true,
+                showInLegend: (series3 === false) ? false: true,
                 color: '#F68C20',
                 marker: {
                     symbol: 'circle',
@@ -438,9 +454,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 },
             },
             {
-                name: s4, //Loss Amount - Below Median Limit
+                name: series4, //Loss Amount - Below Median Limit
                 type: 'line', 
-                showInLegend: (s4 === false) ? false: true,
+                showInLegend: (series4 === false) ? false: true,
                 color: '#B1D23B',
                 marker: {
                     symbol: 'circle',
@@ -449,9 +465,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 },
             },
             {
-                name: s5, //Client Limit
+                name: series5, //Client Limit
                 type: 'line',
-                showInLegend: (s5 === false) ? false: true,
+                showInLegend: (series5 === false) ? false: true,
                 color: '#487AA1',
                 marker: {
                     symbol: 'circle',
@@ -461,9 +477,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 marginBottom: 50,
             }, 
             {
-                name: s6, //Median Peer Program Limit
+                name: series6, //Median Peer Program Limit
                 type: 'line',
-                showInLegend:  (s6 === false) ? false: true,
+                showInLegend:  (series6 === false) ? false: true,
                 color: '#000000',
                 marker: {
                     symbol: 'circle',
@@ -473,9 +489,9 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 marginBottom: 50,  
             },
             {
-                name: s7, //Loss Amount
+                name: series7, //Loss Amount
                 type: 'line',
-                showInLegend: (s7 === false) ? false: true,
+                showInLegend: (series7 === false) ? false: true,
                 color: '#B1D23B',
                 marker: {
                     symbol: 'circle',
@@ -485,6 +501,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 marginBottom: 50,       
             }
         ]
+
         return data;
     }
 }
