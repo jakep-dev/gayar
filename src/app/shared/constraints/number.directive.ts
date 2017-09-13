@@ -12,7 +12,7 @@ export class NumberDirective {
    * @param event 
    */
   @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
-    return (event.keyCode >=48 && event.keyCode <= 57);
+    return (event.charCode >=48 && event.charCode <= 57);
   }
 
   /**
