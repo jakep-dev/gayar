@@ -97,6 +97,7 @@ export class SearchTableComponent implements OnInit {
    * Get company details based on searchType and searchValue
    */
   getCompanyDetails () {
+    this._resetPagination();
     this.searchTableDatabase.deleteAllRecords();
     if(this.searchResultSubscription && !this.searchResultSubscription.closed){
       this.searchResultSubscription.unsubscribe();
@@ -115,6 +116,14 @@ export class SearchTableComponent implements OnInit {
         })
   }
 
+
+  /**
+   * Reset the pagination properties
+   */
+  private _resetPagination () {
+    this.paginator.pageIndex = 0;
+    this.paginator.pageSize = 10;
+  }
 
 
   /**
