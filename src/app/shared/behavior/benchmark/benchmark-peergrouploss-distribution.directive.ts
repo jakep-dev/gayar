@@ -19,7 +19,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
             this.chartComponent.addChartLabel(
                 this.displayText, 
                 10, 
-                this.chartComponent.chart.chartHeight - 55, 
+                this.chartComponent.chart.chartHeight - 70, 
                 '#000000',
                 10,
                 null,
