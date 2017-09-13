@@ -14,8 +14,8 @@ export class FloatDirective {
       * @param event
       */
      @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
-       console.log(event.keyCode);
-       return (event.keyCode >=48 && event.keyCode <= 57 || event.keyCode === 46);
+       console.log(event.charCode);
+       return (event.charCode >=48 && event.charCode <= 57 || event.charCode === 46);
      }
    
      /**

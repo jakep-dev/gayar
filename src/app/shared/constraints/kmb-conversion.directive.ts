@@ -13,10 +13,11 @@ export class KmbConversionDirective {
   @Output('ngModelChange') valueChange = new EventEmitter<string>();
 
   @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent, el: ElementRef){
-    return (event.keyCode >=48 && event.keyCode <= 57 || 
-            event.keyCode === 107 || event.keyCode === 109 ||
-            event.keyCode === 98 || event.keyCode === 46 || event.keyCode === 75 ||
-            event.keyCode === 77 || event.keyCode === 66);
+    console.log(event);
+    return (event.charCode >=48 && event.charCode <= 57 || 
+            event.charCode === 107 || event.charCode === 109 ||
+            event.charCode === 98 || event.charCode === 46 || event.charCode === 75 ||
+            event.charCode === 77 || event.charCode === 66);
   }
 
   @HostListener('input', ['$event']) onInput(event: KeyboardEvent){

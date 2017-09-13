@@ -7,6 +7,7 @@ import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { CompanyModel, SearchModel } from 'app/model/model';
 import { SearchService } from 'app/services/services';
 import { APPCONSTANTS } from 'app/app.const';
+import { Subscription } from 'rxjs/Subscription'
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -34,6 +35,7 @@ export class SearchTableComponent implements OnInit {
   dataSource: SearchTableDataSoruce | null;
   noResultMsg: string = null;
   isProcessing: boolean = false;
+  searchResultSubscription: Subscription;
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
   @ViewChild(MdSort) sort: MdSort;
@@ -42,6 +44,7 @@ export class SearchTableComponent implements OnInit {
 
   constructor(private searchService: SearchService) { }
   ngOnInit() {
+    this._defaultSort();
     this.dataSource = new SearchTableDataSoruce(this.searchTableDatabase, this.paginator, this.sort);
     this.watchForFilter();
     this.onTriggerSearchEvent();
@@ -95,20 +98,45 @@ export class SearchTableComponent implements OnInit {
    * Get company details based on searchType and searchValue
    */
   getCompanyDetails () {
-    this._toggleProcessing();
+    this._resetPagination();
     this.searchTableDatabase.deleteAllRecords();
-    this.searchService
+    if(this.searchResultSubscription && !this.searchResultSubscription.closed){
+      this.searchResultSubscription.unsubscribe();
+    }
+    this.isProcessing = true;
+    this.searchResultSubscription = this.searchService
         .getSearchResult(this.searchType, this.searchValue)
         .subscribe((data: SearchModel) =>
         {
-          this._toggleProcessing();
+          this.isProcessing = false;
           if(!data || !data.companies || data.companies.length == 0){
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
           }
+          
           this.searchTableDatabase.addRecord(data.companies);
-        });
+         
+        })
   }
+
+
+  /**
+   * Reset the pagination properties
+   */
+  private _resetPagination () {
+    this.paginator.pageIndex = 0;
+    this.paginator.pageSize = 10;
+  }
+
+  /**
+   * Set the default sorting order
+   */
+  private _defaultSort () {
+    this.sort.disableClear = true;
+    this.sort.direction = 'desc';
+    this.sort.active = "depthScore";
+  }
+
 
   /**
    * Get column details
