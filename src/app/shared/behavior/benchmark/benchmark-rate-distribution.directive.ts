@@ -224,11 +224,13 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                     width: '2',
                     zIndex: 100
                 });
-            }
 
-            if (this.modelData.quartile.clientRPMPercentileValue > this.modelData.quartile.maxRPM) {
-                max = this.modelData.quartile.clientRPMPercentileValue + (this.modelData.quartile.clientRPMPercentileValue * .1);
-                min = this.modelData.quartile.minRPM - (this.modelData.quartile.clientRPMPercentileValue * .1);
+                if (this.modelData.quartile.clientRPMPercentileValue > this.modelData.quartile.maxRPM) {
+                    max = this.modelData.quartile.clientRPMPercentileValue + (this.modelData.quartile.clientRPMPercentileValue * .1);
+                    min = this.modelData.quartile.minRPM - (this.modelData.quartile.clientRPMPercentileValue * .1);
+                } else if (this.modelData.quartile.clientRPMPercentileValue < this.modelData.quartile.minRPM) {
+                    min = this.modelData.quartile.clientRPMPercentileValue - (this.modelData.quartile.maxRPM * .1);
+                }
             }
 
             let tempChartData: BoxPlotChartData = {
