@@ -19,7 +19,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
             this.chartComponent.addChartLabel(
                 this.displayText, 
                 10, 
-                this.chartComponent.chart.chartHeight - 55, 
+                this.chartComponent.chart.chartHeight - 70, 
                 '#000000',
                 10,
                 null,
@@ -196,7 +196,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if(((this.modelData.clientLimit > 0 && (this.modelData.clientLimit < this.modelData.maxLoss)
                     && (this.modelData.medianLimit !== 0
                     && (this.modelData.clientLimit > this.modelData.medianLimit ||
-                        this.modelData.clientLimit < this.modelData.medianLimit || this.modelData.clientLimit === this.modelData.medianLimit ))))){ 
+                        this.modelData.clientLimit < this.modelData.medianLimit || 
+                        this.modelData.clientLimit === this.modelData.medianLimit ))))){ 
                     console.log('scenario1');
                     tempChartData.series = this.seriesData(this.modelData.lossAmountAboveLabel,
                                             this.modelData.lossAmountBelowLabel,
@@ -225,7 +226,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 } 
                 // scenario 3
-                if(this.modelData.clientLimit && this.modelData.medianLimit < this.modelData.maxLoss
+                if(this.modelData.medianLimit < this.modelData.maxLoss
                     &&  this.modelData.clientLimit === null){
                     console.log('scenario3');
                     tempChartData.series = this.seriesData(false,
@@ -318,11 +319,11 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                             false,
                                             false,
                                             false,
-                                            this.modelData.clientLimitLabel,
+                                            false,
                                             this.modelData.medianLimitLabel,
                                             this.modelData.lossAmountLabel, series1.data, series2.data);
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
-                    tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
+                    tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                 }
                 // scenario 10
                 if(this.modelData.clientLimit === null 
