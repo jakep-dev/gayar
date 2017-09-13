@@ -77,7 +77,7 @@ export class SearchService extends BaseService {
     public checkForRevenueAndIndustry(companyId: number): Observable<ValidationMessageModel> {
         try {
             return super.Post<ValidationMessageModel>('/api/checkForRevenueAndIndustry', {
-                'company_id': companyId
+                'companyId': companyId
             })
         } catch (e) {
             

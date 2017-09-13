@@ -103,11 +103,15 @@ export abstract class BaseChart {
             title: {
                 text: 'Placeholder Title',
                 style: {
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    color: '#464646'
                 }
             },
             subtitle: {
-                text: 'Placeholder Sub-Title'
+                text: 'Placeholder Sub-Title',
+                style: {
+                    color: '#464646'
+                }
             },
             xAxis: {
                 type: 'category',
@@ -117,6 +121,7 @@ export abstract class BaseChart {
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
+                        color: '#464646'
                     },
                     //Set specific X-Axis series text color
                     formatter: null
@@ -124,7 +129,8 @@ export abstract class BaseChart {
                 title: {
                     text: 'X-Axis Placeholder',
                     style: {
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        color: '#464646'
                     }
                 }
             },
@@ -133,7 +139,13 @@ export abstract class BaseChart {
                 title: {
                     text: 'Y-Axis Placeholder',
                     style: {
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        color: '#464646'
+                    }
+                },
+                labels: {
+                    style: {
+                        color: '#464646'
                     }
                 }
             },
