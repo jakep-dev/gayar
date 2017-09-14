@@ -223,7 +223,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     tempChartData.customChartSettings.yAxis.plotLines[1].value = this.modelData.clientLimit;
                 } 
                 // scenario 3
-                if(this.modelData.medianLimit < this.modelData.maxLoss
+                if(this.modelData.medianLimit <= this.modelData.maxLoss
                     &&  this.modelData.clientLimit === null){
                     console.log('scenario3');
                     tempChartData.series = this.seriesData(false,
