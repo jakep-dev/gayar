@@ -87,8 +87,8 @@ export class SearchComponent implements OnInit {
     this.isActionEnabled = (this.selectedSearchValue !== '' && this.searchService.selectedCompany != null);
   }
 
-  onSearch(event, isReady){
-    if(!this.isManual && (event.keyCode === 13 || isReady)){
+  onSearch(event){
+    if(!this.isManual && event.charCode === 13){
        this.isTriggerSearch.next(true);
     }
     else{

@@ -22,23 +22,25 @@
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
-          <div *ngIf="isManual" fxFlex="30"  >
+          <div *ngIf="isManual" class="width-100">
             <md-select fxFlex
-            placeholder="Select industry" [(ngModel)]="selectedIndustry" 
-            floatPlaceholder="never" (ngModelChange)="onValidation()">
-            <md-option *ngFor="let item of industryList" [value]="item">{{item.displayName}}</md-option>
+              placeholder="Select industry" [(ngModel)]="selectedIndustry" 
+              floatPlaceholder="never" (ngModelChange)="onValidation()">
+              <md-option *ngFor="let item of industryList" [value]="item">{{item.displayName}}</md-option>
             </md-select>
           </div>
           
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
-            <md-input-container  fxFlex="90" floatPlaceholder="never" dividerColor="primary"  >
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onValidation()"  (keypress)="onSearch($event, false)"
+            <md-input-container  fxFlex floatPlaceholder="never" dividerColor="primary"  >
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onValidation()"  (keypress)="onSearch($event, false)"
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
             </md-input-container>
-            <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px"> <md-icon>clear_all</md-icon></button>  
-            <button md-icon-button *ngIf="!isManual" (click)="onSearch($event, true)"> <md-icon>search</md-icon></button>
+            <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px"> 
+              <md-icon>close</md-icon>
+            </button>  
+            <button md-icon-button *ngIf="!isManual" (click)="onSearch($event)"> <md-icon>search</md-icon></button>
           </div>
         </div>
 
