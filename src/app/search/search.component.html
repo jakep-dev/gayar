@@ -33,7 +33,8 @@
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
             <md-input-container  fxFlex floatPlaceholder="never" dividerColor="primary"  >
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
-              type="text" *ngIf="searchRule === 'text'" placeholder="{{searchValuePlaceHolder}}" />
+              type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
+              <md-hint align="end" *ngIf="isManual">{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
             </md-input-container>
