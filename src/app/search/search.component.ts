@@ -49,6 +49,20 @@ export class SearchComponent implements OnInit {
   }
 
   /**
+   * If search criteria is already selected
+   */
+  loadSearchCriteria () {
+    const selectedCompany: CompanyModel = this.searchService.selectedCompany;
+    const searchCriteria: SearchCriteriaModel = this.searchService.searchCriteria;
+    if (selectedCompany && searchCriteria) {
+      let searchByModel: SearchByModel =  this.searchByList.find(f=>f.type === searchCriteria.type);
+      this.selectedSearchType = searchCriteria.type
+      this.selectedSearchValue = searchCriteria.value;
+      this.isTriggerSearch.next(true);
+    }
+  }
+
+  /**
    * Calculate place holder for search value.
    */
   calcPlaceHolderForSearchValue(){
@@ -88,11 +102,8 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch(event){
-    if(!this.isManual && event.charCode === 13){
+    if(!this.isManual && event.keyCode === 13){
        this.isTriggerSearch.next(true);
-    }
-    else{
-       this.searchService.selectedCompany = null;
     }
   }
 
@@ -161,6 +172,8 @@ export class SearchComponent implements OnInit {
       premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
+
+    if(this.isManual){ this.searchService.selectedCompany = null; }
   }
 
   /**

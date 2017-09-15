@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk';
-import { MdPaginator, MdSort } from '@angular/material';
+import { MdPaginator, MdSort, MdTable } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
