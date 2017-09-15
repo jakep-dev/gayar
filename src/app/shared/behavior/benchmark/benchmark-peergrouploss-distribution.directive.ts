@@ -150,7 +150,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                 return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
                                 }
                             );
-                            return '<b>' + value + '</b><br/>' + this.series.name +': ' +this.x + '<br/>';
+                            return '<b>' + value + '</b><br/>' + this.series.name +': ' +this.point.x + '<br/>';
                         }
                     },
                     plotOptions: {
