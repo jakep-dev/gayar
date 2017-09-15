@@ -139,7 +139,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     tooltip: {
                         shared: false,
                         formatter: function () {
-                            let value =  (this.point.y.toString()).replace(
+                            let value =  (this.point.stackTotal.toString()).replace(
                                 /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
                                 var reverseString = function(string) { return string.split('').reverse().join(''); };
                                 var insertCommas  = function(string) { 
@@ -150,7 +150,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                                 return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
                                 }
                             );
-                            return '<b>' + value + '</b><br/>' + this.series.name +': ' +this.point.x + '<br/>';
+                            return '<b>' + value + '</b><br/>Loss Amount<br/>';
                         }
                     },
                     plotOptions: {
