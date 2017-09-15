@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuService, SessionService } from 'app/services/services';
+import { MenuService, SessionService, SearchService } from 'app/services/services';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -15,6 +15,7 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = 'side';
   constructor(private menuService: MenuService, 
+              private searchService: SearchService,
               private sessionService: SessionService) { 
       
   }
@@ -37,6 +38,10 @@ export class MenuComponent implements OnInit {
     if(this.sideNavMode){
       this.showShortMenu = false;
     }
+  }
+
+  isSearchCriteriaValid () : boolean {
+    return this.searchService.hasValidSearchCriteria();
   }
 
   shortMenuMouseLeave(){

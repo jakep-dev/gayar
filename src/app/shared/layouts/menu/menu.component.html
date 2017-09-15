@@ -10,25 +10,25 @@
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.currentIdentity.fullName}}</span>
             </button>
-          <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');"
+          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');"
              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
                 <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
                 <md-icon class="md-18">gamepad</md-icon>
                 <span>Severity</span>
             </button>
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');"
+          <button md-button routerLink="/benchmark" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Benchmark');"
           routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
                 <md-icon class="md-18">pie_chart</md-icon>
                 <span>Report</span>
           </button>
@@ -43,27 +43,21 @@
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
             </button>
-          <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active">
+          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
-
             </button>
-          <button md-button (click)="onMenu()">
+          <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">wifi</md-icon>
-
             </button>
-          <button md-button (click)="onMenu()">
+          <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">gamepad</md-icon>
-
             </button>
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');"
-          routerLinkActive="active">
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
-
             </button>
-          <button md-button (click)="onMenu()">
+          <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">pie_chart</md-icon>
-
-            </button>
+          </button>
       </div>
     </div>
   </md-sidenav>
