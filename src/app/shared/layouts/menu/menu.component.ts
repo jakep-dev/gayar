@@ -44,6 +44,11 @@ export class MenuComponent implements OnInit {
     return this.searchService.hasValidSearchCriteria();
   }
 
+  getSearchCompanyName () : string {
+    return this.searchService.selectedCompany ? 
+          this.searchService.selectedCompany.companyName : '';
+  }
+
   shortMenuMouseLeave(){
     if(!this.showShortMenu && !this.isMenuLock){
       this.showShortMenu = true;
