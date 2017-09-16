@@ -25,6 +25,7 @@ export class SearchComponent implements OnInit {
   selectedRetention: string;
   selectedLimit: string;
   selectedRevenue: RevenueModel;
+  selectedCompanyModel: CompanyModel;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -98,11 +99,11 @@ export class SearchComponent implements OnInit {
                               this.selectedSearchValue !== '');
       return;
     }
-    this.isActionEnabled = (this.selectedSearchValue !== '' && this.searchService.selectedCompany != null);
+    this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
   }
 
   onSearch(event){
-    if(!this.isManual && event.keyCode === 13){
+    if(!this.isManual && (event.keyCode === 13 || event.type === 'click')){
        this.isTriggerSearch.next(true);
     }
   }
@@ -117,7 +118,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSearchTableSelectionCompleted(event){
-    this.searchService.selectedCompany = event as CompanyModel;
+    this.selectedCompanyModel = event as CompanyModel;
     this.onValidation();
   }
 
@@ -144,7 +145,7 @@ export class SearchComponent implements OnInit {
    * @return {type}  description
    */
   private _validateRevenueAndIndustry () {
-    const selectedCompany = this.searchService.selectedCompany;
+    const selectedCompany = this.selectedCompanyModel;
     this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId).subscribe((data)=>{
         if(data && data.message){
           this.snackBarService.Simple(data.message);
@@ -173,7 +174,7 @@ export class SearchComponent implements OnInit {
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
 
-    if(this.isManual){ this.searchService.selectedCompany = null; }
+    if(!this.isManual){ this.searchService.selectedCompany = this.selectedCompanyModel; }
   }
 
   /**

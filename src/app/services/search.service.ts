@@ -12,9 +12,7 @@ export class SearchService extends BaseService {
     public selectedCompany: CompanyModel = null;
     public searchCriteria: SearchCriteriaModel = null;
     public hasValidSearchCriteria () : boolean {
-        console.log(this.selectedCompany);
-        console.log(this.searchCriteria);
-        return (this.selectedCompany != null && this.searchCriteria != null)
+        return (this.selectedCompany != null || this.searchCriteria != null)
     }
 
     constructor(http: Http) {
