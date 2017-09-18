@@ -29,7 +29,7 @@ export class PeerGroupLossComponent implements OnInit {
      */
     onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title;
+        this.chartHeader = newChartData.title || 'Limit Adequacy';
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);

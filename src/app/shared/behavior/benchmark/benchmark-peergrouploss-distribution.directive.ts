@@ -67,7 +67,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 series: {
                     data : []
                 },
-                title: this.modelData.chartTitle,
+                title: '',
                 subtitle: this.modelData.filterDescription,
                 displayText: this.modelData.displayText,
                 categories: ['1', '2'],
