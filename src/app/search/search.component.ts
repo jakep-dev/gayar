@@ -162,16 +162,21 @@ export class SearchComponent implements OnInit, OnDestroy {
    *
    * @return {type}  description
    */
-  private _setSelectedSearchCriteria () {
+
+  private _setSelectedSearchCriteria () { 
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
-    this.searchService.searchCriteria = {
-      type: this.selectedSearchType,
-      value: this.selectedSearchValue,
-      industry: this.selectedIndustry,
-      revenue: revenueModel ? revenueModel : null,
-      limit: new KmbConversionPipe().transform(this.selectedLimit).toString(),
-      premium: new KmbConversionPipe().transform(this.selectedPremium).toString(),
-      retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
+    let limit = new KmbConversionPipe().transform(this.selectedLimit); 
+    let premium = new KmbConversionPipe().transform(this.selectedPremium); 
+    let retention = new KmbConversionPipe().transform(this.selectedRetention); 
+
+    this.searchService.searchCriteria = { 
+      type: this.selectedSearchType, 
+      value: this.selectedSearchValue, 
+      industry: this.selectedIndustry, 
+      revenue: revenueModel ? revenueModel : null, 
+      limit: (limit || limit === 0)? limit.toString() : null, 
+      premium: (premium || premium === 0)? premium.toString(): null, 
+      retention: (retention || retention === 0)? retention.toString(): null 
     };
 
     if(!this.isManual){ 

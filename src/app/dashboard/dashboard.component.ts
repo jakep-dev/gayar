@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
             companyId: this.companyId,
             naics: this.naics,
             revenueRange: this.revenueRange,
-            limit: this.searchService.searchCriteria.limit,
+            limit : this.searchService.searchCriteria.limit,
             retention: this.searchService.searchCriteria.retention,
         }
     }
