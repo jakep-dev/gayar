@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService, SessionService, SearchService } from 'app/services/services';
+import { DOCUMENT } from "@angular/platform-browser";
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -25,6 +26,7 @@ export class MenuComponent implements OnInit {
   }
 
   onMenu(name) {
+    console.log('BreadCrumb - ',name);
     this.menuService.breadCrumb = name;
   }
 
@@ -42,6 +44,11 @@ export class MenuComponent implements OnInit {
 
   isSearchCriteriaValid () : boolean {
     return this.searchService.hasValidSearchCriteria();
+  }
+
+  getSearchCompanyName () : string {
+    return this.searchService.selectedCompany ? 
+          this.searchService.selectedCompany.companyName : '';
   }
 
   shortMenuMouseLeave(){

@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ACCORDION_ANIMATION, SPLIT_ANIMATION } from '../animations/animations';
 
 @Component({
   selector: 'app-tile',
   templateUrl: './tile.component.html',
   styleUrls: ['./tile.component.css'],
-  animations: [ ACCORDION_ANIMATION, SPLIT_ANIMATION ]
+  animations: [  ]
 })  
 export class TileComponent implements OnInit {
   @Input() title: string;
@@ -28,11 +27,7 @@ export class TileComponent implements OnInit {
   }
 
   toggleContent(){
-    let timeout:number = 200;
-    if(this.isContent){ timeout = 0; }
-    setTimeout(()=>{
-      this.isContent = !this.isContent; 
-    }, timeout)
+    this.isContent = !this.isContent; 
     this.accordionState = this.accordionState === "up" ? "down" : "up";
   }
 
