@@ -15,8 +15,9 @@ import { ChartModule } from 'angular2-highcharts';
 import { HighchartsProvider } from './shared/highchart/highchart';
 
 // Application Components
-import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES , 
-         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS, BLOCK_SHARED_SERVICE } from './shared/shared';
+import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES,
+         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS, 
+         BLOCK_SHARED_SERVICE } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';

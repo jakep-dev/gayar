@@ -3,20 +3,43 @@ import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import  { Subject } from 'rxjs/Subject';
+import { SessionStorageService } from 'app/services/session-storage.service';
+import { APPCONSTANTS } from 'app/app.const';
 import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, 
          SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel } from 'app/model/model';
 
-
 @Injectable()
 export class SearchService extends BaseService {
-    public selectedCompany: CompanyModel = null;
-    public searchCriteria: SearchCriteriaModel = null;
+    private _sessionStorageService: SessionStorageService;
+    private _searchCriteria: SearchCriteriaModel = null;
+    private _selectedCompany: CompanyModel = null;
+    public get selectedCompany(): CompanyModel {
+        return this._selectedCompany;
+    }
+    public set selectedCompany(companyModel: CompanyModel) {
+        this._selectedCompany = companyModel;
+    }
+
+    public get searchCriteria(): SearchCriteriaModel {
+        return this._searchCriteria;
+    }
+    public set searchCriteria(searchCriteriaModel: SearchCriteriaModel) {
+        this._searchCriteria = searchCriteriaModel;
+    }
+
+    
     public hasValidSearchCriteria () : boolean {
         return (this.selectedCompany != null || this.searchCriteria != null)
     }
 
-    constructor(http: Http) {
+    public clearSearchCookies () {
+        this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
+        this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA);
+    }
+
+    constructor(http: Http, sessionStorageService: SessionStorageService) {
         super(http);
+        this._sessionStorageService = sessionStorageService;
     }
     
     /**

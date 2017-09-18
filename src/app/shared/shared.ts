@@ -16,6 +16,7 @@ import { BLOCK_CHART_TYPES } from './charts/charts';
 import { BLOCK_CONSTRAINTS } from './constraints/constraints';
 import { BLOCK_SEARCH_TABLE } from './tables/tables'
 import { SHARED_BLOCKS } from './blocks/blocks';
+import { BLOCK_UTIL } from './util/util';
 
 
 export const BLOCK_SHARED = [    
@@ -25,7 +26,8 @@ export const BLOCK_SHARED = [
     BLOCK_CHART_BEHAVIORS,
     BLOCK_CHART_TYPES,
     BLOCK_CONSTRAINTS,
-    BLOCK_SEARCH_TABLE
+    BLOCK_SEARCH_TABLE,
+    BLOCK_UTIL
 ];
 
 export const BLOCK_SHARED_SERVICE = [

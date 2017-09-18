@@ -7,7 +7,7 @@
             <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
             <button md-icon-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
-            <button md-icon-button *ngIf="isAccordion" [@accordionAnimation]="accordionState" (click)="toggleContent($event)">
+            <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)">
                 <md-icon>expand_less</md-icon>
             </button>
           </div>
@@ -19,7 +19,7 @@
                   <button md-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon> Split</button>
                   <button md-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon> Flip</button>
                   <button md-button *ngIf="isAccordion"  (click)="toggleContent($event)">
-                    <md-icon [@accordionAnimation]="accordionState">expand_less</md-icon>
+                    <md-icon>expand_less</md-icon>
                     <span *ngIf="isContent">Collapse</span>
                     <span *ngIf="!isContent">Expand</span>
                    </button>
@@ -29,8 +29,8 @@
       </div> 
   </md-toolbar>
   <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
-  <div class="tile-content"  [@accordionContentAnimation]="accordionState">
-    <div *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center" [@splitAnimation]="splitState">
+  <div class="tile-content">
+    <div  *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center">
       <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
       
       </ng-content>

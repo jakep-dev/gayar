@@ -11,7 +11,8 @@ export class NumberDirective {
    * Event emits on keypress
    * @param event 
    */
-  @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
+  @HostListener('keypress', ['$event']) 
+  onKeyPressHandler(event: KeyboardEvent) {
     return (event.charCode >=48 && event.charCode <= 57);
   }
 
@@ -19,7 +20,8 @@ export class NumberDirective {
    * Event emits on textbox input
    * @param event 
    */
-  @HostListener('input', ['$event']) onPasteHandler(event: KeyboardEvent) {
+  @HostListener('input', ['$event']) 
+  onPasteHandler(event: KeyboardEvent) {
     let input = event.target as HTMLInputElement;
     let validNumberRegExp = new RegExp(this.validNumRegExp);
     if(!validNumberRegExp.test(input.value)){
@@ -31,5 +33,4 @@ export class NumberDirective {
 
   constructor() { 
   }
-
 }

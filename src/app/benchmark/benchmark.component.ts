@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { SearchService } from '../services/services';
+import { SearchService, MenuService } from '../services/services';
 import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput } from '../model/benchmark.model';
 
 @Component({
@@ -21,9 +21,11 @@ export class BenchmarkComponent implements OnInit {
     public benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
     public benchmarkRateInput: BenchmarkRateInput;
 
-    constructor(private searchService: SearchService) { }
+    constructor(private searchService: SearchService, 
+                private menuService: MenuService) { }
 
     ngOnInit() {
+        this.menuService.breadCrumb = 'Benchmark';
         this.setupDistributionInput();
         this.setupLimitAdequacyInput();
         this.setupRateInput();

@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService, SessionService, MenuService } from 'app/services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, RevenueRangeResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
-import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion.pipe';
+import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion/kmb-conversion.pipe';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
@@ -13,7 +13,7 @@ import { SnackBarService } from 'app/shared/shared';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   selectedSearchBy: number = 4;
   selectedSearchType: string;
   selectedSearchValue: string;
@@ -53,14 +53,14 @@ export class SearchComponent implements OnInit {
    * If search criteria is already selected
    */
   loadSearchCriteria () {
-    const selectedCompany: CompanyModel = this.searchService.selectedCompany;
-    const searchCriteria: SearchCriteriaModel = this.searchService.searchCriteria;
-    if (selectedCompany && searchCriteria) {
-      let searchByModel: SearchByModel =  this.searchByList.find(f=>f.type === searchCriteria.type);
-      this.selectedSearchType = searchCriteria.type
-      this.selectedSearchValue = searchCriteria.value;
-      this.isTriggerSearch.next(true);
-    }
+    // const selectedCompany: CompanyModel = this.searchService.selectedCompany;
+    // const searchCriteria: SearchCriteriaModel = this.searchService.searchCriteria;
+    // if (selectedCompany && searchCriteria) {
+    //   let searchByModel: SearchByModel =  this.searchByList.find(f=>f.type === searchCriteria.type);
+    //   this.selectedSearchType = searchCriteria.type
+    //   this.selectedSearchValue = searchCriteria.value;
+    //   this.isTriggerSearch.next(true);
+    // }
   }
 
   /**
@@ -174,7 +174,9 @@ export class SearchComponent implements OnInit {
       retention: new KmbConversionPipe().transform(this.selectedRetention).toString()
     };
 
-    if(!this.isManual){ this.searchService.selectedCompany = this.selectedCompanyModel; }
+    if(!this.isManual){ 
+      this.searchService.selectedCompany = this.selectedCompanyModel; 
+    }
   }
 
   /**
@@ -222,5 +224,9 @@ export class SearchComponent implements OnInit {
 
   onSelectionComplete () {
 
+  }
+
+  ngOnDestroy () {
+    
   }
 }
