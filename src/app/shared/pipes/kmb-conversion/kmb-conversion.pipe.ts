@@ -7,11 +7,13 @@ export class KmbConversionPipe implements PipeTransform {
   removeCommaRegEx: any = /[, ]+/g;
 
   transform(value: string, args?: any): number {
-    if(!value){
-      return 0;
+    if(value){ 
+      return this.transformFromKmb(value);
+    }else{
+      return null;
     }
-    return this.transformFromKmb(value);
-  }
+    
+  } 
 
   removeCommas(value){
     return value.replace(this.removeCommaRegEx, "");
