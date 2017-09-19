@@ -10,11 +10,16 @@
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.currentIdentity.fullName}}</span>
             </button>
+          <button md-button routerLink="/search" (click)="onMenu('Company Search');"
+              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">search</md-icon>
+                <span>Company Search</span>
+          </button>
           <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');"
              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
-            </button>
+          </button>
           <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
                 <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
@@ -42,19 +47,22 @@
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
-            </button>
+          </button>
+          <button md-button routerLink="/search" (click)="onMenu('Company Search');" routerLinkActive="active">
+            <md-icon class="md-18">search</md-icon>
+          </button>
           <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
-            </button>
+          </button>
           <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">wifi</md-icon>
-            </button>
+          </button>
           <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">gamepad</md-icon>
-            </button>
+          </button>
           <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
-            </button>
+          </button>
           <button md-button (click)="onMenu()" [disabled]="true">
                 <md-icon class="md-18">pie_chart</md-icon>
           </button>
