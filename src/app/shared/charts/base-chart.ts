@@ -91,7 +91,9 @@ export abstract class BaseChart {
                 type: 'line',
                 marginLeft: 30,
                 marginRight: 30,
-                spacingBottom: 35
+                spacingBottom: 35,
+                width: 600,
+                height: 400
             },
             credits: {
                 enabled: false,

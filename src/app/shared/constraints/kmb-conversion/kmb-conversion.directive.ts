@@ -61,8 +61,22 @@ export class KmbConversionDirective {
     if(isNaN(floatNumber)){
       return '';
     }
-    return floatNumber.toString().replace(this.addCommaRegExpression , "$&,");
+    return this.formatFloatString(floatNumber.toString());
   } 
+
+  private formatFloatString(floatString: string): string {
+    let position = floatString.indexOf('.');
+    let wholeNumberPart: string;
+    let fractionalPart: string;
+    if (position >= 0) {
+      wholeNumberPart = floatString.substring(0, position);
+      fractionalPart = floatString.substring(position);
+    } else {
+      wholeNumberPart = floatString;
+      fractionalPart = '';
+    }
+    return wholeNumberPart.toString().replace(this.addCommaRegExpression , "$&,") + fractionalPart;
+  }
 
   /*
     Compute Kmb Conversion
@@ -84,13 +98,16 @@ export class KmbConversionDirective {
 
     switch(splitChar){
       case 'K':
-        return (floatNumber * 1000).toString().replace(this.addCommaRegExpression , "$&,");
+        floatNumber = floatNumber * 1000;
+        return this.formatFloatString(floatNumber.toString());
 
       case 'M':
-        return (floatNumber * 1000000).toString().replace( this.addCommaRegExpression , "$&,");
+        floatNumber = floatNumber * 1000000;
+        return this.formatFloatString(floatNumber.toString());
 
       case 'B':
-        return (floatNumber * 1000000000).toString().replace( this.addCommaRegExpression , "$&,");
+        floatNumber = floatNumber * 1000000000;
+        return this.formatFloatString(floatNumber.toString());
 
       default: 
         return '';
