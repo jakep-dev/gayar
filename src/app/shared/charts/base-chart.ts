@@ -91,7 +91,9 @@ export abstract class BaseChart {
                 type: 'line',
                 marginLeft: 30,
                 marginRight: 30,
-                spacingBottom: 35
+                spacingBottom: 35,
+                width: 600,
+                height: 400
             },
             credits: {
                 enabled: false,
@@ -103,11 +105,13 @@ export abstract class BaseChart {
                 style: {
                     fontSize: '14px',
                     color: '#464646'
-                }
+                },
+                margin: 30
             },
             subtitle: {
                 text: 'Placeholder Sub-Title',
                 style: {
+                    fontSize: '13px',
                     color: '#464646'
                 }
             },

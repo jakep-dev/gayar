@@ -17,6 +17,7 @@ export class BenchmarkComponent implements OnInit {
 
     setModelData(modelData: BenchmarkScoreModel) {
         this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: GaugeChartData;
@@ -29,7 +30,6 @@ export class BenchmarkComponent implements OnInit {
      */
     onDataComplete(newChartData : GaugeChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title || 'Benchmark';
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);

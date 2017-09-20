@@ -235,7 +235,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
 
             let tempChartData: BoxPlotChartData = {
                 series: [],
-                title: this.modelData.chartTitle,
+                title: '',
                 subtitle: this.modelData.filterDescription,
                 displayText: null,
                 categories: ['1', '2', '3', '4', '5'],

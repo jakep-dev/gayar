@@ -67,7 +67,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 series: {
                     data : []
                 },
-                title: this.modelData.chartTitle,
+                title: '',
                 subtitle: this.modelData.filterDescription,
                 displayText: this.modelData.displayText,
                 categories: ['1', '2'],
@@ -134,7 +134,10 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     },
                     legend: {
                         margin: 10,
-                        y: -45
+                        y: -45,
+                        itemStyle: {
+                            cursor: 'default'
+                        }
                     },
                     tooltip: {
                         shared: false,
@@ -185,6 +188,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
 
             seriesLength = this.modelData.losses.length;
 
+            if(seriesLength > 0){
+
             for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++) {
                 
                 dataLossAbove.data.push(this.modelData.losses[seriesIndex].lossAboveLimit);
@@ -228,11 +233,11 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     console.log('scenario3');
                     tempChartData.series = this.seriesData(false,
                                             false,
-                                            this.modelData.lossAboveMedianLimitLabel,
-                                            this.modelData.lossBelowMedianLimitLabel,
+                                            false,
+                                            false,
                                             false,
                                             this.modelData.medianLimitLabel,
-                                            false,
+                                            this.modelData.lossAmountLabel,
                                             dataLossAbove.data, dataLossBelow.data);
                     tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
                     tempChartData.customChartSettings.yAxis.plotLines[0].value = this.modelData.medianLimit;
@@ -392,6 +397,21 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 }
 
             }
+
+            }else{ // losses = [] empty
+                tempChartData.series = this.seriesData(false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false,
+                                                false, 
+                                                null,
+                                                null);
+                tempChartData.customChartSettings.yAxis.plotLines[0].width = 0;
+                tempChartData.customChartSettings.yAxis.plotLines[1].width = 0;
+            }
+
             this.onDataComplete.emit(tempChartData);
         }
     }
