@@ -71,7 +71,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                     }
                 ],
                 subtitle: '',
-                title: this.modelData.chartTitle,
+                title: '',
                 displayText: this.modelData.displayText,
                 xAxisFormatter: null,
                 xAxisLabel: '',
@@ -80,7 +80,8 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                     chart: {
                         type: 'solidgauge',
                         marginLeft: 30,
-                        marginRight:30
+                        marginRight:30,
+                        marginTop: 5
                     },
                     title: null,
                     pane: {
