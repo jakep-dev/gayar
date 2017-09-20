@@ -17,6 +17,7 @@ export class PeerGroupLossComponent implements OnInit {
 
     setModelData(modelData: BenchmarkLimitModel) {
         this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: BoxPlotChartData;
@@ -29,7 +30,6 @@ export class PeerGroupLossComponent implements OnInit {
      */
     onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);

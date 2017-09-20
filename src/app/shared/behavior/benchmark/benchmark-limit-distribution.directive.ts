@@ -81,7 +81,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
         if (this.modelData) {
             let tempChartData: BarChartData = {
                 series: [],
-                title: this.modelData.chartTitle,
+                title: '',
                 subtitle: this.modelData.filterDescription,
                 displayText: this.modelData.displayText,
                 categories: [],
