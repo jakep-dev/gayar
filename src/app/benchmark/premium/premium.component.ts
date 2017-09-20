@@ -17,6 +17,7 @@ export class PremiumComponent implements OnInit {
 
     setModelData(modelData: BenchmarkModel) {
         this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: BarChartData;
@@ -29,7 +30,6 @@ export class PremiumComponent implements OnInit {
      */
     onDataComplete(newChartData : BarChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
