@@ -1,5 +1,6 @@
 import { Directive, HostListener } from '@angular/core';
 import { SessionStorageService } from 'app/services/services';
+import { DOCUMENT } from '@angular/common'; 
 
 @Directive({
   selector: '[windowListener]'
@@ -11,7 +12,7 @@ export class WindowListenerDirective {
       */
       @HostListener('window:beforeunload', ['$event']) 
       beforeunloadHandler(event) {
-       
+      
       }
 
       @HostListener('window:unload', ['$event'])
@@ -21,7 +22,7 @@ export class WindowListenerDirective {
 
       @HostListener('window:load', ['$event'])
       loadHandler(event){
-       
+        
       }
 
   constructor() { }

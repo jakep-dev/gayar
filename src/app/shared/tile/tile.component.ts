@@ -16,10 +16,8 @@ export class TileComponent implements OnInit {
 
 
   isContent: boolean = true;
-  accordionState: string = "up";
   isFlipped: boolean = false;
   isSplitted: boolean = false;
-  splitState: string = "split";
 
   constructor() { }
 
@@ -28,21 +26,27 @@ export class TileComponent implements OnInit {
 
   toggleContent(){
     this.isContent = !this.isContent; 
-    this.accordionState = this.accordionState === "up" ? "down" : "up";
   }
 
+  /**
+   * Toggle flip
+   */
   toggleFlip(){
       this.isFlipped = !this.isFlipped;
       this.isSplitted = false;
   }
   
+  /**
+   * Toggle full screen
+   */
   toggleFullScreen(){
 
   }
 
+  /**
+   * Toggle split
+   */
   toggleSplit(){
     this.isSplitted = !this.isSplitted;
-    this.splitState = this.splitState === "split" ? "combine" : "split";
-    console.log(this.splitState);
   }
 }
