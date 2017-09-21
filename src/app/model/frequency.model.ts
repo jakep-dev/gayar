@@ -17,3 +17,21 @@ export interface FrequencyDataModel {
     type_of_loss: string;
     case_description: string;
 }
+
+export interface FrequencyIncidentBarModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: FrequencyIncidentGroup[];
+    displayText: string;
+    withBreak: boolean;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface FrequencyIncidentGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
+}

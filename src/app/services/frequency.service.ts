@@ -21,5 +21,18 @@ export class FrequencyService extends BaseService {
         }
         catch (e) {
         }
+    }    
+
+    public getTypeOfIncidentBarData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getTypeOfIncidentBarData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+           });
+        }
+        catch(e){
+
+        }
     }
 }

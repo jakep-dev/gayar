@@ -1,0 +1,61 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { FrequencyIncidentBarModel, BarChartData, FrequencyInput } from 'app/model/model';
+import { FrequencyService } from '../../services/services';
+import { BaseChart } from './../../shared/charts/base-chart';
+
+@Component({
+    selector: 'app-incident',
+    templateUrl: './incident.component.html',
+    styleUrls: ['./incident.component.css']
+})
+export class IncidentComponent implements OnInit {
+
+    modelData: FrequencyIncidentBarModel;
+
+    setModelData(modelData: FrequencyIncidentBarModel) {
+        this.modelData = modelData;
+    }
+
+    chartData: BarChartData;
+
+    @Input() componentData: FrequencyInput;
+
+    /**
+     * Event handler to indicate the construction of the BarChart's required data is built 
+     * @param newChartData BarChart's required data
+     */
+    onDataComplete(newChartData: BarChartData) {
+        this.chartData = newChartData;
+    }
+
+    chartComponent: BaseChart
+
+    /**
+     * Event handler to indicate the chart is loaded 
+     * @param chart The chart commponent
+     */
+    onChartReDraw(chart: BaseChart) {
+        this.chartComponent = chart;
+    }
+
+    constructor(private frequencyService: FrequencyService) {
+    }
+
+    ngOnInit() {
+        this.getBenchmarkLimitData();
+    }
+
+    /**
+     * Get Benchmark Limit Data from back end nodejs server
+     */
+    getBenchmarkLimitData() {
+        if (this.componentData) {
+            this.frequencyService.getTypeOfIncidentBarData(this.componentData.companyId, this.componentData.naics, this.componentData.revenueRange)
+                .subscribe(modelData => this.setModelData(modelData));
+
+        }
+    }
+
+}

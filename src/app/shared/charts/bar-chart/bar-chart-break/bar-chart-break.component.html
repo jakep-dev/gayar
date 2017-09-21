@@ -1,0 +1,15 @@
+<div class="chart-holder">
+    <chart id="chart-break" class="chart-style" 
+        [options]="chartWithBreakOptions" 
+        (load)="setChartWithBreak($event.context)"
+        (drilldown)="onDrilldown($event, true)" 
+        (drillup)="onDrillup($event, true)">
+            <yAxis (afterSetExtremes)="onAfterSetExtremesY($event)"></yAxis>
+    </chart>
+    <chart id="chart-main" class="chart-style" 
+        [options]="chartOptions" 
+        (load)="setChart($event.context)" 
+        (redraw)="onRedraw($event.context)"
+        (drilldown)="onDrilldown($event, false)" 
+        (drillup)="onDrillup($event, false)"></chart>
+</div>

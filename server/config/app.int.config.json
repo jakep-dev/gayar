@@ -49,6 +49,10 @@
             {
                 "name": "checkForRevenueAndIndustry",
                 "contract": "/cybermetrix/util/peergroupValidation"
+            },
+            {
+                "name": "getTypeOfIncidentBarData",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentDisplayDetailDataset"
             }
         ]
     },
