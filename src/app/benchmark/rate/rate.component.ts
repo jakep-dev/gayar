@@ -17,6 +17,7 @@ export class RateComponent implements OnInit {
 
     setModelData(modelData: BenchmarkRateModel) {
         this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: BoxPlotChartData;
@@ -29,7 +30,6 @@ export class RateComponent implements OnInit {
      */
     onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
-        this.chartHeader = newChartData.title;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);

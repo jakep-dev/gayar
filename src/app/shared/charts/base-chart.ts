@@ -105,11 +105,13 @@ export abstract class BaseChart {
                 style: {
                     fontSize: '14px',
                     color: '#464646'
-                }
+                },
+                margin: 30
             },
             subtitle: {
                 text: 'Placeholder Sub-Title',
                 style: {
+                    fontSize: '13px',
                     color: '#464646'
                 }
             },
