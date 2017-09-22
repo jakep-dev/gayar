@@ -11,6 +11,8 @@ import { BaseChart } from '../base-chart';
 export class BarChartComponent extends BaseChart implements OnInit {
 
     @Input() chartData: BarChartData;
+    onDrilldown: any = null;
+    onDrillup: any = null;
 
     constructor() {
         super();
@@ -34,6 +36,14 @@ export class BarChartComponent extends BaseChart implements OnInit {
         this.setXAxisTitle(this.chartData.xAxisLabel);
         this.setYAxisTitle(this.chartData.yAxisLabel);
         this.hasRedrawActions = this.chartData.hasRedrawActions;
+        
+        if (this.chartData.drillUpText) {
+            this.setDrillUpText(this.chartData.drillUpText);
+        }
+
+        if (this.chartData.customChartSettings.drilldown) {
+            this.chartOptions.drilldown = this.chartData.customChartSettings.drilldown;
+        }
     }
 
     /**
@@ -68,6 +78,15 @@ export class BarChartComponent extends BaseChart implements OnInit {
                     );
                 }
             }
+
+            if (this.chartData.onDrillDown) {
+                this.onDrilldown = this.chartData.onDrillDown;
+            }
+
+            if (this.chartData.onDrillUp) {
+                this.onDrillup = this.chartData.onDrillUp;
+            }
+            
             if(this.chartData.customChartSettings) {
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {

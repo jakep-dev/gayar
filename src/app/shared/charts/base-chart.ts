@@ -80,6 +80,14 @@ export abstract class BaseChart {
         this.chartOptions.chart.height = height;
     }
 
+    getDrillUpText() {
+        return this.chartOptions.lang.drillUpText;
+    }
+
+    setDrillUpText(text: string) {
+        this.chartOptions.lang.drillUpText = text;
+    }
+
     /**
      * initialize common options for all chart types
      */
@@ -188,7 +196,8 @@ export abstract class BaseChart {
                 }
             },
             lang: {
-                noData: "No Data Available"
+                noData: "No Data Available",
+                drillUpText: ''
             },
             noData: {
                 style: {
