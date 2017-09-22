@@ -27,6 +27,7 @@ const { SEARCH_SCREEN_NO_RESULT } = APPCONSTANTS;
 export class SearchTableComponent implements OnInit {
   @Input() searchType: string;
   @Input() searchValue: string;
+  @Input() loadedCompanyModel: CompanyModel;
   @Input() onTriggerSearch: AsyncSubject<boolean> = new AsyncSubject<boolean>();
   @Output() onSelectionCompleted: EventEmitter<CompanyModel> = new EventEmitter<CompanyModel>(true);
 
@@ -90,7 +91,6 @@ export class SearchTableComponent implements OnInit {
    */
   onRowSelection (companyModel: CompanyModel) {
     companyModel.isSelected = true;
-    this.searchService.selectedCompany = companyModel;
     this.onSelectionCompleted.emit(companyModel);
   }
 
@@ -113,10 +113,20 @@ export class SearchTableComponent implements OnInit {
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
           }
-          
+          data.companies = this._preSelectCompanyModel(data.companies);
           this.searchTableDatabase.addRecord(data.companies);
-         
         })
+  }
+
+  _preSelectCompanyModel (companies: Array<CompanyModel>) : Array<CompanyModel> {
+    if(companies && this.loadedCompanyModel){
+      companies.forEach(comp=> {
+        if(comp.companyId === this.loadedCompanyModel.companyId) {
+          comp.isSelected = true;
+        }
+      });
+    }
+    return companies;
   }
 
 

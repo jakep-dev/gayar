@@ -8,7 +8,8 @@
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
             <button md-icon-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
             <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)">
-                <md-icon>expand_less</md-icon>
+                <md-icon *ngIf="isContent">expand_less</md-icon>
+                <md-icon *ngIf="!isContent">expand_more</md-icon>
             </button>
           </div>
           <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.gt-xs]="true" class="tile-buttons">
@@ -19,7 +20,8 @@
                   <button md-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon> Split</button>
                   <button md-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon> Flip</button>
                   <button md-button *ngIf="isAccordion"  (click)="toggleContent($event)">
-                    <md-icon>expand_less</md-icon>
+                    <md-icon *ngIf="isContent">expand_less</md-icon>
+                    <md-icon *ngIf="!isContent">expand_more</md-icon>
                     <span *ngIf="isContent">Collapse</span>
                     <span *ngIf="!isContent">Expand</span>
                    </button>

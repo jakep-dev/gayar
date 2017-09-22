@@ -4,6 +4,7 @@ import { BenchmarkRetentionDistributionDirective } from './benchmark/benchmark-r
 import { BenchmarkLimitDistributionDirective } from './benchmark/benchmark-limit-distribution.directive';
 import { BenchmarkPeerGroupLossDistributionDirective } from './benchmark/benchmark-peergrouploss-distribution.directive';
 import { BenchmarkScoreDirective } from './dashboard/benchmark-score.directive';
+import {FrequencyIndustryOverviewDirective} from './frequency/frequency-industry-overview.directive';
 
 import { IncidentBarDirective } from './frequency/incident-bar.directive';
 
@@ -13,6 +14,8 @@ export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkRetentionDistributionDirective,
     BenchmarkLimitDistributionDirective,
     BenchmarkPeerGroupLossDistributionDirective,
+    BenchmarkScoreDirective,
+    FrequencyIndustryOverviewDirective,
     IncidentBarDirective,
     BenchmarkScoreDirective
 ];

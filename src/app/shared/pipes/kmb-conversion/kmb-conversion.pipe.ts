@@ -9,10 +9,9 @@ export class KmbConversionPipe implements PipeTransform {
   transform(value: string, args?: any): number {
     if(value){ 
       return this.transformFromKmb(value);
-    }else{
-      return null;
     }
-    
+
+    return null;
   } 
 
   removeCommas(value){

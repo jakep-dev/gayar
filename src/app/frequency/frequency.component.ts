@@ -2,7 +2,7 @@ import {FrequencyInput} from '../model/model';
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService } from 'app/services/services';
-import { FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
+import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput } from 'app/model/model';
 
 @Component({
     selector: 'app-frequency',
@@ -14,6 +14,7 @@ import { FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model'
 export class FrequencyComponent implements OnInit {
     peerGroupTable: Array<FrequencyDataModel>;
     companyLossesTable: Array<FrequencyDataModel>;
+    frequencyIndustryOverviewInput : FrequencyIndustryOverviewInput
 
     columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
     hearderColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
@@ -38,6 +39,7 @@ export class FrequencyComponent implements OnInit {
         this.industry = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription) ? this.searchService.searchCriteria.industry.naicsDescription : null;
         this.revenue_range = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
         this.loadFrequencyDataTable();
+        this.setupDistributionInput();
         this.setupFrequencyInput();
     }
 
@@ -48,6 +50,13 @@ export class FrequencyComponent implements OnInit {
         });
     }
 
+    setupDistributionInput() {
+        this.frequencyIndustryOverviewInput = {           
+            companyId: this.companyId,
+            naics : this.industry
+        }
+    }
+    
     setupFrequencyInput() {
         this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
         this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;

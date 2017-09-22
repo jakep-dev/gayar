@@ -18,6 +18,28 @@ export interface FrequencyDataModel {
     case_description: string;
 }
 
+export interface FrequencyIndustryOverviewModel {
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    xAxis: string;
+    yAxis: string;
+    datasets: Array<IndustryOverviewDataset>
+
+}      
+export interface IndustryOverviewDataset {
+    incidentCount: string;
+    revenueRange: string;
+    description: string;
+}
+
+
+export interface FrequencyIndustryOverviewInput {
+    companyId: number;
+    naics: string;
+
+}
+
 export interface FrequencyIncidentBarModel {
     
     chartTitle: string;

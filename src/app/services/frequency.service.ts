@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { FrequencyDataResponseModel } from 'app/model/model';
+import { FrequencyDataResponseModel, FrequencyIndustryOverviewModel } from 'app/model/model';
+
 
 @Injectable()
 export class FrequencyService extends BaseService {
@@ -30,6 +31,18 @@ export class FrequencyService extends BaseService {
                 'naics': naics,
                 'revenueRange': revenueRange
            });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getFrequencyIndustryOverview( companyId: number, naics : string) : Observable<FrequencyIndustryOverviewModel> {
+        try{
+           return super.Post<FrequencyIndustryOverviewModel>('/api/getIndustryOverviewDisplayDataset', {
+               'companyId': companyId,
+               'naics': naics
+           });    
         }
         catch(e){
 
