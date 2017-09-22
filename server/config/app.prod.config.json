@@ -49,6 +49,10 @@
             {
                 "name": "checkForRevenueAndIndustry",
                 "contract": "/cybermetrix/util/peergroupValidation"
+            },
+            {
+                "name": "getFrequencyData",
+                "contract": "/cybermetrix/chart/frequency/getFrequencyList"
             }
         ]
     },
