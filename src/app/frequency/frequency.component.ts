@@ -2,7 +2,7 @@ import {FrequencyInput} from '../model/model';
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService } from 'app/services/services';
-import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput } from 'app/model/model';
+import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput, FrequencyIncidentPieFlipData } from 'app/model/model';
 
 @Component({
     selector: 'app-frequency',
@@ -28,6 +28,7 @@ export class FrequencyComponent implements OnInit {
     naics: string;
     revenueRange: string;
     public frequencyInput: FrequencyInput;
+    public getFrequencyIncidentFlipManualInput: FrequencyIncidentPieFlipData;
 
     constructor(private frequencyService: FrequencyService,
         private menuService: MenuService,
@@ -41,6 +42,7 @@ export class FrequencyComponent implements OnInit {
         this.loadFrequencyDataTable();
         this.setupDistributionInput();
         this.setupFrequencyInput();
+        this.setupfrequencyIncidentPieFlipInput();
     }
 
     loadFrequencyDataTable() {
@@ -67,6 +69,19 @@ export class FrequencyComponent implements OnInit {
             naics: this.naics,
             revenueRange: this.revenueRange
         };
+    }
+
+    /**
+     * create incident flip chart input
+     */
+    setupfrequencyIncidentPieFlipInput() {
+
+        this.getFrequencyIncidentFlipManualInput = {
+            searchType: this.searchType,
+            companyId: this.companyId,
+            naics: this.industry,
+            revenueRange: this.revenue_range,
+        }
     }
 
 }

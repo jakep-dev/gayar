@@ -4,9 +4,11 @@ import { FrequencyComponent } from './frequency.component';
 import { IndustryOverviewComponent } from './industry-overview/industry-overview.component';
 
 import { IncidentBarComponent } from './incident-bar/incident-bar.component';
+import { IncidentPieComponent } from './incident-pie/incident-pie.component';
 
 export const BLOCK_FREQUENCY = [
     FrequencyComponent,
     IndustryOverviewComponent,
-    IncidentBarComponent
+    IncidentBarComponent,
+    IncidentPieComponent
 ];
