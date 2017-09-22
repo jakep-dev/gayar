@@ -3,6 +3,16 @@
     <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">       
         <div front  *ngIf="frequencyIndustryOverviewInput">
             <app-industry-overview [componentData]="frequencyIndustryOverviewInput"></app-industry-overview>
+        </div>     
+        <div>
+            <app-tile [title]="'Type of Incident'" [isSplittable]="true" [isFlippable]="true">
+                <div front>
+                    <app-incident [componentData]="frequencyInput"></app-incident>
+                </div>
+                <div back>
+                    Type of Incident Pie
+                </div>
+            </app-tile>
         </div>
     </div>
     <!-- Each 2 Chart Display -->
