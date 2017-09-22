@@ -106,6 +106,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
+
+    if(this.searchService.searchCriteria || this.searchService.selectedCompany){
+      this.searchService.clearSearchCookies();
+      this.snackBarService.Simple('As you made changes to search criteria, please choose Assessment/Report action.');
+    }
   }
 
   onSearch(event){
