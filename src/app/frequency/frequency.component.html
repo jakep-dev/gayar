@@ -12,14 +12,36 @@
             </app-tile>
         </div>
         <div>
-            <app-tile [title]="'Tile 2'" [isSplittable]="false" [isFlippable]="false">
+            <app-tile [title]="'Type of Incident'" [isSplittable]="true" [isFlippable]="true">
                 <div front>
                     <app-incident [componentData]="frequencyInput"></app-incident>
+                </div>
+                <div back>
+                    Type of Incident Pie
                 </div>
             </app-tile>
         </div>
     </div>
     <!-- Each 2 Chart Display -->
+    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
+        <div>
+            <app-tile [title]="'Type of Loss'" [isSplittable]="false" [isFlippable]="true">
+                <div front>
+                    Type of Loss Bar
+                </div>
+                <div back>
+                    Type of Loss Pie
+                </div>
+            </app-tile>
+        </div>
+        <div>
+            <app-tile [title]="'Time Period'" [isSplittable]="false" [isFlippable]="false">
+                <div front>
+                    Time Period Bar
+                </div>
+            </app-tile>
+        </div>
+    </div>
 </div>
 <div>
     <app-tile [title]="'5 Most Recent Peer Group'">
