@@ -59,6 +59,23 @@ export class FrequencyRouter extends BaseRoute {
         catch(e){
             Logger.error(e);
         }
+    }    
+                 
+    //Get Type of Incident Bar
+    public getTypeOfLossBarData(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getTypeOfLossBarData", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
     }
 
     //Initialize all the api call endpoints
@@ -66,5 +83,6 @@ export class FrequencyRouter extends BaseRoute {
         this.app.post('/api/getFrequencyData', this.getFrequencyData);
         this.app.post('/api/getIndustryOverviewDisplayDataset', this.getFrequencyIndustryOverview);
         this.app.post('/api/getTypeOfIncidentBarData', this.getTypeOfIncidentBarData);
+        this.app.post('/api/getTypeOfLossBarData', this.getTypeOfLossBarData);
     }
 }

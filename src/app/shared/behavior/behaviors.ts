@@ -7,6 +7,7 @@ import { BenchmarkScoreDirective } from './dashboard/benchmark-score.directive';
 
 import {FrequencyIndustryOverviewDirective} from './frequency/frequency-industry-overview.directive';
 import { FrequencyIncidentBarDirective } from './frequency/frequency-incident-bar.directive';
+import { FrequencyLossBarDirective } from './frequency/frequency-loss-bar.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,
@@ -17,5 +18,6 @@ export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkScoreDirective,
     BenchmarkScoreDirective,    
     FrequencyIndustryOverviewDirective,
-    FrequencyIncidentBarDirective
+    FrequencyIncidentBarDirective,
+    FrequencyLossBarDirective
 ];

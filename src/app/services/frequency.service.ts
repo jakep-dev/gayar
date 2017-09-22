@@ -36,6 +36,19 @@ export class FrequencyService extends BaseService {
 
         }
     }
+    
+    public getTypeOfLossBarData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getTypeOfLossBarData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
+    }
 
     public getFrequencyIndustryOverview( companyId: number, naics : string) : Observable<FrequencyIndustryOverviewModel> {
         try{
