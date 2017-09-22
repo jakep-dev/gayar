@@ -1,16 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
     <!-- Each 2 Chart Display -->
-    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
-        <div>
-            <app-tile [title]="'Tile 1'" [isSplittable]="false" [isFlippable]="true">
-                <div front>
-                    Row 1 Tile 1 Chart 1 Place Holder
-                </div>
-                <div back>
-                    Row 1 Tile 1 Chart 2 Place Holder
-                </div>
-            </app-tile>
-        </div>
+    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">       
+        <div front  *ngIf="frequencyIndustryOverviewInput">
+            <app-industry-overview [componentData]="frequencyIndustryOverviewInput"></app-industry-overview>
+        </div>     
         <div>
             <app-tile [title]="'Tile 2'" [isSplittable]="false" [isFlippable]="false">
                 <div front>
@@ -22,20 +15,16 @@
     <!-- Each 2 Chart Display -->
 </div>
 <div>
-    <div>
-        <app-tile [title]="'5 Most Recent Peer Group'">
-            <div front class="width-100">
-                <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
-                </app-simple-table>
-            </div>
-        </app-tile>
-    </div>
-    <div *ngIf="companyLossesTable">
-        <app-tile [title]="'5 Most Recent Company Losses'">
-            <div front class="width-100">
-                <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
-                </app-simple-table>
-            </div>
-        </app-tile>
-    </div>
+    <app-tile [title]="'5 Most Recent Peer Group'">
+        <div front class="width-100">
+            <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+            </app-simple-table>
+        </div>
+    </app-tile>
+    <app-tile [title]="'5 Most Recent Company Losses'">
+        <div front class="width-100">
+            <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+            </app-simple-table>
+        </div>
+    </app-tile>
 </div>

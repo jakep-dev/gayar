@@ -53,6 +53,10 @@
             {
                 "name": "getFrequencyData",
                 "contract": "/cybermetrix/chart/frequency/getFrequencyList"
+            },
+            {
+                "name": "getIndustryOverviewDisplayDataset",
+                "contract": "/cybermetrix/chart/frequency/getIndustryOverviewDisplayDataset"
             }
         ]
     },

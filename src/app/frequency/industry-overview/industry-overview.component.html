@@ -1,0 +1,15 @@
+<app-tile [title]="chartHeader" [isSplittable]="false" [isFlippable]="false">
+  <div front style='width: 100%; height: 100%;' fxLayout="column">
+      <div *ngIf='modelData'>
+          <bar-chart
+              frequency-industry-overview-behavior
+              [modelData]="modelData"
+              [chartData]="chartData"
+              [chartComponent]="chartComponent$ | async"
+              (onDataComplete)="onDataComplete($event)"
+              (onChartRedraw)="onChartReDraw($event)"
+          >
+          </bar-chart>
+      </div>
+  </div>
+</app-tile>

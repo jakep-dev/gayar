@@ -29,8 +29,24 @@ export class FrequencyRouter extends BaseRoute {
         }
     }
 
+    public getFrequencyIndustryOverview(req: Request, res: Response, next: NextFunction) {
+        try{
+            super.PerformGetRequest("getIndustryOverviewDisplayDataset", {
+                'companyId': req.body.companyId,
+                'naics': req.body.naics,
+                 'ssnid': req.body.token
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }
+
     //Initialize all the api call endpoints
     init() {
         this.app.post('/api/getFrequencyData', this.getFrequencyData);
+        this.app.post('/api/getIndustryOverviewDisplayDataset', this.getFrequencyIndustryOverview);
     }
 }
