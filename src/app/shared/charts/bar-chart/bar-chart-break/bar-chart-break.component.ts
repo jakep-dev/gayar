@@ -13,8 +13,6 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     @Input() chartData: BarChartData;
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
 
-    /*onDrilldown: any = null;
-    onDrillup: any = null;*/
     hasRedrawActions: boolean;
     chartWithBreakOptions: any;
     chartWithBreak: any;
@@ -107,14 +105,6 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
                 }
             }
 
-            /*if (this.chartData.onDrillDown) {
-                this.onDrilldown = this.chartData.onDrillDown;
-            }
-
-            if (this.chartData.onDrillUp) {
-                this.onDrillup = this.chartData.onDrillUp;
-            }*/
-
             if (this.chartData.customChartSettings) {
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
@@ -124,7 +114,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     }
 
     /**
-     * Load barchart settings and data that requires the underlying HighChart chart object
+     * Load barchart with break settings and data that requires the underlying HighChart chart object
      */
     loadBarChartWithBreakData() {
         if (this.chartData) {
@@ -175,17 +165,12 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
 
     setChart(chart: any) {
         this.chart = chart;
-        console.log('chart', this.chart)
         this.loadBarChartData();
-        this.addBreakLines();
     }
 
     setChartWithBreak(chart: any) {
         this.chartWithBreak = chart;
-        this.addBreakLines();
-        console.log('chartWithBreak', this.chartWithBreak)
         this.loadBarChartWithBreakData();
-
         this.addBreakLines();
     }
 
@@ -202,7 +187,6 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         } else {
             this.chartData.onDrillDown(event, this.chart, this.chartWithBreak, withBreak);
         }
-
     }
 
     onDrillup(event, withBreak) {
@@ -214,43 +198,24 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     }
 
     addBreakLines() {
-        let Highcharts = require('highcharts');
 
-        Highcharts.wrap(Highcharts.Axis.prototype, 'getLinePath', function (proceed, lineWidth) {
-            var axis = this,
-                path = proceed.call(this, lineWidth),
-                x = path[1],
-                y = path[2];
+        this.chartWithBreak.renderer.path([
+            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 10, 
+            'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight
+        ]).attr({
+            stroke: '#ccd6eb',
+            'stroke-width': 2,
+            zIndex: 999
+        }).add();
 
-                //console.log('wraaaaaaaaaaaaaaaaaaaaaaaaaaapppp');
-        
-                Highcharts.each(this.breakArray || [], function (brk) {
-                    //console.log('looooooooooooooopppppppp');
-                if (axis.horiz) {
-                    x = axis.toPixels(brk.from);
-                    path.splice(3, 0,
-                        'L', x - 4, y, // stop
-                        'M', x - -9, y + 5, 'L', x + 1, y - 5, // left slanted line
-                        'M', x - 1, y + 5, 'L', x + -9, y - 5, // higher slanted line
-                        'M', x + 4, y
-                    );
-                } else {
-                    y = axis.toPixels(brk.from);
-                    path.splice(3, 0,
-                        'L', x, y - 10, // stop
-                        'M', x + 6, y - 0, 'L', x - 6, y + -9, // lower slanted line
-                        'M', x, y + 4
-                    );
-                }
-            });
-            console.log('paaaaaaaaaaaaaaaaaaaaatttttttth', path);
-            return path;
-        });
-
-    }
-
-    onAfterSetExtremesY($event) {
-        console.log('event', $event )
+        this.chartWithBreak.renderer.path([
+            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 15, 
+            'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight - 5
+        ]).attr({
+            stroke: '#ccd6eb',
+            'stroke-width': 2,
+            zIndex: 999
+        }).add();
     }
 
 }

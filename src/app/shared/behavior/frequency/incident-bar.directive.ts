@@ -2,6 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from '../../../model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FrequencyIncidentBarModel, FrequencyIncidentGroup } from "app/model/frequency.model";
+import { SearchService } from './../../../services/services';
 
 @Directive({
     selector: '[frequeny-bar-incident]'
@@ -17,11 +18,12 @@ export class IncidentBarDirective {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
-            let labelHeight = 200;//((Math.ceil(this.displayText.length / BenchmarkLimitDistributionDirective.maxCharactersPerLine)) * 10);
+            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+
             this.chartComponent.addChartLabel(
                 this.displayText,
                 10,
-                this.chartComponent.chart.chartHeight - labelHeight,
+                this.chartComponent.chart.chartHeight - labelHeight + 10,
                 '#000000',
                 10,
                 null,
@@ -38,16 +40,11 @@ export class IncidentBarDirective {
     }
 
     public static defaultLineColor: string = 'black';
-
-    static maxCharactersPerLine: number = 105; //approximate max characters per line
-
-    static CLIENT_LINE: string = "Client Line";
-
     seriesColor: string[];
-
     displayText: string = '';
+    companyName: string = '';
 
-    constructor() {
+    constructor(private searchService: SearchService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -57,8 +54,17 @@ export class IncidentBarDirective {
         return this.seriesColor[seriesName] || IncidentBarDirective.defaultLineColor;
     }
 
-    ngOnInit() {
+    ngOnInit() {        
+        this.getCompanyName();
         this.buildHighChartObject();
+    }
+
+    getCompanyName() {
+        if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+            this.companyName = this.searchService.selectedCompany.companyName;
+        } else if (this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
+            this.companyName = this.searchService.searchCriteria.value;
+        }
     }
 
     getSeriesObject(groupName) {
@@ -73,7 +79,7 @@ export class IncidentBarDirective {
                 }
             case 'Company':
                 return {
-                    name: 'Company',
+                    name: this.companyName,
                     id: '',
                     type: 'scatter',
                     pointPadding: 0.2,
@@ -115,8 +121,16 @@ export class IncidentBarDirective {
             onDrillUp: null,
             customChartSettings: {
                 chart: {
-                    marginLeft: 80,
-                    spacingBottom: 0
+                    marginLeft: 80
+                },
+                title: {
+                    text: this.modelData.xAxis,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '11px'
+                    },
+                    align: 'center',
+                    y: 320
                 },
                 xAxis: {
                     type: 'category',
@@ -137,7 +151,7 @@ export class IncidentBarDirective {
                 yAxis: {
                     tickInterval: 2,
                     title: {
-                        text: 'Number of Incidents',
+                        text: this.modelData.yAxis,
                         style: {
                             fontSize: '11px'
                         }
@@ -200,6 +214,7 @@ export class IncidentBarDirective {
             },
             hasRedrawActions: true
         };
+        this.displayText = this.modelData.displayText;
 
         let groups: FrequencyIncidentGroup[] = new Array();
         let groupNames = new Array();
@@ -253,6 +268,9 @@ export class IncidentBarDirective {
 
         });
 
+
+        var defaultTitle = this.modelData.xAxis;
+
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
@@ -269,8 +287,7 @@ export class IncidentBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
-            var chartTitle = 'Type of Incident';
-            chart.setTitle({ text: chartTitle });
+            chart.setTitle({ text: defaultTitle });
         }
 
         this.onDataComplete.emit(tempChartData);
@@ -278,8 +295,7 @@ export class IncidentBarDirective {
     }
 
     buildWithBreakChart() {
-
-        let tickPosition = this.getTickPosition(500);
+        let tickPosition = this.getTickPosition(this.modelData.maxValue);
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -297,18 +313,19 @@ export class IncidentBarDirective {
                 chart: {
                     marginTop: 0,
                     marginLeft: 70,
+                    spacingBottom: 35,
                     width: 600,
                     height: 250,
                     drilled: false
                 },
                 title: {
-                    text: '',
+                    text: this.modelData.yAxis,
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 200
+                    y: 180
                 },
                 subtitle: {
                     text: false,
@@ -334,7 +351,6 @@ export class IncidentBarDirective {
                     lineWidth: 2,
                 },
                 yAxis: [
-                    //Column bars
                     {
                         max: 10,
                         min: 0,
@@ -343,11 +359,10 @@ export class IncidentBarDirective {
                         tickWidth: 0,
                         lineWidth: 2,
                         labels: {
-                            format: '{value:,.0f}',
-
+                            format: '{value:,.0f}'
                         },
                         title: {
-                            text: 'Number of Incidents',
+                            text: this.modelData.yAxis,
                             align: 'high',
                             style: {
                                 fontSize: '11px'
@@ -435,7 +450,7 @@ export class IncidentBarDirective {
                     height: 150
                 },
                 title: {
-                    text: this.modelData.chartTitle,
+                    text: '',
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
@@ -465,24 +480,35 @@ export class IncidentBarDirective {
                     lineWidth: 0,
                 },
                 yAxis: [
-                    //Column bars
                     {
-                        tickPositions: [1, 2, 3],//we can set yAxis values. This is set to 10-1000.
+                        tickPositions: tickPosition,
                         type: 'logarithmic',
                         gridLineWidth: 0,
                         tickWidth: 0,
                         lineWidth: 0,
                         labels: {
                             format: '{value:,.0f}',
+                            formatter: function() {
+                                return (this.value.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                            },
                             style: {
                                 color: 'transparent'
                             }
                         },
                         title: false
                     },
-                    //placeholder for break yaxis
                     {
-                        tickPositions: [1, 2, 3], //we can set yAxis values. This is set to 10-1000.
+                        tickPositions: tickPosition,
                         type: 'logarithmic',
                         overflow: 'justify',
                         breaks: [{
@@ -494,9 +520,20 @@ export class IncidentBarDirective {
                         tickWidth: 0,
                         lineWidth: 2,
                         labels: {
-                            format: '{value:,.0f}'
+                            formatter: function() {
+                                return (this.value.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                            }
                         },
-                        //Number of Incidents
                         title: {
                             text: '',
                             style: {
@@ -507,15 +544,26 @@ export class IncidentBarDirective {
                         offset: -0.125,
 
                     },
-                    //set color on top break yaxis and set height to fit in top of the break point.
                     {
-                        lineColor: "#ff0000",//here you can set the color
+                        lineColor: "#ff0000",
                         title: false,
                         lineWidth: 2,
-                        height: '85%',//here you can set the height
+                        height: '85%',
                         tickWidth: 0,
                         labels: {
-                            format: '{value:,.0f}',
+                            formatter: function() {
+                                return (this.value.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                            },
                             style: {
                                 color: 'transparent'
                             }
@@ -525,10 +573,10 @@ export class IncidentBarDirective {
                     }, {
                         title: false,
                         lineWidth: 2,
-                        height: '93.75%',//set break space through yaxis
+                        height: '93.75%',
                         tickWidth: 0,
                         gridLineWidth: 0,
-                        tickPositions: [1, 2, 3],//we can set yAxis values. This is set to 10-1000.
+                        tickPositions: tickPosition,
                         type: 'logarithmic',
                         breaks: [{
                             from: 1,
@@ -536,7 +584,19 @@ export class IncidentBarDirective {
                             breakSize: 1
                         }],
                         labels: {
-                            format: '{value:,.0f}',
+                            formatter: function() {
+                                return (this.value.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                            },
                             style: {
                                 color: 'transparent'
                             }
@@ -603,6 +663,8 @@ export class IncidentBarDirective {
             hasRedrawActions: true
         };
 
+        this.displayText = this.modelData.displayText;
+
         let groups: FrequencyIncidentGroup[] = new Array();
         let groupNames = new Array();
         let groupDrilldownNames = new Array();
@@ -655,6 +717,8 @@ export class IncidentBarDirective {
 
         });
 
+        var defaultTitle = this.modelData.xAxis;
+
         tempChartData.onDrillDown = function (event, chart, otherChart, withBreak) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
@@ -664,7 +728,6 @@ export class IncidentBarDirective {
                 chart.options.chart.drilled = true;
                 otherChart.options.chart.drilled = true;
                 otherChart.series[0].data[pointIndex].doDrilldown();
-                console.log('drilldown other', otherChart);
             }
 
             e.preventDefault();
@@ -672,30 +735,26 @@ export class IncidentBarDirective {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     if (withBreak) {
-                        chart.setTitle({ text: 'Types of ' + e.point.name + ' Incidents' });
+                        otherChart.setTitle({ text: 'Types of ' + e.point.name + ' Incidents' });
                     }
-
                 }
-
             });
             chart.applyDrilldown();
 
         };
 
         tempChartData.onDrillUp = function (event, chart, otherChart, withBreak) {
-            var chartTitle = 'Type of Incident';
 
             if (otherChart.options.chart.drilled &&
                 otherChart.drilldownLevels &&
                 otherChart.drilldownLevels.length > 0) {
                 chart.options.chart.drilled = false;
                 otherChart.options.chart.drilled = !withBreak;
-                console.log('drillup other', otherChart);
                 otherChart.drillUp();
             }
 
             if (withBreak) {
-                chart.setTitle({ text: chartTitle });
+                otherChart.setTitle({ text: defaultTitle });
             }
         }
 

@@ -25,6 +25,7 @@ export interface FrequencyIncidentBarModel {
     datasets: FrequencyIncidentGroup[];
     displayText: string;
     withBreak: boolean;
+    maxValue: number;
     xAxis: string;
     yAxis: string;
 }

@@ -4,7 +4,6 @@
         (load)="setChartWithBreak($event.context)"
         (drilldown)="onDrilldown($event, true)" 
         (drillup)="onDrillup($event, true)">
-            <yAxis (afterSetExtremes)="onAfterSetExtremesY($event)"></yAxis>
     </chart>
     <chart id="chart-main" class="chart-style" 
         [options]="chartOptions" 

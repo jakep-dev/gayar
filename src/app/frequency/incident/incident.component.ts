@@ -12,10 +12,12 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class IncidentComponent implements OnInit {
 
+    chartHeader:string = '';
     modelData: FrequencyIncidentBarModel;
 
     setModelData(modelData: FrequencyIncidentBarModel) {
         this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: BarChartData;
@@ -30,14 +32,15 @@ export class IncidentComponent implements OnInit {
         this.chartData = newChartData;
     }
 
-    chartComponent: BaseChart
+    private chartComponent = new BehaviorSubject<BaseChart>(null);
+    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
-        this.chartComponent = chart;
+    onChartReDraw(chart: BaseChart) {        
+        this.chartComponent.next(chart);
     }
 
     constructor(private frequencyService: FrequencyService) {
