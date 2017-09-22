@@ -14,17 +14,21 @@ export class SearchService extends BaseService {
     private _searchCriteria: SearchCriteriaModel = null;
     private _selectedCompany: CompanyModel = null;
     public get selectedCompany(): CompanyModel {
-        return this._selectedCompany;
+        return this._selectedCompany || 
+               this._sessionStorageService.getItem<CompanyModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
     }
     public set selectedCompany(companyModel: CompanyModel) {
         this._selectedCompany = companyModel;
+        this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY, companyModel);
     }
 
     public get searchCriteria(): SearchCriteriaModel {
-        return this._searchCriteria;
+        return this._searchCriteria ||
+               this._sessionStorageService.getItem<SearchCriteriaModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA);;
     }
     public set searchCriteria(searchCriteriaModel: SearchCriteriaModel) {
         this._searchCriteria = searchCriteriaModel;
+        this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA, searchCriteriaModel);
     }
 
     

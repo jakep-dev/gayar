@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService, SessionService, MenuService } from 'app/services/services';
 import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, RevenueRangeResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
-import { KmbConversionPipe } from 'app/shared/pipes/kmb-conversion/kmb-conversion.pipe';
+import { KmbConversionPipe, CommaConversionPipe } from 'app/shared/pipes/pipes';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedLimit: string;
   selectedRevenue: RevenueModel;
   selectedCompanyModel: CompanyModel;
+  loadedCompanyModel: CompanyModel;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -47,20 +48,25 @@ export class SearchComponent implements OnInit, OnDestroy {
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
+     this.loadSearchCriteria();
   }
 
   /**
    * If search criteria is already selected
    */
   loadSearchCriteria () {
-    // const selectedCompany: CompanyModel = this.searchService.selectedCompany;
-    // const searchCriteria: SearchCriteriaModel = this.searchService.searchCriteria;
-    // if (selectedCompany && searchCriteria) {
-    //   let searchByModel: SearchByModel =  this.searchByList.find(f=>f.type === searchCriteria.type);
-    //   this.selectedSearchType = searchCriteria.type
-    //   this.selectedSearchValue = searchCriteria.value;
-    //   this.isTriggerSearch.next(true);
-    // }
+     if (this.searchService.searchCriteria) {
+        this.selectedSearchType = this.searchService.searchCriteria.type
+        this.selectedSearchValue = this.searchService.searchCriteria.value;
+        this.selectedPremium = new CommaConversionPipe().transform(this.searchService.searchCriteria.premium);
+        this.selectedRetention = new CommaConversionPipe().transform(this.searchService.searchCriteria.retention);
+        this.selectedLimit = new CommaConversionPipe().transform(this.searchService.searchCriteria.limit);
+     }
+
+     if(this.searchService.selectedCompany) {
+       this.loadedCompanyModel = this.searchService.selectedCompany;
+       this.isTriggerSearch.next(true);
+     }
   }
 
   /**
@@ -197,6 +203,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   loadSearchBy(){
     this.searchService.getSearchBy().subscribe(res=>{
        this.searchByList = res;
+       if(this.searchService.searchCriteria) {
+         this.selectedSearchBy = this.searchByList.find(f=>f.type === this.searchService.searchCriteria.type).id;
+       }
        this.calcPlaceHolderForSearchValue();
     });
   }
@@ -210,6 +219,11 @@ export class SearchComponent implements OnInit, OnDestroy {
        this.revenueModellist.forEach((revenue, index)=>{
           revenue.id = index + 1;
       });
+      if(this.searchService.searchCriteria && 
+         this.searchService.searchCriteria.type === 'SEARCH_BY_MANUAL_INPUT') {
+          this.selectedRevenue = this.revenueModellist.find(f=>f.id === this.searchService.searchCriteria.revenue.id);
+          console.log('SelectedRevenue ', this.selectedRevenue);
+      }
     });
   }
 
@@ -224,6 +238,11 @@ export class SearchComponent implements OnInit, OnDestroy {
           f.displayName = `${f.naics} ${f.naicsDescription}`;
         });
        }
+
+       if(this.searchService.searchCriteria && 
+        this.searchService.searchCriteria.type === 'SEARCH_BY_MANUAL_INPUT') {
+         this.selectedIndustry = this.industryList.find(f=>f.naics === this.searchService.searchCriteria.industry.naics);
+     }
     });
   }
 
