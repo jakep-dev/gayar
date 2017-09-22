@@ -77,3 +77,23 @@ export interface FrequencyLossGroup {
     type: string;
     sub_type: string;
 }
+
+export interface FrequencyIncidentPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : DataSetsGroup[];
+}
+
+export interface DataSetsGroup{
+    pct_count: string;
+    sub_type: string;
+    type: string;
+}
+
+export interface FrequencyIncidentPieFlipData {
+    searchType: string;
+    companyId: number;
+    naics: string;
+    revenueRange: string;
+}

@@ -65,6 +65,10 @@
             {
                 "name": "getTypeOfLossBarData",
                 "contract": "/cybermetrix/chart/frequency/getTypeOfLossDisplayDetailDataset"
+            },
+            {
+                "name": "getTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentFlipDetailDataset"
             }
         ]
     },
