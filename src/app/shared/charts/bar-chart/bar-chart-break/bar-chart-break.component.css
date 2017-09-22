@@ -1,0 +1,13 @@
+.chart-holder {
+    float: left;
+    min-height: 275px;
+    overflow:visible;
+    width: 100%;
+    z-index: 4;
+    height:400px;
+}
+
+.chart-style {
+    margin: 0 auto;
+}
+

@@ -3,16 +3,28 @@
     <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">       
         <div front  *ngIf="frequencyIndustryOverviewInput">
             <app-industry-overview [componentData]="frequencyIndustryOverviewInput"></app-industry-overview>
-        </div>     
+        </div>
+    </div>
+    <!-- Each 2 Chart Display -->
+    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
         <div>
-            <app-tile [title]="'Tile 2'" [isSplittable]="false" [isFlippable]="false">
+            <app-tile [title]="'Type of Loss'" [isSplittable]="false" [isFlippable]="true">
                 <div front>
-                    Row 1 Tile 2 Chart 2 Place Holder
+                    Type of Loss Bar
+                </div>
+                <div back>
+                    Type of Loss Pie
+                </div>
+            </app-tile>
+        </div>
+        <div>
+            <app-tile [title]="'Time Period'" [isSplittable]="false" [isFlippable]="false">
+                <div front>
+                    Time Period Bar
                 </div>
             </app-tile>
         </div>
     </div>
-    <!-- Each 2 Chart Display -->
 </div>
 <div>
     <app-tile [title]="'5 Most Recent Peer Group'">

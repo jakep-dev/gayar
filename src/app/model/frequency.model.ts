@@ -39,3 +39,22 @@ export interface FrequencyIndustryOverviewInput {
     naics: string;
 
 }
+
+export interface FrequencyIncidentBarModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: FrequencyIncidentGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface FrequencyIncidentGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
+}

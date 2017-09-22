@@ -35,6 +35,23 @@ export class FrequencyRouter extends BaseRoute {
                 'companyId': req.body.companyId,
                 'naics': req.body.naics,
                  'ssnid': req.body.token
+                }, (data)=>{
+                    res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }    
+                 
+    //Get Type of Incident Bar
+    public getTypeOfIncidentBarData(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getTypeOfIncidentBarData", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
             }, (data)=>{
                 res.send(data);
             });
@@ -48,5 +65,6 @@ export class FrequencyRouter extends BaseRoute {
     init() {
         this.app.post('/api/getFrequencyData', this.getFrequencyData);
         this.app.post('/api/getIndustryOverviewDisplayDataset', this.getFrequencyIndustryOverview);
+        this.app.post('/api/getTypeOfIncidentBarData', this.getTypeOfIncidentBarData);
     }
 }

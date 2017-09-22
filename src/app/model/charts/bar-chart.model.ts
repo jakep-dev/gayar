@@ -12,4 +12,14 @@ export interface BarChartData {
     customChartSettings: any;
     //Indicate if there are any post render actions needed
     hasRedrawActions: boolean;
+    
+    //inidcate if has break
+    withBreak?: boolean;
+    breakChartSettings?: any;
+
+    //Drilldown optional properties
+    drilldown?: any;
+    drillUpText?: string;
+    onDrillDown?: any;
+    onDrillUp?: any;
 }
