@@ -59,6 +59,25 @@ export interface FrequencyIncidentGroup {
     sub_type: string;
 }
 
+export interface FrequencyLossBarModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: FrequencyLossGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface FrequencyLossGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
+}
+
 export interface FrequencyIncidentPieFlipModel{
     chartTitle: string;
     filterDescription: string;

@@ -1,0 +1,18 @@
+<div *ngIf='modelData'>
+    <bar-chart *ngIf='!modelData?.withBreak' 
+        frequeny-bar-loss
+        [modelData]="modelData" 
+        [chartData]="chartData" 
+        [chartComponent]="chartComponent$ | async"
+        (onDataComplete)="onDataComplete($event)" 
+        (onChartRedraw)="onChartReDraw($event)">
+    </bar-chart>
+    <bar-chart-with-break *ngIf='modelData?.withBreak' 
+        frequeny-bar-loss 
+        [modelData]="modelData" 
+        [chartData]="chartData"
+        [chartComponent]="chartComponent$ | async" 
+        (onDataComplete)="onDataComplete($event)" 
+        (onChartRedraw)="onChartReDraw($event)">
+    </bar-chart-with-break>
+</div>
