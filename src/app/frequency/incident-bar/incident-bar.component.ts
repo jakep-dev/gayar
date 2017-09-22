@@ -6,11 +6,11 @@ import { FrequencyService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
-    selector: 'app-incident',
-    templateUrl: './incident.component.html',
-    styleUrls: ['./incident.component.css']
+    selector: 'app-incident-bar',
+    templateUrl: './incident-bar.component.html',
+    styleUrls: ['./incident-bar.component.css']
 })
-export class IncidentComponent implements OnInit {
+export class IncidentBarComponent implements OnInit {
 
     chartHeader:string = '';
     modelData: FrequencyIncidentBarModel;
