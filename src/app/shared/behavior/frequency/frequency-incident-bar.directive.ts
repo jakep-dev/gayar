@@ -7,7 +7,7 @@ import { SearchService } from './../../../services/services';
 @Directive({
     selector: '[frequeny-bar-incident]'
 })
-export class IncidentBarDirective {
+export class FrequencyIncidentBarDirective {
 
     @Input() modelData: FrequencyIncidentBarModel;
 
@@ -51,7 +51,7 @@ export class IncidentBarDirective {
     }
 
     private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || IncidentBarDirective.defaultLineColor;
+        return this.seriesColor[seriesName] || FrequencyIncidentBarDirective.defaultLineColor;
     }
 
     ngOnInit() {        
