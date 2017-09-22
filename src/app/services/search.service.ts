@@ -37,6 +37,8 @@ export class SearchService extends BaseService {
     }
 
     public clearSearchCookies () {
+        this.searchCriteria = null;
+        this.selectedCompany = null;
         this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
         this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA);
     }
