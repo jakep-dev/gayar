@@ -1,3 +1,7 @@
 <div style="min-height: 275px;">
-    <chart [options]="chartOptions" (load)="setChart($event.context)" (redraw)="onRedraw($event.context)"></chart>
+    <chart [options]="chartOptions" 
+        (load)="setChart($event.context)" 
+        (redraw)="onRedraw($event.context)"
+        (drilldown)="onDrilldown($event, chart)" 
+        (drillup)="onDrillup($event, chart)"></chart>
 </div>

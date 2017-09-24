@@ -49,6 +49,22 @@
             {
                 "name": "checkForRevenueAndIndustry",
                 "contract": "/cybermetrix/util/peergroupValidation"
+            },
+            {
+                "name": "getFrequencyData",
+                "contract": "/cybermetrix/chart/frequency/getFrequencyList"
+            },
+            {
+                "name": "getTypeOfIncidentBarData",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentDisplayDetailDataset"
+            },
+            {
+                "name": "getTypeOfLossBarData",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfLossDisplayDetailDataset"
+            },
+            {
+                "name": "getTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentFlipDetailDataset"
             }
         ]
     },

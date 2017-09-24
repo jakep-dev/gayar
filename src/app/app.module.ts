@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
+import { BLOCK_FREQUENCY } from './frequency/frequency';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
@@ -37,6 +38,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     AppComponent,
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
+    BLOCK_FREQUENCY,
     MenuComponent,
     SearchComponent,  
     SsoComponent,
