@@ -20,7 +20,7 @@
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
           </button>
-          <button md-button routerLink="/frequency" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Frequency');"
+          <button md-button routerLink="/frequency" [disabled]="true" (click)="onMenu('Frequency');"
             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
             <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
@@ -55,7 +55,7 @@
           <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
           </button>
-          <button md-button routerLink="/frequency" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Frequency');" routerLinkActive="active">
+          <button md-button routerLink="/frequency" [disabled]="true" (click)="onMenu('Frequency');" routerLinkActive="active">
                 <md-icon class="md-18">wifi</md-icon>
           </button>
           <button md-button (click)="onMenu()" [disabled]="true">
