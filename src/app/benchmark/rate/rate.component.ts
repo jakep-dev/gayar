@@ -56,8 +56,13 @@ export class RateComponent implements OnInit {
      */
     getBenchmarkRateData() {
         if(this.componentData) {
-            this.benchmarkService.getRatePerMillion(this.componentData.companyId, this.componentData.premiumValue, this.componentData.limitValue, this.componentData.revenueRange, this.componentData.naics)
-            .subscribe(modelData => this.setModelData(modelData));            
+            if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.benchmarkService.getRatePerMillion(this.componentData.companyId, this.componentData.premiumValue, this.componentData.limitValue, null, null)
+                .subscribe(modelData => this.setModelData(modelData));
+            } else {
+                this.benchmarkService.getRatePerMillion(null, this.componentData.premiumValue, this.componentData.limitValue, this.componentData.revenueRange, this.componentData.naics)
+                .subscribe(modelData => this.setModelData(modelData));
+            }      
         }
     }
 

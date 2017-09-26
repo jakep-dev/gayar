@@ -73,11 +73,13 @@ export class BenchmarkComponent implements OnInit {
      * create rate per million chart input
      */
     setupRateInput() {
+        let searchType = this.searchService.searchCriteria.type;
         let companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
         let naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
         let revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.id)? this.searchService.searchCriteria.revenue.id + '' : null; 
 
         this.benchmarkRateInput = {
+            searchType: searchType,
             companyId: companyId,
             premiumValue: (this.searchService.searchCriteria.premium && this.searchService.searchCriteria.premium != '0')? this.searchService.searchCriteria.premium: null,
             limitValue: (this.searchService.searchCriteria.limit && this.searchService.searchCriteria.limit != '0')? this.searchService.searchCriteria.limit: null,
