@@ -74,4 +74,17 @@ export class FrequencyService extends BaseService {
 
         }
     }
+    
+    public getTimePeriodData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getTimePeriodData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
+    }
 }

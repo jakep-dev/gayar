@@ -94,6 +94,23 @@ export class FrequencyRouter extends BaseRoute {
             Logger.error(e);
         }
     }
+    
+    //Get Time Period
+    public getTimePeriodData(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getTimePeriodData", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }
 
     //Initialize all the api call endpoints
     init() {
@@ -102,5 +119,6 @@ export class FrequencyRouter extends BaseRoute {
         this.app.post('/api/getTypeOfIncidentBarData', this.getTypeOfIncidentBarData);
         this.app.post('/api/getTypeOfLossBarData', this.getTypeOfLossBarData);
         this.app.post('/api/getTypeOfIncidentFlipDetailDataset', this.getTypeOfIncidentFlipDetailDataset);
+        this.app.post('/api/getTimePeriodData', this.getTimePeriodData);
     }
 }
