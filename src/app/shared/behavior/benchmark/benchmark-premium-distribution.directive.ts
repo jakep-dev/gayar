@@ -67,7 +67,11 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
     }   
     
     getCompanyName() {
-        if(this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
+        if (this.searchService.searchCriteria &&
+            this.searchService.searchCriteria.type &&
+            this.searchService.searchCriteria.type !== 'SEARCH_BY_MANUAL_INPUT' &&
+            this.searchService.selectedCompany && 
+            this.searchService.selectedCompany.companyName) {
             this.companyName = this.searchService.selectedCompany.companyName;
         } else if(this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
             this.companyName = this.searchService.searchCriteria.value;

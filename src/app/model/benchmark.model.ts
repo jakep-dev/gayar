@@ -33,6 +33,7 @@ export interface BenchmarkLimitAdequacyInput {
 }
 
 export interface BenchmarkRateInput {
+    searchType: string;
     companyId: number;
     premiumValue: string;
     limitValue: string;
