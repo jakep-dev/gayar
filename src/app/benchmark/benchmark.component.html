@@ -46,13 +46,13 @@
         <div *ngIf="benchmarkDistributionInput">
             <app-retention [componentData]="benchmarkDistributionInput"></app-retention>
         </div>
-        <div *ngIf="benchmarkLimitAdequacyInput">
-            <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+        <div *ngIf="benchmarkRateInput">
+            <app-rate [componentData]="benchmarkRateInput"></app-rate>
         </div>
     </div>
     <div fxLayout="row" fxLayout.md="column"  fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
-        <div *ngIf="benchmarkRateInput">
-            <app-rate [componentData]="benchmarkRateInput"></app-rate>
+        <div *ngIf="benchmarkLimitAdequacyInput">
+            <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
         </div>
     </div>
     <!-- Each 2 Chart Display -->
