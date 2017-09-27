@@ -6,6 +6,7 @@ import { BenchmarkPeerGroupLossDistributionDirective } from './benchmark/benchma
 import { BenchmarkScoreDirective } from './dashboard/benchmark-score.directive';
 
 import { FrequencyIndustryOverviewDirective } from './frequency/frequency-industry-overview.directive';
+import { FrequencyTimePeriodDirective } from './frequency/frequency-time-period.directive';
 import { FrequencyIncidentBarDirective } from './frequency/frequency-incident-bar.directive';
 import { FrequencyLossBarDirective } from './frequency/frequency-loss-bar.directive';
 import { FrequencyIncidentPieDirective } from './frequency/frequency-incident-pie.directive';
@@ -18,6 +19,7 @@ export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPeerGroupLossDistributionDirective,
     BenchmarkScoreDirective,
     FrequencyIndustryOverviewDirective,
+    FrequencyTimePeriodDirective,
     FrequencyIncidentBarDirective,
     FrequencyIncidentPieDirective,
     FrequencyLossBarDirective
