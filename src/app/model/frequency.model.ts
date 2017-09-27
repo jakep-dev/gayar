@@ -97,3 +97,20 @@ export interface FrequencyIncidentPieFlipData {
     naics: string;
     revenueRange: string;
 }
+
+export interface FrequencyTimePeriodModel {    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: FrequencyTimePeriodGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface FrequencyTimePeriodGroup{
+    period: number;
+    count: number;
+    compOrPeer: string;
+}
