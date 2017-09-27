@@ -74,15 +74,15 @@
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
               <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedPremium" autofocus  kmbConversion  type="text" placeholder="Enter Premium">
+                <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onValidation()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
              <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
-              <input mdInput [(ngModel)]="selectedLimit" autofocus kmbConversion type="text" placeholder="Enter Limit">
+              <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onValidation()" autofocus kmbConversion type="text" placeholder="Enter Limit">
               </md-input-container>
 
              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedRetention" autofocus kmbConversion type="text" placeholder="Enter Retention">
+                <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onValidation()" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
           </div>
       </div>

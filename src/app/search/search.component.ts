@@ -93,7 +93,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  onValidation(){
+  onValidation () {
+    this.clearSearchCriteria();
     if(this.isManual){
       this.isActionEnabled = (this.selectedIndustry &&
                               this.selectedRevenue &&
@@ -106,10 +107,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
+  }
 
+  clearSearchCriteria () {
     if(this.searchService.searchCriteria || this.searchService.selectedCompany){
+      if(this.searchService.selectedCompany) {
+        this.loadedCompanyModel = null;
+        this.selectedCompanyModel = this.searchService.selectedCompany;
+      }
       this.searchService.clearSearchCookies();
-      this.snackBarService.Simple('As you made changes to search criteria, please choose Assessment/Report action.');
+      this.snackBarService.Simple('Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.');
     }
   }
 
