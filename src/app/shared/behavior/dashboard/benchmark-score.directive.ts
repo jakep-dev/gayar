@@ -18,12 +18,12 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
             this.chartComponent = changes['chartComponent'].currentValue;
             this.chartComponent.addChartLabel(
                 this.displayText,
-                10,
-                this.chartComponent.chart.chartHeight - 30,
+                95,
+                this.chartComponent.chart.chartHeight - 60,
                 '#000000',
                 10,
                 null,
-                500
+                400
             );
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png',
@@ -85,8 +85,8 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                     },
                     title: null,
                     pane: {
-                        center: ['50%', '85%'],
-                        size: '140%',
+                        center: ['50%', '80%'],
+                        size: '142%',
                         startAngle: -90,
                         endAngle: 90,
                         background: {
