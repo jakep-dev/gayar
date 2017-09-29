@@ -1,4 +1,5 @@
 export interface FrequencyInput {
+    searchType: string;
     companyId: number;
     naics: string;
     revenueRange: string;
@@ -110,7 +111,9 @@ export interface FrequencyTimePeriodModel {
 }
 
 export interface FrequencyTimePeriodGroup{
-    period: number;
+    period: string;
     count: number;
     compOrPeer: string;
+    ruleTypeCode: string;
+    ruleTypeSubCode: number;
 }

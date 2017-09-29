@@ -60,11 +60,13 @@ export class FrequencyComponent implements OnInit {
     }
     
     setupFrequencyInput() {
+        let searchType = this.searchService.searchCriteria.type;
         this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
         this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
         this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
 
         this.frequencyInput = {
+            searchType: searchType,
             companyId: this.companyId,
             naics: this.naics,
             revenueRange: this.revenueRange
