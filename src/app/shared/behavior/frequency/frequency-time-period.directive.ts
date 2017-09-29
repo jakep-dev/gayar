@@ -267,6 +267,7 @@ export class FrequencyTimePeriodDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
+                    className: 'time-below1',
                     drilled: false
                 },
                 title: {
@@ -398,7 +399,8 @@ export class FrequencyTimePeriodDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'time-upper1'
                 },
                 title: {
                     text: '',
