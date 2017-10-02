@@ -18,7 +18,6 @@ export class FrequencyIncidentBarDirective {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
-            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
             
             if(this.modelData.datasets && this.modelData.datasets.length > 0) {
                 if(this.displayText && this.displayText.length > 0) {
