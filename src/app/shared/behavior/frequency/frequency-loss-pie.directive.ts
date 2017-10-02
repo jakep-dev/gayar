@@ -1,14 +1,14 @@
-import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { BaseChart } from './../../charts/base-chart';
-import { FrequencyIncidentPieFlipModel, PieChartData } from 'app/model/model';
+import { Directive, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { PieChartData, FrequencyLossPieFlipModel } from 'app/model/model';
+import { BaseChart } from 'app/shared/charts/base-chart';
 
 @Directive({
-  selector: '[frequency-incident-pie]'
+  selector: '[frequency-loss-pie]'
 })
-export class FrequencyIncidentPieDirective {
+export class FrequencyLossPieDirective {
 
   
-  @Input() modelData: FrequencyIncidentPieFlipModel;
+  @Input() modelData: FrequencyLossPieFlipModel;
 
   @Output() onDataComplete = new EventEmitter<PieChartData>();
 
@@ -294,21 +294,21 @@ export class FrequencyIncidentPieDirective {
 
   setDrilldownUpText(){
     return '< <span style="font-size:9px"> Back to all Types<br/>' +
-           '<span style="font-size:9px"> of Incidents</span>';
+           '<span style="font-size:9px"> of Losses</span>';
   }
 
   buildSeriesColor(){
     this.seriesColor = [];
-    this.seriesColor[0] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
-    this.seriesColor[1] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
-    this.seriesColor[2] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
-    this.seriesColor[3] = FrequencyIncidentPieDirective.ORANGE; //'#F68C20'
-    this.seriesColor[4] = FrequencyIncidentPieDirective.DGRAY; //'#464646'
-    this.seriesColor[5] = FrequencyIncidentPieDirective.LGRAY; //'#CCCCCC'
+    this.seriesColor[0] = FrequencyLossPieDirective.BLUE ; //'#487AA1'
+    this.seriesColor[1] = FrequencyLossPieDirective.GREEN; //'#B1D23B'
+    this.seriesColor[2] = FrequencyLossPieDirective.CYAN; //'#27A9BC'
+    this.seriesColor[3] = FrequencyLossPieDirective.ORANGE; //'#F68C20'
+    this.seriesColor[4] = FrequencyLossPieDirective.DGRAY; //'#464646'
+    this.seriesColor[5] = FrequencyLossPieDirective.LGRAY; //'#CCCCCC'
   }
 
   private getSeriesColor(index: any) {
-        return this.seriesColor[index] || FrequencyIncidentPieDirective.defaultLineColor;
+        return this.seriesColor[index] || FrequencyLossPieDirective.defaultLineColor;
     }
 
 

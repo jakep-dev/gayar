@@ -45,6 +45,19 @@
             </app-tile>
         </div>
     </div>
+    <!-- Temp Type of Losses Pie Charts  -->
+    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
+        <div>
+            <app-tile [title]="'Type of Losses'" [isSplittable]="true" [isFlippable]="true">
+                <div front>
+                    <app-loss-pie [componentData]="getFrequencyLossFlipManualInput"></app-loss-pie>
+                </div>
+                <div back>
+                    Type of Losses Pie
+                </div>
+            </app-tile>
+        </div>
+    </div>
 </div>
 <div>
     <app-tile [title]="'5 Most Recent Peer Group'">

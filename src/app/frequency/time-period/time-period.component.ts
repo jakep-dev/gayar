@@ -55,8 +55,13 @@ export class TimePeriodComponent implements OnInit {
      */
     getBenchmarkLimitData() {
         if (this.componentData) {
-            this.frequencyService.getTimePeriodData(this.componentData.companyId, this.componentData.naics, this.componentData.revenueRange)
+            if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+                this.frequencyService.getTimePeriodData(this.componentData.companyId, this.componentData.naics, this.componentData.revenueRange)
                 .subscribe(modelData => this.setModelData(modelData));
+            } else {
+                this.frequencyService.getTimePeriodData(null, this.componentData.naics, this.componentData.revenueRange)
+                .subscribe(modelData => this.setModelData(modelData));
+            }
 
         }
     }

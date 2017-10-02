@@ -87,4 +87,17 @@ export class FrequencyService extends BaseService {
 
         }
     }
+
+    public getTypeOfLossFlipDetailDataset(companyId: number, naics_description: string, revenue_range: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getTypeOfLossFlipDetailDataset', {
+                'companyId': companyId,
+                'naics_description': naics_description,
+                'revenue_range': revenue_range
+           });
+        }
+        catch(e){
+
+        }
+    }
 }

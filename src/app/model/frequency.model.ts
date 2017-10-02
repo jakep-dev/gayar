@@ -1,4 +1,5 @@
 export interface FrequencyInput {
+    searchType: string;
     companyId: number;
     naics: string;
     revenueRange: string;
@@ -110,7 +111,29 @@ export interface FrequencyTimePeriodModel {
 }
 
 export interface FrequencyTimePeriodGroup{
-    period: number;
+    period: string;
     count: number;
     compOrPeer: string;
+    ruleTypeCode: string;
+    ruleTypeSubCode: number;
+}
+
+export interface FrequencyLossPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : DataLossPieSetsGroup[];
+}
+
+export interface DataLossPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}
+
+export interface FrequencyLossPieFlipData {
+    searchType: string;
+    companyId: number;
+    naics: string;
+    revenueRange: string;
 }

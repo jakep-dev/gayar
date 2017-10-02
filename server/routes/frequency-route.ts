@@ -112,6 +112,23 @@ export class FrequencyRouter extends BaseRoute {
         }
     }
 
+    //Get Incident flip pie chart details
+    public getTypeOfLossFlipDetailDataset(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getTypeOfLossFlipDetailDataset", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics_description': req.body.naics_description,
+                'revenue_range': req.body.revenueRange,
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }
+
     //Initialize all the api call endpoints
     init() {
         this.app.post('/api/getFrequencyData', this.getFrequencyData);
@@ -120,5 +137,6 @@ export class FrequencyRouter extends BaseRoute {
         this.app.post('/api/getTypeOfLossBarData', this.getTypeOfLossBarData);
         this.app.post('/api/getTypeOfIncidentFlipDetailDataset', this.getTypeOfIncidentFlipDetailDataset);
         this.app.post('/api/getTimePeriodData', this.getTimePeriodData);
+        this.app.post('/api/getTypeOfLossFlipDetailDataset', this.getTypeOfLossFlipDetailDataset);
     }
 }
