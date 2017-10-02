@@ -10,6 +10,7 @@ import { FrequencyTimePeriodDirective } from './frequency/frequency-time-period.
 import { FrequencyIncidentBarDirective } from './frequency/frequency-incident-bar.directive';
 import { FrequencyLossBarDirective } from './frequency/frequency-loss-bar.directive';
 import { FrequencyIncidentPieDirective } from './frequency/frequency-incident-pie.directive';
+import { FrequencyLossPieDirective } from 'app/shared/behavior/frequency/frequency-loss-pie.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,
@@ -22,5 +23,6 @@ export const BLOCK_CHART_BEHAVIORS = [
     FrequencyTimePeriodDirective,
     FrequencyIncidentBarDirective,
     FrequencyIncidentPieDirective,
-    FrequencyLossBarDirective
+    FrequencyLossBarDirective,
+    FrequencyLossPieDirective
 ];
