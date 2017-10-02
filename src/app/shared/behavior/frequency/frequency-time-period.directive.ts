@@ -18,24 +18,29 @@ export class FrequencyTimePeriodDirective {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
-            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
 
-            this.chartComponent.addChartLabel(
-                this.displayText,
-                10,
-                this.chartComponent.chart.chartHeight - labelHeight + 10,
-                '#000000',
-                10,
-                null,
-                this.chartComponent.chart.chartWidth - 85
-            );
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png',
-                this.chartComponent.chart.chartWidth - 80,
-                this.chartComponent.chart.chartHeight - 20,
-                69,
-                17
-            );
+            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+                if(this.displayText && this.displayText.length > 0) {
+                    let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+                    
+                    this.chartComponent.addChartLabel(
+                        this.displayText,
+                        10,
+                        this.chartComponent.chart.chartHeight - labelHeight,
+                        '#000000',
+                        10,
+                        null,
+                        this.chartComponent.chart.chartWidth - 85
+                    );
+                }
+                this.chartComponent.addChartImage(
+                    'https://www.advisen.com/img/advisen-logo.png',
+                    this.chartComponent.chart.chartWidth - 80,
+                    this.chartComponent.chart.chartHeight - 20,
+                    69,
+                    17
+                );
+            }
         }
     }
 
@@ -60,8 +65,12 @@ export class FrequencyTimePeriodDirective {
     }
 
     getCompanyName() {
-        if (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) {
-            this.companyName = this.searchService.selectedCompany.companyName;
+        if (this.searchService.searchCriteria &&
+            this.searchService.searchCriteria.type &&
+            this.searchService.searchCriteria.type !== 'SEARCH_BY_MANUAL_INPUT' &&
+            this.searchService.selectedCompany && 
+            this.searchService.selectedCompany.companyName) {
+                this.companyName = this.searchService.selectedCompany.companyName;
         } else if (this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
             this.companyName = this.searchService.searchCriteria.value;
         }
@@ -124,7 +133,7 @@ export class FrequencyTimePeriodDirective {
                     marginLeft: 80
                 },
                 title: {
-                    text: this.modelData.xAxis,
+                    text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
@@ -221,6 +230,51 @@ export class FrequencyTimePeriodDirective {
         let groupDrilldownNames = new Array();
         let series = {};
         var defaultTitle = this.modelData.xAxis;
+
+        this.modelData.datasets.forEach(eachData => {
+            if (!groupNames.join(',').includes(eachData.compOrPeer)) {
+                groupNames.push(eachData.compOrPeer);
+            }
+        });
+
+        groupNames = groupNames.reverse();        
+        groupNames.forEach(name => {
+            let mainGroup = this.modelData.datasets.filter(
+                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS'
+            );
+
+            if (mainGroup && mainGroup.length > 0) {
+                let series = this.getSeriesObject(name);
+                series.data = mainGroup.map(eachGroup => {
+                    return {
+                        name: eachGroup.period,
+                        drilldown: eachGroup.compOrPeer,
+                        y: eachGroup.count
+                    }
+                });
+                tempChartData.series.push(series);
+
+                mainGroup.forEach(eachMainGroup => {
+                    let detailedGroup = this.modelData.datasets.filter(
+                        eachGroup => eachGroup.compOrPeer === name && 
+                        eachGroup.ruleTypeCode === 'TPC' && 
+                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode
+                    );
+
+                    if(detailedGroup && detailedGroup.length > 0) {
+                        detailedGroup = detailedGroup.sort( eachGroup => Number(eachGroup.period));
+                        let series = this.getSeriesObject(name);
+                        series.id = eachMainGroup.period;
+                        series.data = detailedGroup.map(group => {
+                            return [
+                                group.period, group.count
+                            ];
+                        });
+                        tempChartData.drilldown.push(series);
+                    }
+                });
+            }
+        });
 
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
@@ -620,8 +674,6 @@ export class FrequencyTimePeriodDirective {
         let groupNames = new Array();
         let groupDrilldownNames = new Array();
         let series = {};
-        let segments = [3, 5, 10];
-        let currentYear = new Date().getFullYear();
 
         this.modelData.datasets.forEach(eachData => {
             if (!groupNames.join(',').includes(eachData.compOrPeer)) {
@@ -629,51 +681,45 @@ export class FrequencyTimePeriodDirective {
             }
         });
 
+        groupNames = groupNames.reverse();
         groupNames.forEach(name => {
-            groups = this.modelData.datasets.filter(
-                eachGroup => eachGroup.compOrPeer === name
+            let mainGroup = this.modelData.datasets.filter(
+                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS'
             );
 
-            if (groups && groups.length > 0) {
+            if (mainGroup && mainGroup.length > 0) {
                 let series = this.getSeriesObject(name);
-                series.data = segments.map(yearRange => {
-                    let totalCount = 0;
-                    groups.forEach(groupData => {
-                        if (groupData.period >= currentYear - yearRange) {
-                            totalCount += groupData.count
-                        }
-                    });
+                series.data = mainGroup.map(eachGroup => {
                     return {
-                        name: 'Past ' + yearRange + ' years',
-                        drilldown: 'Past ' + yearRange + ' years',
-                        y: totalCount
+                        name: eachGroup.period,
+                        drilldown: eachGroup.compOrPeer,
+                        y: eachGroup.count
                     }
                 });
-
                 tempChartData.series.push(series);
+
+                mainGroup.forEach(eachMainGroup => {
+                    let detailedGroup = this.modelData.datasets.filter(
+                        eachGroup => eachGroup.compOrPeer === name && 
+                        eachGroup.ruleTypeCode === 'TPC' && 
+                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode
+                    );
+
+                    if(detailedGroup && detailedGroup.length > 0) {
+                        detailedGroup = detailedGroup.sort( eachGroup => Number(eachGroup.period));
+                        let series = this.getSeriesObject(name);
+                        series.id = eachMainGroup.period;
+                        series.data = detailedGroup.map(group => {
+                            return [
+                                group.period, group.count
+                            ];
+                        });
+                        tempChartData.drilldown.push(series);
+                    }
+                });
             }
         });
-
-        groupNames.forEach(name => {
-            segments.forEach(yearRange => {
-                groups = this.modelData.datasets.filter(
-                    eachGroup => eachGroup.compOrPeer === name && eachGroup.period >= currentYear - yearRange
-                );
-
-                if (groups && groups.length > 0) {
-                    let series = this.getSeriesObject(name);
-                    series.id = 'Past ' + yearRange + ' years';
-                    series.data = groups.map(group => {
-                        return [
-                            group.period, group.count
-                        ];
-                    });
-                    tempChartData.drilldown.push(series);
-                }
-            });
-
-        });
-
+        
         var defaultTitle = this.modelData.xAxis;
 
         tempChartData.onDrillDown = function (event, chart, otherChart, withBreak) {
