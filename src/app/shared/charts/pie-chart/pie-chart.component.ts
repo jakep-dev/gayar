@@ -10,6 +10,7 @@ import { PieChartData } from 'app/model/model';
 export class PieChartComponent extends BaseChart implements OnInit {
 
   @Input() chartData: PieChartData;
+  onDrilldown: any = null;
 
     constructor() {
         super();
@@ -18,13 +19,13 @@ export class PieChartComponent extends BaseChart implements OnInit {
     }
 
     ngOnInit() {
-        this.initializeBarChart();
+        this.initializePieChart();
     }plot
 
     /**
      * Initialze simple Piechart settings that doens't require the underlying HighChart chart object
      */
-    initializeBarChart() {
+    initializePieChart() {
 
         this.setTitle(this.chartData.title);
         this.setSubTitle(this.chartData.subtitle);
@@ -68,24 +69,17 @@ export class PieChartComponent extends BaseChart implements OnInit {
                     }
                 );
             }
+
+            if (this.chartData.onDrillDown) {
+                this.onDrilldown = this.chartData.onDrillDown;
+            }
+
             if (this.chartData.customChartSettings) {
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
                 this.chart.update(this.chartOptions, true);
             }
         }
-    }
-
-    onDrilldown(event, chart){
-        var e = event.originalEvent;
-        var drilldowns = this.chartData.customChartSettings.drilldown.series;
-        e.preventDefault();
-        drilldowns.forEach(function (p, i) {
-            if (p.id.includes(e.point.name) ) {
-                chart.addSingleSeriesAsDrilldown(e.point, p);
-            }
-        }); 
-        chart.applyDrilldown();
     }
 
     setChart(chart: any) {

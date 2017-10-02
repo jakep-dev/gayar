@@ -14,4 +14,5 @@ export interface PieChartData {
     hasRedrawActions: boolean;
 
     drilldownUpText?: any;
+    onDrillDown?: any;
 }
