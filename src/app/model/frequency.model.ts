@@ -114,3 +114,23 @@ export interface FrequencyTimePeriodGroup{
     count: number;
     compOrPeer: string;
 }
+
+export interface FrequencyLossPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : DataLossPieSetsGroup[];
+}
+
+export interface DataLossPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}
+
+export interface FrequencyLossPieFlipData {
+    searchType: string;
+    companyId: number;
+    naics: string;
+    revenueRange: string;
+}

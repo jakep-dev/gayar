@@ -6,6 +6,7 @@ import { TimePeriodComponent } from './time-period/time-period.component';
 import { IncidentBarComponent } from './incident-bar/incident-bar.component';
 import { LossBarComponent } from './loss-bar/loss-bar.component';
 import { IncidentPieComponent } from './incident-pie/incident-pie.component';
+import { LossPieComponent } from 'app/frequency/loss-pie/loss-pie.component';
 
 export const BLOCK_FREQUENCY = [
     FrequencyComponent,
@@ -13,5 +14,6 @@ export const BLOCK_FREQUENCY = [
     TimePeriodComponent,
     IncidentBarComponent,
     IncidentPieComponent,
-    LossBarComponent
+    LossBarComponent,
+    LossPieComponent
 ];

@@ -2,7 +2,7 @@ import {FrequencyInput} from '../model/model';
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService } from 'app/services/services';
-import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput, FrequencyIncidentPieFlipData } from 'app/model/model';
+import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput, FrequencyIncidentPieFlipData, FrequencyLossPieFlipData } from 'app/model/model';
 
 @Component({
     selector: 'app-frequency',
@@ -29,6 +29,7 @@ export class FrequencyComponent implements OnInit {
     revenueRange: string;
     public frequencyInput: FrequencyInput;
     public getFrequencyIncidentFlipManualInput: FrequencyIncidentPieFlipData;
+    public getFrequencyLossFlipManualInput: FrequencyLossPieFlipData;
 
     constructor(private frequencyService: FrequencyService,
         private menuService: MenuService,
@@ -43,6 +44,7 @@ export class FrequencyComponent implements OnInit {
         this.setupDistributionInput();
         this.setupFrequencyInput();
         this.setupfrequencyIncidentPieFlipInput();
+        this.setupfrequencyLossPieFlipInput();
     }
 
     loadFrequencyDataTable() {
@@ -77,6 +79,19 @@ export class FrequencyComponent implements OnInit {
     setupfrequencyIncidentPieFlipInput() {
 
         this.getFrequencyIncidentFlipManualInput = {
+            searchType: this.searchType,
+            companyId: this.companyId,
+            naics: this.industry,
+            revenueRange: this.revenue_range,
+        }
+    }
+
+    /**
+     * create loss flip chart input
+     */
+    setupfrequencyLossPieFlipInput() {
+
+        this.getFrequencyLossFlipManualInput = {
             searchType: this.searchType,
             companyId: this.companyId,
             naics: this.industry,
