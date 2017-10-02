@@ -19,23 +19,30 @@ export class FrequencyIncidentBarDirective {
         if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
             this.chartComponent = changes['chartComponent'].currentValue;
             let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
-
-            this.chartComponent.addChartLabel(
-                this.displayText,
-                10,
-                this.chartComponent.chart.chartHeight - labelHeight + 10,
-                '#000000',
-                10,
-                null,
-                this.chartComponent.chart.chartWidth - 85
-            );
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png',
-                this.chartComponent.chart.chartWidth - 80,
-                this.chartComponent.chart.chartHeight - 20,
-                69,
-                17
-            );
+            
+            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+                if(this.displayText && this.displayText.length > 0) {
+                    let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+                    
+                    this.chartComponent.addChartLabel(
+                        this.displayText,
+                        10,
+                        this.chartComponent.chart.chartHeight - labelHeight,
+                        '#000000',
+                        10,
+                        null,
+                        this.chartComponent.chart.chartWidth - 85
+                    );
+                }
+                
+                this.chartComponent.addChartImage(
+                    'https://www.advisen.com/img/advisen-logo.png',
+                    this.chartComponent.chart.chartWidth - 80,
+                    this.chartComponent.chart.chartHeight - 20,
+                    69,
+                    17
+                );
+            }
         }
     }
 
@@ -124,7 +131,7 @@ export class FrequencyIncidentBarDirective {
                     marginLeft: 80
                 },
                 title: {
-                    text: this.modelData.xAxis,
+                    text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
