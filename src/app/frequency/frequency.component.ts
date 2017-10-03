@@ -87,7 +87,7 @@ export class FrequencyComponent implements OnInit {
         this.getFrequencyIncidentFlipManualInput = {
             searchType: this.searchType,
             companyId: this.companyId,
-            naics: this.industry,
+            naics: this.naics,
             revenueRange: this.revenueRange,
         }
     }
