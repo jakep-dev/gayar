@@ -326,7 +326,7 @@ export class FrequencyTimePeriodDirective {
                     drilled: false
                 },
                 title: {
-                    text: this.modelData.yAxis,
+                    text: this.modelData.xAxis,
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
