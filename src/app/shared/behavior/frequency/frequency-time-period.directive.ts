@@ -125,7 +125,8 @@ export class FrequencyTimePeriodDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Time<br/> of Periods',
+            drillUpText: '<span style="font-size:9px">  Back to All Time </span><br/>' +
+                            '<span style="font-size:9px"> Periods</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -311,7 +312,8 @@ export class FrequencyTimePeriodDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Time<br/> of Period',
+            drillUpText: '<span style="font-size:9px">  Back to All Time </span><br/>' +
+                            '<span style="font-size:9px"> Periods</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -324,7 +326,7 @@ export class FrequencyTimePeriodDirective {
                     drilled: false
                 },
                 title: {
-                    text: this.modelData.yAxis,
+                    text: this.modelData.xAxis,
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
@@ -681,8 +683,7 @@ export class FrequencyTimePeriodDirective {
             }
         });
 
-        groupNames = groupNames.reverse();
-        groupNames.forEach(name => {
+        groupNames.sort().reverse().forEach(name => {
             let mainGroup = this.modelData.datasets.filter(
                 eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS'
             );

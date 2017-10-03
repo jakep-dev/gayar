@@ -83,9 +83,9 @@ export class FrequencyRouter extends BaseRoute {
         try{
             super.PerformGetRequest("getTypeOfIncidentFlipDetailDataset", {
                 'ssnid': req.body.token,
-                'company_id': req.body.companyId,
-                'naics_description': req.body.naics_description,
-                'revenue_range': req.body.revenueRange,
+                'company_id': req.body.company_id,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenue_range,
             }, (data)=>{
                 res.send(data);
             });
@@ -117,9 +117,9 @@ export class FrequencyRouter extends BaseRoute {
         try{
             super.PerformGetRequest("getTypeOfLossFlipDetailDataset", {
                 'ssnid': req.body.token,
-                'company_id': req.body.companyId,
-                'naics_description': req.body.naics_description,
-                'revenue_range': req.body.revenueRange,
+                'company_id': req.body.company_id,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenue_range,
             }, (data)=>{
                 res.send(data);
             });

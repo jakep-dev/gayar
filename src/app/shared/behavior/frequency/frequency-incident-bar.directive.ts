@@ -122,7 +122,8 @@ export class FrequencyIncidentBarDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Types<br/> of Incidents',
+            drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
+                            '<span style="font-size:9px"> of Incidents</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -312,7 +313,8 @@ export class FrequencyIncidentBarDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Types<br/> of Incidents',
+            drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
+                            '<span style="font-size:9px"> of Incidents</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -325,7 +327,7 @@ export class FrequencyIncidentBarDirective {
                     drilled: false
                 },
                 title: {
-                    text: this.modelData.yAxis,
+                    text: this.modelData.xAxis,
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
@@ -682,7 +684,7 @@ export class FrequencyIncidentBarDirective {
             }
         });
 
-        groupNames.forEach(name => {
+        groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
                 eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
             );

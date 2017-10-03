@@ -122,7 +122,8 @@ export class FrequencyLossBarDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Types<br/> of Loss',
+            drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
+                            '<span style="font-size:9px"> of Loss</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -312,7 +313,8 @@ export class FrequencyLossBarDirective {
             yAxisLabel: this.modelData.yAxis,
             xAxisFormatter: null,
             drilldown: [],
-            drillUpText: '< Back to all Types<br/> of Loss',
+            drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
+                            '<span style="font-size:9px"> of Loss</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -325,7 +327,7 @@ export class FrequencyLossBarDirective {
                     drilled: false
                 },
                 title: {
-                    text: this.modelData.yAxis,
+                    text: this.modelData.xAxis,
                     style: {
                         fontWeight: 'bold',
                         fontSize: '11px'
@@ -682,7 +684,7 @@ export class FrequencyLossBarDirective {
             }
         });
 
-        groupNames.forEach(name => {
+        groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
                 eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
             );

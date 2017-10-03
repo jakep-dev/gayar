@@ -62,12 +62,12 @@ export class FrequencyService extends BaseService {
         }
     }
 
-    public getTypeOfIncidentFlipDetailDataset(companyId: number, naics_description: string, revenue_range: string): Observable<any>{
+    public getTypeOfIncidentFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
         try{
             return super.Post<any>('/api/getTypeOfIncidentFlipDetailDataset', {
-                'companyId': companyId,
-                'naics_description': naics_description,
-                'revenue_range': revenue_range
+                'company_id': companyId,
+                'naics': naics,
+                'revenue_range': revenueRange
            });
         }
         catch(e){
@@ -88,12 +88,12 @@ export class FrequencyService extends BaseService {
         }
     }
 
-    public getTypeOfLossFlipDetailDataset(companyId: number, naics_description: string, revenue_range: string): Observable<any>{
+    public getTypeOfLossFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
         try{
             return super.Post<any>('/api/getTypeOfLossFlipDetailDataset', {
-                'companyId': companyId,
-                'naics_description': naics_description,
-                'revenue_range': revenue_range
+                'company_id': companyId,
+                'naics': naics,
+                'revenue_range': revenueRange
            });
         }
         catch(e){
