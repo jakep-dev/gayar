@@ -3,7 +3,7 @@ import { Injectable, HostListener } from '@angular/core';
 @Injectable()
 export class SessionStorageService  {
     constructor() {
-        
+
     }
 
     /**
@@ -12,7 +12,7 @@ export class SessionStorageService  {
      * @param value  - local storage value
      */
     public setItem(key: string, value: any) {
-        localStorage.setItem(key, JSON.stringify(value));
+        sessionStorage.setItem(key, JSON.stringify(value));
     }
 
     /**
@@ -20,7 +20,7 @@ export class SessionStorageService  {
      * @param key - local storage key
      */
     public getItem<T>(key: string){
-        const item = localStorage.getItem(key);
+        const item = sessionStorage.getItem(key);
         if(!item) {
             return null;
         }
@@ -31,7 +31,7 @@ export class SessionStorageService  {
      * Clear all the values from local storage
      */
     public clearAll(){
-        localStorage.clear();
+        sessionStorage.clear();
     }
 
     /**
@@ -39,13 +39,13 @@ export class SessionStorageService  {
      * @param key - local storage key
      */
     public removeItem (key: string) {
-        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
     }
 
     /**
      * Get the local storage max length
      */
     public maxLength () : number {
-        return localStorage.length;
+        return sessionStorage.length;
     }
 }

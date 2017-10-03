@@ -1,7 +1,7 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
-import { BaseChart } from './../../charts/base-chart';
-import { SearchService } from './../../../services/services';
+import { BaseChart } from 'app/shared/charts/base-chart';
+import { SearchService } from 'app/services/services';
 
 @Directive({
     selector: '[benchmark-limit-distribution-behavior]'
@@ -33,7 +33,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                 this.chartComponent.chart.chartHeight - 20,
                 69,
                 17
-            );            
+            );
         }
     }
 
@@ -48,7 +48,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
     seriesColor: string[];
 
     displayText: string = '';
-    
+
     constructor(private searchService: SearchService) {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
@@ -64,13 +64,13 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
     ngOnInit() {
         this.getCompanyName();
         this.buildHighChartObject();
-    }    
+    }
 
     getCompanyName() {
         if (this.searchService.searchCriteria &&
             this.searchService.searchCriteria.type &&
             this.searchService.searchCriteria.type !== 'SEARCH_BY_MANUAL_INPUT' &&
-            this.searchService.selectedCompany && 
+            this.searchService.selectedCompany &&
             this.searchService.selectedCompany.companyName) {
             this.companyName = this.searchService.selectedCompany.companyName;
         } else if(this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
@@ -125,7 +125,7 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                     groups[bucket.group] = new Array();
                     groupNames.push(bucket.group);
                 }
-                
+
                 if(bucket.label) {
                     tempChartData.categories.push(bucket.label);
                     groups[bucket.group][bucket.label] = bucket.count;

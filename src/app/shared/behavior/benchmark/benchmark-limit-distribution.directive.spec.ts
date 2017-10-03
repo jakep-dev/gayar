@@ -1,6 +1,6 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { BenchmarkLimitDistributionDirective } from './benchmark-limit-distribution.directive';
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 describe('BenchmarkLimitDistributionDirective', () => {
   let fixture: ComponentFixture<SearchService>;
