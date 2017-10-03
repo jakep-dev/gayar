@@ -19,24 +19,29 @@ export class FrequencyIncidentPieDirective {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['chartComponent'] && changes['chartComponent'].currentValue) {
       this.chartComponent = changes['chartComponent'].currentValue;
-      let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
-
-      this.chartComponent.addChartLabel(
-        this.displayText,
-        10,
-        this.chartComponent.chart.chartHeight - labelHeight + 10,
-        '#000000',
-        10,
-        null,
-        this.chartComponent.chart.chartWidth - 85
-      );
-      this.chartComponent.addChartImage(
-        'https://www.advisen.com/img/advisen-logo.png',
-        this.chartComponent.chart.chartWidth - 80,
-        this.chartComponent.chart.chartHeight - 20,
-        69,
-        17
-      );
+      if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+        if(this.displayText && this.displayText.length > 0) {
+            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+            
+            this.chartComponent.addChartLabel(
+                this.displayText,
+                10,
+                this.chartComponent.chart.chartHeight - labelHeight,
+                '#000000',
+                10,
+                null,
+                this.chartComponent.chart.chartWidth - 85
+            );
+        }
+        
+        this.chartComponent.addChartImage(
+            'https://www.advisen.com/img/advisen-logo.png',
+            this.chartComponent.chart.chartWidth - 80,
+            this.chartComponent.chart.chartHeight - 20,
+            69,
+            17
+        );
+      }
     }
   }
 
@@ -55,6 +60,7 @@ export class FrequencyIncidentPieDirective {
   constructor() {}
 
   ngOnInit() {
+    this.setDataInDescendingOrder();
     this.buildHighChartObject();
   }
 
@@ -201,6 +207,8 @@ export class FrequencyIncidentPieDirective {
       let nameType = new Array();
       let groupNameType = new Array();
       let groups = new Array();
+      let sortSeriesInDescOrder= new Array();
+      let start_index : number;
       
       if(this.modelData.datasets && this.modelData.datasets.length > 0){
         
@@ -223,7 +231,7 @@ export class FrequencyIncidentPieDirective {
       series.startAngle = -90;
       series.data = new Array();
 
-      groupNameType.forEach((name, index) => {
+      groupNameType.forEach(name => {
 
         groups = this.modelData.datasets.filter(
           perGroup => perGroup.type === name && perGroup.sub_type === null
@@ -236,16 +244,28 @@ export class FrequencyIncidentPieDirective {
               y: item.pct_count,
               drilldown: item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: this.getSeriesColor(index)
+              color: this.getSeriesColor(item.type)
             }
           }).forEach(item => series.data.push(item));
         }
       });
-      tempChartData.series.push(series);
+      sortSeriesInDescOrder.push(series);
+
+      sortSeriesInDescOrder.forEach(function(item){
+        item.data.sort(function(a,b){
+          if(a.y < b.y){
+            return 1;
+          }else if (a.y > b.y){
+            return -1;
+          }
+          return 0;
+        });
+      });
+      
+      tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
       tempDrilldownSeries = new Array();
-      let start_index : number;
       groupNameType.forEach(name => {
         dataDrilldownSeries = new Object();
         dataDrilldownSeries.data = new Array();
@@ -283,6 +303,17 @@ export class FrequencyIncidentPieDirective {
     }
   }
 
+  setDataInDescendingOrder(){
+    this.modelData.datasets.sort(function(a,b){
+      if(a.pct_count < b.pct_count){
+            return 1;
+      }else if (a.pct_count > b.pct_count){
+        return -1;
+      }
+      return 0;
+    });
+  }
+
   setDataLabelsDistance(groupNameType, pct_count){
     if(groupNameType && groupNameType.length >= 2){
       var dataLabels = {
@@ -299,6 +330,14 @@ export class FrequencyIncidentPieDirective {
 
   buildSeriesColor(){
     this.seriesColor = [];
+
+    //for series order
+    this.seriesColor['Data Privacy'] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
+    this.seriesColor['Network Security'] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
+    this.seriesColor['Privacy Violations'] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
+    this.seriesColor['Tech E&O'] = FrequencyIncidentPieDirective.ORANGE; //'#F68C20'
+    
+    //for drilldown order
     this.seriesColor[0] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
     this.seriesColor[1] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
     this.seriesColor[2] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
