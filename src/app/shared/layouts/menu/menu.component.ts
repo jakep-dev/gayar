@@ -9,18 +9,18 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  
+
   isFullScreen: boolean;
   searchCompanyName: string;
   showShortMenu: boolean = true;
   isMenuLock: boolean = false;
   sideNavMode: string = 'side';
-  constructor(private menuService: MenuService, 
+  constructor(private menuService: MenuService,
               private searchService: SearchService,
-              private sessionService: SessionService) { 
-      
+              private sessionService: SessionService) {
+
   }
-  
+
   ngOnInit() {
     this.sideNavMode = "side";
   }
@@ -42,13 +42,27 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  /**
+   * Validates whether there is a valid search criteria or not.  
+   */
   isSearchCriteriaValid () : boolean {
     return this.searchService.hasValidSearchCriteria();
   }
 
+  /**
+   * Get the search company name
+   * to display on the header.
+   */
   getSearchCompanyName () : string {
-    return this.searchService.selectedCompany ? 
-          this.searchService.selectedCompany.companyName : '';
+    if(this.searchService.selectedCompany) {
+      return this.searchService.selectedCompany.companyName;
+    }
+
+    if(this.searchService.searchCriteria) {
+      return this.searchService.searchCriteria.value;
+    }
+
+    return null;
   }
 
   shortMenuMouseLeave(){
