@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-     this.menuService.breadCrumb = 'Company Search';
+     this.menuService.breadCrumb = 'Search';
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
@@ -181,24 +181,24 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}  description
    */
 
-  private _setSelectedSearchCriteria () { 
+  private _setSelectedSearchCriteria () {
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
-    let limit = new KmbConversionPipe().transform(this.selectedLimit); 
-    let premium = new KmbConversionPipe().transform(this.selectedPremium); 
-    let retention = new KmbConversionPipe().transform(this.selectedRetention); 
+    let limit = new KmbConversionPipe().transform(this.selectedLimit);
+    let premium = new KmbConversionPipe().transform(this.selectedPremium);
+    let retention = new KmbConversionPipe().transform(this.selectedRetention);
 
-    this.searchService.searchCriteria = { 
-      type: this.selectedSearchType, 
-      value: this.selectedSearchValue, 
-      industry: this.selectedIndustry, 
-      revenue: revenueModel ? revenueModel : null, 
-      limit: (limit || limit === 0)? limit.toString() : null, 
-      premium: (premium || premium === 0)? premium.toString(): null, 
-      retention: (retention || retention === 0)? retention.toString(): null 
+    this.searchService.searchCriteria = {
+      type: this.selectedSearchType,
+      value: this.selectedSearchValue,
+      industry: this.selectedIndustry,
+      revenue: revenueModel ? revenueModel : null,
+      limit: (limit || limit === 0)? limit.toString() : null,
+      premium: (premium || premium === 0)? premium.toString(): null,
+      retention: (retention || retention === 0)? retention.toString(): null
     };
 
-    if(!this.isManual){ 
-      this.searchService.selectedCompany = this.selectedCompanyModel; 
+    if(!this.isManual){
+      this.searchService.selectedCompany = this.selectedCompanyModel;
     }
   }
 
@@ -231,7 +231,7 @@ export class SearchComponent implements OnInit, OnDestroy {
        this.revenueModellist.forEach((revenue, index)=>{
           revenue.id = index + 1;
       });
-      if(this.searchService.searchCriteria && 
+      if(this.searchService.searchCriteria &&
          this.searchService.searchCriteria.type === 'SEARCH_BY_MANUAL_INPUT') {
           this.selectedRevenue = this.revenueModellist.find(f=>f.id === this.searchService.searchCriteria.revenue.id);
           console.log('SelectedRevenue ', this.selectedRevenue);
@@ -251,7 +251,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         });
        }
 
-       if(this.searchService.searchCriteria && 
+       if(this.searchService.searchCriteria &&
         this.searchService.searchCriteria.type === 'SEARCH_BY_MANUAL_INPUT') {
          this.selectedIndustry = this.industryList.find(f=>f.naics === this.searchService.searchCriteria.industry.naics);
      }
@@ -263,6 +263,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    
+
   }
 }
