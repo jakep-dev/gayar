@@ -37,4 +37,19 @@ export class DashboardService extends BaseService {
 
         }
     }
+
+    public getFrequencyScore(companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getFrequencyScore', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange,
+                'limit': limit,
+                'retention': retention
+           });
+        }
+        catch(e){
+
+        }
+    }
 }
