@@ -267,8 +267,8 @@ export class FrequencyTimePeriodDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    className: 'time-below1',
-                    drilled: false
+                    drilled: false,
+                    className: 'time-below1'
                 },
                 title: {
                     text: this.modelData.yAxis,

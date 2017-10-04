@@ -1,12 +1,13 @@
 import { BarChartData } from '../../../../model/charts/bar-chart.model';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
 import { BaseChart } from '../../base-chart';
 import { ChartModule } from 'angular2-highcharts'; 
 
 @Component({
     selector: 'bar-chart-with-break',
     templateUrl: './bar-chart-break.component.html',
-    styleUrls: ['./bar-chart-break.component.css']
+    styleUrls: ['./bar-chart-break.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class BarChartBreakComponent extends BaseChart implements OnInit {
 

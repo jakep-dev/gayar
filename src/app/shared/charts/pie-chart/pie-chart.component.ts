@@ -1,11 +1,12 @@
 import {BaseChart} from '../base-chart';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { PieChartData } from 'app/model/model';
 
 @Component({
   selector: 'pie-chart',
   templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.css']
+  styleUrls: ['./pie-chart.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PieChartComponent extends BaseChart implements OnInit {
 

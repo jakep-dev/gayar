@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { GaugeChartData } from 'app/model/model';
 import { BaseChart } from '../base-chart';
 
@@ -6,7 +6,8 @@ import { BaseChart } from '../base-chart';
   selector: 'gauge-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gauge-chart.component.html',
-  styleUrls: ['./gauge-chart.component.scss']
+  styleUrls: ['./gauge-chart.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class GaugeChartComponent extends BaseChart implements OnInit {

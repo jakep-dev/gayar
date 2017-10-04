@@ -316,7 +316,8 @@ export class FrequencyLossBarDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'loss-below1'
                 },
                 title: {
                     text: this.modelData.yAxis,
@@ -447,7 +448,8 @@ export class FrequencyLossBarDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'loss-upper1'
                 },
                 title: {
                     text: '',
