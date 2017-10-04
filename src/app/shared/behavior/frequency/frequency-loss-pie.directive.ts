@@ -244,7 +244,7 @@ export class FrequencyLossPieDirective {
               y: item.pct_count,
               drilldown: item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: this.getSeriesColor(item.type)
+              color: ''
             }
           }).forEach(item => series.data.push(item));
         }
@@ -262,6 +262,10 @@ export class FrequencyLossPieDirective {
         });
       });
       
+      seriesLength = sortSeriesInDescOrder[0].data.length;
+      for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++){
+        sortSeriesInDescOrder[0].data[seriesIndex].color = this.getSeriesColor(seriesIndex);
+      }
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
@@ -331,11 +335,7 @@ export class FrequencyLossPieDirective {
   buildSeriesColor(){
     this.seriesColor = [];
 
-    //for series order
-    this.seriesColor['Personal Information'] = FrequencyLossPieDirective.BLUE ; //'#487AA1'
-    this.seriesColor['Corporate Losses'] = FrequencyLossPieDirective.GREEN; //'#B1D23B'
-    
-    //for drilldown order
+    //for series & drilldown order
     this.seriesColor[0] = FrequencyLossPieDirective.BLUE ; //'#487AA1'
     this.seriesColor[1] = FrequencyLossPieDirective.GREEN; //'#B1D23B'
     this.seriesColor[2] = FrequencyLossPieDirective.CYAN; //'#27A9BC'
