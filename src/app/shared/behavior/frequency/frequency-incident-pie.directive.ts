@@ -199,7 +199,6 @@ export class FrequencyIncidentPieDirective {
       this.buildSeriesColor();
 
       let datasets: any;
-      let tempDrilldownSeries : any;
       let dataDrilldownSeries: any;
       let series: any;
       let seriesIndex: number;
@@ -269,7 +268,6 @@ export class FrequencyIncidentPieDirective {
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
-      tempDrilldownSeries = new Array();
       groupNameType.forEach(name => {
         dataDrilldownSeries = new Object();
         dataDrilldownSeries.data = new Array();
