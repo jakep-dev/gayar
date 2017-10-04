@@ -244,7 +244,7 @@ export class FrequencyIncidentPieDirective {
               y: item.pct_count,
               drilldown: item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: this.getSeriesColor(item.type)
+              color: ''
             }
           }).forEach(item => series.data.push(item));
         }
@@ -262,6 +262,10 @@ export class FrequencyIncidentPieDirective {
         });
       });
       
+      seriesLength = sortSeriesInDescOrder[0].data.length;
+      for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++){
+        sortSeriesInDescOrder[0].data[seriesIndex].color = this.getSeriesColor(seriesIndex);
+      }
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
@@ -331,13 +335,7 @@ export class FrequencyIncidentPieDirective {
   buildSeriesColor(){
     this.seriesColor = [];
 
-    //for series order
-    this.seriesColor['Data Privacy'] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
-    this.seriesColor['Network Security'] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
-    this.seriesColor['Privacy Violations'] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
-    this.seriesColor['Tech E&O'] = FrequencyIncidentPieDirective.ORANGE; //'#F68C20'
-    
-    //for drilldown order
+    //for series & drilldown order
     this.seriesColor[0] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
     this.seriesColor[1] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
     this.seriesColor[2] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
