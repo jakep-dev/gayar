@@ -2,7 +2,6 @@
     float: left;
     min-height: 275px;
     overflow:visible;
-    width: 100%;
     z-index: 4;
     height:400px;
 }
@@ -11,3 +10,28 @@
     margin: 0 auto;
 }
 
+@media only screen and (max-width : 680px) {
+.chart-style .highcharts-container{
+    width: 401px !important;
+    height: 269px;
+  }
+
+.chart-style .highcharts-root{
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+
+.incident-upper1, .time-upper1, .loss-upper1{
+    height: 100.35px !important;
+    top:1px !important;
+  }
+.incident-below1, .time-below1, .loss-below1{
+    height: 179px !important;
+    top: -8px !important;
+  }
+
+.chart-holder{
+    height: 179px !important;
+  }
+}

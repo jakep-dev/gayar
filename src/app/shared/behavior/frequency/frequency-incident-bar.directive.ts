@@ -329,7 +329,8 @@ export class FrequencyIncidentBarDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'incident-below1'
                 },
                 title: {
                     text: this.modelData.xAxis,
@@ -462,7 +463,8 @@ export class FrequencyIncidentBarDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'incident-upper1'
                 },
                 title: {
                     text: '',

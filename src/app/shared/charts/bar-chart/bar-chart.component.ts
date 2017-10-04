@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { BarChartData } from 'app/model/model';
 import { BaseChart } from '../base-chart';
 
@@ -7,6 +7,7 @@ import { BaseChart } from '../base-chart';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class BarChartComponent extends BaseChart implements OnInit {
 

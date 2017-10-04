@@ -327,7 +327,8 @@ export class FrequencyTimePeriodDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'time-below1'
                 },
                 title: {
                     text: this.modelData.xAxis,
@@ -460,7 +461,8 @@ export class FrequencyTimePeriodDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'time-upper1'
                 },
                 title: {
                     text: '',
