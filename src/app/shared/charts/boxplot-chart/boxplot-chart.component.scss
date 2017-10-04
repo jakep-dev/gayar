@@ -1,0 +1,16 @@
+.boxplot-chart1 {
+    width:100%;
+}
+
+@media only screen and (max-width : 680px) {
+.boxplot-chart1 .highcharts-container{
+    width: 401px !important;
+    height: 269px !important;
+    
+  }
+
+.boxplot-chart1  .highcharts-root{
+      width: 100% !important;
+      height: 100% !important;
+  }
+}

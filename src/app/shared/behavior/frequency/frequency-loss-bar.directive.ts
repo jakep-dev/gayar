@@ -123,7 +123,7 @@ export class FrequencyLossBarDirective {
             xAxisFormatter: null,
             drilldown: [],
             drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
-                            '<span style="font-size:9px"> of Loss</span>',
+                            '<span style="font-size:9px"> of Losses</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -192,7 +192,9 @@ export class FrequencyLossBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -236,7 +238,8 @@ export class FrequencyLossBarDirective {
 
         groupNames.forEach(name => {
             groups = this.modelData.datasets.filter(
-                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
+                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
             );
 
             if (groups && groups.length > 0) {
@@ -258,7 +261,9 @@ export class FrequencyLossBarDirective {
         groupNames.forEach(name => {
             groupDrilldownNames.forEach(drilldownName => {
                 groups = this.modelData.datasets.filter(
-                    eachGroup => eachGroup.comp_or_peer === name && eachGroup.type === drilldownName && eachGroup.sub_type !== null
+                    eachGroup => eachGroup.comp_or_peer === name && 
+                    eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
                 );
 
                 if (groups && groups.length > 0) {
@@ -314,7 +319,7 @@ export class FrequencyLossBarDirective {
             xAxisFormatter: null,
             drilldown: [],
             drillUpText: '<span style="font-size:9px">  Back to All Types </span><br/>' +
-                            '<span style="font-size:9px"> of Loss</span>',
+                            '<span style="font-size:9px"> of Losses</span>',
             onDrillDown: null,
             onDrillUp: null,
             customChartSettings: {
@@ -324,7 +329,8 @@ export class FrequencyLossBarDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'loss-below1'
                 },
                 title: {
                     text: this.modelData.xAxis,
@@ -422,7 +428,9 @@ export class FrequencyLossBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -455,7 +463,8 @@ export class FrequencyLossBarDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'loss-upper1'
                 },
                 title: {
                     text: '',
@@ -641,7 +650,9 @@ export class FrequencyLossBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -686,7 +697,8 @@ export class FrequencyLossBarDirective {
 
         groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
-                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
+                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
             );
 
             if (groups && groups.length > 0) {
@@ -708,7 +720,9 @@ export class FrequencyLossBarDirective {
         groupNames.forEach(name => {
             groupDrilldownNames.forEach(drilldownName => {
                 groups = this.modelData.datasets.filter(
-                    eachGroup => eachGroup.comp_or_peer === name && eachGroup.type === drilldownName && eachGroup.sub_type !== null
+                    eachGroup => eachGroup.comp_or_peer === name && 
+                    eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
                 );
 
                 if (groups && groups.length > 0) {
@@ -743,7 +757,7 @@ export class FrequencyLossBarDirective {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     if (withBreak) {
-                        otherChart.setTitle({ text: 'Types of ' + e.point.name + ' Loss' });
+                        otherChart.setTitle({ text: 'Types of ' + e.point.name + (e.point.name && e.point.name.includes('Losses')? '' : ' Losses') });
                     }
                 }
             });

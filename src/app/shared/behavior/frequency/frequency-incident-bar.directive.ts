@@ -192,7 +192,9 @@ export class FrequencyIncidentBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -236,7 +238,8 @@ export class FrequencyIncidentBarDirective {
 
         groupNames.forEach(name => {
             groups = this.modelData.datasets.filter(
-                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
+                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
             );
 
             if (groups && groups.length > 0) {
@@ -258,7 +261,9 @@ export class FrequencyIncidentBarDirective {
         groupNames.forEach(name => {
             groupDrilldownNames.forEach(drilldownName => {
                 groups = this.modelData.datasets.filter(
-                    eachGroup => eachGroup.comp_or_peer === name && eachGroup.type === drilldownName && eachGroup.sub_type !== null
+                    eachGroup => eachGroup.comp_or_peer === name && 
+                    eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
                 );
 
                 if (groups && groups.length > 0) {
@@ -324,7 +329,8 @@ export class FrequencyIncidentBarDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'incident-below1'
                 },
                 title: {
                     text: this.modelData.xAxis,
@@ -422,7 +428,9 @@ export class FrequencyIncidentBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -455,7 +463,8 @@ export class FrequencyIncidentBarDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'incident-upper1'
                 },
                 title: {
                     text: '',
@@ -641,7 +650,9 @@ export class FrequencyIncidentBarDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -686,7 +697,8 @@ export class FrequencyIncidentBarDirective {
 
         groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
-                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null
+                eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
             );
 
             if (groups && groups.length > 0) {
@@ -708,7 +720,9 @@ export class FrequencyIncidentBarDirective {
         groupNames.forEach(name => {
             groupDrilldownNames.forEach(drilldownName => {
                 groups = this.modelData.datasets.filter(
-                    eachGroup => eachGroup.comp_or_peer === name && eachGroup.type === drilldownName && eachGroup.sub_type !== null
+                    eachGroup => eachGroup.comp_or_peer === name && 
+                    eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
                 );
 
                 if (groups && groups.length > 0) {

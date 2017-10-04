@@ -17,7 +17,21 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {       
         if (changes['chartComponent'] && changes['chartComponent'].currentValue != undefined) {
-            this.chartComponent = changes['chartComponent'].currentValue;          
+            this.chartComponent = changes['chartComponent'].currentValue;   
+            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+                if(this.displayText && this.displayText.length > 0) { 
+                    let labelHeight = ((Math.ceil(this.displayText.length / FrequencyIndustryOverviewDirective.maxCharactersPerLine)) * 10);
+                    this.chartComponent.addChartLabel(
+                        this.displayText,
+                        10,
+                        this.chartComponent.chart.chartHeight - labelHeight,
+                        '#000000',
+                        10,
+                        null,
+                        this.chartComponent.chart.chartWidth - 85
+                    );             
+                }
+            }
             this.chartComponent.addChartImage(
                 'https://www.advisen.com/img/advisen-logo.png',
                 this.chartComponent.chart.chartWidth - 80,
@@ -29,6 +43,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     }
   
     public static defaultLineColor: string = '#487AA1';
+    static maxCharactersPerLine: number = 105;
     seriesColor: string[];
     categories:  any;
 
@@ -74,12 +89,13 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                             step: 1
                         },
                         title: {
-                            style: {                                
+                            style: {          
+                                fontWeight: 'bold',                       
                                 fontSize: '11px'
                             }
                         },
 
-                        crosshair: true
+                        crosshair: false
                     },
                     yAxis: {
                         gridLineWidth: 0,
@@ -95,12 +111,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
 
                     },
                     tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
+                        headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y:.1f}</b><br/></span>'
                     },
                     plotOptions: {
                         column: {
@@ -111,14 +123,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                         }
                     },
                     legend: {
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        layout: 'horizontal',
-                        symbolHeight: 10,
-                        symbolWidth: 10,
-                        symbolRadius: 20,
-                        x: 0,
-                        y: 10
+                        enabled: true,
+                        symbolHeight: 8
                     }
                 },
                 hasRedrawActions: true
@@ -127,6 +133,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
             let seriesData = new Array();
             let seriesNames = new Array();           
             let series: any; 
+            this.displayText = this.modelData.displayText;
 
             this.modelData.datasets.forEach(function (industryOverviewDataset) {
                 if (!seriesData[industryOverviewDataset.description]) {

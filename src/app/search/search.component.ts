@@ -7,6 +7,7 @@ import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
 import { SnackBarService } from 'app/shared/shared';
+import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'app-search',
@@ -34,6 +35,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
 
+  /**
+   *
+   */
   constructor(private searchService: SearchService,
               private menuService: MenuService,
               private sessionService: SessionService,
@@ -43,6 +47,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * ngOnInit - description
+   *
+   * @return {type}  description
+   */
   ngOnInit() {
      this.menuService.breadCrumb = 'Search';
      this.loadSearchBy();
@@ -51,29 +60,15 @@ export class SearchComponent implements OnInit, OnDestroy {
      this.loadSearchCriteria();
   }
 
-  /**
-   * If search criteria is already selected
-   */
-  loadSearchCriteria () {
-     if (this.searchService.searchCriteria) {
-        this.selectedSearchType = this.searchService.searchCriteria.type
-        this.selectedSearchValue = this.searchService.searchCriteria.value;
-        this.selectedPremium = new CommaConversionPipe().transform(this.searchService.searchCriteria.premium);
-        this.selectedRetention = new CommaConversionPipe().transform(this.searchService.searchCriteria.retention);
-        this.selectedLimit = new CommaConversionPipe().transform(this.searchService.searchCriteria.limit);
-     }
-
-     if(this.searchService.selectedCompany) {
-       this.loadedCompanyModel = this.searchService.selectedCompany;
-       this.isTriggerSearch.next(true);
-     }
-  }
 
   /**
-   * Calculate place holder for search value.
+   * calcPlaceHolderForSearchValue - Sets the searchRule, searchType, isManual and searchValuePlaceHolder.
+   *
+   * @return {type}  No return type
    */
   calcPlaceHolderForSearchValue(){
     let searchByModel: SearchByModel =  this.searchByList.find(f=>f.id === this.selectedSearchBy);
+    if(!searchByModel) { return; }
     this.searchRule = searchByModel.rule;
     this.selectedSearchType = searchByModel.type;
     this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
@@ -81,107 +76,47 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Set Search Type based on searchBy
+   * clearSearchCriteria - Clears the previously selected search criteria.
+   * Displays message to user about the search update.
+   * Removes the search selection from session.
+   * @return {type}  No return Type
    */
-  setSearchType () {
-    let searchByModel: SearchByModel =  this.searchByList.find(f=>f.id === this.selectedSearchBy);
-    if(searchByModel){
-      this.selectedSearchType = searchByModel.type;
-    }
-  }
-
-  /**
-   *
-   */
-  onValidation () {
-    this.clearSearchCriteria();
-    if(this.isManual){
-      this.isActionEnabled = (this.selectedIndustry &&
-                              this.selectedRevenue &&
-                              this.selectedSearchValue &&
-                              this.selectedIndustry.naics &&
-                              this.selectedIndustry.naics !== '' &&
-                              this.selectedRevenue.id &&
-                              this.selectedRevenue.id !== -1 &&
-                              this.selectedSearchValue !== '');
-      return;
-    }
-    this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
-  }
-
   clearSearchCriteria () {
-    if(this.searchService.searchCriteria || this.searchService.selectedCompany){
+    if(this.searchService.searchCriteria ||
+      this.searchService.selectedCompany){
       if(this.searchService.selectedCompany) {
         this.loadedCompanyModel = null;
-        this.selectedCompanyModel = this.searchService.selectedCompany;
+        this.selectedCompanyModel = (this.searchService.selectedCompany === this.selectedCompanyModel) ? null : this.selectedCompanyModel;
       }
       this.searchService.clearSearchCookies();
       this.snackBarService.Simple('Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.');
     }
   }
 
-  onSearch(event){
-    if(!this.isManual && (event.keyCode === 13 || event.type === 'click')){
-       this.isTriggerSearch.next(true);
-    }
-  }
-
   /**
-   * SearchBy details
+   * validateRevenueAndIndustry - Checks for revenue and industry for the selected company.
+   * If selected company doesn't have renenue and industry displays proper message to the user.
+   * @return {type}  No return type
    */
-  onSearchByChange(){
-    this.selectedSearchValue = '';
-    this.calcPlaceHolderForSearchValue();
-    this.onValidation();
-  }
-
-  onSearchTableSelectionCompleted(event){
-    this.selectedCompanyModel = event as CompanyModel;
-    this.onValidation();
-  }
-
-  /**
-   * Build SearchCriteria and Navigate to dashboard
-   */
-  onAssessment(){
-    if(this.isManual){
-      this._setSelectedSearchCriteria();
-      this.router.navigate(['/dashboard']);
-      return;
-    }
-    this._validateRevenueAndIndustry();
-  }
-
-  onClearSearchValue () {
-    this.selectedSearchValue = "";
-  }
-
-
-  /**
-   * validateRevenueAndIndustry - description
-   *
-   * @return {type}  description
-   */
-  private _validateRevenueAndIndustry () {
+  validateRevenueAndIndustry () {
     const selectedCompany = this.selectedCompanyModel;
     this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId).subscribe((data)=>{
         if(data && data.message){
           this.snackBarService.Simple(data.message);
         }else{
-          this._setSelectedSearchCriteria();
+          this.setSelectedSearchCriteria();
           this.router.navigate(['/dashboard']);
         }
     });
   }
 
-
   /**
-   * private _setSelectedSearchCriteria - set the selected/entered search criteria
-   *
+   * setSelectedSearchCriteria - Sets the selected search criteria and selected company.
+   * Converts the limit, premium and retention and sets the search criteria.
+   * Search Type - is not manual, sets the selected company as well.
    * @return {type}  description
    */
-
-  private _setSelectedSearchCriteria () {
+  setSelectedSearchCriteria () {
     let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
     let limit = new KmbConversionPipe().transform(this.selectedLimit);
     let premium = new KmbConversionPipe().transform(this.selectedPremium);
@@ -202,15 +137,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Navigate to report page
-   */
-  onReport(){
-    this.router.navigate(['/report']);
-  }
 
   /**
-   * Load SearchBy details from SearchService
+   * loadSearchBy - Load the searchBy details from search service.
+   * @todo - Will push the searchBy details to service layer.
+   * @return {type}  description
    */
   loadSearchBy(){
     this.searchService.getSearchBy().subscribe(res=>{
@@ -222,8 +153,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
+
   /**
-   * Load RevenueModel details from SearchService
+   * loadRevenueModel - Load RevenueModel details from SearchService
+   * @return {type}  description
    */
   loadRevenueModel(){
      this.searchService.getRevenueModel().subscribe((res: RevenueRangeResponseModel) =>{
@@ -256,6 +189,107 @@ export class SearchComponent implements OnInit, OnDestroy {
          this.selectedIndustry = this.industryList.find(f=>f.naics === this.searchService.searchCriteria.industry.naics);
      }
     });
+  }
+
+  /**
+   * If search criteria is already selected
+   */
+  loadSearchCriteria () {
+     if (this.searchService.searchCriteria) {
+        this.selectedSearchType = this.searchService.searchCriteria.type
+        this.selectedSearchValue = this.searchService.searchCriteria.value;
+        this.selectedPremium = new CommaConversionPipe().transform(this.searchService.searchCriteria.premium);
+        this.selectedRetention = new CommaConversionPipe().transform(this.searchService.searchCriteria.retention);
+        this.selectedLimit = new CommaConversionPipe().transform(this.searchService.searchCriteria.limit);
+     }
+
+     if(this.searchService.selectedCompany) {
+       this.loadedCompanyModel = this.searchService.selectedCompany;
+       this.isTriggerSearch.next(true);
+     }
+  }
+
+  /**
+   *
+   */
+  validateActions () {
+    if(this.isManual){
+      this.isActionEnabled = (this.selectedIndustry &&
+                              this.selectedRevenue &&
+                              this.selectedSearchValue &&
+                              this.selectedIndustry.naics &&
+                              this.selectedIndustry.naics !== '' &&
+                              this.selectedRevenue.id &&
+                              this.selectedRevenue.id !== -1 &&
+                              this.selectedSearchValue !== '');
+      return;
+    }
+    this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
+  }
+
+  onSearchChange () {
+    this.clearSearchCriteria();
+    this.validateActions();
+  }
+
+  /**
+   * Navigate to report page
+   */
+  onReport(){
+    this.router.navigate(['/report']);
+  }
+
+  /**
+   * onSearch - description
+   *
+   * @param  {type} event description
+   * @return {type}       description
+   */
+  onSearch(event){
+    if(!this.isManual && (event.keyCode === 13 || event.type === 'click')){
+       this.isTriggerSearch.next(true);
+    }
+  }
+
+  /**
+   * SearchBy details
+   */
+  onSearchByChange(){
+    this.selectedSearchValue = '';
+    this.calcPlaceHolderForSearchValue();
+    this.onSearchChange();
+  }
+
+  /**
+   * onSearchTableSelectionCompleted - description
+   *
+   * @param  {type} event description
+   * @return {type}       description
+   */
+  onSearchTableSelectionCompleted(event){
+    this.selectedCompanyModel = event as CompanyModel;
+    this.onSearchChange();
+  }
+
+  /**
+   * Build SearchCriteria and Navigate to dashboard
+   */
+  onAssessment(){
+    if(this.isManual){
+      this.setSelectedSearchCriteria();
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+    this.validateRevenueAndIndustry();
+  }
+
+  /**
+   * onClearSearchValue - description
+   *
+   * @return {type}  description
+   */
+  onClearSearchValue () {
+    this.selectedSearchValue = "";
   }
 
   onSelectionComplete () {

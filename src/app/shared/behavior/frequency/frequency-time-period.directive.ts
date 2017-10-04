@@ -195,7 +195,9 @@ export class FrequencyTimePeriodDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -241,7 +243,8 @@ export class FrequencyTimePeriodDirective {
         groupNames = groupNames.reverse();        
         groupNames.forEach(name => {
             let mainGroup = this.modelData.datasets.filter(
-                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS'
+                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS' &&
+                !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
             );
 
             if (mainGroup && mainGroup.length > 0) {
@@ -259,7 +262,8 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode
+                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
                     if(detailedGroup && detailedGroup.length > 0) {
@@ -268,7 +272,7 @@ export class FrequencyTimePeriodDirective {
                         series.id = eachMainGroup.period;
                         series.data = detailedGroup.map(group => {
                             return [
-                                group.period, group.count
+                                Number(group.period), group.count
                             ];
                         });
                         tempChartData.drilldown.push(series);
@@ -323,7 +327,8 @@ export class FrequencyTimePeriodDirective {
                     spacingBottom: 35,
                     width: 600,
                     height: 250,
-                    drilled: false
+                    drilled: false,
+                    className: 'time-below1'
                 },
                 title: {
                     text: this.modelData.xAxis,
@@ -421,7 +426,9 @@ export class FrequencyTimePeriodDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -454,7 +461,8 @@ export class FrequencyTimePeriodDirective {
                     marginBottom: 0,
                     marginLeft: 70,
                     width: 600,
-                    height: 150
+                    height: 150,
+                    className: 'time-upper1'
                 },
                 title: {
                     text: '',
@@ -640,7 +648,9 @@ export class FrequencyTimePeriodDirective {
                 },
                 drilldown: {
                     activeAxisLabelStyle: {
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        color: '#464646',
+                        'font-weight': 'normal'
                     },
                     drillUpButton: {
                         relativeTo: 'spacingBox',
@@ -685,7 +695,8 @@ export class FrequencyTimePeriodDirective {
 
         groupNames.sort().reverse().forEach(name => {
             let mainGroup = this.modelData.datasets.filter(
-                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS'
+                eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS' &&
+                !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
             );
 
             if (mainGroup && mainGroup.length > 0) {
@@ -703,7 +714,8 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode
+                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
                     if(detailedGroup && detailedGroup.length > 0) {
@@ -712,7 +724,7 @@ export class FrequencyTimePeriodDirective {
                         series.id = eachMainGroup.period;
                         series.data = detailedGroup.map(group => {
                             return [
-                                group.period, group.count
+                                Number(group.period), group.count
                             ];
                         });
                         tempChartData.drilldown.push(series);

@@ -4,60 +4,60 @@
         <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
     </div>
 
-    <div front  
-         fxLayout="column" 
-         class="width-100 padding-left-10 padding-right-10 padding-bottom-10"  
+    <div front
+         fxLayout="column"
+         class="width-100 padding-left-10 padding-right-10 padding-bottom-10"
          fxLayoutAlign="center start">
 
-        <div fxLayout="row"  
+        <div fxLayout="row"
              class="width-100"
-             fxLayout.xs="column"  
-             fxLayoutAlign.xs="center start" 
-             fxLayoutGap.xs="10px" 
-             fxLayoutAlign="start center" 
+             fxLayout.xs="column"
+             fxLayoutAlign.xs="center start"
+             fxLayoutGap.xs="10px"
+             fxLayoutAlign="start center"
              fxLayoutGap="20px">
 
-          <md-select  fxFlex="30" placeholder="Select search by" [(ngModel)]="selectedSearchBy"  
+          <md-select  fxFlex="30" placeholder="Select search by" [(ngModel)]="selectedSearchBy"
                (ngModelChange)="onSearchByChange()" floatPlaceholder="never">
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
           <div *ngIf="isManual" class="width-100">
             <md-select fxFlex
-              placeholder="Select industry" [(ngModel)]="selectedIndustry" 
-              floatPlaceholder="never" (ngModelChange)="onValidation()">
+              placeholder="Select industry" [(ngModel)]="selectedIndustry"
+              floatPlaceholder="never" (ngModelChange)="onSearchChange()">
               <md-option *ngFor="let item of industryList" [value]="item">{{item.displayName}}</md-option>
             </md-select>
           </div>
-          
+
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
             <md-input-container  fxFlex floatPlaceholder="never" dividerColor="primary"  >
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onSearchChange()"  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
               <md-hint align="end" *ngIf="isManual">{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onValidation()"  (keypress)="onSearch($event)"
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onSearchChange()"  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
             </md-input-container>
-            <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px"> 
+            <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px">
               <md-icon>close</md-icon>
-            </button>  
+            </button>
             <button md-icon-button *ngIf="!isManual" (click)="onSearch($event)"> <md-icon>search</md-icon></button>
           </div>
         </div>
 
          <div *ngIf="isManual" class="width-100" fxLayout="row" fxLayoutAlign="start center"
-            fxLayoutGap="92px" fxLayout.xs="column"  
-             fxLayoutAlign.xs="center start" 
+            fxLayoutGap="92px" fxLayout.xs="column"
+             fxLayoutAlign.xs="center start"
              fxLayoutGap.xs="0">
-          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue" 
-             (ngModelChange)="onValidation()" floatPlaceholder="never">
+          <md-select  fxFlex="30" placeholder="Select revenue" [(ngModel)]="selectedRevenue"
+             (ngModelChange)="onSearchChange()" floatPlaceholder="never">
               <md-option *ngFor="let item of revenueModellist" [value]="item">{{item.rangeDisplay}}</md-option>
           </md-select>
         </div>
 
          <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
            <app-search-table class="width-100"
-              [searchType]="selectedSearchType" 
+              [searchType]="selectedSearchType"
               [searchValue]="selectedSearchValue"
               [loadedCompanyModel]="loadedCompanyModel"
               [onTriggerSearch]="isTriggerSearch"
@@ -74,15 +74,15 @@
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
               <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onValidation()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
+                <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onSearchChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
              <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
-              <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onValidation()" autofocus kmbConversion type="text" placeholder="Enter Limit">
+              <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onSearchChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
               </md-input-container>
 
              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onValidation()" autofocus kmbConversion type="text" placeholder="Enter Retention">
+                <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onSearchChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
           </div>
       </div>
@@ -93,7 +93,7 @@
       <md-icon>speaker_notes</md-icon>
       Assessment
     </button>
-    
+
     <button md-raised-button (click)="onReport()" color="accent" [disabled]="!isActionEnabled">
       <md-icon>pie_chart</md-icon>
       Report
@@ -103,4 +103,3 @@
   <div style="height: 50px">
 
   </div>
-

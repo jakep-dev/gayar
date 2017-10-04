@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
         this.searchType = this.searchService.searchCriteria.type;
         if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
             this.companyId = this.searchService.selectedCompany.companyId;
+        }else{
+            this.companyId = null;
         }
 
         this.chartType = 'BENCHMARK';

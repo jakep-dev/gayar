@@ -87,7 +87,7 @@ export interface FrequencyIncidentPieFlipModel{
 }
 
 export interface DataSetsGroup{
-    pct_count: string;
+    pct_count: number;
     sub_type: string;
     type: string;
 }
