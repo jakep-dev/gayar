@@ -21,7 +21,7 @@ export class FrequencyTimePeriodDirective {
 
             if(this.modelData.datasets && this.modelData.datasets.length > 0) {
                 if(this.displayText && this.displayText.length > 0) {
-                    let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+                    let labelHeight = (Math.ceil((this.displayText.length * 5) / (this.chartComponent.chart.chartWidth - 85))) * 10;
                     
                     this.chartComponent.addChartLabel(
                         this.displayText,
@@ -240,8 +240,7 @@ export class FrequencyTimePeriodDirective {
             }
         });
 
-        groupNames = groupNames.reverse();        
-        groupNames.forEach(name => {
+        groupNames.sort().reverse().forEach(name => {
             let mainGroup = this.modelData.datasets.filter(
                 eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS' &&
                 !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
@@ -252,7 +251,7 @@ export class FrequencyTimePeriodDirective {
                 series.data = mainGroup.map(eachGroup => {
                     return {
                         name: eachGroup.period,
-                        drilldown: eachGroup.compOrPeer,
+                        drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count < 1) ? null : eachGroup.period,
                         y: eachGroup.count
                     }
                 });
@@ -704,7 +703,7 @@ export class FrequencyTimePeriodDirective {
                 series.data = mainGroup.map(eachGroup => {
                     return {
                         name: eachGroup.period,
-                        drilldown: eachGroup.compOrPeer,
+                        drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count < 1) ? null : eachGroup.period,
                         y: eachGroup.count
                     }
                 });
