@@ -21,7 +21,7 @@ export class FrequencyLossPieDirective {
       this.chartComponent = changes['chartComponent'].currentValue;
       if(this.modelData.datasets && this.modelData.datasets.length > 0) {
         if(this.displayText && this.displayText.length > 0) {
-            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+            let labelHeight = (Math.ceil((this.displayText.length * 5) / (this.chartComponent.chart.chartWidth - 85))) * 10;
             
             this.chartComponent.addChartLabel(
                 this.displayText,
@@ -52,8 +52,6 @@ export class FrequencyLossPieDirective {
   public static ORANGE: string = '#F68C20';
   public static DGRAY: string = '#464646';
   public static LGRAY: string = '#CCCCCC';
-
-  seriesColor: any[];
 
   displayText: string = '';
 
@@ -86,6 +84,14 @@ export class FrequencyLossPieDirective {
             marginLeft: -170,
             marginBottom: 50
           },
+          colors:[
+            FrequencyLossPieDirective.BLUE , //'#487AA1'
+            FrequencyLossPieDirective.GREEN, //'#B1D23B'
+            FrequencyLossPieDirective.CYAN, //'#27A9BC'
+            FrequencyLossPieDirective.ORANGE, //'#F68C20'
+            FrequencyLossPieDirective.DGRAY, //'#464646'
+            FrequencyLossPieDirective.LGRAY, //'#CCCCCC'
+          ],
           legend: {
             align: 'left',
             verticalAlign: 'top',
@@ -149,7 +155,8 @@ export class FrequencyLossPieDirective {
                   }
               },
               showInLegend: true,
-              borderColor: '#CCCCCC'
+              borderColor: '#CCCCCC',
+              size: '95%'
             }
           },
           tooltip: {  
@@ -196,7 +203,6 @@ export class FrequencyLossPieDirective {
       }
       
       this.displayText = this.modelData.displayText;
-      this.buildSeriesColor();
 
       let datasets: any;
       let tempDrilldownSeries : any;
@@ -208,7 +214,6 @@ export class FrequencyLossPieDirective {
       let groupNameType = new Array();
       let groups = new Array();
       let sortSeriesInDescOrder= new Array();
-      let start_index : number;
       
       if(this.modelData.datasets && this.modelData.datasets.length > 0){
         
@@ -234,7 +239,7 @@ export class FrequencyLossPieDirective {
       groupNameType.forEach(name => {
 
         groups = this.modelData.datasets.filter(
-          perGroup => perGroup.type === name && perGroup.sub_type === null
+          perGroup => perGroup.type === name && perGroup.sub_type === null && perGroup.pct_count !== null
         );
         
         if(groups && groups.length > 0){
@@ -243,8 +248,7 @@ export class FrequencyLossPieDirective {
               name: item.type,
               y: item.pct_count,
               drilldown: item.type,
-              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: ''
+              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             }
           }).forEach(item => series.data.push(item));
         }
@@ -261,11 +265,6 @@ export class FrequencyLossPieDirective {
           return 0;
         });
       });
-      
-      seriesLength = sortSeriesInDescOrder[0].data.length;
-      for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++){
-        sortSeriesInDescOrder[0].data[seriesIndex].color = this.getSeriesColor(seriesIndex);
-      }
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
@@ -273,18 +272,15 @@ export class FrequencyLossPieDirective {
       groupNameType.forEach(name => {
         dataDrilldownSeries = new Object();
         dataDrilldownSeries.data = new Array();
-        start_index = 0;
         this.modelData.datasets.forEach(item => {
-          if(name === item.type && item.sub_type !== null){
+          if(name === item.type && item.sub_type !== null && item.pct_count !== null){
             dataDrilldownSeries.name = name;
             dataDrilldownSeries.id = item.type;
             dataDrilldownSeries.data.push({
               name: item.sub_type,
               y: item.pct_count,
-              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: this.getSeriesColor(start_index)
+              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             });
-            start_index++;
           }
         });
         tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
@@ -331,23 +327,5 @@ export class FrequencyLossPieDirective {
     return '< <span style="font-size:9px"> Back to all Types<br/>' +
            '<span style="font-size:9px"> of Losses</span>';
   }
-
-  buildSeriesColor(){
-    this.seriesColor = [];
-
-    //for series & drilldown order
-    this.seriesColor[0] = FrequencyLossPieDirective.BLUE ; //'#487AA1'
-    this.seriesColor[1] = FrequencyLossPieDirective.GREEN; //'#B1D23B'
-    this.seriesColor[2] = FrequencyLossPieDirective.CYAN; //'#27A9BC'
-    this.seriesColor[3] = FrequencyLossPieDirective.ORANGE; //'#F68C20'
-    this.seriesColor[4] = FrequencyLossPieDirective.DGRAY; //'#464646'
-    this.seriesColor[5] = FrequencyLossPieDirective.LGRAY; //'#CCCCCC'
-  }
-
-  private getSeriesColor(index: any) {
-        return this.seriesColor[index] || FrequencyLossPieDirective.defaultLineColor;
-    }
-
-
 
 }
