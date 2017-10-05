@@ -205,7 +205,6 @@ export class FrequencyLossPieDirective {
       this.displayText = this.modelData.displayText;
 
       let datasets: any;
-      let tempDrilldownSeries : any;
       let dataDrilldownSeries: any;
       let series: any;
       let seriesIndex: number;
@@ -268,22 +267,25 @@ export class FrequencyLossPieDirective {
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
-      tempDrilldownSeries = new Array();
       groupNameType.forEach(name => {
         dataDrilldownSeries = new Object();
         dataDrilldownSeries.data = new Array();
-        this.modelData.datasets.forEach(item => {
-          if(name === item.type && item.sub_type !== null && item.pct_count !== null){
+
+        let drilldownGroup = this.modelData.datasets.filter(eachGroup => eachGroup.type === name &&
+                              eachGroup.sub_type !== null && eachGroup.pct_count !== null);
+
+        if(drilldownGroup && drilldownGroup.length>0){
             dataDrilldownSeries.name = name;
-            dataDrilldownSeries.id = item.type;
-            dataDrilldownSeries.data.push({
-              name: item.sub_type,
-              y: item.pct_count,
-              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
+            dataDrilldownSeries.id = name;
+            dataDrilldownSeries.data= drilldownGroup.map(group=> {
+                return{
+                  name: group.sub_type,
+                  y: group.pct_count,
+                  dataLabels: this.setDataLabelsDistance(groupNameType, group.pct_count)
+                }
             });
-          }
-        });
-        tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
+          tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
+        }
       });
 
       //Drilldown behavior
