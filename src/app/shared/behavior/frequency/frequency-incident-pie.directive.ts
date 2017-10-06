@@ -21,7 +21,7 @@ export class FrequencyIncidentPieDirective {
       this.chartComponent = changes['chartComponent'].currentValue;
       if(this.modelData.datasets && this.modelData.datasets.length > 0) {
         if(this.displayText && this.displayText.length > 0) {
-            let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+            let labelHeight = (Math.ceil((this.displayText.length * 5) / (this.chartComponent.chart.chartWidth - 85))) * 10;
             
             this.chartComponent.addChartLabel(
                 this.displayText,
@@ -52,8 +52,6 @@ export class FrequencyIncidentPieDirective {
   public static ORANGE: string = '#F68C20';
   public static DGRAY: string = '#464646';
   public static LGRAY: string = '#CCCCCC';
-
-  seriesColor: any[];
 
   displayText: string = '';
 
@@ -86,6 +84,14 @@ export class FrequencyIncidentPieDirective {
             marginLeft: -170,
             marginBottom: 50
           },
+          colors:[
+            FrequencyIncidentPieDirective.BLUE , //'#487AA1'
+            FrequencyIncidentPieDirective.GREEN, //'#B1D23B'
+            FrequencyIncidentPieDirective.CYAN, //'#27A9BC'
+            FrequencyIncidentPieDirective.ORANGE, //'#F68C20'
+            FrequencyIncidentPieDirective.DGRAY, //'#464646'
+            FrequencyIncidentPieDirective.LGRAY, //'#CCCCCC'
+          ],
           legend: {
             align: 'left',
             verticalAlign: 'top',
@@ -149,7 +155,8 @@ export class FrequencyIncidentPieDirective {
                   }
               },
               showInLegend: true,
-              borderColor: '#CCCCCC'
+              borderColor: '#CCCCCC',
+              size: '95%'
             }
           },
           tooltip: {  
@@ -196,7 +203,6 @@ export class FrequencyIncidentPieDirective {
       }
       
       this.displayText = this.modelData.displayText;
-      this.buildSeriesColor();
 
       let datasets: any;
       let dataDrilldownSeries: any;
@@ -207,7 +213,6 @@ export class FrequencyIncidentPieDirective {
       let groupNameType = new Array();
       let groups = new Array();
       let sortSeriesInDescOrder= new Array();
-      let start_index : number;
       
       if(this.modelData.datasets && this.modelData.datasets.length > 0){
         
@@ -233,7 +238,7 @@ export class FrequencyIncidentPieDirective {
       groupNameType.forEach(name => {
 
         groups = this.modelData.datasets.filter(
-          perGroup => perGroup.type === name && perGroup.sub_type === null
+          perGroup => perGroup.type === name && perGroup.sub_type === null && perGroup.pct_count !== null
         );
         
         if(groups && groups.length > 0){
@@ -242,8 +247,7 @@ export class FrequencyIncidentPieDirective {
               name: item.type,
               y: item.pct_count,
               drilldown: item.type,
-              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: ''
+              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             }
           }).forEach(item => series.data.push(item));
         }
@@ -260,32 +264,28 @@ export class FrequencyIncidentPieDirective {
           return 0;
         });
       });
-      
-      seriesLength = sortSeriesInDescOrder[0].data.length;
-      for(seriesIndex = 0; seriesIndex < seriesLength; seriesIndex++){
-        sortSeriesInDescOrder[0].data[seriesIndex].color = this.getSeriesColor(seriesIndex);
-      }
       tempChartData.series = sortSeriesInDescOrder;
 
       // Start Get Drilldown Data
       groupNameType.forEach(name => {
-        dataDrilldownSeries = new Object();
-        dataDrilldownSeries.data = new Array();
-        start_index = 0;
-        this.modelData.datasets.forEach(item => {
-          if(name === item.type && item.sub_type !== null){
-            dataDrilldownSeries.name = name;
-            dataDrilldownSeries.id = item.type;
-            dataDrilldownSeries.data.push({
-              name: item.sub_type,
-              y: item.pct_count,
-              dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count),
-              color: this.getSeriesColor(start_index)
-            });
-            start_index++;
-          }
-        });
+      dataDrilldownSeries = new Object();
+      dataDrilldownSeries.data = new Array();
+
+      let drilldownGroup = this.modelData.datasets.filter(eachGroup => eachGroup.type === name &&
+                            eachGroup.sub_type !== null && eachGroup.pct_count !== null);
+
+      if(drilldownGroup && drilldownGroup.length > 0){
+          dataDrilldownSeries.name = name;
+          dataDrilldownSeries.id = name;
+          dataDrilldownSeries.data= drilldownGroup.map(group=> {
+              return{
+                name: group.sub_type,
+                y: group.pct_count,
+                dataLabels: this.setDataLabelsDistance(groupNameType, group.pct_count)
+              }
+          });
         tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
+      }
       });
 
       //Drilldown behavior
@@ -319,7 +319,7 @@ export class FrequencyIncidentPieDirective {
   setDataLabelsDistance(groupNameType, pct_count){
     if(groupNameType && groupNameType.length >= 2){
       var dataLabels = {
-          distance: (pct_count < 5) ? 10: -30
+          distance: (pct_count < 5) ? 20: -30
       }
     }
     return  dataLabels;
@@ -329,23 +329,5 @@ export class FrequencyIncidentPieDirective {
     return '< <span style="font-size:9px"> Back to all Types<br/>' +
            '<span style="font-size:9px"> of Incidents</span>';
   }
-
-  buildSeriesColor(){
-    this.seriesColor = [];
-
-    //for series & drilldown order
-    this.seriesColor[0] = FrequencyIncidentPieDirective.BLUE ; //'#487AA1'
-    this.seriesColor[1] = FrequencyIncidentPieDirective.GREEN; //'#B1D23B'
-    this.seriesColor[2] = FrequencyIncidentPieDirective.CYAN; //'#27A9BC'
-    this.seriesColor[3] = FrequencyIncidentPieDirective.ORANGE; //'#F68C20'
-    this.seriesColor[4] = FrequencyIncidentPieDirective.DGRAY; //'#464646'
-    this.seriesColor[5] = FrequencyIncidentPieDirective.LGRAY; //'#CCCCCC'
-  }
-
-  private getSeriesColor(index: any) {
-        return this.seriesColor[index] || FrequencyIncidentPieDirective.defaultLineColor;
-    }
-
-
 
 }

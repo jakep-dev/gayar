@@ -21,7 +21,7 @@ export class FrequencyIncidentBarDirective {
             
             if(this.modelData.datasets && this.modelData.datasets.length > 0) {
                 if(this.displayText && this.displayText.length > 0) {
-                    let labelHeight = (Math.ceil((this.displayText.length * 6) / (this.chartComponent.chart.chartWidth - 85))) * 10;
+                    let labelHeight = (Math.ceil((this.displayText.length * 5) / (this.chartComponent.chart.chartWidth - 85))) * 10;
                     
                     this.chartComponent.addChartLabel(
                         this.displayText,
@@ -128,7 +128,8 @@ export class FrequencyIncidentBarDirective {
             onDrillUp: null,
             customChartSettings: {
                 chart: {
-                    marginLeft: 80
+                    marginLeft: 80,
+                    marginBottom: 135
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -151,6 +152,10 @@ export class FrequencyIncidentBarDirective {
                     },
                     labels: {
                         rotation: 0,
+                        style: {
+                            fontSize: '10px',
+                            textOverflow: 'none'
+                        }
                     },
                     tickWidth: 0,
                     lineWidth: 2,
@@ -236,7 +241,7 @@ export class FrequencyIncidentBarDirective {
             }
         });
 
-        groupNames.forEach(name => {
+        groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
                 eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
                 !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
@@ -251,7 +256,7 @@ export class FrequencyIncidentBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company') ? null : group.type
+                        drilldown: (group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -326,7 +331,8 @@ export class FrequencyIncidentBarDirective {
                 chart: {
                     marginTop: 0,
                     marginLeft: 70,
-                    spacingBottom: 35,
+                    spacingBottom: 45,
+                    marginBottom: 135,
                     width: 600,
                     height: 250,
                     drilled: false,
@@ -339,7 +345,7 @@ export class FrequencyIncidentBarDirective {
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 180
+                    y: 165
                 },
                 subtitle: {
                     text: false,
@@ -360,6 +366,10 @@ export class FrequencyIncidentBarDirective {
                     },
                     labels: {
                         rotation: 0,
+                        style: {
+                            fontSize: '10px',
+                            textOverflow: 'none'
+                        }
                     },
                     tickWidth: 0,
                     lineWidth: 2,
@@ -492,6 +502,10 @@ export class FrequencyIncidentBarDirective {
                     },
                     labels: {
                         rotation: 0,
+                        style: {
+                            fontSize: '10px',
+                            textOverflow: 'none'
+                        }
                     },
                     tickWidth: 0,
                     lineWidth: 0,
@@ -710,7 +724,7 @@ export class FrequencyIncidentBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company') ? null : group.type
+                        drilldown: (group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
