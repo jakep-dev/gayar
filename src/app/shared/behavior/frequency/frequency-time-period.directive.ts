@@ -261,7 +261,7 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        eachGroup.ruleTypeSubCode < eachMainGroup.ruleTypeSubCode &&
                         !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
@@ -713,7 +713,7 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        eachGroup.ruleTypeSubCode < eachMainGroup.ruleTypeSubCode &&
                         !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
