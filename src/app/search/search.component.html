@@ -32,11 +32,15 @@
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
             <md-input-container  fxFlex floatPlaceholder="never" dividerColor="primary"  >
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onSearchChange()"  (keypress)="onSearch($event)"
+
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
+
               <md-hint align="end" *ngIf="isManual">{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (ngModelChange)="onSearchChange()"  (keypress)="onSearch($event)"
+
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
+
             </md-input-container>
             <button md-icon-button *ngIf="!isManual" (click)="onClearSearchValue($event, true)" style="margin-left:-30px">
               <md-icon>close</md-icon>
@@ -55,7 +59,7 @@
           </md-select>
         </div>
 
-         <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="!isManual">
+         <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="hasSearchResult">
            <app-search-table class="width-100"
               [searchType]="selectedSearchType"
               [searchValue]="selectedSearchValue"
@@ -74,15 +78,15 @@
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
               <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onSearchChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
+                <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onProgramStructureChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
              <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
-              <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onSearchChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
+              <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
               </md-input-container>
 
              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
-                <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onSearchChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
+                <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
           </div>
       </div>
