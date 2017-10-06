@@ -60,16 +60,20 @@
     </div>
 </div>
 <div>
-    <app-tile [title]="'5 Most Recent Peer Group'">
-        <div front class="width-100">
-            <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
-            </app-simple-table>
-        </div>
-    </app-tile>
-    <app-tile [title]="'5 Most Recent Company Losses'">
-        <div front class="width-100">
-            <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
-            </app-simple-table>
-        </div>
-    </app-tile>
+    <div>
+        <app-tile [title]="'5 Most Recent Peer Group'">
+            <div front class="width-100">
+                <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+                </app-simple-table>
+            </div>
+        </app-tile>
+    </div>
+    <div *ngIf="companyLossesTable">>
+        <app-tile [title]="'5 Most Recent Company Losses'">
+            <div front class="width-100">
+                <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+                </app-simple-table>
+            </div>
+        </app-tile>
+    </div>
 </div>
