@@ -272,8 +272,8 @@ export abstract class BaseChart {
         if(startPoint && startPoint.length > 0 &&
             linePoints && linePoints.length > 0) {
                 let pathArray = ['M', 'L'];
-                // pathArray.splice(1, 0, ...startPoint);
-                // pathArray.splice(pathArray.length, 0 , ...linePoints);
+                pathArray.splice(1, 0, ...startPoint);
+                pathArray.splice(pathArray.length, 0 , ...linePoints);
 
                 this.chart.renderer.path(pathArray)
                     .attr({
