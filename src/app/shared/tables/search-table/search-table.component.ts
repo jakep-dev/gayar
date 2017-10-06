@@ -213,9 +213,9 @@ export class SearchTableDataSoruce extends DataSource<any> {
   private _sorter(a, b, multi){
       if (a === b)
         return 0;
-    else if (a === null) 
+    else if (a === null)
       return 1;
-    else if (b === null)  
+    else if (b === null)
       return -1;
     else        {
       let valueA = isNaN(+a) ? a : +a;

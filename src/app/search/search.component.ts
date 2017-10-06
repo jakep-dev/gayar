@@ -19,7 +19,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedSearchType: string;
   selectedSearchValue: string;
   isTriggerSearch: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
-  isSearchChanges: AsyncSubject<boolean> = new AsyncSubject();
+  hasSearchResult: boolean = false;
   searchRule: string = "number";
   searchValuePlaceHolder: string;
   selectedIndustry: IndustryModel;
@@ -27,8 +27,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedRetention: string;
   selectedLimit: string;
   selectedRevenue: RevenueModel;
-  selectedCompanyModel: CompanyModel;
-  loadedCompanyModel: CompanyModel;
+  selectedCompanyModel: CompanyModel = null;
+  loadedCompanyModel: CompanyModel = null;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -73,6 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchRule = searchByModel.rule;
     this.selectedSearchType = searchByModel.type;
     this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
+    this.hasSearchResult = !this.isManual;
     this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
   }
 
@@ -270,7 +271,14 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}       description
    */
   onSearch(event){
-    if(!this.isManual && (event.keyCode === 13 || event.type === 'click')){
+    if(this.isManual) {
+      this.onSearchChange();
+      return;
+    }
+
+    if(event.keyCode === 13 ||
+       event.type === 'click'){
+       this.onSearchChange();
        this.isTriggerSearch.next(true);
     }
   }
@@ -281,7 +289,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   onSearchByChange(){
     this.selectedSearchValue = '';
     this.calcPlaceHolderForSearchValue();
-    this.onSearchChange();
+    if(this.searchService.searchCriteria &&
+      this.selectedSearchType === this.searchService.searchCriteria.type) {
+      this.loadSearchCriteria();
+    }
   }
 
   /**
