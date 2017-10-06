@@ -238,7 +238,8 @@ export class FrequencyLossPieDirective {
       groupNameType.forEach(name => {
 
         groups = this.modelData.datasets.filter(
-          perGroup => perGroup.type === name && perGroup.sub_type === null && perGroup.pct_count !== null
+          perGroup => perGroup.type === name && perGroup.sub_type === null && perGroup.pct_count !== null 
+                      && perGroup.pct_count !== 0
         );
         
         if(groups && groups.length > 0){
@@ -272,7 +273,8 @@ export class FrequencyLossPieDirective {
         dataDrilldownSeries.data = new Array();
 
         let drilldownGroup = this.modelData.datasets.filter(eachGroup => eachGroup.type === name &&
-                              eachGroup.sub_type !== null && eachGroup.pct_count !== null);
+                              eachGroup.sub_type !== null && eachGroup.pct_count !== null &&
+                              eachGroup.pct_count !== 0);
 
         if(drilldownGroup && drilldownGroup.length>0){
             dataDrilldownSeries.name = name;
