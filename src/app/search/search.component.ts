@@ -19,6 +19,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedSearchType: string;
   selectedSearchValue: string;
   isTriggerSearch: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  isSearchChanges: AsyncSubject<boolean> = new AsyncSubject();
   searchRule: string = "number";
   searchValuePlaceHolder: string;
   selectedIndustry: IndustryModel;
@@ -135,6 +136,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(!this.isManual){
       this.searchService.selectedCompany = this.selectedCompanyModel;
     }
+
+    console.log('ScreenSearch Details - ', this.searchService.selectedCompany, this.searchService.searchCriteria);
   }
 
 
@@ -205,6 +208,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
      if(this.searchService.selectedCompany) {
        this.loadedCompanyModel = this.searchService.selectedCompany;
+       this.selectedCompanyModel = this.searchService.selectedCompany;
        this.isTriggerSearch.next(true);
      }
   }
@@ -224,11 +228,31 @@ export class SearchComponent implements OnInit, OnDestroy {
                               this.selectedSearchValue !== '');
       return;
     }
-    this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel!= null);
+    this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel !== null);
+    console.log('this.selectedSearchValue - ', this.selectedSearchValue);
+    console.log('this.selectedCompanyModel - ', this.selectedCompanyModel);
+    console.log('this.isActionEnabled - ', this.isActionEnabled);
   }
 
-  onSearchChange () {
+  /**
+   * onSearchChange - Fires on select company tile field changes
+   */
+  onSearchChange (): void {
     this.clearSearchCriteria();
+    this.validateActions();
+  }
+
+  /**
+   * onProgramChange - Fires when program structure tile field changes.
+   *
+   * @return {type}  - No return type
+   */
+  onProgramStructureChange () {
+    if(this.searchService.searchCriteria ||
+      this.searchService.selectedCompany){
+        this.searchService.clearSearchCookies();
+        this.snackBarService.Simple('Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.');
+    }
     this.validateActions();
   }
 
@@ -267,8 +291,9 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}       description
    */
   onSearchTableSelectionCompleted(event){
+    this.clearSearchCriteria();
     this.selectedCompanyModel = event as CompanyModel;
-    this.onSearchChange();
+    this.validateActions();
   }
 
   /**
