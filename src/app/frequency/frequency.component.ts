@@ -50,7 +50,9 @@ export class FrequencyComponent implements OnInit {
     loadFrequencyDataTable() {
         this.frequencyService.getFrequencyDataTable(this.token, this.companyId, this.industry, this.revenue_range).subscribe((res: FrequencyDataResponseModel) => {
             this.peerGroupTable = res.peerGroup;
-            this.companyLossesTable = res.company;
+            if (res.company != null && res.company.length > 0) {
+                this.companyLossesTable = res.company;
+            }
         });
     }
 
