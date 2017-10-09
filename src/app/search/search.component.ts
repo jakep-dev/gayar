@@ -92,9 +92,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
     this.loadedCompanyModel   = null;
     this.selectedCompanyModel = null;
-    console.log('----ClearSearchCriteria----');
-    console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
-    console.log('----ClearSearchCriteria----');
+    // console.log('----ClearSearchCriteria----');
+    // console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
+    // console.log('----ClearSearchCriteria----');
   }
 
   /**
@@ -232,11 +232,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel !== null);
-    console.log('----ValidateActions----')
-    console.log('this.selectedSearchValue - ', this.selectedSearchValue);
-    console.log('this.selectedCompanyModel - ', this.selectedCompanyModel);
-    console.log('this.isActionEnabled - ', this.isActionEnabled);
-    console.log('----ValidateActions----')
+    // console.log('----ValidateActions----')
+    // console.log('this.selectedSearchValue - ', this.selectedSearchValue);
+    // console.log('this.selectedCompanyModel - ', this.selectedCompanyModel);
+    // console.log('this.isActionEnabled - ', this.isActionEnabled);
+    // console.log('----ValidateActions----')
   }
 
   /**
