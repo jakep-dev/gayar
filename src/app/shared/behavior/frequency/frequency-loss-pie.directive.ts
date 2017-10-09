@@ -145,7 +145,7 @@ export class FrequencyLossPieDirective {
               dataLabels: {
                 enabled: true,
                 distance: -30,
-                color: '#003399'
+                color: '#000000'
               },
               point: {
                   events: {
@@ -166,11 +166,11 @@ export class FrequencyLossPieDirective {
           drilldown:{
             activeAxisLabelStyle: {
               textDecoration: 'none',
-              color: '#003399'
+              color: '#000000'
             },
             activeDataLabelStyle: {
               textDecoration: 'none',
-              color: '#003399',
+              color: '#000000',
             },
             drillUpButton: {
               relativeTo: 'spacingBox',
