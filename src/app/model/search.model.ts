@@ -27,6 +27,7 @@ export interface CompanyModel {
     country: string;
     topLevel: string;
     status: string;
+    filter: string;
 }
 
 export interface SearchCriteriaModel {
@@ -37,6 +38,7 @@ export interface SearchCriteriaModel {
     premium: string;
     retention: string;
     limit: string;
+    filter: string;
 }
 
 export interface IndustryModel {
@@ -59,6 +61,6 @@ export interface RevenueModel {
 }
 
 export interface ValidationMessageModel {
-    resp: ResponseModel, 
+    resp: ResponseModel,
     message: string
 }
