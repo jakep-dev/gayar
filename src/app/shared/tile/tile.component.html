@@ -25,21 +25,21 @@
                     <span *ngIf="isContent">Collapse</span>
                     <span *ngIf="!isContent">Expand</span>
                    </button>
-                </div>  
+                </div>
               </md-menu>
           </div>
-      </div> 
+      </div>
   </md-toolbar>
   <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
   <div class="tile-content">
     <div  *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center">
       <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
-      
+
       </ng-content>
 
       <ng-content select="[back]" *ngIf="isFlipped || isSplitted">
-        
+
       </ng-content>
     </div>
-  </div>
+  </div>  
 </div>

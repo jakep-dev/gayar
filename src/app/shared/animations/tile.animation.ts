@@ -30,6 +30,9 @@ export const ACCORDION_ANIMATION = [
 ];
 
 
+/**
+ * Split animation on tile content.
+ */
 export const SPLIT_ANIMATION = [
    trigger('splitAnimation', [
      state('split', style({
@@ -39,10 +42,14 @@ export const SPLIT_ANIMATION = [
         height: 'auto'
      })),
      transition('split => combine', animate('200ms')),
-      transition('combine => split', animate('200ms'))
+     transition('combine => split', animate('200ms'))
    ])
 ];
 
+
+/**
+ * Flip animation on tile content.
+ */
 export const FLIP_ANIMATION = [
   trigger('flipAnimation', [
      state('back', style({
