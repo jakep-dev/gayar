@@ -1,12 +1,15 @@
-<div class="tile-container">
+<div class="tile-container" *ngIf="isTileVisible">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
           <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
           <ng-content select="[header]" ></ng-content>
           <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.xs]="true" class="tile-buttons">
-            <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon></button>
+            <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)">
+              <md-icon *ngIf="!isMaximize">fullscreen</md-icon>
+              <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
+            </button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
-            <button md-icon-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
+            <button md-icon-button *ngIf="isFlippable"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
             <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)">
                 <md-icon *ngIf="isContent">expand_less</md-icon>
                 <md-icon *ngIf="!isContent">expand_more</md-icon>
@@ -25,20 +28,30 @@
                     <span *ngIf="isContent">Collapse</span>
                     <span *ngIf="!isContent">Expand</span>
                    </button>
-                </div>  
+                </div>
               </md-menu>
           </div>
-      </div> 
+      </div>
   </md-toolbar>
   <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
   <div class="tile-content">
-    <div  *ngIf="isContent"  fxLayout="row" fxLayoutAlign="start center">
-      <ng-content select="[front]" *ngIf="!isFlipped || isSplitted">
-      
+    <div
+      *ngIf="isContent"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayout.lt-sm="column"
+      fxLayoutAlign.lt-sm="center center">
+
+      <ng-content
+        select="[front]"
+        *ngIf="!isFlipped || isSplitted">
+
       </ng-content>
 
-      <ng-content select="[back]" *ngIf="isFlipped || isSplitted">
-        
+      <ng-content
+        select="[back]"
+        *ngIf="isFlipped || isSplitted">
+
       </ng-content>
     </div>
   </div>

@@ -5,7 +5,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule, MdSnackBarModule, MdDialogModule } from '@angular/material';
@@ -16,7 +16,7 @@ import { HighchartsProvider } from './shared/highchart/highchart';
 
 // Application Components
 import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES,
-         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS, 
+         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS,
          BLOCK_SHARED_SERVICE } from './shared/shared';
 import { AppComponent } from './app.component';
 import { APP_ROUTES  } from './app.routes';
@@ -40,7 +40,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     BLOCK_BENCHMARK,
     BLOCK_FREQUENCY,
     MenuComponent,
-    SearchComponent,  
+    SearchComponent,
     SsoComponent,
     BLOCK_CHART_TYPES,
     BLOCK_CHART_BEHAVIORS,
@@ -55,7 +55,6 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     HttpModule,
     CommonModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule,
     FlexLayoutModule,
     MaterialModule,
     MdSnackBarModule,
