@@ -131,7 +131,7 @@ export class FrequencyTimePeriodDirective {
             onDrillUp: null,
             customChartSettings: {
                 chart: {
-                    marginLeft: 80
+                    marginLeft: 80,
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -173,7 +173,7 @@ export class FrequencyTimePeriodDirective {
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
                 },
                 plotOptions: {
                     scatter: {
@@ -261,7 +261,7 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        eachGroup.ruleTypeSubCode < eachMainGroup.ruleTypeSubCode &&
                         !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
@@ -323,7 +323,8 @@ export class FrequencyTimePeriodDirective {
                 chart: {
                     marginTop: 0,
                     marginLeft: 70,
-                    spacingBottom: 35,
+                    spacingBottom: 40,
+                    marginBottom: 110,
                     width: 600,
                     height: 250,
                     drilled: false,
@@ -336,7 +337,7 @@ export class FrequencyTimePeriodDirective {
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 180
+                    y: 170
                 },
                 subtitle: {
                     text: false,
@@ -713,7 +714,7 @@ export class FrequencyTimePeriodDirective {
                     let detailedGroup = this.modelData.datasets.filter(
                         eachGroup => eachGroup.compOrPeer === name && 
                         eachGroup.ruleTypeCode === 'TPC' && 
-                        eachGroup.ruleTypeSubCode <= eachMainGroup.ruleTypeSubCode &&
+                        eachGroup.ruleTypeSubCode < eachMainGroup.ruleTypeSubCode &&
                         !(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
                     );
 
