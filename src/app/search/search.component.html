@@ -63,9 +63,11 @@
            <app-search-table class="width-100"
               [searchType]="selectedSearchType"
               [searchValue]="selectedSearchValue"
-              [loadedCompanyModel]="loadedCompanyModel"
+              [selectedCompany]="loadedCompanyModel"
+              [enteredSearchFilter]="enteredSearchFilter"
               [onTriggerSearch]="isTriggerSearch"
-              (onSelectionCompleted)="onSearchTableSelectionCompleted($event)">
+              (onFilterChanged)="onFilterChange($event)"
+              (onSelectionCompleted)="onRowSelection($event)">
            </app-search-table>
          </div>
     </div>
