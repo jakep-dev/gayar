@@ -99,9 +99,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
     this.loadedCompanyModel   = null;
     this.selectedCompanyModel = null;
-    console.log('----ClearSearchCriteria----');
-    console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
-    console.log('----ClearSearchCriteria----');
+    // console.log('----ClearSearchCriteria----');
+    // console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
+    // console.log('----ClearSearchCriteria----');
   }
 
   /**
@@ -348,7 +348,6 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}       - No return type
    */
   onFilterChange (event) {
-    console.log('onFilterChange - ', event);
     this.enteredSearchFilter = event;
   }
 

@@ -1,5 +1,5 @@
 
-  <app-tile [title]="'SELECT COMPANY'" [showProgress]="isSearching">
+  <app-tile [id]="'SELECT_COMPANY'" [title]="'SELECT COMPANY'" [showProgress]="isSearching">
     <div header>
         <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
     </div>
@@ -73,7 +73,7 @@
     </div>
   </app-tile>
 
-  <app-tile [title]="'PROGRAM STRUCTURE'">
+  <app-tile [id]="'PROGRAM_STRUCTURE'" [title]="'PROGRAM STRUCTURE'">
       <div header>
           <span class="optional" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Optional)</span>
       </div>
@@ -94,17 +94,19 @@
       </div>
   </app-tile>
 
-  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
-    <button md-raised-button (click)="onAssessment()" color="accent" [disabled]="!isActionEnabled">
-      <md-icon>speaker_notes</md-icon>
-      Assessment
-    </button>
+  <blank-tile [id]="'SEARCH_ACTIONS'">
+    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
+      <button md-raised-button (click)="onAssessment()" color="accent" [disabled]="!isActionEnabled">
+        <md-icon>speaker_notes</md-icon>
+        Assessment
+      </button>
 
-    <button md-raised-button (click)="onReport()" color="accent" [disabled]="!isActionEnabled">
-      <md-icon>pie_chart</md-icon>
-      Report
-    </button>
-  </div>
+      <button md-raised-button (click)="onReport()" color="accent" [disabled]="!isActionEnabled">
+        <md-icon>pie_chart</md-icon>
+        Report
+      </button>
+    </div>
+  </blank-tile>
 
   <div style="height: 50px">
 

@@ -79,7 +79,6 @@ export class SearchTableComponent implements OnInit {
     if(this.onTriggerSearch){
       this.onTriggerSearch.asObservable().subscribe((isNewSearch)=>{
         if (isNewSearch) {
-          console.log('isNewSearch - ', isNewSearch);
           this.enteredSearchFilter = '';
         }
         if(this.searchType && this.searchValue){
