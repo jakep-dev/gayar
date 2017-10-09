@@ -29,6 +29,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedRevenue: RevenueModel;
   selectedCompanyModel: CompanyModel = null;
   loadedCompanyModel: CompanyModel = null;
+  enteredSearchFilter: string;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
@@ -70,10 +71,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   calcPlaceHolderForSearchValue(){
     let searchByModel: SearchByModel =  this.searchByList.find(f=>f.id === this.selectedSearchBy);
     if(!searchByModel) { return; }
-    this.searchRule = searchByModel.rule;
-    this.selectedSearchType = searchByModel.type;
-    this.isManual = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
-    this.hasSearchResult = !this.isManual;
+    this.searchRule             = searchByModel.rule;
+    this.selectedSearchType     = searchByModel.type;
+    this.isManual               = (searchByModel.type === "SEARCH_BY_MANUAL_INPUT")
+    this.hasSearchResult        = !this.isManual;
     this.searchValuePlaceHolder = this.isManual ? 'Enter Company Name' : `Enter ${searchByModel.description}`;
   }
 
@@ -87,7 +88,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(this.searchService.searchCriteria ||
       this.searchService.selectedCompany){
       if(this.searchService.selectedCompany) {
-        this.loadedCompanyModel = null;
+        this.loadedCompanyModel   = null;
         this.selectedCompanyModel = (this.searchService.selectedCompany === this.selectedCompanyModel) ? null : this.selectedCompanyModel;
       }
       this.searchService.clearSearchCookies();
@@ -131,7 +132,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       revenue: revenueModel ? revenueModel : null,
       limit: (limit || limit === 0)? limit.toString() : null,
       premium: (premium || premium === 0)? premium.toString(): null,
-      retention: (retention || retention === 0)? retention.toString(): null
+      retention: (retention || retention === 0)? retention.toString(): null,
+      filter: this.enteredSearchFilter
     };
 
     if(!this.isManual){
@@ -200,18 +202,21 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   loadSearchCriteria () {
      if (this.searchService.searchCriteria) {
-        this.selectedSearchType = this.searchService.searchCriteria.type
-        this.selectedSearchValue = this.searchService.searchCriteria.value;
-        this.selectedPremium = new CommaConversionPipe().transform(this.searchService.searchCriteria.premium);
-        this.selectedRetention = new CommaConversionPipe().transform(this.searchService.searchCriteria.retention);
-        this.selectedLimit = new CommaConversionPipe().transform(this.searchService.searchCriteria.limit);
+        this.selectedSearchType   = this.searchService.searchCriteria.type
+        this.selectedSearchValue  = this.searchService.searchCriteria.value;
+        this.enteredSearchFilter  = this.searchService.searchCriteria.filter;
+        this.selectedPremium      = new CommaConversionPipe().transform(this.searchService.searchCriteria.premium);
+        this.selectedRetention    = new CommaConversionPipe().transform(this.searchService.searchCriteria.retention);
+        this.selectedLimit        = new CommaConversionPipe().transform(this.searchService.searchCriteria.limit);
+        this.enteredSearchFilter  = this.searchService.searchCriteria.filter;
      }
 
      if(this.searchService.selectedCompany) {
-       this.loadedCompanyModel = this.searchService.selectedCompany;
-       this.selectedCompanyModel = this.searchService.selectedCompany;
-       this.isTriggerSearch.next(true);
+       this.loadedCompanyModel    = this.searchService.selectedCompany;
+       this.selectedCompanyModel  = this.searchService.selectedCompany;
+       this.isTriggerSearch.next(false);
      }
+     console.log('loadSearchCriteria - ', this.searchService.searchCriteria);
   }
 
   /**
@@ -296,12 +301,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * onSearchTableSelectionCompleted - description
+   * onRowSelection - description
    *
    * @param  {type} event description
    * @return {type}       description
    */
-  onSearchTableSelectionCompleted(event){
+  onRowSelection(event){
     this.clearSearchCriteria();
     this.selectedCompanyModel = event as CompanyModel;
     this.validateActions();
@@ -328,8 +333,14 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.selectedSearchValue = "";
   }
 
-  onSelectionComplete () {
-
+  /**
+   * onFilterChange - Listens to the search filter on table.
+   *
+   * @param  {type} event - Carrys the filter element value
+   * @return {type}       - No return type
+   */
+  onFilterChange (event) {
+    this.enteredSearchFilter = event;
   }
 
   ngOnDestroy () {

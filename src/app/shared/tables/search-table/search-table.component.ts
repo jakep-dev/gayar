@@ -27,9 +27,23 @@ const { SEARCH_SCREEN_NO_RESULT } = APPCONSTANTS;
 export class SearchTableComponent implements OnInit {
   @Input() searchType: string;
   @Input() searchValue: string;
-  @Input() loadedCompanyModel: CompanyModel;
+  @Input() selectedCompany: CompanyModel;
+  @Input() enteredSearchFilter: string;
+
+  /**
+   * Triggers the search from the parent, if previously used search criteria exists.
+   */
   @Input() onTriggerSearch: AsyncSubject<boolean> = new AsyncSubject<boolean>();
+
+  /**
+   * Notifies the table selection to the parent.
+   */
   @Output() onSelectionCompleted: EventEmitter<CompanyModel> = new EventEmitter<CompanyModel>(true);
+
+  /**
+   * Notifies the filter change to the parent.
+   */
+  @Output() onFilterChanged: EventEmitter<string> = new EventEmitter<string>();
 
   displayedColumns = this.getColumns();
   searchTableDatabase = new SearchTableDatabase();
@@ -54,7 +68,7 @@ export class SearchTableComponent implements OnInit {
   /**
    * Toggle the isprocessing flag helps to display the message on table
    */
-  private _toggleProcessing() {
+  private toggleProcessing() {
     this.isProcessing = !this.isProcessing;
   }
 
@@ -63,7 +77,7 @@ export class SearchTableComponent implements OnInit {
    */
   onTriggerSearchEvent () {
     if(this.onTriggerSearch){
-      this.onTriggerSearch.asObservable().subscribe(()=>{
+      this.onTriggerSearch.asObservable().subscribe((isNewSearch)=>{
         if(this.searchType && this.searchValue){
           this.noResultMsg = null;
           this.getCompanyDetails();
@@ -81,7 +95,9 @@ export class SearchTableComponent implements OnInit {
     .distinctUntilChanged()
     .subscribe(() => {
       if (!this.dataSource) { return; }
-      this.dataSource.filter = this.filter.nativeElement.value;
+      const filterValue = this.filter.nativeElement.value;
+      this.onFilterChanged.emit(filterValue);
+      this.dataSource.filter = filterValue;
     });
   }
 
@@ -91,6 +107,7 @@ export class SearchTableComponent implements OnInit {
    */
   onRowSelection (companyModel: CompanyModel) {
     companyModel.isSelected = true;
+    companyModel.filter = this.filter.nativeElement.value;
     this.onSelectionCompleted.emit(companyModel);
   }
 
@@ -103,30 +120,50 @@ export class SearchTableComponent implements OnInit {
     if(this.searchResultSubscription && !this.searchResultSubscription.closed){
       this.searchResultSubscription.unsubscribe();
     }
-    this.isProcessing = true;
     this.searchResultSubscription = this.searchService
         .getSearchResult(this.searchType, this.searchValue)
         .subscribe((data: SearchModel) =>
         {
-          this.isProcessing = false;
           if(!data || !data.companies || data.companies.length == 0){
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
           }
-          data.companies = this._preSelectCompanyModel(data.companies);
+          data.companies = this.preSelectCompanyModel(data.companies);
           this.searchTableDatabase.addRecord(data.companies);
+          this.preFilterResult();
         })
   }
 
-  _preSelectCompanyModel (companies: Array<CompanyModel>) : Array<CompanyModel> {
-    if(companies && this.loadedCompanyModel){
+
+  /**
+   * preSelectCompanyModel - Select the previously loaded company details
+   * @return {Array<CompanyModel>}
+   */
+  preSelectCompanyModel (companies: Array<CompanyModel>) : Array<CompanyModel> {
+    if(companies && this.selectedCompany){
       companies.forEach(comp=> {
-        if(comp.companyId === this.loadedCompanyModel.companyId) {
+        if(comp.companyId === this.selectedCompany.companyId) {
           comp.isSelected = true;
+          return companies;
         }
       });
     }
     return companies;
+  }
+
+
+  /**
+   * preFilterResult - Show the previously user filter
+   *
+   * @return {type}  - No return type
+   */
+  preFilterResult (){
+    if(!this.enteredSearchFilter) {
+      return;
+    }
+    this.filter.nativeElement.value = this.enteredSearchFilter;
+    this.dataSource.filter = this.enteredSearchFilter;
+    console.log(this.dataSource.filter);
   }
 
 
