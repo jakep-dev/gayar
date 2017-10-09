@@ -117,13 +117,16 @@ export class SearchTableComponent implements OnInit {
   getCompanyDetails () {
     this._resetPagination();
     this.searchTableDatabase.deleteAllRecords();
+    this.isProcessing = true;
     if(this.searchResultSubscription && !this.searchResultSubscription.closed){
+      this.isProcessing = false;
       this.searchResultSubscription.unsubscribe();
     }
     this.searchResultSubscription = this.searchService
         .getSearchResult(this.searchType, this.searchValue)
         .subscribe((data: SearchModel) =>
         {
+          this.isProcessing = false;
           if(!data || !data.companies || data.companies.length == 0){
             this.noResultMsg = SEARCH_SCREEN_NO_RESULT;
             return;
