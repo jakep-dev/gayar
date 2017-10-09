@@ -9,6 +9,12 @@ import { Observable  } from 'rxjs/Observable';
 import { SnackBarService } from 'app/shared/shared';
 import 'rxjs/add/observable/of';
 
+
+/**
+ * All constants related to search screen goes here.
+ */
+const SEARCHCRITERIA_CHANGED = "Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.";
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -50,8 +56,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnInit - description
-   *
+   * ngOnInit - Fires on initial load and loads the
+   * SearchBy, Industry, Revenue and previously loaded searchCriteria
    * @return {type}  description
    */
   ngOnInit() {
@@ -87,14 +93,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   clearSearchCriteria () {
     if (this.searchService.searchCriteria ||
         this.searchService.selectedCompany) {
+      //this.enteredSearchFilter = '';
       this.searchService.clearSearchCookies();
-      this.snackBarService.Simple('Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.');
+      this.snackBarService.Simple(SEARCHCRITERIA_CHANGED);
     }
     this.loadedCompanyModel   = null;
     this.selectedCompanyModel = null;
-    // console.log('----ClearSearchCriteria----');
-    // console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
-    // console.log('----ClearSearchCriteria----');
+    console.log('----ClearSearchCriteria----');
+    console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
+    console.log('----ClearSearchCriteria----');
   }
 
   /**
@@ -140,6 +147,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(!this.isManual){
       this.searchService.selectedCompany = this.selectedCompanyModel;
     }
+    console.log('setSelectedSearchCriteria - ', this.searchService.searchCriteria, this.searchService.selectedCompany);
   }
 
 
@@ -256,7 +264,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(this.searchService.searchCriteria ||
       this.searchService.selectedCompany){
         this.searchService.clearSearchCookies();
-        this.snackBarService.Simple('Please click on Assessment/Report to rerun the analysis as changes were made to the search criteria.');
+        this.snackBarService.Simple(SEARCHCRITERIA_CHANGED);
     }
     this.validateActions();
   }
@@ -282,7 +290,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     if(event.keyCode === 13 ||
        event.type === 'click'){
-
+       this.enteredSearchFilter = '';
        this.onSearchChange();
        this.isTriggerSearch.next(true);
     }
@@ -340,6 +348,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}       - No return type
    */
   onFilterChange (event) {
+    console.log('onFilterChange - ', event);
     this.enteredSearchFilter = event;
   }
 

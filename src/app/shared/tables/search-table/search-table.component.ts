@@ -78,6 +78,10 @@ export class SearchTableComponent implements OnInit {
   onTriggerSearchEvent () {
     if(this.onTriggerSearch){
       this.onTriggerSearch.asObservable().subscribe((isNewSearch)=>{
+        if (isNewSearch) {
+          console.log('isNewSearch - ', isNewSearch);
+          this.enteredSearchFilter = '';
+        }
         if(this.searchType && this.searchValue){
           this.noResultMsg = null;
           this.getCompanyDetails();
@@ -161,12 +165,8 @@ export class SearchTableComponent implements OnInit {
    * @return {type}  - No return type
    */
   preFilterResult (){
-    if(!this.enteredSearchFilter) {
-      return;
-    }
     this.filter.nativeElement.value = this.enteredSearchFilter;
     this.dataSource.filter = this.enteredSearchFilter;
-    console.log(this.dataSource.filter);
   }
 
 
