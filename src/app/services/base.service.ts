@@ -2,46 +2,64 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers, RequestOptionsArgs } from '@angular/http';
 import { SessionModel } from 'app/model/model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/finally';
 
 export abstract class BaseService {
     private headers: Headers = new Headers({'Content-Type': 'application/json'});
     private requestOptions: RequestOptionsArgs = { headers: this.headers };
     public currentIdentity: SessionModel;
+    private isHttpRequestInProgress: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    constructor(private http: Http){}
+    constructor(private http: Http){
+    }
+
+
+    /**
+     *
+     */
+    public isHttpReqInProgress () : BehaviorSubject<boolean> {
+      return this.isHttpRequestInProgress;
+    }
 
     //Perform the post request operation
     public Post<T>(endPoint: string, data: any): Observable<T>{
         if(!this.currentIdentity){
             this.getToken();
         }
+       this.handleRequestProgress();
        data.token = this.currentIdentity ? this.currentIdentity.token || null : null;
        return this.http.post(endPoint, data, this.requestOptions)
                  .map((res: Response)=>{
+                     this.isHttpRequestInProgress.next(false);
                      return res.json() as T
                  })
-                 .catch(this.handleException);
+                 .catch(this.handleException)
+                 .finally(this.handleFinally);
     }
 
     //Perform the get request operation
     public Get<T>(endPoint: string, data: any): Observable<T>{
         let dataString:string = JSON.stringify(data),
              path = `${endPoint}?${JSON.stringify(data)}`;
-
-       return this.http.get(path, this.requestOptions)
+        return this.http.get(path, this.requestOptions)
                  .map((res: Response)=>{
+                     this.isHttpRequestInProgress.next(false);
                      return res.json() as T;
                  })
-                 .catch(this.handleException);
+                 .catch(this.handleException)
+                 .finally(this.handleFinally);
     }
 
     public Put<T>(endPoint: string, data: any): Observable<T>{
-       return this.http.put(endPoint, JSON.stringify(data), this.requestOptions)
+        this.isHttpRequestInProgress.next(true);
+        return this.http.put(endPoint, JSON.stringify(data), this.requestOptions)
                  .map((res: Response)=>{
                      return res.json() as T;
                  })
-                 .catch(this.handleException);
+                 .catch(this.handleException)
+                 .finally(this.handleFinally);
     }
 
     public Delete<T>(endPoint: string, data: any): Observable<T>{
@@ -50,7 +68,8 @@ export abstract class BaseService {
                  .map((res: Response)=>{
                      return res.json() as T
                  })
-                 .catch(this.handleException);
+                 .catch(this.handleException)
+                 .finally(this.handleFinally);
     }
 
     private handleException(error: Response | any){
@@ -64,6 +83,14 @@ export abstract class BaseService {
         }
         console.error(errMsg);
         return Observable.throw(errMsg);
+    }
+
+    private handleFinally () {
+
+    }
+
+    private handleRequestProgress () {
+      this.isHttpRequestInProgress.next(true);
     }
 
     private getToken(){

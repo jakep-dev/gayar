@@ -17,7 +17,6 @@ export class TileComponent implements OnInit {
   @Input() isFullScreen: boolean = true;
   @Input() showProgress: boolean = false;
 
-
   /**
    * Fires on flip.
    */

@@ -1,7 +1,9 @@
-<div style="min-height: 275px;">
-    <chart [options]="chartOptions" 
-        (load)="setChart($event.context)" 
+<div fxLayout="row" fxLayoutAlign="start start">
+    <chart fxFlexFill
+        [options]="chartOptions"
+        (load)="setChart($event.context)"
         (redraw)="onRedraw($event.context)"
-        (drilldown)="onDrilldown($event, chart)" 
-        (drillup)="onDrillup($event, chart)"></chart>
+        (drilldown)="onDrilldown($event, chart)"
+        (drillup)="onDrillup($event, chart)">
+    </chart>
 </div>
