@@ -5,7 +5,7 @@
             <app-industry-overview [componentData]="frequencyIndustryOverviewInput"></app-industry-overview>
         </div>        
         <div>
-            <app-tile [title]="'Time Period'" [isSplittable]="false" [isFlippable]="false">
+            <app-tile [id]="'FREQ_TIME_PERIOD'" [title]="'Time Period'" [isSplittable]="false" [isFlippable]="false">
                 <div front>
                     <app-time-period [componentData]="frequencyInput"></app-time-period>
                 </div>
@@ -15,45 +15,24 @@
     <!-- Each 2 Chart Display -->
     <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
         <div>
-            <app-tile [title]="'Type of Incident'" [isSplittable]="true" [isFlippable]="true">
+            <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" [isSplittable]="isIncidentShowFlip" [isFlippable]="isIncidentShowSplit"
+                (onFullScreen)="isIncidentShowFlip=isIncidentShowSplit=!$event" (onFlip)="showIncidentPie=true" (onSplit)="showIncidentPie=true">
                 <div front>
                     <app-incident-bar [componentData]="frequencyInput"></app-incident-bar>
                 </div>
-                <div back>
-                    Type of Incident Pie
-                </div>
-            </app-tile>
-        </div>
-        <div>
-            <app-tile [title]="'Type of Incident'" [isSplittable]="true" [isFlippable]="true">
-                <div front>
+                <div back *ngIf="showIncidentPie">
                     <app-incident-pie [componentData]="getFrequencyIncidentFlipManualInput"></app-incident-pie>
                 </div>
-                <div back>
-                    Type of Incident Pie
-                </div>
             </app-tile>
         </div>
         <div>
-            <app-tile [title]="'Type of Loss'" [isSplittable]="false" [isFlippable]="true">
+            <app-tile [id]="'FREQ_LOSS'" [title]="'Type of Loss'" [isSplittable]="isLossShowFlip" [isFlippable]="isLossShowSplit"
+                (onFullScreen)="isLossShowFlip=isLossShowSplit=!$event" (onFlip)="showLossPie=true" (onSplit)="showLossPie=true">
                 <div front>
                     <app-loss-bar [componentData]="frequencyInput"></app-loss-bar>
                 </div>
-                <div back>
-                    Type of Loss Pie
-                </div>
-            </app-tile>
-        </div>
-    </div>
-    <!-- Temp Type of Losses Pie Charts  -->
-    <div fxLayout="row" fxLayout.md="column" fxLayoutAlign.md="start start" fxLayoutAlign="start center" fxLayoutGap="5px">
-        <div>
-            <app-tile [title]="'Type of Losses'" [isSplittable]="true" [isFlippable]="true">
-                <div front>
+                <div back *ngIf="showLossPie">
                     <app-loss-pie [componentData]="getFrequencyLossFlipManualInput"></app-loss-pie>
-                </div>
-                <div back>
-                    Type of Losses Pie
                 </div>
             </app-tile>
         </div>
@@ -61,7 +40,7 @@
 </div>
 <div>
     <div>
-        <app-tile [title]="'5 Most Recent Peer Group'">
+        <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'5 Most Recent Peer Group'">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
                 </app-simple-table>
@@ -69,7 +48,7 @@
         </app-tile>
     </div>
     <div *ngIf="companyLossesTable">>
-        <app-tile [title]="'5 Most Recent Company Losses'">
+        <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
                 </app-simple-table>
