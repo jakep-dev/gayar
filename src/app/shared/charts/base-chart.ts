@@ -99,9 +99,7 @@ export abstract class BaseChart {
                 type: 'line',
                 marginLeft: 30,
                 marginRight: 30,
-                spacingBottom: 35,
-                width: 600,
-                height: 400
+                spacingBottom: 35
             },
             credits: {
                 enabled: false,
@@ -291,7 +289,7 @@ export abstract class BaseChart {
      */
     public getYAxisPosition(yPoint: number) {
         let yOffSet = this.chart.chartHeight - this.chart.marginBottom; //position of Y axis
-        let minYAxis = this.chart.yAxis[0].min; // 
+        let minYAxis = this.chart.yAxis[0].min; //
         let maxYAxis = this.chart.yAxis[0].max;
         let heightPerUnit = this.chart.plotHeight / ( maxYAxis - minYAxis); //height per y-axis unit
 
