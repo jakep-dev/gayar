@@ -68,7 +68,7 @@
             </div>
         </app-tile>
     </div>
-    <div *ngIf="companyLossesTable">>
+    <div *ngIf="companyLossesTable">
         <app-tile [title]="'5 Most Recent Company Losses'">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
