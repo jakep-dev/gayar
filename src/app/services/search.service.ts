@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import  { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 import { SessionStorageService } from 'app/services/session-storage.service';
 import { APPCONSTANTS } from 'app/app.const';
-import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel, 
+import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel,
          SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel } from 'app/model/model';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class SearchService extends BaseService {
     private _searchCriteria: SearchCriteriaModel = null;
     private _selectedCompany: CompanyModel = null;
     public get selectedCompany(): CompanyModel {
-        return this._selectedCompany || 
+        return this._selectedCompany ||
                this._sessionStorageService.getItem<CompanyModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
     }
     public set selectedCompany(companyModel: CompanyModel) {
@@ -31,7 +31,7 @@ export class SearchService extends BaseService {
         this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA, searchCriteriaModel);
     }
 
-    
+
     public hasValidSearchCriteria () : boolean {
         return (this.selectedCompany != null || this.searchCriteria != null)
     }
@@ -47,7 +47,7 @@ export class SearchService extends BaseService {
         super(http);
         this._sessionStorageService = sessionStorageService;
     }
-    
+
     /**
      * Get all search by value details
      */
@@ -66,10 +66,10 @@ export class SearchService extends BaseService {
     public getRevenueModel(): Observable<RevenueRangeResponseModel>{
         try{
             return super.Post<RevenueRangeResponseModel>('/api/getRangeList', {
-            });    
+            });
          }
          catch(e){
- 
+
          }
     }
 
@@ -83,7 +83,7 @@ export class SearchService extends BaseService {
            return super.Post<SearchModel>('/api/doCompanySearch', {
                'searchType': searchByType,
                'searchValue': searchValue
-           });    
+           });
         }
         catch(e){
 
@@ -95,7 +95,7 @@ export class SearchService extends BaseService {
      */
     public getIndustry(): Observable<IndustryResponseModel>{
         try{
-           return super.Post<IndustryResponseModel>('/api/getIndustries', {});    
+           return super.Post<IndustryResponseModel>('/api/getIndustries', {});
         }
         catch(e){
 
@@ -112,7 +112,7 @@ export class SearchService extends BaseService {
                 'companyId': companyId
             })
         } catch (e) {
-            
+
         }
     }
 }

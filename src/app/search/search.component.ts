@@ -18,7 +18,7 @@ const SEARCHCRITERIA_CHANGED = "Please click on Assessment/Report to rerun the a
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnDestroy {
   selectedSearchBy: number = 4;

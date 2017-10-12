@@ -19,7 +19,12 @@
             <button md-icon-button [mdMenuTriggerFor]="menu" ><md-icon>more_vert</md-icon></button>
               <md-menu #menu="mdMenu">
                 <div fxLayout="column" fxLayoutAlign="center start">
-                  <button md-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)"><md-icon>fullscreen</md-icon> Full Screen</button>
+                  <button md-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)">
+                    <md-icon *ngIf="!isMaximize">fullscreen</md-icon>
+                    <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
+                    <span *ngIf="!isMaximize">Maximize</span>
+                    <span *ngIf="isMaximize">Minimize</span>
+                  </button>
                   <button md-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon> Split</button>
                   <button md-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon> Flip</button>
                   <button md-button *ngIf="isAccordion"  (click)="toggleContent($event)">
@@ -38,9 +43,9 @@
     <div
       *ngIf="isContent"
       fxLayout="row"
-      fxLayoutAlign="start center"
-      fxLayout.lt-sm="column"
-      fxLayoutAlign.lt-sm="center center">
+      fxLayoutAlign="start start"
+      fxLayout.lt-md="column"
+      fxLayoutAlign.lt-md="center center">
 
       <ng-content
         select="[front]"

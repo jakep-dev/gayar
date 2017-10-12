@@ -26,6 +26,5 @@ export class WindowListenerDirective {
           //this.sessionStorage.clearAll();
       }
 
-  constructor(private sessionStorage: SessionStorageService) { }
-
+      constructor() {}
 }
