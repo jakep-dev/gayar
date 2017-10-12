@@ -1,10 +1,15 @@
 <md-progress-bar mode="indeterminate" color="warn" *ngIf="isLoading"></md-progress-bar>
 <md-sidenav-container [style.background]="menuService.containerBgColor">
-  <md-sidenav [style.display]="menuService.isFullScreen ? 'none' : ''"  #sidenav mode="{{sideNavMode}}" opened="true">
+  <md-sidenav style="overflow: hidden !important"
+    #sidenav
+    [style.display]="menuService.isFullScreen ? 'none' : ''"
+    mode="{{sideNavMode}}"
+    opened="true">
     <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-            <img style="width:90px; height: 50px" src="../assets/images/insite20twenty.png" alt="">
+            <img class="top-long-logo" src="../assets/images/insite20twenty.png" alt="">
       </md-toolbar>
+      <div style="border: 1px solid lightgray"></div>
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
           <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">account_circle</md-icon>
@@ -40,12 +45,13 @@
           </button>
       </div>
     </div>
-    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important"
+    <div id="ShortMenu" *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important"
           (mouseover)="shortMenuMouseOver()"  >
       <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-           <img  src="../assets/images/insite_short.png" alt="">
+           <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
       </md-toolbar>
-      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+      <div style="border: 1px solid lightgray"></div>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="overflow-y: hidden !important">
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
           </button>
@@ -70,7 +76,9 @@
       </div>
     </div>
   </md-sidenav>
-  <md-toolbar [style.display]="menuService.isFullScreen ? 'none' : ''"  color="accent" class="top-menu">
+  <md-toolbar
+      [style.display]="menuService.isFullScreen ? 'none' : ''"
+      class="top-menu" color="warn">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
         <div >
           <button md-icon-button (click)="toggleMenu();">
@@ -79,18 +87,19 @@
           <span class="bread-crumb">{{this.menuService.breadCrumb}}</span>
         </div>
         <div>
-
           <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
              <div style="font-size: 13px;">{{getSearchCompanyName()}}</div>
-             <button md-icon-button routerLink="/search" (click)="onMenu('Search');"><md-icon>search</md-icon></button>
-             <button md-icon-button><md-icon>home</md-icon></button>
-             <button md-icon-button><md-icon>pie_chart</md-icon></button>
+             <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_Glossary.png" imgAlt="Glossary"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_UnderwritingFramework.png" imgAlt="UnderWriting"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
           </div>
         </div>
     </div>
   </md-toolbar>
   <div class="app-content">
     <router-outlet></router-outlet>
+    <div style="height: 100px"></div>
   </div>
 </md-sidenav-container>
