@@ -1,4 +1,4 @@
-<app-tile [title]="chartHeader" [isSplittable]="false" [isFlippable]="false">
+<app-tile [id]="'FREQ_IND_OVERVIEW'" [title]="chartHeader" [isSplittable]="false" [isFlippable]="false">
   <div front style='width: 100%; height: 100%;' fxLayout="column">
       <div *ngIf='modelData'>
           <bar-chart

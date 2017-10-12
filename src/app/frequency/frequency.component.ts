@@ -27,6 +27,12 @@ export class FrequencyComponent implements OnInit {
     chartType: string;
     naics: string;
     revenueRange: string;
+
+    isIncidentShowFlip: boolean;
+    isIncidentShowSplit: boolean;
+    isLossShowFlip: boolean;
+    isLossShowSplit: boolean;
+
     public frequencyInput: FrequencyInput;
     public getFrequencyIncidentFlipManualInput: FrequencyIncidentPieFlipData;
     public getFrequencyLossFlipManualInput: FrequencyLossPieFlipData;
@@ -45,6 +51,14 @@ export class FrequencyComponent implements OnInit {
         this.setupFrequencyInput();
         this.setupfrequencyIncidentPieFlipInput();
         this.setupfrequencyLossPieFlipInput();
+        this.setupTileButtons();
+    }
+    
+    setupTileButtons() {
+        this.isIncidentShowFlip = true;
+        this.isIncidentShowSplit= true;
+        this.isLossShowFlip = true;
+        this.isLossShowSplit = true;
     }
 
     loadFrequencyDataTable() {
