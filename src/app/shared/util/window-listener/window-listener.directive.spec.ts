@@ -5,7 +5,7 @@ describe('WindowListenerDirective', () => {
   let fixture: ComponentFixture<SessionStorageService>;
   let sessionStorageService = fixture.debugElement.injector.get(SessionStorageService);
   it('should create an instance', () => {
-    const directive = new WindowListenerDirective(sessionStorageService);
+    const directive = new WindowListenerDirective();
     expect(directive).toBeTruthy();
   });
 });
