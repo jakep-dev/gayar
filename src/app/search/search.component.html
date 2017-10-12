@@ -18,7 +18,7 @@
              fxLayoutGap="20px">
 
           <md-select  fxFlex="30" placeholder="Select search by" [(ngModel)]="selectedSearchBy"
-               (ngModelChange)="onSearchByChange()" floatPlaceholder="never">
+               (ngModelChange)="onSearchByChange()" floatPlaceholder="never" color="accent">
               <md-option *ngFor="let item of searchByList" [value]="item.id">{{item.description}}</md-option>
           </md-select>
 
@@ -31,7 +31,7 @@
           </div>
 
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
-            <md-input-container  fxFlex floatPlaceholder="never" dividerColor="primary"  >
+            <md-input-container  fxFlex floatPlaceholder="never" dividerColor="accent">
 
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
@@ -79,15 +79,15 @@
       </div>
       <div front fxLayout="row" fxFlex  class="padding-left-10">
           <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
-              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
+              <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
                 <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onProgramStructureChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
              </md-input-container>
 
-             <md-input-container class="width-50"floatPlaceholder="never" dividerColor="primary"  align="start" >
+             <md-input-container class="width-50"floatPlaceholder="never" dividerColor="accent"  align="start" >
               <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
               </md-input-container>
 
-             <md-input-container class="width-50" floatPlaceholder="never" dividerColor="primary"  align="start" >
+             <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
                 <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
              </md-input-container>
           </div>
@@ -96,18 +96,14 @@
 
   <blank-tile [id]="'SEARCH_ACTIONS'">
     <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
-      <button md-raised-button (click)="onAssessment()" color="accent" [disabled]="!isActionEnabled">
+      <button md-raised-button (click)="onAssessment()" [disabled]="!isActionEnabled">
         <md-icon>speaker_notes</md-icon>
         Assessment
       </button>
 
-      <button md-raised-button (click)="onReport()" color="accent" [disabled]="!isActionEnabled">
+      <button md-raised-button (click)="onReport()"  [disabled]="!isActionEnabled">
         <md-icon>pie_chart</md-icon>
         Report
       </button>
     </div>
   </blank-tile>
-
-  <div style="height: 50px">
-
-  </div>

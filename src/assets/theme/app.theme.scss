@@ -1,12 +1,78 @@
 @import '~@angular/material/_theming';
 
+$mat-sidenav-background-color: #464646;
+
+$mat-advisen-primary: (
+  50: #464646,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50: white,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: $white-87-opacity,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: $black-87-opacity,
+    A400: $black-87-opacity,
+    A700: $black-87-opacity,
+  )
+);
+
+$mat-advisen-accent: (
+  50: #b1d23b,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50:  $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: $white-87-opacity,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: $black-87-opacity,
+    A400: $black-87-opacity,
+    A700: $black-87-opacity,
+  )
+);
+
 @include mat-core();
 
-$cyber-app-primary: mat-palette($mat-blue-grey, 900);
-$cyber-app-accent: mat-palette($mat-grey, 0);
-$cyber-app-warn: mat-palette($mat-amber, A200, A100, A400);
+$cyber-app-primary: mat-palette($mat-advisen-primary, 50);
+$cyber-app-accent: mat-palette($mat-advisen-accent, 50);
+$cyber-app-warn: mat-palette($mat-grey, 0);
 $cyber-app-theme: mat-light-theme($cyber-app-primary, $cyber-app-accent, $cyber-app-warn);
 
 @include angular-material-theme($cyber-app-theme);
-
-
