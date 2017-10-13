@@ -13,27 +13,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
 
     @Input() chartComponent: BaseChart;
 
-    ngOnChanges(changes: SimpleChanges) {
-        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
-            this.chartComponent = changes['chartComponent'].currentValue;
-            this.chartComponent.addChartLabel(
-                this.displayText, 
-                10, 
-                this.chartComponent.chart.chartHeight - 70, 
-                '#000000',
-                10,
-                null,
-                this.chartComponent.chart.chartWidth - 73
-            );
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png', 
-                this.chartComponent.chart.chartWidth - 80, 
-                this.chartComponent.chart.chartHeight - 20, 
-                69, 
-                17
-            );
-        }
-    }
+    ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
 
