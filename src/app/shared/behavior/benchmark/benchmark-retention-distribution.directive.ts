@@ -128,9 +128,9 @@ export class BenchmarkRetentionDistributionDirective implements OnInit, OnChange
                 series = new Object();
                 series.name = groupNames[seriesIndex];
                 series.color = this.getSeriesColor(series.name);
-                series.pointWidth = 20;
+                //series.pointWidth = 20;
                 series.borderWidth = 0;
-                series.pointPlacement = -0.20;
+                series.pointPlacement = 0;
                 series.data = new Array();
                 for (categoryIndex = 0; categoryIndex < categoriesLength; categoryIndex++) {
                     if ((group[tempChartData.categories[categoryIndex]] != undefined) && (group[tempChartData.categories[categoryIndex]] != null)) {
