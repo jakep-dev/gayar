@@ -93,10 +93,14 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
     
     onRedraw(chart: BaseChart) {
-        if(this.hasRedrawActions) {
-            this.onChartRedraw.emit(this);
-            this.hasRedrawActions = false;
-        }
+        //if(this.hasRedrawActions) {
+        this.renderedObject.forEach(object => {
+            object.destroy(); 
+        });
+        this.renderedObject = [];
+        this.onChartRedraw.emit(this);
+        this.hasRedrawActions = false;
+        //}
     }
     
 }

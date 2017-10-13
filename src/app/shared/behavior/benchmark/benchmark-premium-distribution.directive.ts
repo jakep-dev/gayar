@@ -14,28 +14,7 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
 
     @Input() chartComponent: BaseChart;
     
-    ngOnChanges(changes: SimpleChanges) {
-        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
-            this.chartComponent = changes['chartComponent'].currentValue;
-            let labelHeight = ((Math.ceil(this.displayText.length / BenchmarkPremiumDistributionDirective.maxCharactersPerLine)) * 10);
-            this.chartComponent.addChartLabel(
-                this.displayText,
-                10,
-                this.chartComponent.chart.chartHeight - labelHeight,
-                '#000000',
-                10,
-                null,
-                this.chartComponent.chart.chartWidth - 85
-            );
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png',
-                this.chartComponent.chart.chartWidth - 80,
-                this.chartComponent.chart.chartHeight - 20,
-                69,
-                17
-            );
-        }
-    }
+    ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
 
@@ -149,9 +128,9 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
                 series = new Object();
                 series.name = groupNames[seriesIndex];
                 series.color = this.getSeriesColor(series.name);
-                series.pointWidth = 20;
+                //series.pointWidth = 20;
                 series.borderWidth = 0;
-                series.pointPlacement = -0.20;
+                series.pointPlacement = 0;
                 series.data = new Array();
                 for (categoryIndex = 0; categoryIndex < categoriesLength; categoryIndex++) {
                     if ((group[tempChartData.categories[categoryIndex]] != undefined) && (group[tempChartData.categories[categoryIndex]] != null)) {

@@ -3,6 +3,8 @@ export abstract class BaseChart {
 
     chart: any;
     chartOptions: any;
+    renderedObject: any;
+    chartData: any;
 
     constructor() {
         this.initializeChart();
@@ -92,6 +94,7 @@ export abstract class BaseChart {
      * initialize common options for all chart types
      */
     initializeChart() {
+        this.renderedObject = new Array();
         this.chartOptions = {
             chart: {
                 //default chart type is line
@@ -226,14 +229,14 @@ export abstract class BaseChart {
      */
     public addChartLabel(text: string, xPos: number, yPos: number, color: string, fontSize: number, fontWeight?: string, width?: number) {
 
-        let render = this.chart.renderer.text(text, xPos, yPos);
-        let css = {
+        var render = this.chart.renderer.text(text, xPos, yPos);
+        var css = {
             color: color || '#000',
             fontSize: (fontSize || 12) + 'px',
             fontWeight: fontWeight || 'normal'
         };
 
-        let attr = {
+        var attr = {
             zIndex: 999
         };
 
@@ -244,6 +247,8 @@ export abstract class BaseChart {
         render.css(css)
         render.attr(attr);
         render.add();
+
+        this.renderedObject.push(render);
     }
 
     /**
@@ -256,7 +261,10 @@ export abstract class BaseChart {
      */
     public addChartImage(link: string, xPos: number, yPos: number, width: number, height: number) {
 
-        this.chart.renderer.image(link, xPos, yPos, width, height).add();
+        var render = this.chart.renderer.image(link, xPos, yPos, width, height).add();
+        render.add();
+
+        this.renderedObject.push(render);
     }
 
     /**
@@ -269,17 +277,19 @@ export abstract class BaseChart {
     public addLine(startPoint:Array<number>, linePoints:Array<number>, color?: string, width?: number) {
         if(startPoint && startPoint.length > 0 &&
             linePoints && linePoints.length > 0) {
-                let pathArray = ['M', 'L'];
-                //pathArray.splice(1, 0, ...startPoint);
-                //pathArray.splice(pathArray.length, 0 , ...linePoints);
+                var pathArray = ['M', 'L'];
+                pathArray.splice(1, 0, ...startPoint);
+                pathArray.splice(pathArray.length, 0 , ...linePoints);
 
-                this.chart.renderer.path(pathArray)
+                var render = this.chart.renderer.path(pathArray)
                     .attr({
                         stroke: color || 'black',
                         'stroke-width': width || 1,
                         zIndex: 999
                     })
-                    .add();
+                    
+                    render.add();
+                    this.renderedObject.push(render);
             }
     }
 

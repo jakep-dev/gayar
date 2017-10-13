@@ -41,7 +41,28 @@ export class PeerGroupLossComponent implements OnInit {
      */
     onChartReDraw(chart: BaseChart) {
         //this.chartComponent = chart;
+        this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+    }
+
+    addLabelAndImage(chart){
+        chart.addChartLabel(
+            chart.chartData.displayText, 
+            10, 
+            chart.chart.chartHeight - 70, 
+            '#000000',
+            10,
+            null,
+            chart.chart.chartWidth - 73
+        );
+
+        chart.addChartImage(
+            'https://www.advisen.com/img/advisen-logo.png', 
+            chart.chart.chartWidth - 80, 
+            chart.chart.chartHeight - 20, 
+            69, 
+            17
+        );
     }
 
     constructor(private benchmarkService: BenchmarkService) {
