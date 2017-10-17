@@ -13,7 +13,7 @@
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
             <button md-icon-button *ngIf="isFlippable"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
             <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)" 
-                [ngClass]="{'expand-collapse-rotate-exp-90':isContent, 'expand-collapse-rotate-cps-90':!isContent}">
+                [ngClass]="{'collapse':isContent, 'expand':!isContent}">
                 <i *ngIf="isContent" class="icon-backburger expand-collapse"></i>
                 <i *ngIf="!isContent" class="icon-backburger expand-collapse"></i>
             </button>

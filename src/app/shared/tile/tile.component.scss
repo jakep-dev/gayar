@@ -42,10 +42,20 @@
     font-size: 22px;
 }
 
-.expand-collapse-rotate-exp-90 {
-    transform: rotate(90deg);
+.collapse
+{
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transition: transform 0.2s ease-in-out 0.1s;
+  transform: rotate(90deg);
 }
 
-.expand-collapse-rotate-cps-90 {
-    transform: rotate(-90deg);
+.expand
+{
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transition: transform 0.2s ease-in-out 0.1s;
+  transform: rotate(270deg);
 }
