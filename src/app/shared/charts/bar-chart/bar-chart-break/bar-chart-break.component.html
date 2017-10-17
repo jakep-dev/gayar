@@ -1,11 +1,11 @@
-<div class="chart-holder">
-    <chart id="chart-break" class="chart-style" 
+<div class="chart-holder width-100">
+    <chart id="chart-break" class="chart-style width-100" 
         [options]="chartWithBreakOptions" 
         (load)="setChartWithBreak($event.context)"
         (drilldown)="onDrilldown($event, true)" 
         (drillup)="onDrillup($event, true)">
     </chart>
-    <chart id="chart-main" class="chart-style" 
+    <chart id="chart-main" class="chart-style width-100" 
         [options]="chartOptions" 
         (load)="setChart($event.context)" 
         (redraw)="onRedraw($event.context)"
