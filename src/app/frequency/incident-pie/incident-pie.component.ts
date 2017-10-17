@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FrequencyService } from 'app/services/frequency.service';
 
 @Component({
-  selector: 'app-incident-pie',
+  selector: 'frequency-incident-pie',
   templateUrl: './incident-pie.component.html',
   styleUrls: ['./incident-pie.component.css']
 })

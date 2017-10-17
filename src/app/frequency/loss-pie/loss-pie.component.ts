@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PieChartData, FrequencyLossPieFlipData, FrequencyLossPieFlipModel } from 'app/model/model';
 
 @Component({
-  selector: 'app-loss-pie',
+  selector: 'frequency-loss-pie',
   templateUrl: './loss-pie.component.html',
   styleUrls: ['./loss-pie.component.css']
 })

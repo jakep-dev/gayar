@@ -6,7 +6,7 @@ import { FrequencyService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
-    selector: 'app-incident-bar',
+    selector: 'frequency-incident-bar',
     templateUrl: './incident-bar.component.html',
     styleUrls: ['./incident-bar.component.css']
 })

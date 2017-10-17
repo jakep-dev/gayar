@@ -7,7 +7,7 @@ import { FrequencyService } from "app/services/services";
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-industry-overview',
+  selector: 'frequency-industry-overview',
   templateUrl: './industry-overview.component.html',
   styleUrls: ['./industry-overview.component.css']
 })

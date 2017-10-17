@@ -6,7 +6,7 @@ import { FrequencyService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
 @Component({
-    selector: 'app-time-period',
+    selector: 'frequency-time-period',
     templateUrl: './time-period.component.html',
     styleUrls: ['./time-period.component.css']
 })
