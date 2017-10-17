@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule, MdSnackBarModule, MdDialogModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
+import { DragulaModule } from "ng2-dragula";
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsProvider } from './shared/highchart/highchart';
 
@@ -60,6 +61,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     MdSnackBarModule,
     MdDialogModule,
     CdkTableModule,
+    DragulaModule,
     ChartModule,
     RouterModule.forRoot(APP_ROUTES)
   ],

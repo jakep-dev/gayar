@@ -1,58 +1,31 @@
-<!-- Outer Most Panel -->
 <div
-  fxLayout="column"
-  fxLayoutAlign="start start"
-  fxLayoutGap="2px">
-    <!-- Each 2 Chart Display -->
-    <div
-      class="width-100"
-      fxLayout="row"
-      fxLayoutAlign="start start"
-      fxLayout.lt-lg="column"
-      fxLayoutAlign.lt-lg="start start"
-      fxLayoutGap="2px">
-        <div
-          class="width-100"
-          *ngIf="benchmarkDistributionInput">
-            <app-premium class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
-        </div>
-        <div
-          class="width-100"
-          *ngIf="benchmarkDistributionInput">
-            <app-limit [componentData]="benchmarkDistributionInput"></app-limit>
-        </div>
-    </div>
-    <div
-      class="width-100"
-      fxLayout="row"
-      fxLayoutAlign="start start"
-      fxLayout.lt-lg="column"
-      fxLayoutAlign.lt-lg="start start"
-      fxLayoutGap="2px">
-        <div
-          class="width-100"
-          *ngIf="benchmarkDistributionInput">
-            <app-retention [componentData]="benchmarkDistributionInput"></app-retention>
-        </div>
-        <div
-          class="width-100"
-          *ngIf="benchmarkRateInput">
-            <app-rate [componentData]="benchmarkRateInput"></app-rate>
-        </div>
-    </div>
-    <div
-      class="width-100"
-      fxLayout="row"
-      fxLayoutAlign="start start"
-      fxLayout.lt-lg="column"
-      fxLayoutAlign.lt-lg="start start"
-      fxLayoutGap="2px">
-        <div
-          class="width-100"
-          *ngIf="benchmarkLimitAdequacyInput">
-            <app-peer-group-loss [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-        </div>
-    </div>
-    <!-- Each 2 Chart Display -->
+    fxLayout="column"
+    fxLayoutAlign="start start"
+    fxLayoutGap="2px">
+      <div  class="width-100"
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayout.lt-lg="column"
+            fxLayoutAlign.lt-lg="start start"
+            fxLayoutGap="2px">
+        <app-premium  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+        <app-limit    *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
+      </div>
+      <div  class="width-100"
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayout.lt-lg="column"
+            fxLayoutAlign.lt-lg="start start"
+            fxLayoutGap="2px">
+            <app-retention *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
+            <app-rate *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+      </div>
+      <div  class="width-100"
+            fxLayout="row"
+            fxLayoutAlign="start start"
+            fxLayout.lt-lg="column"
+            fxLayoutAlign.lt-lg="start start"
+            fxLayoutGap="2px">
+          <app-peer-group-loss *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+      </div>
 </div>
-<!-- Outer Most Panel -->

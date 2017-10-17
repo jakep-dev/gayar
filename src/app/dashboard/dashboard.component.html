@@ -1,26 +1,10 @@
-<div front flex fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px" class="padding-left-10 padding-right-10">
-  <div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-      <div>
-        <div *ngIf="getBenchmarkScoreByManualInput">
-          <app-dashboard-frequency [componentData]="getBenchmarkScoreByManualInput"></app-dashboard-frequency>
-        </div>
-      </div>
-      <div>
-        <div *ngIf="getBenchmarkScoreByManualInput">
-          <dashboard-benchmark-score [componentData]="getBenchmarkScoreByManualInput"></dashboard-benchmark-score>
-        </div>
-      </div>
-      <div>
-        <app-tile [title]="'Severity'" [isSplittable]="false" [isFlippable]="false">
-          <div front style='width: 100%; height: 100%;'>
-            <app-dashboard-impact></app-dashboard-impact>
-          </div>
-          <div back style='width: 100%; height: 100%;'>
-            Row 1 Tile 1 Chart 2 Place Holder
-          </div>
-        </app-tile>
-      </div>
-    </div>
-  </div>
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayout.lt-lg="column"
+  fxLayoutAlign.lt-lg="start start"
+  fxLayoutGap="2px">
+    <app-dashboard-frequency  class="width-100" *ngIf="getBenchmarkScoreByManualInput" [componentData]="getBenchmarkScoreByManualInput"></app-dashboard-frequency>
+    <dashboard-benchmark-score class="width-100" *ngIf="getBenchmarkScoreByManualInput" [componentData]="getBenchmarkScoreByManualInput"></dashboard-benchmark-score>
+    <app-dashboard-impact class="width-100"></app-dashboard-impact>
 </div>
