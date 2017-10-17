@@ -1,8 +1,7 @@
-import {FrequencyInput} from '../model/model';
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService } from 'app/services/services';
-import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput, FrequencyIncidentPieFlipData, FrequencyLossPieFlipData } from 'app/model/model';
+import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
 
 @Component({
     selector: 'app-frequency',

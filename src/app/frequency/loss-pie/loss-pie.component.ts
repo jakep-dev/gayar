@@ -3,7 +3,7 @@ import { FrequencyService } from 'app/services/services';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { PieChartData, FrequencyLossPieFlipData, FrequencyLossPieFlipModel } from 'app/model/model';
+import { PieChartData, FrequencyInput, FrequencyLossPieFlipModel } from 'app/model/model';
 
 @Component({
   selector: 'frequency-loss-pie',
@@ -23,7 +23,7 @@ export class LossPieComponent implements OnInit {
 
     chartData: PieChartData;
 
-    @Input() componentData: FrequencyLossPieFlipData;
+    @Input() componentData: FrequencyInput;
 
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 
