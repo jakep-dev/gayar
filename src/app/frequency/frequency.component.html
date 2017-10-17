@@ -8,10 +8,10 @@
         fxLayout.lt-lg="column"
         fxLayoutAlign.lt-lg="start start"
         fxLayoutGap="2px">
-        <app-industry-overview *ngIf="frequencyIndustryOverviewInput" class="width-100" [componentData]="frequencyIndustryOverviewInput"></app-industry-overview>
+        <frequency-industry-overview *ngIf="frequencyInput" class="width-100" [componentData]="frequencyInput"></frequency-industry-overview>
         <app-tile [id]="'FREQ_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
             <div front class="width-100" fxLayout="row">
-                <app-time-period [componentData]="frequencyInput" class="width-100" fxFlexFill></app-time-period>
+                <frequency-time-period [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-time-period>
             </div>
         </app-tile>
   </div>
@@ -27,10 +27,10 @@
                   (onFlip)="showIncidentPie=true" 
                   (onSplit)="showIncidentPie=true">
             <div front class="width-100" fxLayout="row">
-                <app-incident-bar [componentData]="frequencyInput" class="width-100" fxFlexFill></app-incident-bar>
+                <frequency-incident-bar [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-incident-bar>
             </div>
             <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
-                <app-incident-pie [componentData]="getFrequencyIncidentFlipManualInput" class="width-100" fxFlexFill></app-incident-pie>
+                <frequency-incident-pie [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-incident-pie>
             </div>
         </app-tile>
 
@@ -41,10 +41,10 @@
                   (onFlip)="showLossPie=true" 
                   (onSplit)="showLossPie=true">
         <div front>
-            <app-loss-bar [componentData]="frequencyInput"></app-loss-bar>
+            <frequency-loss-bar [componentData]="frequencyInput"></frequency-loss-bar>
         </div>
         <div back *ngIf="showLossPie">
-            <app-loss-pie [componentData]="getFrequencyLossFlipManualInput"></app-loss-pie>
+            <frequency-loss-pie [componentData]="frequencyInput"></frequency-loss-pie>
         </div>
     </app-tile>
   </div>
