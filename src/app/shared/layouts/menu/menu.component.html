@@ -30,8 +30,9 @@
             <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
-                <md-icon class="md-18">gamepad</md-icon>
+          <button md-button routerLink="/severity" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Severity');"
+            routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+            <md-icon class="md-18">gamepad</md-icon>
                 <span>Severity</span>
             </button>
           <button md-button routerLink="/benchmark" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Benchmark');"
@@ -64,7 +65,7 @@
           <button md-button routerLink="/frequency" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Frequency');" routerLinkActive="active">
                 <md-icon class="md-18">wifi</md-icon>
           </button>
-          <button md-button (click)="onMenu()" [disabled]="true">
+          <button md-button routerLink="/severity" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Severity');" routerLinkActive="active">
                 <md-icon class="md-18">gamepad</md-icon>
           </button>
           <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
