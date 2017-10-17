@@ -43,6 +43,78 @@ export class SearchService extends BaseService {
         this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA);
     }
 
+    /**
+     * Extract the search type. 
+     */
+    public get getSearchType () {
+        return this.searchCriteria.type;
+    }
+
+    /**
+     * Extract the company Id.
+     */
+    public get getCompanyId () {
+        if(!(this.selectedCompany && this.selectedCompany.companyId)){
+            return null;
+        }
+
+        return this.selectedCompany.companyId;
+    }
+
+    /**
+     * Extract the naics.
+     */
+    public get getNaics () {
+        if(!(this.searchCriteria.industry && this.searchCriteria.industry.naicsDescription)){
+            return null;
+        }
+        
+        return this.searchCriteria.industry.naicsDescription;
+    }
+
+    /**
+     * Extract the revenue range.
+     */
+    public get getRevenueRange () {
+        if(!(this.searchCriteria.revenue && this.searchCriteria.revenue.rangeDisplay)){
+            return null;
+        }
+        return `${this.searchCriteria.revenue.id} ` ;
+    }
+
+    /**
+     * Extract the premium.
+     */
+    public get getPremium () {
+        if(!(this.searchCriteria.premium && this.searchCriteria.premium !== '0')) {
+            return null;
+        }
+        return this.searchCriteria.premium;
+    }
+
+    /**
+     * Extract the limit.
+     */
+    public get getLimit () {
+        if(!(this.searchCriteria.limit && this.searchCriteria.limit !== '0')) {
+            return null;
+        }
+
+        return this.searchCriteria.limit;
+    }
+
+    /**
+     * Extract the retention
+     */
+    public get getRetention () {
+        if(!(this.searchCriteria.retention && this.searchCriteria.retention != '0')) {
+            return null;
+        }
+
+        return this.searchCriteria.retention;
+    }
+
+
     constructor(http: Http, sessionStorageService: SessionStorageService) {
         super(http);
         this._sessionStorageService = sessionStorageService;
