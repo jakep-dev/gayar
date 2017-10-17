@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { MenuService } from 'app/services/services';
 import { FLIP_ANIMATION, SPLIT_ANIMATION, FLYINOUT_ANIMATION } from 'app/shared/animations/animations';
 
@@ -15,6 +15,7 @@ export class TileComponent implements OnInit {
   @Input() isAccordion: boolean = true;
   @Input() isFlippable: boolean = false;
   @Input() isFullScreen: boolean = true;
+  @Input() isDragable: boolean = false;
   @Input() showProgress: boolean = false;
 
   /**
@@ -39,7 +40,9 @@ export class TileComponent implements OnInit {
   isMaximize:   boolean = false;
   isTileVisible: boolean = true;
 
-  constructor(private menuService: MenuService) { }
+  constructor(private menuService: MenuService, 
+              private element: ElementRef) {
+  }
 
   ngOnInit() {
     this.menuService.appTileComponents.push(this);
@@ -68,13 +71,14 @@ export class TileComponent implements OnInit {
    * Toggle full screen
    */
   toggleFullScreen(){
-      console.log(this.menuService.appTileComponents);
       this.menuService.appTileComponents.forEach(tile => {
           if (tile.id !== this.id) {
             tile.isTileVisible = this.isMaximize;
           }
       });
       this.isMaximize = !this.isMaximize;
+      this.isAccordion = !this.isMaximize;
+      this.isContent = true;
       this.menuService.isFullScreen = this.isMaximize;
       this.onFullScreen.emit(this.isMaximize);
   }
