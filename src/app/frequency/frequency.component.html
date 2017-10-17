@@ -24,7 +24,6 @@
         <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" 
                   class="width-100"
                   [isSplittable]="isIncidentShowFlip" [isFlippable]="isIncidentShowSplit"
-                  (onFullScreen)="isIncidentShowFlip=isIncidentShowSplit=!$event" 
                   (onFlip)="showIncidentPie=true" 
                   (onSplit)="showIncidentPie=true">
             <div front class="width-100" fxLayout="row">
@@ -39,7 +38,6 @@
                   class="width-100"
                   [isSplittable]="isLossShowFlip" 
                   [isFlippable]="isLossShowSplit"
-                  (onFullScreen)="isLossShowFlip=isLossShowSplit=!$event" 
                   (onFlip)="showLossPie=true" 
                   (onSplit)="showLossPie=true">
         <div front>
