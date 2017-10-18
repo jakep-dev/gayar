@@ -1,5 +1,4 @@
- <div id="wrapper" >
-  <app-tile [id]="'SELECT_COMPANY'" [title]="'SELECT COMPANY'">
+<app-tile [id]="'SELECT_COMPANY'" [title]="'SELECT COMPANY'">
     <div header>
         <span class="required" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Required)</span>
     </div>
@@ -71,29 +70,28 @@
            </app-search-table>
          </div>
     </div>
-  </app-tile>
-  <app-tile [id]="'PROGRAM_STRUCTURE'" [title]="'PROGRAM STRUCTURE'">
+</app-tile>
+
+<app-tile [id]="'PROGRAM_STRUCTURE'" [title]="'PROGRAM STRUCTURE'">
     <div header>
         <span class="optional" fxLayout="row" fxLayoutAlign="center center">&nbsp;(Optional)</span>
     </div>
-    <div front fxLayout="row" fxFlex  class="padding-left-10">
-        <div fxLayout="column" fxFlex  fxLayoutGap="0px"  fxLayoutAlign="center start">
-            <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
-              <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onProgramStructureChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
-           </md-input-container>
+    <div front fxLayout="column" fxLayoutAlign="end start" class="padding-left-10 width-100">
+        <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
+            <input mdInput [(ngModel)]="selectedPremium" (ngModelChange)="onProgramStructureChange()" autofocus   kmbConversion  type="text" placeholder="Enter Premium">
+         </md-input-container>
 
-           <md-input-container class="width-50"floatPlaceholder="never" dividerColor="accent"  align="start" >
-            <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
-            </md-input-container>
+         <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
+          <input mdInput [(ngModel)]="selectedLimit" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Limit">
+          </md-input-container>
 
-           <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
-              <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
-           </md-input-container>
-        </div>
+         <md-input-container class="width-50" floatPlaceholder="never" dividerColor="accent"  align="start" >
+            <input mdInput [(ngModel)]="selectedRetention" (ngModelChange)="onProgramStructureChange()" autofocus kmbConversion type="text" placeholder="Enter Retention">
+         </md-input-container>
     </div>
-  </app-tile>
- </div>
-  <blank-tile [id]="'SEARCH_ACTIONS'">
+</app-tile>
+
+<blank-tile [id]="'SEARCH_ACTIONS'">
     <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" style="padding-right: 5px">
       <button md-raised-button (click)="onAssessment()" [disabled]="!isActionEnabled">
         <md-icon>speaker_notes</md-icon>
@@ -105,5 +103,5 @@
         Report
       </button>
     </div>
-  </blank-tile>
+</blank-tile>
 
