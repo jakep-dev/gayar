@@ -291,7 +291,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(event.keyCode === 13 ||
        event.type === 'click'){
        this.enteredSearchFilter = '';
-       this.onSearchChange();
+       //this.onSearchChange();
        this.isTriggerSearch.next(true);
     }
   }
