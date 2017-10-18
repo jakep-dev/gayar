@@ -1,4 +1,4 @@
-<div class="tile-container" *ngIf="isTileVisible">
+<div class="tile-container" *ngIf="isTileVisible" [ngClass]="{'tile-maximize': isMaximize}">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
           <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
