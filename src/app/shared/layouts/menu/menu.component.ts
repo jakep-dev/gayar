@@ -4,6 +4,8 @@ import { DOCUMENT } from "@angular/platform-browser";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
+const NAV_MODE = 'side';
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -15,7 +17,7 @@ export class MenuComponent implements OnInit {
   searchCompanyName: string;
   showShortMenu: boolean = true;
   isMenuLock: boolean = false;
-  sideNavMode: string = 'side';
+  sideNavMode: string = NAV_MODE;
   constructor(private menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
@@ -23,7 +25,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.sideNavMode = "side";
+    this.sideNavMode = NAV_MODE;
     this.watchForInprogress();
   }
 
@@ -49,7 +51,7 @@ export class MenuComponent implements OnInit {
    * @return {void}  - No return type
    */
   shortMenuMouseOver () {
-    this.sideNavMode = "side";
+    this.sideNavMode = NAV_MODE;
     if(this.sideNavMode){
       this.showShortMenu = false;
     }
@@ -96,7 +98,7 @@ export class MenuComponent implements OnInit {
   shortMenuMouseLeave(){
     if(!this.showShortMenu && !this.isMenuLock){
       this.showShortMenu = true;
-      this.sideNavMode = "side";
+      this.sideNavMode = NAV_MODE;
     }
   }
 }

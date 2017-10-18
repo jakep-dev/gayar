@@ -1,13 +1,13 @@
-import {BaseChart} from '../../shared/charts/base-chart';
-import {BarChartData} from '../../model/charts/bar-chart.model';
+import { BaseChart }  from '../../shared/charts/base-chart';
+import { BarChartData } from '../../model/charts/bar-chart.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FrequencyIndustryOverviewModel, FrequencyIndustryOverviewInput } from "app/model/model";
+import { FrequencyIndustryOverviewModel, FrequencyInput } from "app/model/model";
 import { FrequencyService } from "app/services/services";
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-industry-overview',
+  selector: 'frequency-industry-overview',
   templateUrl: './industry-overview.component.html',
   styleUrls: ['./industry-overview.component.css']
 })
@@ -23,7 +23,7 @@ export class IndustryOverviewComponent implements OnInit {
 
     chartData: BarChartData;
 
-    @Input() componentData: FrequencyIndustryOverviewInput;
+    @Input() componentData: FrequencyInput;
 
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 

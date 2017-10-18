@@ -5,6 +5,7 @@ export * from './auth-activator.service';
 export * from './menu.service';
 export * from './dashboard.service';
 export * from './frequency.service';
+export * from './severity.service'
 export * from './session-storage.service';
 
 
@@ -15,6 +16,7 @@ import { MenuService } from './menu.service';
 import { AuthRouteActivatorService } from './auth-activator.service';
 import { DashboardService } from './dashboard.service';
 import { FrequencyService } from './frequency.service';
+import { SeverityService } from './severity.service';
 import { SessionStorageService } from './session-storage.service';
 
 export const BLOCK_SERVICES = [
@@ -25,6 +27,7 @@ export const BLOCK_SERVICES = [
     AuthRouteActivatorService,
     DashboardService,
     FrequencyService,
+    SeverityService,
     SessionStorageService
 ];
 

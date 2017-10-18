@@ -1,12 +1,12 @@
-import {BaseChart} from '../../shared/charts/base-chart';
+import { BaseChart } from '../../shared/charts/base-chart';
 import { Component, OnInit, Input } from '@angular/core';
-import { FrequencyIncidentPieFlipModel, PieChartData, FrequencyIncidentPieFlipData } from 'app/model/model';
+import { FrequencyIncidentPieFlipModel, PieChartData, FrequencyInput } from 'app/model/model';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FrequencyService } from 'app/services/frequency.service';
 
 @Component({
-  selector: 'app-incident-pie',
+  selector: 'frequency-incident-pie',
   templateUrl: './incident-pie.component.html',
   styleUrls: ['./incident-pie.component.css']
 })
@@ -25,7 +25,7 @@ export class IncidentPieComponent implements OnInit {
 
     chartData: PieChartData;
 
-    @Input() componentData: FrequencyIncidentPieFlipData;
+    @Input() componentData: FrequencyInput;
 
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 

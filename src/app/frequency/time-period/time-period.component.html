@@ -1,5 +1,6 @@
 <div *ngIf='modelData'>
     <bar-chart *ngIf='!modelData?.withBreak' 
+        class="width-100"
         frequeny-time-period
         [modelData]="modelData" 
         [chartData]="chartData" 
@@ -7,7 +8,8 @@
         (onDataComplete)="onDataComplete($event)" 
         (onChartRedraw)="onChartReDraw($event)">
     </bar-chart>
-    <bar-chart-with-break *ngIf='modelData?.withBreak' 
+    <bar-chart-with-break *ngIf='modelData?.withBreak'  
+        class="width-100"
         frequeny-time-period
         [modelData]="modelData" 
         [chartData]="chartData"

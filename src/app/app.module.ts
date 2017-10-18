@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule, MdSnackBarModule, MdDialogModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
+import { DragulaModule } from "ng2-dragula";
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsProvider } from './shared/highchart/highchart';
 
@@ -23,6 +24,7 @@ import { APP_ROUTES  } from './app.routes';
 import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { BLOCK_FREQUENCY } from './frequency/frequency';
+import { BLOCK_SEVERITY } from './severity/severity';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
 import { BLOCK_SERVICES } from './services/services';
@@ -39,6 +41,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     BLOCK_DASHBOARD,
     BLOCK_BENCHMARK,
     BLOCK_FREQUENCY,
+    BLOCK_SEVERITY,
     MenuComponent,
     SearchComponent,
     SsoComponent,
@@ -60,6 +63,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     MdSnackBarModule,
     MdDialogModule,
     CdkTableModule,
+    DragulaModule,
     ChartModule,
     RouterModule.forRoot(APP_ROUTES)
   ],

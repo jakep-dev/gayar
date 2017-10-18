@@ -26,19 +26,12 @@ export interface FrequencyIndustryOverviewModel {
     xAxis: string;
     yAxis: string;
     datasets: Array<IndustryOverviewDataset>
+}
 
-}      
 export interface IndustryOverviewDataset {
     incidentCount: string;
     revenueRange: string;
     description: string;
-}
-
-
-export interface FrequencyIndustryOverviewInput {
-    companyId: number;
-    naics: string;
-
 }
 
 export interface FrequencyIncidentBarModel {
@@ -92,13 +85,6 @@ export interface DataSetsGroup{
     type: string;
 }
 
-export interface FrequencyIncidentPieFlipData {
-    searchType: string;
-    companyId: number;
-    naics: string;
-    revenueRange: string;
-}
-
 export interface FrequencyTimePeriodModel {    
     chartTitle: string;
     filterDescription: string;
@@ -129,11 +115,4 @@ export interface DataLossPieSetsGroup{
     pct_count: number;
     sub_type: string;
     type: string;
-}
-
-export interface FrequencyLossPieFlipData {
-    searchType: string;
-    companyId: number;
-    naics: string;
-    revenueRange: string;
 }

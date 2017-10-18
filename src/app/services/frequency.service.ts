@@ -11,10 +11,9 @@ export class FrequencyService extends BaseService {
         super(http);
     }
 
-    public getFrequencyDataTable(token: string, companyId: number, industry: string, revenue: string): Observable<FrequencyDataResponseModel> {
+    public getFrequencyDataTable(companyId: number, industry: string, revenue: string): Observable<FrequencyDataResponseModel> {
         try {
             return super.Post<FrequencyDataResponseModel>('/api/getFrequencyData', {
-                'token': token,
                 'company_id': companyId,
                 'industry': industry,
                 'revenue_range': revenue

@@ -1,40 +1,22 @@
-<div class="tile-container" *ngIf="isTileVisible">
+<div class="tile-container" *ngIf="isTileVisible" [ngClass]="{'tile-maximize': isMaximize}">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
           <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
           <ng-content select="[header]" ></ng-content>
-          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.xs]="true" class="tile-buttons">
+          <div fxLayout="row" fxFlex fxLayoutAlign="end center" class="tile-buttons">
             <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)">
               <md-icon *ngIf="!isMaximize">fullscreen</md-icon>
               <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
             </button>
+          
+            <button md-icon-button *ngIf="isDragable"><md-icon>open_with</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon></button>
             <button md-icon-button *ngIf="isFlippable"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
-            <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)">
-                <md-icon *ngIf="isContent">expand_less</md-icon>
-                <md-icon *ngIf="!isContent">expand_more</md-icon>
+            <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)" 
+                [ngClass]="{'collapse':isContent, 'expand':!isContent}">
+                <i *ngIf="isContent" class="icon-backburger expand-collapse"></i>
+                <i *ngIf="!isContent" class="icon-backburger expand-collapse"></i>
             </button>
-          </div>
-          <div fxLayout="row" fxFlex fxLayoutAlign="end center" [fxHide.gt-xs]="true" class="tile-buttons">
-            <button md-icon-button [mdMenuTriggerFor]="menu" ><md-icon>more_vert</md-icon></button>
-              <md-menu #menu="mdMenu">
-                <div fxLayout="column" fxLayoutAlign="center start">
-                  <button md-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)">
-                    <md-icon *ngIf="!isMaximize">fullscreen</md-icon>
-                    <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
-                    <span *ngIf="!isMaximize">Maximize</span>
-                    <span *ngIf="isMaximize">Minimize</span>
-                  </button>
-                  <button md-button *ngIf="isSplittable" (click)="toggleSplit($event)"><md-icon>filter_none</md-icon> Split</button>
-                  <button md-button *ngIf="isFlippable" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon> Flip</button>
-                  <button md-button *ngIf="isAccordion"  (click)="toggleContent($event)">
-                    <md-icon *ngIf="isContent">expand_less</md-icon>
-                    <md-icon *ngIf="!isContent">expand_more</md-icon>
-                    <span *ngIf="isContent">Collapse</span>
-                    <span *ngIf="!isContent">Expand</span>
-                   </button>
-                </div>
-              </md-menu>
           </div>
       </div>
   </md-toolbar>

@@ -1,8 +1,7 @@
-import {FrequencyInput} from '../model/model';
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService } from 'app/services/services';
-import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOverviewInput, FrequencyIncidentPieFlipData, FrequencyLossPieFlipData } from 'app/model/model';
+import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
 
 @Component({
     selector: 'app-frequency',
@@ -12,30 +11,16 @@ import { FrequencyDataModel, FrequencyDataResponseModel, FrequencyIndustryOvervi
     host: { '[@routerTransition]': '' }
 })
 export class FrequencyComponent implements OnInit {
-    peerGroupTable: Array<FrequencyDataModel>;
-    companyLossesTable: Array<FrequencyDataModel>;
-    frequencyIndustryOverviewInput : FrequencyIndustryOverviewInput
-
-    columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
-    hearderColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
-
-    token: string;
-    companyId: number;
-    industry: string;
-    revenue_range: string;
-    searchType: string;
-    chartType: string;
-    naics: string;
-    revenueRange: string;
-
-    isIncidentShowFlip: boolean;
-    isIncidentShowSplit: boolean;
-    isLossShowFlip: boolean;
-    isLossShowSplit: boolean;
-
+    
+    public peerGroupTable: Array<FrequencyDataModel>;
+    public companyLossesTable: Array<FrequencyDataModel>;
+    public columnsKeys: Array<string>;
+    public hearderColumns: Array<string>;
+    public isIncidentShowFlip: boolean;
+    public isIncidentShowSplit: boolean;
+    public isLossShowFlip: boolean;
+    public isLossShowSplit: boolean;
     public frequencyInput: FrequencyInput;
-    public getFrequencyIncidentFlipManualInput: FrequencyIncidentPieFlipData;
-    public getFrequencyLossFlipManualInput: FrequencyLossPieFlipData;
 
     constructor(private frequencyService: FrequencyService,
         private menuService: MenuService,
@@ -43,15 +28,10 @@ export class FrequencyComponent implements OnInit {
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Frequency';
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        this.industry = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription) ? this.searchService.searchCriteria.industry.naicsDescription : null;
-        this.revenue_range = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
-        this.loadFrequencyDataTable();
-        this.setupDistributionInput();
-        this.setupFrequencyInput();
-        this.setupfrequencyIncidentPieFlipInput();
-        this.setupfrequencyLossPieFlipInput();
         this.setupTileButtons();
+        this.setupTableDefinitions();
+        this.loadFrequencyDataTable();
+        this.buildCommonInput();
     }
     
     setupTileButtons() {
@@ -61,69 +41,30 @@ export class FrequencyComponent implements OnInit {
         this.isLossShowSplit = true;
     }
 
+    setupTableDefinitions() {
+        this.columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
+        this.hearderColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
+    }
+
     loadFrequencyDataTable() {
-        this.frequencyService.getFrequencyDataTable(this.token, this.companyId, this.industry, this.revenue_range).subscribe((res: FrequencyDataResponseModel) => {
-            this.peerGroupTable = res.peerGroup;
-            if (res.company != null && res.company.length > 0) {
-                this.companyLossesTable = res.company;
-            }
+        this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
+            this.searchService.getNaics,
+            this.searchService.getRevenueRange)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                this.peerGroupTable = res.peerGroup;
+                if (res.company != null && res.company.length > 0) {
+                    this.companyLossesTable = res.company;
+                }
         });
     }
-
-    setupDistributionInput() {
-        this.frequencyIndustryOverviewInput = {           
-            companyId: this.companyId,
-            naics : this.industry
-        }
-    }
     
-    setupFrequencyInput() {
-        let searchType = this.searchService.searchCriteria.type;
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
-
+    buildCommonInput() {
         this.frequencyInput = {
-            searchType: searchType,
-            companyId: this.companyId,
-            naics: this.naics,
-            revenueRange: this.revenueRange
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRange
         };
-    }
-
-    /**
-     * create incident flip chart input
-     */
-    setupfrequencyIncidentPieFlipInput() {
-        let searchType = this.searchService.searchCriteria.type;
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
-
-        this.getFrequencyIncidentFlipManualInput = {
-            searchType: this.searchType,
-            companyId: this.companyId,
-            naics: this.naics,
-            revenueRange: this.revenueRange,
-        }
-    }
-
-    /**
-     * create loss flip chart input
-     */
-    setupfrequencyLossPieFlipInput() {
-
-        let searchType = this.searchService.searchCriteria.type;
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay: null; 
-
-        this.getFrequencyLossFlipManualInput = {
-            searchType: this.searchType,
-            companyId: this.companyId,
-            naics: this.naics,
-            revenueRange: this.revenueRange,
-        }
     }
 
 }
