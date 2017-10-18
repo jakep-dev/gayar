@@ -59,3 +59,9 @@
   transition: transform 0.2s ease-in-out 0.1s;
   transform: rotate(270deg);
 }
+
+.tile-maximize {
+    position: fixed;
+    width: 99%;
+    left: 0px;
+}
