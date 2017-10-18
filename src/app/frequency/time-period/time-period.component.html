@@ -1,7 +1,6 @@
-<div *ngIf='modelData' class="width-100" fxLayout="row">
+<div *ngIf='modelData'>
     <bar-chart *ngIf='!modelData?.withBreak' 
         class="width-100"
-        fxFlexFill
         frequeny-time-period
         [modelData]="modelData" 
         [chartData]="chartData" 
@@ -11,7 +10,6 @@
     </bar-chart>
     <bar-chart-with-break *ngIf='modelData?.withBreak'  
         class="width-100"
-        fxFlexFill
         frequeny-time-period
         [modelData]="modelData" 
         [chartData]="chartData"
