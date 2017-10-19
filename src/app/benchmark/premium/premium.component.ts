@@ -42,7 +42,7 @@ export class PremiumComponent implements OnInit {
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
-        //this.chartComponent = chart;
+        chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
     }
