@@ -84,7 +84,7 @@
             },
             {
                 "name": "getSeverityData",
-                "contract": "/cybermetrix/chart/severity/getFrequencyList"
+                "contract": "/cybermetrix/chart/severity/getSeverityList"
             }
         ]
     },
