@@ -106,10 +106,6 @@ export class BarChartComponent extends BaseChart implements OnInit {
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
 
     onRedraw(chart: BaseChart) {
-        this.renderedObject.forEach(object => {
-            object.destroy(); 
-        });
-        this.renderedObject = [];
         this.onChartRedraw.emit(this);
     }
     

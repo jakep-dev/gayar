@@ -278,8 +278,8 @@ export abstract class BaseChart {
         if(startPoint && startPoint.length > 0 &&
             linePoints && linePoints.length > 0) {
                 var pathArray = ['M', 'L'];
-                // pathArray.splice(1, 0, ...startPoint);
-                // pathArray.splice(pathArray.length, 0 , ...linePoints);
+                pathArray.splice(1, 0, ...startPoint);
+                pathArray.splice(pathArray.length, 0 , ...linePoints);
 
                 var render = this.chart.renderer.path(pathArray)
                     .attr({
@@ -291,6 +291,13 @@ export abstract class BaseChart {
                     render.add();
                     this.renderedObject.push(render);
             }
+    }
+    
+    public removeRenderedObjects() {        
+        this.renderedObject.forEach(object => {
+            object.destroy(); 
+        });
+        this.renderedObject = [];
     }
 
     /**
