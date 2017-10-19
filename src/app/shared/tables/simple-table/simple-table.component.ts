@@ -7,8 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 
 export class SimpleTableComponent implements OnInit {
-    @Input() hearderColumns: Array<String>;
+    @Input() headerColumns: Array<String>;
     @Input() columnsKeys: Array<String>;
+    @Input() columnsHAlignment: Array<String>;
+    @Input() columnsWidth: Array<String>;
     @Input() dataSource: Array<any>;
 
     constructor() { }
