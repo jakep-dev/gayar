@@ -81,7 +81,8 @@ export class FrequencyIncidentPieDirective {
         customChartSettings: {
           chart: {
             type: 'pie',
-            marginLeft: -170,
+            marginLeft: -60,
+            marginRight: 100,
             marginBottom: 50
           },
           colors:[
@@ -93,11 +94,11 @@ export class FrequencyIncidentPieDirective {
             FrequencyIncidentPieDirective.LGRAY, //'#CCCCCC'
           ],
           legend: {
-            align: 'left',
+            align: 'right',
             verticalAlign: 'top',
             layout: 'vertical',
-            x: 400,
-            y: 100,
+            y: 50,
+            padding: 50,
             itemStyle: {
                 cursor: 'default',
             },

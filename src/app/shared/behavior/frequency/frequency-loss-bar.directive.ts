@@ -140,6 +140,9 @@ export class FrequencyLossBarDirective {
                     align: 'center',
                     y: 320
                 },
+                subtitle:{
+                    y: 15
+                },
                 xAxis: {
                     type: 'category',
                     categories: null,
