@@ -15,7 +15,9 @@ export class FrequencyComponent implements OnInit {
     public peerGroupTable: Array<FrequencyDataModel>;
     public companyLossesTable: Array<FrequencyDataModel>;
     public columnsKeys: Array<string>;
-    public hearderColumns: Array<string>;
+    public headerColumns: Array<string>;
+    public columnsHAlignment: Array<string>;
+    public columnsWidth: Array<string>;
     public isIncidentShowFlip: boolean;
     public isIncidentShowSplit: boolean;
     public isLossShowFlip: boolean;
@@ -43,7 +45,9 @@ export class FrequencyComponent implements OnInit {
 
     setupTableDefinitions() {
         this.columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
-        this.hearderColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
+        this.headerColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
+        this.columnsHAlignment = ['left', 'left', 'center', 'center', 'left'];
+        this.columnsWidth = ['20%', '20%', '20%', '20%', '20%'];
     }
 
     loadFrequencyDataTable() {
