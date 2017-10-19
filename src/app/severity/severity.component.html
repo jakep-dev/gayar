@@ -36,9 +36,10 @@
     </div>
     <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
         fxLayoutGap="2px">
-        <app-tile [id]="'SEV_PEER_TABLE'" [title]="'5 Most Recent Peer Group'" class="width-100">
+        <app-tile [id]="'SEV_PEER_TABLE'" [title]="'5 Most Recent Peer Group Losses'" class="width-100">
             <div front class="width-100">
-                <app-simple-table [dataSource]="peerGroupTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+                <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
+                    [columnsWidth]="columnsWidth">
                 </app-simple-table>
             </div>
         </app-tile>
@@ -47,7 +48,8 @@
         fxLayoutGap="2px">
         <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
             <div front class="width-100">
-                <app-simple-table [dataSource]="companyLossesTable" [hearderColumns]="hearderColumns" [columnsKeys]="columnsKeys">
+                <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
+                    [columnsWidth]="columnsWidth">
                 </app-simple-table>
             </div>
         </app-tile>

@@ -14,17 +14,12 @@ import { SeverityDataModel, SeverityDataResponseModel } from 'app/model/model';
 
 export class SeverityComponent implements OnInit {
 
-    peerGroupTable: Array<SeverityDataModel>;
-    companyLossesTable: Array<SeverityDataModel>;
-
-    columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
-    hearderColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
-
-    public companyId: number;
-    public industry: string;
-    public searchType: string;
-    public revenueRange: string;
-
+    public peerGroupTable: Array<SeverityDataModel>;
+    public companyLossesTable: Array<SeverityDataModel>;
+    public columnsKeys: Array<string>;
+    public headerColumns: Array<string>;
+    public columnsHAlignment: Array<string>;
+    public columnsWidth: Array<string>;
     public severityInput: SeverityInput;
 
     constructor(private severityService: SeverityService,
@@ -33,11 +28,9 @@ export class SeverityComponent implements OnInit {
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Severity';
-        this.companyId = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyId) ? this.searchService.selectedCompany.companyId : null;
-        this.industry = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription) ? this.searchService.searchCriteria.industry.naicsDescription : null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay) ? this.searchService.searchCriteria.revenue.rangeDisplay : null;
-        this.loadSeverityDataTable();
         this.buildCommonInput();
+        this.setupTableDefinitions();
+        this.loadSeverityDataTable();
     }
 
     buildCommonInput() {
@@ -49,13 +42,15 @@ export class SeverityComponent implements OnInit {
         };
     }
 
+    setupTableDefinitions() {
+        this.columnsKeys = ['company_name', 'type_of_incident', 'incident_date_formatted', 'records_affected', 'type_of_loss', 'case_description'];
+        this.headerColumns = ['Company Name', 'Type of Incident', 'Incident Date', 'Records Affected', 'Type of Loss'];
+        this.columnsHAlignment = ['left', 'left', 'center', 'center', 'left'];
+        this.columnsWidth = ['20%', '20%', '20%', '20%', '20%'];
+    }
+
     loadSeverityDataTable() {
-        console.log('###########################################');
-        console.log('this.companyId: ' + this.companyId);
-        console.log('this.industry: ' + this.industry);
-        console.log('this.revenueRange: ' + this.revenueRange);
-        console.log('###########################################');
-        this.severityService.getSeverityDataTable(this.companyId, this.industry, this.revenueRange).subscribe((res: SeverityDataResponseModel) => {
+        this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
             this.peerGroupTable = res.peerGroup;
             if (res.company != null && res.company.length > 0) {
                 this.companyLossesTable = res.company;
