@@ -24,11 +24,11 @@
 
         <app-tile [id]="'FREQ_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="isLossShowFlip" [isFlippable]="isLossShowSplit"
             (onFlip)="showLossPie=true" (onSplit)="showLossPie=true">
-            <div front>
-                <frequency-loss-bar [componentData]="frequencyInput"></frequency-loss-bar>
+            <div front class="width-100" fxLayout="row">
+                <frequency-loss-bar [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-loss-bar>
             </div>
-            <div back *ngIf="showLossPie">
-                <frequency-loss-pie [componentData]="frequencyInput"></frequency-loss-pie>
+            <div back *ngIf="showLossPie" class="width-100" fxLayout="row">
+                <frequency-loss-pie [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-loss-pie>
             </div>
         </app-tile>
     </div>
