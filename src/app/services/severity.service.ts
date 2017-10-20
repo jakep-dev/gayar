@@ -21,5 +21,18 @@ export class SeverityService extends BaseService {
         }
         catch (e) {
         }
-    }    
+    }
+
+    public getSeverityTimePeriodData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTimePeriodData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
+    }
 }

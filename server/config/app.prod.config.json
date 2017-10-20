@@ -85,6 +85,10 @@
             {
                 "name": "getSeverityData",
                 "contract": "/cybermetrix/chart/severity/getSeverityList"
+            },
+            {
+                "name": "getSeverityTimePeriodData",
+                "contract": "/cybermetrix/chart/severity/getTimePeriodDisplayDetailDataset"
             }
         ]
     },

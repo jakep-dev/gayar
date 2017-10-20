@@ -8,7 +8,8 @@
         </app-tile>
         <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
             <div front class="width-100" fxLayout="row">
-                TIME PERIOD
+                <severity-time-period [componentData]="severityInput" class="width-100" fxFlexFill>
+                </severity-time-period>
             </div>
         </app-tile>
     </div>
