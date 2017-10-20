@@ -1,7 +1,5 @@
-<div id="container-benchmarking" 
-     class="gauge-chart1" fxLayout="row" fxLayoutAlign="start start">
-    <chart 
-        fxFlexFill
+<div class="gauge-chart1" fxLayout="row" fxLayoutAlign="start start">
+    <chart fxFlexFill
         [options]="chartOptions" 
         (load)="setChart($event.context)" 
         (redraw)="onRedraw($event.context)">
