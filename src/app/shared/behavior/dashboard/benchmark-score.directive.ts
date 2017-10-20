@@ -13,27 +13,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
 
     @Input() chartComponent: BaseChart;
     
-    ngOnChanges(changes: SimpleChanges) {
-        if(changes['chartComponent'] && changes['chartComponent'].currentValue) {
-            this.chartComponent = changes['chartComponent'].currentValue;
-            this.chartComponent.addChartLabel(
-                this.displayText,
-                95,
-                this.chartComponent.chart.chartHeight - 60,
-                '#000000',
-                10,
-                null,
-                400
-            );
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png',
-                this.chartComponent.chart.chartWidth - 80,
-                this.chartComponent.chart.chartHeight - 20,
-                69,
-                17
-            );
-        }
-    }
+    ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
 
@@ -85,8 +65,8 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                     },
                     title: null,
                     pane: {
-                        center: ['50%', '80%'],
-                        size: '142%',
+                        center: ['50%', '70%'],
+                        size: '100%',
                         startAngle: -90,
                         endAngle: 90,
                         background: {
@@ -110,8 +90,12 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                         minorTickInterval: null,
                         tickAmount: 2,
                         title: {
-                            y: 70,
-                            text: null
+                            y: 80,
+                            text: '',
+                            style:{
+                                color: "#000000",
+                                fontSize: "50px"
+                            },
                         },
                         labels: {
                             style:{
@@ -120,7 +104,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                             },
                             // Bottom Label Offset
                             y: 20,
-                            distance: -43,
+                            distance: -33,
                         }
                     },
                     plotOptions: {
@@ -141,7 +125,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
                             data: [],
                             dataLabels: {
                               format: '<div style="text-align:center"><span style="font-size:50px;color:' +
-                                    'black">{y}</span><br/></div>'
+                                    'black;display:none">{y}</span><br/></div>'
                             },
                             tooltip: {
                               valueSuffix: null
@@ -155,6 +139,7 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
             if (this.modelData && this.modelData.score !== null && this.modelData.score.finalScore !== null) {
                 tempChartData.series[0].data.push(this.modelData.score.finalScore);
                 tempChartData.customChartSettings.series[0].data.push(this.modelData.score.finalScore);
+                tempChartData.customChartSettings.yAxis.title.text = this.modelData.score.finalScore;
                 tempChartData.customChartSettings.yAxis.min = 0;
                 tempChartData.customChartSettings.yAxis.max = 100;
 

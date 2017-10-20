@@ -93,10 +93,8 @@ export class PieChartComponent extends BaseChart implements OnInit {
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
     
     onRedraw(chart: BaseChart) {
-        if(this.hasRedrawActions) {
-            this.onChartRedraw.emit(this);
-            this.hasRedrawActions = false;
-        }
+        this.onChartRedraw.emit(this);
+        this.hasRedrawActions = false;
     }
 
 }

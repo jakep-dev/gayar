@@ -40,8 +40,29 @@ export class BenchmarkComponent implements OnInit {
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
-        //this.chartComponent = chart;
+        chart.removeRenderedObjects();
+        this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+    }
+
+    addLabelAndImage(chart){
+        chart.addChartLabel(
+            this.modelData.displayText,
+            (chart.chart.chartWidth * 0.1) - 2,
+            chart.chart.chartHeight - 80,
+            '#000000',
+            10,
+            null,
+            (chart.chart.chartWidth * 0.75) + 50
+        );
+
+        chart.addChartImage(
+            'https://www.advisen.com/img/advisen-logo.png', 
+            chart.chart.chartWidth - 80, 
+            chart.chart.chartHeight - 20, 
+            69, 
+            17
+        ); 
     }
     
     constructor(private dashboardService: DashboardService) {

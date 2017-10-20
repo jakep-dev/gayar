@@ -15,32 +15,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
 
     @Input() chartComponent: BaseChart;
 
-    ngOnChanges(changes: SimpleChanges) {       
-        if (changes['chartComponent'] && changes['chartComponent'].currentValue != undefined) {
-            this.chartComponent = changes['chartComponent'].currentValue;   
-            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
-                if(this.displayText && this.displayText.length > 0) { 
-                    let labelHeight = ((Math.ceil(this.displayText.length / FrequencyIndustryOverviewDirective.maxCharactersPerLine)) * 10);
-                    this.chartComponent.addChartLabel(
-                        this.displayText,
-                        10,
-                        this.chartComponent.chart.chartHeight - labelHeight,
-                        '#000000',
-                        10,
-                        null,
-                        this.chartComponent.chart.chartWidth - 85
-                    );             
-                }
-            }
-            this.chartComponent.addChartImage(
-                'https://www.advisen.com/img/advisen-logo.png',
-                this.chartComponent.chart.chartWidth - 80,
-                this.chartComponent.chart.chartHeight - 20,
-                69,
-                17
-            );
-        }
-    }
+    ngOnChanges(changes: SimpleChanges) {}
   
     public static defaultLineColor: string = '#487AA1';
     static maxCharactersPerLine: number = 105;

@@ -165,8 +165,9 @@ export abstract class BaseChart {
                 enabled: true,
                 itemStyle: {
                     fontSize: '11px',
-                    color: '#000000'
-                }
+                    color: '#000000',
+                    cursor: 'default'
+                },
             },
             tooltip: {
                 shared: true
