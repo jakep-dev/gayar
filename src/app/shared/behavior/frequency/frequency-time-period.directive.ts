@@ -142,6 +142,9 @@ export class FrequencyTimePeriodDirective {
                     align: 'center',
                     y: 320
                 },
+                subtitle:{
+                    y: 15
+                },
                 xAxis: {
                     type: 'category',
                     categories: null,
@@ -160,6 +163,8 @@ export class FrequencyTimePeriodDirective {
                 },
                 yAxis: {
                     tickInterval: 2,
+                    gridLineWidth: 0,
+                    lineWidth: 2,
                     title: {
                         text: this.modelData.yAxis,
                         style: {
@@ -271,7 +276,7 @@ export class FrequencyTimePeriodDirective {
                         series.id = eachMainGroup.period;
                         series.data = detailedGroup.map(group => {
                             return [
-                                Number(group.period), group.count
+                                group.period, group.count
                             ];
                         });
                         tempChartData.drilldown.push(series);
@@ -474,9 +479,6 @@ export class FrequencyTimePeriodDirective {
                 },
                 subtitle: {
                     text: this.modelData.filterDescription,
-                    style: {
-                        fontSize: '14px'
-                    },
                     align: 'center'
                 },
                 xAxis: {
@@ -724,7 +726,7 @@ export class FrequencyTimePeriodDirective {
                         series.id = eachMainGroup.period;
                         series.data = detailedGroup.map(group => {
                             return [
-                                Number(group.period), group.count
+                                group.period, group.count
                             ];
                         });
                         tempChartData.drilldown.push(series);

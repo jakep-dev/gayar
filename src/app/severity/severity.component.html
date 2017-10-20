@@ -1,74 +1,57 @@
-<div
-    fxLayout="column"
-    fxLayoutAlign="start start"
-    fxLayoutGap="2px">
-        <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-            <app-tile [id]="'SEV_IND_OVERVIEW'" [title]="'Industry Overview'" class="width-100">
-                <div front class="width-100" fxLayout="row">
-                    INDUSTRY OVERVIEW
-                </div>
-            </app-tile>
-            <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
-                <div front class="width-100" fxLayout="row">
-                    TIME PERIOD
-                </div>
-            </app-tile>
-        </div>
-        <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" 
-                        class="width-100"
-                        [isSplittable]="true" [isFlippable]="true"
-                        (onFlip)="showIncidentPie=true" 
-                        (onSplit)="showIncidentPie=true">
-                    <div front class="width-100" fxLayout="row">
-                        INCIDENT BAR
-                    </div>
-                    <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
-                        INCIDENT PIE
-                    </div>
-                </app-tile>
+<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
+    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
+        fxLayoutGap="2px">
+        <app-tile [id]="'SEV_IND_OVERVIEW'" [title]="'Industry Overview'" class="width-100">
+            <div front class="width-100" fxLayout="row">
+                INDUSTRY OVERVIEW
+            </div>
+        </app-tile>
+        <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
+            <div front class="width-100" fxLayout="row">
+                TIME PERIOD
+            </div>
+        </app-tile>
+    </div>
+    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
+        fxLayoutGap="2px">
+        <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true"
+            (onFlip)="showIncidentPie=true" (onSplit)="showIncidentPie=true">
+            <div front class="width-100" fxLayout="row">
+                INCIDENT BAR
+            </div>
+            <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
+                INCIDENT PIE
+            </div>
+        </app-tile>
 
-                <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" 
-                        class="width-100"
-                        [isSplittable]="true" 
-                        [isFlippable]="true"
-                        (onFlip)="showLossPie=true" 
-                        (onSplit)="showLossPie=true">
-                    <div front>
-                        LOSS BAR
-                    </div>
-                    <div back *ngIf="showLossPie">
-                        LOSS PIE
-                    </div>
-            </app-tile>
-        </div>
-        <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                <app-tile [id]="'SEV_PEER_TABLE'" [title]="'5 Most Recent Peer Group'" class="width-100">
-                    <div front class="width-100">
-                        5 Most Recent Peer Group
-                    </div>
-                </app-tile>
-
-                <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'" 
-                        class="width-100">
-                    <div front class="width-100">
-                        5 Most Recent Company Losses
-                    </div>
-                </app-tile>
-        </div>
+        <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" (onFlip)="showLossPie=true"
+            (onSplit)="showLossPie=true">
+            <div front>
+                LOSS BAR
+            </div>
+            <div back *ngIf="showLossPie">
+                LOSS PIE
+            </div>
+        </app-tile>
+    </div>
+    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
+        fxLayoutGap="2px">
+        <app-tile [id]="'SEV_PEER_TABLE'" [title]="'5 Most Recent Peer Group Losses'" class="width-100">
+            <div front class="width-100">
+                <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
+                    [columnsWidth]="columnsWidth">
+                </app-simple-table>
+            </div>
+        </app-tile>
+    </div>
+    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
+        fxLayoutGap="2px">
+        <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
+            <div front class="width-100">
+                <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
+                    [columnsWidth]="columnsWidth">
+                </app-simple-table>
+            </div>
+        </app-tile>
+    </div>
 </div>

@@ -81,6 +81,10 @@
             {
                 "name": "getFrequencyScore",
                 "contract": "/cybermetrix/chart/frequency/getFrequencyScore"
+            },
+            {
+                "name": "getSeverityData",
+                "contract": "/cybermetrix/chart/severity/getSeverityList"
             }
         ]
     },

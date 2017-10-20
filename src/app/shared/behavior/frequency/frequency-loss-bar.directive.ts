@@ -140,6 +140,9 @@ export class FrequencyLossBarDirective {
                     align: 'center',
                     y: 320
                 },
+                subtitle:{
+                    y: 15
+                },
                 xAxis: {
                     type: 'category',
                     categories: null,
@@ -162,6 +165,8 @@ export class FrequencyLossBarDirective {
                 },
                 yAxis: {
                     tickInterval: 2,
+                    gridLineWidth: 0,
+                    lineWidth: 2,
                     title: {
                         text: this.modelData.yAxis,
                         style: {
@@ -296,7 +301,7 @@ export class FrequencyLossBarDirective {
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
-                    chart.setTitle({ text: 'Types of ' + e.point.name + ' Loss' });
+                    chart.setTitle({ text: 'Types of ' + e.point.name + (e.point.name && e.point.name.includes('Losses')? '' : ' Losses') });
                 }
 
             });
@@ -486,9 +491,6 @@ export class FrequencyLossBarDirective {
                 },
                 subtitle: {
                     text: this.modelData.filterDescription,
-                    style: {
-                        fontSize: '14px'
-                    },
                     align: 'center'
                 },
                 xAxis: {

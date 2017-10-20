@@ -42,7 +42,7 @@ export class RateComponent implements OnInit {
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
-        //this.chartComponent = chart;
+        chart.removeRenderedObjects();
         this.chartComponent.next(chart);
         this.addLabelAndImage(chart);
     }

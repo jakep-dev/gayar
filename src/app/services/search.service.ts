@@ -73,13 +73,23 @@ export class SearchService extends BaseService {
     }
 
     /**
+     * Extract the revenue range id.
+     */
+    public get getRevenueRangeId () {
+        if(!(this.searchCriteria.revenue && this.searchCriteria.revenue.rangeDisplay)){
+            return null;
+        }
+        return `${this.searchCriteria.revenue.id} ` ;
+    }
+
+    /**
      * Extract the revenue range.
      */
     public get getRevenueRange () {
         if(!(this.searchCriteria.revenue && this.searchCriteria.revenue.rangeDisplay)){
             return null;
         }
-        return `${this.searchCriteria.revenue.id} ` ;
+        return this.searchCriteria.revenue.rangeDisplay;
     }
 
     /**

@@ -140,6 +140,9 @@ export class FrequencyIncidentBarDirective {
                     align: 'center',
                     y: 320
                 },
+                subtitle:{
+                    y: 15
+                },
                 xAxis: {
                     type: 'category',
                     categories: null,
@@ -162,6 +165,8 @@ export class FrequencyIncidentBarDirective {
                 },
                 yAxis: {
                     tickInterval: 2,
+                    gridLineWidth: 0,
+                    lineWidth: 2,
                     title: {
                         text: this.modelData.yAxis,
                         style: {
@@ -296,7 +301,7 @@ export class FrequencyIncidentBarDirective {
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
-                    chart.setTitle({ text: 'Types of ' + e.point.name + ' Incidents' });
+                    chart.setTitle({ text: 'Types of ' + e.point.name.replace('Violations', 'Violation') + ' Incidents' });
                 }
 
             });
@@ -486,9 +491,6 @@ export class FrequencyIncidentBarDirective {
                 },
                 subtitle: {
                     text: this.modelData.filterDescription,
-                    style: {
-                        fontSize: '14px'
-                    },
                     align: 'center'
                 },
                 xAxis: {
@@ -771,7 +773,7 @@ export class FrequencyIncidentBarDirective {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     if (withBreak) {
-                        otherChart.setTitle({ text: 'Types of ' + e.point.name + ' Incidents' });
+                        otherChart.setTitle({ text: 'Types of ' + e.point.name.replace('Violations', 'Violation') + ' Incidents' });
                     }
                 }
             });
