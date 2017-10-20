@@ -18,3 +18,22 @@ export interface SeverityDataModel {
     type_of_loss: string;
     case_description: string;
 }
+
+export interface SeverityTimePeriodModel {    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: SeverityTimePeriodGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface SeverityTimePeriodGroup{
+    period: string;
+    count: number;
+    compOrPeer: string;
+    ruleTypeCode: string;
+    ruleTypeSubCode: number;
+}

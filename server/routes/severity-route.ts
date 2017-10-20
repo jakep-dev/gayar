@@ -12,14 +12,12 @@ export class SeverityRouter extends BaseRoute {
     //Initialize all the api call endpoints
     init() {
         this.app.post('/api/getSeverityData', this.getSeverityData);
+        this.app.post('/api/getSeverityTimePeriodData', this.getSeverityTimePeriodData);
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
+        console.log('===== FETCHING SEVERITY DATA TABLE START =====');
         try {
-            console.log('TOKEN: ' + req.body.token);
-            console.log('COMPANY ID: ' + req.body.company_id);
-            console.log('INDUSTRY: ' + req.body.industry);
-            console.log('REVENUE RANGE: ' + req.body.revenue_range);
             super.PerformGetRequest("getSeverityData", {
                 'ssnid': req.body.token,
                 'company_id': req.body.company_id,
@@ -32,4 +30,24 @@ export class SeverityRouter extends BaseRoute {
         catch (e) {
             Logger.error(e);
         }
-    }}
+        console.log('===== FETCHING SEVERITY DATA TABLE END =====');
+    }
+
+    public getSeverityTimePeriodData(req: Request, res: Response, next: NextFunction) {
+        console.log('===== FETCHING SEVERITY TIME PERIOD DATA START =====');
+        try {
+            super.PerformGetRequest("getSeverityTimePeriodData", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data) => {
+                res.send(data);
+            });
+        }
+        catch (e) {
+            Logger.error(e);
+        }
+        console.log('===== FETCHING SEVERITY TIME PERIOD DATA END =====');
+    }
+}
