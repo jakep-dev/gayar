@@ -38,6 +38,20 @@ export interface SeverityTimePeriodGroup{
     ruleTypeSubCode: number;
 }
 
+export interface SeverityIndustryOverviewModel {
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    xAxis: string;
+    yAxis: string;
+    datasets: Array<SeverityIndustryOverviewDataset>
+}
+
+export interface SeverityIndustryOverviewDataset {
+    incidentCount: string;
+    revenueRange: string;
+    description: string;
+}
 export interface SeverityLossPieFlipModel{
     chartTitle: string;
     filterDescription: string;

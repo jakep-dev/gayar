@@ -51,6 +51,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     BLOCK_PIPES,
     SearchTableComponent,
     SearchTableMobileComponent
+
   ],
   imports: [
     BrowserModule,

@@ -91,6 +91,10 @@
                 "contract": "/cybermetrix/chart/severity/getTimePeriodDisplayDetailDataset"
             },
             {
+                "name": "severity/getIndustryOverviewDisplayDataset",
+                "contract": "/cybermetrix/chart/severity/getIndustryOverviewDisplayDataset"
+            },
+            {
                 "name": "getSeverityTypeOfLossFlipDetailDataset",
                 "contract": "/cybermetrix/chart/severity/getTypeOfLossFlipDetailDataset"
             },
