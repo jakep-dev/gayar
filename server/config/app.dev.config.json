@@ -89,6 +89,10 @@
             {
                 "name": "getSeverityTimePeriodData",
                 "contract": "/cybermetrix/chart/severity/getTimePeriodDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/severity/getTypeOfIncidentFlipDetailDataset"
             }
         ]
     },

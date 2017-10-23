@@ -13,6 +13,7 @@ export class SeverityRouter extends BaseRoute {
     init() {
         this.app.post('/api/getSeverityData', this.getSeverityData);
         this.app.post('/api/getSeverityTimePeriodData', this.getSeverityTimePeriodData);
+        this.app.post('/api/getSeverityTypeOfIncidentFlipDetailDataset', this.getSeverityTypeOfIncidentFlipDetailDataset);
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
@@ -49,5 +50,22 @@ export class SeverityRouter extends BaseRoute {
             Logger.error(e);
         }
         console.log('===== FETCHING SEVERITY TIME PERIOD DATA END =====');
+    }
+
+    //Get Incident flip pie chart details
+    public getSeverityTypeOfIncidentFlipDetailDataset(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getSeverityTypeOfIncidentFlipDetailDataset", {
+                'ssnid': req.body.token,
+                'company_id': req.body.company_id,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenue_range,
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
     }
 }

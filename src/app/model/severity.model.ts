@@ -37,3 +37,16 @@ export interface SeverityTimePeriodGroup{
     ruleTypeCode: string;
     ruleTypeSubCode: number;
 }
+
+export interface SeverityIncidentPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : SeveritydataIncidentPieSetsGroup[];
+}
+
+export interface SeveritydataIncidentPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}
