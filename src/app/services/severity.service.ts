@@ -48,4 +48,17 @@ export class SeverityService extends BaseService {
 
         }
     }
+    
+    public getSeverityTypeOfIncidentFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTypeOfIncidentFlipDetailDataset', {
+                'company_id': companyId,
+                'naics': naics,
+                'revenue_range': revenueRange
+           });
+        }
+        catch(e){
+
+        }
+    }
 }

@@ -14,6 +14,7 @@ import { FrequencyLossPieDirective } from 'app/shared/behavior/frequency/frequen
 
 import { SeverityTimePeriodDirective } from './severity/severity-time-period.directive';
 import { SeverityLossPieDirective } from './severity/severity-loss-pie.directive';
+import { SeverityIncidentPieDirective } from 'app/shared/behavior/severity/severity-incident-pie.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,
@@ -29,5 +30,6 @@ export const BLOCK_CHART_BEHAVIORS = [
     FrequencyLossBarDirective,
     FrequencyLossPieDirective,
     SeverityTimePeriodDirective,
-    SeverityLossPieDirective
+    SeverityLossPieDirective,
+    SeverityIncidentPieDirective
 ];

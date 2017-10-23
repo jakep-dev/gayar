@@ -93,6 +93,10 @@
             {
                 "name": "getSeverityTypeOfLossFlipDetailDataset",
                 "contract": "/cybermetrix/chart/severity/getTypeOfLossFlipDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/severity/getTypeOfIncidentFlipDetailDataset"
             }
         ]
     },

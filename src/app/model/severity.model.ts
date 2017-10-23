@@ -50,3 +50,15 @@ export interface SeverityDataLossPieSetsGroup{
     sub_type: string;
     type: string;
 }
+export interface SeverityIncidentPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : SeveritydataIncidentPieSetsGroup[];
+}
+
+export interface SeveritydataIncidentPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}

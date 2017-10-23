@@ -21,7 +21,7 @@
                 INCIDENT BAR
             </div>
             <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
-                INCIDENT PIE
+                <severity-incident-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-pie>
             </div>
         </app-tile>
 
