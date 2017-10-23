@@ -1,0 +1,9 @@
+<pie-chart 
+  *ngIf='modelData'
+  severity-loss-pie
+  [modelData]="modelData"
+  [chartData]="chartData"
+  [chartComponent]="chartComponent$ | async"
+  (onDataComplete)="onDataComplete($event)"
+  (onChartRedraw)="onChartReDraw($event)">
+</pie-chart>
