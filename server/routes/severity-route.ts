@@ -13,6 +13,7 @@ export class SeverityRouter extends BaseRoute {
     init() {
         this.app.post('/api/getSeverityData', this.getSeverityData);
         this.app.post('/api/getSeverityTimePeriodData', this.getSeverityTimePeriodData);
+        this.app.post('/api/severity/getIndustryOverviewDisplayDataset', this.getSeverityIndustryOverview);
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
@@ -49,5 +50,20 @@ export class SeverityRouter extends BaseRoute {
             Logger.error(e);
         }
         console.log('===== FETCHING SEVERITY TIME PERIOD DATA END =====');
+    }
+
+    public getSeverityIndustryOverview(req: Request, res: Response, next: NextFunction) {
+        try{
+            super.PerformGetRequest("getIndustryOverviewDisplayDataset", {
+                'companyId': req.body.companyId,
+                'naics': req.body.naics,
+                 'ssnid': req.body.token
+                }, (data)=>{
+                    res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
     }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SeverityDataResponseModel } from 'app/model/model';
+import { SeverityDataResponseModel, SeverityIndustryOverviewModel } from 'app/model/model';
 
 
 @Injectable()
@@ -30,6 +30,18 @@ export class SeverityService extends BaseService {
                 'naics': naics,
                 'revenueRange': revenueRange
             });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getSeverityIndustryOverview( companyId: number, naics : string) : Observable<SeverityIndustryOverviewModel> {
+        try{
+           return super.Post<SeverityIndustryOverviewModel>('/api/severity/getIndustryOverviewDisplayDataset', {
+               'companyId': companyId,
+               'naics': naics
+           });    
         }
         catch(e){
 

@@ -11,7 +11,7 @@
     },
     "api": {
         "protocol": "http",
-        "host": "dev-vm-websvc.advisen.com",
+        "host": "192.168.100.225",
         "port": "8080",
         "endPoints": [
             {
@@ -89,6 +89,10 @@
             {
                 "name": "getSeverityTimePeriodData",
                 "contract": "/cybermetrix/chart/severity/getTimePeriodDisplayDetailDataset"
+            },
+            {
+                "name": "severity/getIndustryOverviewDisplayDataset",
+                "contract": "/cybermetrix/chart/severity/getIndustryOverviewDisplayDataset"
             }
         ]
     },
