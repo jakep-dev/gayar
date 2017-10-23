@@ -52,3 +52,27 @@ export interface SeverityIndustryOverviewDataset {
     revenueRange: string;
     description: string;
 }
+export interface SeverityLossPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : SeverityDataLossPieSetsGroup[];
+}
+
+export interface SeverityDataLossPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}
+export interface SeverityIncidentPieFlipModel{
+    chartTitle: string;
+    filterDescription: string;
+    displayText: string;
+    datasets : SeveritydataIncidentPieSetsGroup[];
+}
+
+export interface SeveritydataIncidentPieSetsGroup{
+    pct_count: number;
+    sub_type: string;
+    type: string;
+}
