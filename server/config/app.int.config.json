@@ -105,6 +105,10 @@
             {
                 "name": "getSeverityTypeOfIncidentBarData",
                 "contract": "/cybermetrix/chart/severity/getTypeOfIncidentDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfLossBarData",
+                "contract": "/cybermetrix/chart/severity/getTypeOfLossDisplayDetailDataset"
             }
         ]
     },

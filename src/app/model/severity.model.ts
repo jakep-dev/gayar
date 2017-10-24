@@ -97,3 +97,22 @@ export interface SeverityIncidentGroup {
     type: string;
     sub_type: string;
 }
+
+export interface SeverityLossBarModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: SeverityLossGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface SeverityLossGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
+}

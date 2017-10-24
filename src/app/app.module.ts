@@ -17,11 +17,11 @@ import { HighchartsProvider } from './shared/highchart/highchart';
 
 // Application Components
 import { BLOCK_SHARED, BLOCK_ERRORS, BLOCK_CHART_TYPES,
-         BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS,
-         BLOCK_SHARED_SERVICE } from './shared/shared';
+		 BLOCK_CONSTRAINTS, BLOCK_CHART_BEHAVIORS,
+		 BLOCK_SHARED_SERVICE } from './shared/shared';
 import { AppComponent } from './app.component';
-import { APP_ROUTES  } from './app.routes';
-import { BLOCK_DASHBOARD  } from './dashboard/dashboard';
+import { APP_ROUTES } from './app.routes';
+import { BLOCK_DASHBOARD } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { BLOCK_FREQUENCY } from './frequency/frequency';
 import { BLOCK_SEVERITY } from './severity/severity';
@@ -32,53 +32,47 @@ import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
 import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
-import { IncidentBarComponent } from './severity/incident-bar/incident-bar.component';
-import { SeverityIncidentBarDirective } from './shared/behavior/severity/severity-incident-bar.directive';
 
 @NgModule({
-  declarations: [
-    BLOCK_SHARED,
-    BLOCK_ERRORS,
-    AppComponent,
-    BLOCK_DASHBOARD,
-    BLOCK_BENCHMARK,
-    BLOCK_FREQUENCY,
-    BLOCK_SEVERITY,
-    MenuComponent,
-    SearchComponent,
-    SsoComponent,
-    BLOCK_CHART_TYPES,
-    BLOCK_CHART_BEHAVIORS,
-    BLOCK_CONSTRAINTS,
-    BLOCK_PIPES,
-    SearchTableComponent,
-    SearchTableMobileComponent,
-    IncidentBarComponent,
-    SeverityIncidentBarDirective
-
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    CommonModule,
-    BrowserAnimationsModule,
-    FlexLayoutModule,
-    MaterialModule,
-    MdSnackBarModule,
-    MdDialogModule,
-    CdkTableModule,
-    DragulaModule,
-    ChartModule,
-    RouterModule.forRoot(APP_ROUTES)
-  ],
-
-  providers: [
-    HighchartsProvider,
-    BLOCK_SERVICES,
-    BLOCK_SHARED_SERVICE
-  ],
-
-  bootstrap: [AppComponent]
+	declarations: [
+		BLOCK_SHARED,
+		BLOCK_ERRORS,
+		AppComponent,
+		BLOCK_DASHBOARD,
+		BLOCK_BENCHMARK,
+		BLOCK_FREQUENCY,
+		BLOCK_SEVERITY,
+		MenuComponent,
+		SearchComponent,
+		SsoComponent,
+		BLOCK_CHART_TYPES,
+		BLOCK_CHART_BEHAVIORS,
+		BLOCK_CONSTRAINTS,
+		BLOCK_PIPES,
+		SearchTableComponent,
+		SearchTableMobileComponent
+	],
+	imports: [
+		BrowserModule,
+		FormsModule,
+		HttpModule,
+		CommonModule,
+		BrowserAnimationsModule,
+		FlexLayoutModule,
+		MaterialModule,
+		MdSnackBarModule,
+		MdDialogModule,
+		CdkTableModule,
+		DragulaModule,
+		ChartModule,
+		RouterModule.forRoot(APP_ROUTES)
+	],
+	providers: [
+		HighchartsProvider,
+		BLOCK_SERVICES,
+		BLOCK_SHARED_SERVICE
+	],
+	bootstrap: [AppComponent]
 })
+
 export class AppModule { }
