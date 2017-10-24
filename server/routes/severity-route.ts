@@ -17,6 +17,7 @@ export class SeverityRouter extends BaseRoute {
         this.app.post('/api/getSeverityTypeOfLossFlipDetailDataset', this.getSeverityTypeOfLossFlipDetailDataset);
         this.app.post('/api/getSeverityTypeOfIncidentFlipDetailDataset', this.getSeverityTypeOfIncidentFlipDetailDataset);
         this.app.post('/api/getSeverityTypeOfIncidentBarData', this.getSeverityTypeOfIncidentBarData);
+        this.app.post('/api/getSeverityTypeOfLossBarData', this.getSeverityTypeOfLossBarData);
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
@@ -120,5 +121,22 @@ export class SeverityRouter extends BaseRoute {
             Logger.error(e);
         }
         console.log('===== FETCHING SEVERITY INCIDENT BAR DATA END =====');
+    }
+                     
+    //Get Type of Loss Bar
+    public getSeverityTypeOfLossBarData(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getTypeOfLossBarData", {
+                'ssnid': req.body.token,
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
     }
 }

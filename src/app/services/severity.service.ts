@@ -84,5 +84,18 @@ export class SeverityService extends BaseService {
         }
         catch (e) {
         }
+    }    
+
+    public getSeverityTypeOfLossBarData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTypeOfLossBarData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
     }
 }
