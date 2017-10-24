@@ -1,16 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
 import { DashboardService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
+import { Component, OnInit, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-dashboard-frequency',
-  templateUrl: './frequency.component.html',
-  styleUrls: ['./frequency.component.css']
+  selector: 'app-dashboard-severity',
+  templateUrl: './severity.component.html',
+  styleUrls: ['./severity.component.css']
 })
-export class FrequencyComponent implements OnInit {
+export class SeverityComponent implements OnInit {
 
   
   chartHeader:string = '';
@@ -77,7 +77,7 @@ export class FrequencyComponent implements OnInit {
    * Get Benchmark Data from back end nodejs server
    */
   getFrequencyData() {   
-    this.dashboardService.getFrequencyScore(this.componentData.companyId, this.componentData.naics, 
+    this.dashboardService.getSeverityScore(this.componentData.companyId, this.componentData.naics, 
                                             this.componentData.revenueRange, this.componentData.limit, this.componentData.retention).
                                             subscribe(chartData => this.setModelData(chartData));;
   }        

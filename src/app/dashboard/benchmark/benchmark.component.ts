@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkScoreModel, GaugeChartData, BenchmarkScore } from 'app/model/model';
+import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
 import { DashboardService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
@@ -13,16 +13,16 @@ import { BaseChart } from './../../shared/charts/base-chart';
 export class BenchmarkComponent implements OnInit {
 
     chartHeader:string = '';
-    modelData: BenchmarkScoreModel;
+    modelData: DashboardScoreModel;
 
-    setModelData(modelData: BenchmarkScoreModel) {
+    setModelData(modelData: DashboardScoreModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
     chartData: GaugeChartData;
 
-    @Input() componentData: BenchmarkScore;
+    @Input() componentData: DashboardScore;
 
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 
