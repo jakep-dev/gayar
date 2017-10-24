@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SeverityDataResponseModel } from 'app/model/model';
+import { SeverityDataResponseModel, SeverityIndustryOverviewModel } from 'app/model/model';
 
 
 @Injectable()
@@ -21,5 +21,56 @@ export class SeverityService extends BaseService {
         }
         catch (e) {
         }
-    }    
+    }
+
+    public getSeverityTimePeriodData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTimePeriodData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getSeverityIndustryOverview( companyId: number, naics : string) : Observable<SeverityIndustryOverviewModel> {
+        try{
+           return super.Post<SeverityIndustryOverviewModel>('/api/severity/getIndustryOverviewDisplayDataset', {
+               'companyId': companyId,
+               'naics': naics
+            });
+        }
+        catch(e){
+ 
+        }
+     }
+
+    public getSeverityTypeOfLossFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTypeOfLossFlipDetailDataset', {
+                'company_id': companyId,
+                'naics': naics,
+                'revenue_range': revenueRange
+           });
+        }
+        catch(e){
+
+        }
+    }
+    
+    public getSeverityTypeOfIncidentFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTypeOfIncidentFlipDetailDataset', {
+                'company_id': companyId,
+                'naics': naics,
+                'revenue_range': revenueRange
+           });
+        }
+        catch(e){
+
+        }
+    }
 }

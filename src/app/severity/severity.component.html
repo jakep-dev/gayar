@@ -1,14 +1,11 @@
 <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
     <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
-        fxLayoutGap="2px">
-        <app-tile [id]="'SEV_IND_OVERVIEW'" [title]="'Industry Overview'" class="width-100">
-            <div front class="width-100" fxLayout="row">
-                INDUSTRY OVERVIEW
-            </div>
-        </app-tile>
+        fxLayoutGap="2px">    
+        <severity-industry-overview *ngIf="severityInput" class="width-100" [componentData]="severityInput"></severity-industry-overview>                          
         <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
             <div front class="width-100" fxLayout="row">
-                TIME PERIOD
+                <severity-time-period [componentData]="severityInput" class="width-100" fxFlexFill>
+                </severity-time-period>
             </div>
         </app-tile>
     </div>
@@ -20,7 +17,7 @@
                 INCIDENT BAR
             </div>
             <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
-                INCIDENT PIE
+                <severity-incident-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-pie>
             </div>
         </app-tile>
 
@@ -29,8 +26,8 @@
             <div front>
                 LOSS BAR
             </div>
-            <div back *ngIf="showLossPie">
-                LOSS PIE
+            <div back *ngIf="showLossPie" class="width-100" fxLayout="row">
+                <severity-loss-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-pie>
             </div>
         </app-tile>
     </div>
