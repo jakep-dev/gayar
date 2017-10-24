@@ -101,6 +101,10 @@
             {
                 "name": "getSeverityTypeOfIncidentFlipDetailDataset",
                 "contract": "/cybermetrix/chart/severity/getTypeOfIncidentFlipDetailDataset"
+            },
+            {
+                "name": "getSeverityScore",
+                "contract": "/cybermetrix/chart/severity/getSeverityScore"
             }
         ]
     },

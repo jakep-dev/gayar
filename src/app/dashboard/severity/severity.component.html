@@ -1,0 +1,16 @@
+<app-tile [id]="'Dashboard_Severity'" [title]="chartHeader" class="width-100">
+  <div front class="width-100" fxLayout="row">
+      <gauge-chart 
+          fxFlexFill
+          *ngIf='modelData' 
+          routerLink="/severity"
+          routerLinkActive="active"
+          dashboard-score
+          [modelData]="modelData"
+          [chartData]="chartData"
+          [chartComponent]="chartComponent$ | async"
+          (onDataComplete)="onDataComplete($event)"
+          (onChartRedraw)="onChartReDraw($event)">
+      </gauge-chart>
+  </div>
+</app-tile>

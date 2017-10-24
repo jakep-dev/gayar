@@ -1,4 +1,4 @@
-export interface BenchmarkScoreModel{
+export interface DashboardScoreModel{
     chartTitle: string;
     filterDescription: string;
     displayText: string;
@@ -9,7 +9,7 @@ export interface FinalScore{
     finalScore: number;
 }
 
-export interface BenchmarkScore {
+export interface DashboardScore {
     chartType: string;
     searchType: string;
     companyId: number;

@@ -3,8 +3,6 @@ import { BenchmarkRateDistributionDirective } from './benchmark/benchmark-rate-d
 import { BenchmarkRetentionDistributionDirective } from './benchmark/benchmark-retention-distribution.directive';
 import { BenchmarkLimitDistributionDirective } from './benchmark/benchmark-limit-distribution.directive';
 import { BenchmarkPeerGroupLossDistributionDirective } from './benchmark/benchmark-peergrouploss-distribution.directive';
-import { BenchmarkScoreDirective } from './dashboard/benchmark-score.directive';
-
 import { FrequencyIndustryOverviewDirective } from './frequency/frequency-industry-overview.directive';
 import { FrequencyTimePeriodDirective } from './frequency/frequency-time-period.directive';
 import { FrequencyIncidentBarDirective } from './frequency/frequency-incident-bar.directive';
@@ -15,6 +13,7 @@ import { SeverityTimePeriodDirective } from './severity/severity-time-period.dir
 import { SeverityIndustryOverviewDirective } from './severity/severity-industry-overview.directive';
 import { SeverityLossPieDirective } from './severity/severity-loss-pie.directive';
 import { SeverityIncidentPieDirective } from 'app/shared/behavior/severity/severity-incident-pie.directive';
+import { DashboardScoreDirective } from './dashboard/dashboard-score.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,
@@ -22,7 +21,7 @@ export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkRetentionDistributionDirective,
     BenchmarkLimitDistributionDirective,
     BenchmarkPeerGroupLossDistributionDirective,
-    BenchmarkScoreDirective,
+    DashboardScoreDirective,
     FrequencyIndustryOverviewDirective,
     FrequencyTimePeriodDirective,
     FrequencyIncidentBarDirective,

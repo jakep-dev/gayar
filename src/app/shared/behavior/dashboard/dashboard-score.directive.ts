@@ -1,13 +1,13 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { BenchmarkScoreModel, GaugeChartData } from 'app/model/model';
+import { DashboardScoreModel, GaugeChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
 
 @Directive({
-    selector: '[benchmark-score]'
+    selector: '[dashboard-score]'
 })
-export class BenchmarkScoreDirective implements OnInit, OnChanges {
+export class DashboardScoreDirective implements OnInit, OnChanges {
 
-    @Input() modelData: BenchmarkScoreModel;
+    @Input() modelData: DashboardScoreModel;
 
     @Output() onDataComplete = new EventEmitter<GaugeChartData>();
 
@@ -27,11 +27,11 @@ export class BenchmarkScoreDirective implements OnInit, OnChanges {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
-        this.seriesColor[BenchmarkScoreDirective.CLIENT_LINE] = '#487AA1';
+        this.seriesColor[DashboardScoreDirective.CLIENT_LINE] = '#487AA1';
     }
 
     private getSeriesColor(seriesName: string) {
-        return this.seriesColor[seriesName] || BenchmarkScoreDirective.defaultLineColor;
+        return this.seriesColor[seriesName] || DashboardScoreDirective.defaultLineColor;
     }
 
     ngOnInit() {
