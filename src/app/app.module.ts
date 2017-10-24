@@ -32,6 +32,8 @@ import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
 import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
+import { IncidentBarComponent } from './severity/incident-bar/incident-bar.component';
+import { SeverityIncidentBarDirective } from './shared/behavior/severity/severity-incident-bar.directive';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
     BLOCK_CONSTRAINTS,
     BLOCK_PIPES,
     SearchTableComponent,
-    SearchTableMobileComponent
+    SearchTableMobileComponent,
+    IncidentBarComponent,
+    SeverityIncidentBarDirective
 
   ],
   imports: [
