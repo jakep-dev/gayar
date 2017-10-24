@@ -52,4 +52,19 @@ export class DashboardService extends BaseService {
 
         }
     }
+
+    public getSeverityScore(companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityScore', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange,
+                'limit': limit,
+                'retention': retention
+           });
+        }
+        catch(e){
+
+        }
+    }
 }
