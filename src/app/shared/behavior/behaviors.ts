@@ -15,6 +15,7 @@ import { SeverityTimePeriodDirective } from './severity/severity-time-period.dir
 import { SeverityIndustryOverviewDirective } from './severity/severity-industry-overview.directive';
 import { SeverityLossPieDirective } from './severity/severity-loss-pie.directive';
 import { SeverityIncidentPieDirective } from 'app/shared/behavior/severity/severity-incident-pie.directive';
+import { SeverityIncidentBarDirective } from 'app/shared/behavior/severity/severity-incident-bar.directive';
 
 export const BLOCK_CHART_BEHAVIORS = [
     BenchmarkPremiumDistributionDirective,
@@ -32,5 +33,6 @@ export const BLOCK_CHART_BEHAVIORS = [
     SeverityTimePeriodDirective,
     SeverityIndustryOverviewDirective,
     SeverityLossPieDirective,
-    SeverityIncidentPieDirective
+    SeverityIncidentPieDirective,
+    SeverityIncidentBarDirective
 ];
