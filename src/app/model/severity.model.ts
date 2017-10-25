@@ -19,7 +19,7 @@ export interface SeverityDataModel {
     case_description: string;
 }
 
-export interface SeverityTimePeriodModel {    
+export interface SeverityTimePeriodModel {
     chartTitle: string;
     filterDescription: string;
     datasets: SeverityTimePeriodGroup[];
@@ -30,7 +30,7 @@ export interface SeverityTimePeriodModel {
     yAxis: string;
 }
 
-export interface SeverityTimePeriodGroup{
+export interface SeverityTimePeriodGroup {
     period: string;
     count: number;
     compOrPeer: string;
@@ -52,27 +52,67 @@ export interface SeverityIndustryOverviewDataset {
     revenueRange: string;
     description: string;
 }
-export interface SeverityLossPieFlipModel{
+
+export interface SeverityLossPieFlipModel {
     chartTitle: string;
     filterDescription: string;
     displayText: string;
-    datasets : SeverityDataLossPieSetsGroup[];
+    datasets: SeverityDataLossPieSetsGroup[];
 }
 
-export interface SeverityDataLossPieSetsGroup{
+export interface SeverityDataLossPieSetsGroup {
     pct_count: number;
     sub_type: string;
     type: string;
 }
-export interface SeverityIncidentPieFlipModel{
+
+export interface SeverityIncidentPieFlipModel {
     chartTitle: string;
     filterDescription: string;
     displayText: string;
-    datasets : SeveritydataIncidentPieSetsGroup[];
+    datasets: SeveritydataIncidentPieSetsGroup[];
 }
 
-export interface SeveritydataIncidentPieSetsGroup{
+export interface SeveritydataIncidentPieSetsGroup {
     pct_count: number;
     sub_type: string;
     type: string;
+}
+
+export interface SeverityIncidentBarModel {
+
+    chartTitle: string;
+    filterDescription: string;
+    datasets: SeverityIncidentGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface SeverityIncidentGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
+}
+
+export interface SeverityLossBarModel {
+    
+    chartTitle: string;
+    filterDescription: string;
+    datasets: SeverityLossGroup[];
+    displayText: string;
+    withBreak: boolean;
+    maxValue: number;
+    xAxis: string;
+    yAxis: string;
+}
+
+export interface SeverityLossGroup {
+    comp_or_peer: string;
+    count: number;
+    type: string;
+    sub_type: string;
 }

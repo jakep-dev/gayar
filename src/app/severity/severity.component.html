@@ -14,7 +14,7 @@
         <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true"
             (onFlip)="showIncidentPie=true" (onSplit)="showIncidentPie=true">
             <div front class="width-100" fxLayout="row">
-                INCIDENT BAR
+                <severity-incident-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-bar>
             </div>
             <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
                 <severity-incident-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-pie>
@@ -23,8 +23,8 @@
 
         <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" (onFlip)="showLossPie=true"
             (onSplit)="showLossPie=true">
-            <div front>
-                LOSS BAR
+            <div front class="width-100" fxLayout="row">
+                <severity-loss-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-bar>
             </div>
             <div back *ngIf="showLossPie" class="width-100" fxLayout="row">
                 <severity-loss-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-pie>
