@@ -48,72 +48,69 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
        * Use chart data from web service to build parts of Highchart chart options object
        */
       buildHighChartObject() {
-          if (this.modelData) {
-              let tempChartData: BarChartData = {
-                  series: [],
-                  title: '',
-                  subtitle: this.modelData.filterDescription,
-                  displayText: this.modelData.displayText,
-                  categories: this.categories,
-                  xAxisLabel: this.modelData.xAxis,
-                  yAxisLabel: this.modelData.yAxis,
-                  xAxisFormatter: null,
-                  customChartSettings: {    
-                    chart: { 
-                      marginLeft: 75, 
-                      marginRight: 25
-                     },   credits: {
-                      text: 'Example.com',
-                      href: 'http://www.example.com'
-                  },                
-                      xAxis: {
-                          type: 'category',
-                          labels: {
-                              rotation: 0,
-                              step: 1
-                          },
-                          title: {
-                              style: {          
-                                  fontWeight: 'bold',                       
-                                  fontSize: '11px'
-                              }
-                          },
-  
-                          crosshair: false
-                      },
-                      yAxis: {
-                          gridLineWidth: 0,
-                          tickWidth: 1,
-                          lineWidth: 1,
-                          allowDecimals: false,
-                          min: 0,
-                          title: {                            
-                              style: {                                
-                                  fontSize: '11px'
-                              }
-                          }
-  
-                      },
-                      tooltip: {
-                          headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                          pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y:.1f}</b><br/></span>'
-                      },
-                      plotOptions: {
-                          column: {
-                              pointPadding: 0,
-                              borderWidth: 1,
-                              borderColor: '#000000',
-                              grouping: true
-                          },
-                          options3d:{'enabled':'true'}
-                      },
-                      legend: {
-                          enabled: true,
-                          symbolHeight: 8
-                      }
-                  },
-                  hasRedrawActions: true
-              }          
+        if (this.modelData) {
+            let tempChartData: BarChartData = {
+                series: [],
+                title: '',
+                subtitle: this.modelData.filterDescription,
+                displayText: this.modelData.displayText,
+                categories: this.categories,
+                xAxisLabel: this.modelData.xAxis,
+                yAxisLabel: this.modelData.yAxis,
+                xAxisFormatter: null,
+                customChartSettings: {    
+                  chart: { 
+                    marginLeft: 75, 
+                    marginRight: 25,
+                    marginTop: 25
+                   },                
+                    xAxis: {
+                        type: 'category',
+                        labels: {
+                            rotation: 0,
+                            step: 1
+                        },
+                        title: {
+                            style: {          
+                                fontWeight: 'bold',                       
+                                fontSize: '11px'
+                            }
+                        },
+
+                        crosshair: false
+                    },
+                    yAxis: {
+                        gridLineWidth: 0,
+                        tickWidth: 1,
+                        lineWidth: 1,
+                        allowDecimals: false,
+                        min: 0,
+                        title: {                            
+                            style: {                                
+                                fontSize: '11px'
+                            }
+                        }
+
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y:.1f}</b><br/></span>'
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0,
+                            borderWidth: 1,
+                            borderColor: '#000000',
+                            grouping: true
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                        symbolHeight: 8
+                    }
+                },
+                hasRedrawActions: true
+            }        
               
               let seriesData = new Array();
               let seriesNames = new Array();           
