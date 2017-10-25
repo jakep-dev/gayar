@@ -93,15 +93,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   clearSearchCriteria () {
     if (this.searchService.searchCriteria ||
         this.searchService.selectedCompany) {
-      //this.enteredSearchFilter = '';
-      this.searchService.clearSearchCookies();
-      this.snackBarService.Simple(SEARCHCRITERIA_CHANGED);
+        this.searchService.clearSearchCookies();
+        this.snackBarService.Simple(SEARCHCRITERIA_CHANGED);
     }
     this.loadedCompanyModel   = null;
     this.selectedCompanyModel = null;
-    // console.log('----ClearSearchCriteria----');
-    // console.log('SearchCriteriaModel - ', this.searchService.searchCriteria, this.searchService.selectedCompany, this.selectedCompanyModel);
-    // console.log('----ClearSearchCriteria----');
   }
 
   /**
@@ -147,7 +143,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(!this.isManual){
       this.searchService.selectedCompany = this.selectedCompanyModel;
     }
-    console.log('setSelectedSearchCriteria - ', this.searchService.searchCriteria, this.searchService.selectedCompany);
   }
 
 
@@ -240,19 +235,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     this.isActionEnabled = (this.selectedSearchValue !== '' && this.selectedCompanyModel !== null);
-    // console.log('----ValidateActions----')
-    // console.log('this.selectedSearchValue - ', this.selectedSearchValue);
-    // console.log('this.selectedCompanyModel - ', this.selectedCompanyModel);
-    // console.log('this.isActionEnabled - ', this.isActionEnabled);
-    // console.log('----ValidateActions----')
   }
 
   /**
    * onSearchChange - Fires on select company tile field changes
    */
   onSearchChange (): void {
-    this.clearSearchCriteria();
     this.validateActions();
+    if(this.isActionEnabled) {
+      this.clearSearchCriteria();
+    }
   }
 
   /**
@@ -291,7 +283,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(event.keyCode === 13 ||
        event.type === 'click'){
        this.enteredSearchFilter = '';
-       //this.onSearchChange();
        this.isTriggerSearch.next(true);
     }
   }

@@ -14,8 +14,7 @@
             <button md-icon-button *ngIf="isFlippable && isAccordion"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
             <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)" 
                 [ngClass]="{'collapse':isContent, 'expand':!isContent}">
-                <i *ngIf="isContent" class="icon-backburger expand-collapse"></i>
-                <i *ngIf="!isContent" class="icon-backburger expand-collapse"></i>
+                <i class="icon-backburger expand-collapse"></i>
             </button>
           </div>
       </div>
@@ -24,10 +23,8 @@
   <div class="tile-content">
     <div
       *ngIf="isContent"
-      fxLayout="row"
-      fxLayoutAlign="start start"
-      fxLayout.lt-md="column"
-      fxLayoutAlign.lt-md="center center">
+      fxLayout="column"
+      fxLayoutAlign="center center">
 
       <ng-content
         select="[front]"

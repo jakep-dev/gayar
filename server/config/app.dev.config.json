@@ -101,6 +101,18 @@
             {
                 "name": "getSeverityTypeOfIncidentFlipDetailDataset",
                 "contract": "/cybermetrix/chart/severity/getTypeOfIncidentFlipDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfIncidentBarData",
+                "contract": "/cybermetrix/chart/severity/getTypeOfIncidentDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfLossBarData",
+                "contract": "/cybermetrix/chart/severity/getTypeOfLossDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityScore",
+                "contract": "/cybermetrix/chart/severity/getSeverityScore"
             }
         ]
     },
@@ -158,5 +170,8 @@
                 "type": "add"
             }
         ]
+    },
+    "phantom": {
+        
     }
 }

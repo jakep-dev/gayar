@@ -23,51 +23,76 @@ export class SeverityService extends BaseService {
         }
     }
 
-    public getSeverityTimePeriodData(companyId: number, naics: string, revenueRange: string): Observable<any>{
-        try{
+    public getSeverityTimePeriodData(companyId: number, naics: string, revenueRange: string): Observable<any> {
+        try {
             return super.Post<any>('/api/getSeverityTimePeriodData', {
                 'companyId': companyId,
                 'naics': naics,
                 'revenueRange': revenueRange
             });
         }
-        catch(e){
+        catch (e) {
 
         }
     }
 
-    public getSeverityIndustryOverview( companyId: number, naics : string) : Observable<SeverityIndustryOverviewModel> {
-        try{
-           return super.Post<SeverityIndustryOverviewModel>('/api/severity/getIndustryOverviewDisplayDataset', {
-               'companyId': companyId,
-               'naics': naics
+    public getSeverityIndustryOverview(companyId: number, naics: string): Observable<SeverityIndustryOverviewModel> {
+        try {
+            return super.Post<SeverityIndustryOverviewModel>('/api/severity/getIndustryOverviewDisplayDataset', {
+                'companyId': companyId,
+                'naics': naics
             });
         }
-        catch(e){
- 
-        }
-     }
+        catch (e) {
 
-    public getSeverityTypeOfLossFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
-        try{
+        }
+    }
+
+    public getSeverityTypeOfLossFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any> {
+        try {
             return super.Post<any>('/api/getSeverityTypeOfLossFlipDetailDataset', {
                 'company_id': companyId,
                 'naics': naics,
                 'revenue_range': revenueRange
-           });
+            });
         }
-        catch(e){
+        catch (e) {
 
         }
     }
-    
-    public getSeverityTypeOfIncidentFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any>{
-        try{
+
+    public getSeverityTypeOfIncidentFlipDetailDataset(companyId: number, naics: string, revenueRange: string): Observable<any> {
+        try {
             return super.Post<any>('/api/getSeverityTypeOfIncidentFlipDetailDataset', {
                 'company_id': companyId,
                 'naics': naics,
                 'revenue_range': revenueRange
-           });
+            });
+        }
+        catch (e) {
+
+        }
+    }
+
+    public getSeverityTypeOfIncidentBarData(companyId: number, naics: string, revenueRange: string): Observable<any> {
+        try {
+            return super.Post<any>('/api/getSeverityTypeOfIncidentBarData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
+        }
+        catch (e) {
+        }
+    }    
+
+    public getSeverityTypeOfLossBarData(companyId: number, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getSeverityTypeOfLossBarData', {
+                'companyId': companyId,
+                'naics': naics,
+                'revenueRange': revenueRange
+            });
         }
         catch(e){
 
