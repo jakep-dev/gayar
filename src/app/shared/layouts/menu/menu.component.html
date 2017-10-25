@@ -6,8 +6,9 @@
     mode="{{sideNavMode}}"
     opened="true">
     <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
-      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-            <img class="top-long-logo" src="../assets/images/insite20twenty.png" alt="">
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
+          <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
+          <div class="top-logo-name">Cyber OverVue</div>
       </md-toolbar>
       <div style="border: 1px solid lightgray"></div>
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
@@ -82,8 +83,9 @@
       class="top-menu" color="warn">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
         <div >
-          <button md-icon-button (click)="toggleMenu();">
-            <md-icon class="md-24">menu</md-icon>
+          <button md-icon-button (click)="toggleMenu();" 
+            [ngClass]="{'menu-open':showShortMenu, 'menu-close':!showShortMenu}">
+            <i class="icon-backburger expand-collapse"></i>
           </button>
           <span class="bread-crumb">{{this.menuService.breadCrumb}}</span>
         </div>

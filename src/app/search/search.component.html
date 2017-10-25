@@ -32,10 +32,10 @@
           <div  class="width-100" fxLayout="row" fxLayoutAlign="start center">
             <md-input-container  fxFlex floatPlaceholder="never" dividerColor="accent">
 
-              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (keypress)="onSearch($event)"
-              type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
+              <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onSearch($event)"
+              (keypress)="onSearch($event)" type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
 
-              <md-hint align="end" *ngIf="isManual">{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
+              <md-hint align="end" >{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
 
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
@@ -57,6 +57,8 @@
               <md-option *ngFor="let item of revenueModellist" [value]="item">{{item.rangeDisplay}}</md-option>
           </md-select>
         </div>
+
+        <div class="height-10"></div>
 
          <div fxLayout="column" fxLayoutAlign="center start"  class="width-100" *ngIf="hasSearchResult">
            <app-search-table class="width-100"
@@ -98,7 +100,7 @@
         Assessment
       </button>
 
-      <button md-raised-button (click)="onReport()"  [disabled]="!isActionEnabled">
+      <button md-raised-button (click)="onReport()"  [disabled]="true">
         <md-icon>pie_chart</md-icon>
         Report
       </button>
