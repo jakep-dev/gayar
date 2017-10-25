@@ -126,7 +126,7 @@ export class SeverityRouter extends BaseRoute {
     //Get Type of Loss Bar
     public getSeverityTypeOfLossBarData(req: Request, res: Response, next: NextFunction){
         try{
-            super.PerformGetRequest("getTypeOfLossBarData", {
+            super.PerformGetRequest("getSeverityTypeOfLossBarData", {
                 'ssnid': req.body.token,
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
