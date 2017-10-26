@@ -94,7 +94,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y:.1f}</b><br/></span>'
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
                     },
                     plotOptions: {
                         column: {
