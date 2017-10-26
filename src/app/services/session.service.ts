@@ -34,6 +34,36 @@ export class SessionService extends BaseService {
         }
     }
 
+
+    /**
+     * public get - Get the UserId from currentIdentity.
+     *
+     * @return {type} number - UserId
+     */
+    public get UserId () : number {
+      return this.currentIdentity.userId;
+    }
+
+
+    /**
+     * public get - Get the token from currentIdentity.
+     *
+     * @return {type} string - Token
+     */
+    public get Token () : string {
+      return this.currentIdentity.token;
+    }
+
+
+    /**
+     * public get - Get the fullname from currentIdentity.
+     *
+     * @return {type} string - FullName
+     */
+    public get UserFullName () : string {
+      return this.currentIdentity ? this.currentIdentity.fullName : ''; 
+    }
+
     public getUserFullName(): string {
         return this.currentIdentity.fullName;
     }

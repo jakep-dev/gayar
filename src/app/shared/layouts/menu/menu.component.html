@@ -14,7 +14,7 @@
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
           <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">account_circle</md-icon>
-                <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.currentIdentity.fullName}}</span>
+                <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
           <button md-button routerLink="/search" (click)="onMenu('Search');"
               routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
@@ -83,7 +83,7 @@
       class="top-menu" color="warn">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
         <div >
-          <button md-icon-button (click)="toggleMenu();" 
+          <button md-icon-button (click)="toggleMenu();"
             [ngClass]="{'menu-open':showShortMenu, 'menu-close':!showShortMenu}">
             <i class="icon-backburger expand-collapse"></i>
           </button>
@@ -93,9 +93,9 @@
           <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
              <div style="font-size: 13px;">{{getSearchCompanyName()}}</div>
-             <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home" (onClick)="navigateToHome()"></icon-img>
              <icon-img imgSrc="../assets/images/Icon_Glossary.png" imgAlt="Glossary"></icon-img>
-             <icon-img imgSrc="../assets/images/Icon_UnderwritingFramework.png" imgAlt="UnderWriting"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_UnderwritingFramework.png" imgAlt="UnderWriting" (onClick)="launchUnderWriting()"></icon-img>
              <icon-img imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
           </div>
         </div>

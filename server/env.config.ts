@@ -18,7 +18,7 @@ export class EnvConfig {
     }
 
     init(env: string){
-       EnvConfig.environment = env; 
+       EnvConfig.environment = env;
        this.loadConfiguration();
        this.loadServerConfig();
        this.loadApiConfig();
@@ -26,10 +26,26 @@ export class EnvConfig {
        this.loadSecurityConfig();
     }
 
+
+    /**
+     * Returns the environment details
+     */
+    static getEnvironment (): string {
+      return this.environment;
+    }
+
+
+    /**
+     * Returns the log configuration
+     */
     static getLog(): LogModel {
         return EnvConfig.envConfigModel.Log;
     }
 
+
+    /**
+     * Returns the security configuration
+     */
     static getSecurity(): SecurityModel {
         return EnvConfig.envConfigModel.Security;
     }
@@ -41,7 +57,7 @@ export class EnvConfig {
     static getApi(): ApiModel {
         return EnvConfig.envConfigModel.Api;
     }
-    
+
     static getSecurityHeader(): any {
         return EnvConfig.envConfigModel.Security.headers;
     }
