@@ -118,7 +118,8 @@ export class SeverityIncidentPieDirective {
                   dataLabels: {
                     enabled: true,
                     distance: -30,
-                    color: '#000000'
+                    color: '#000000',
+                    useHTML: true
                   },
                   point: {
                       events: {
