@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenuService, SessionService, SearchService } from 'app/services/services';
 import { DOCUMENT } from "@angular/platform-browser";
 import { Observable } from 'rxjs/Observable';
+import { environment } from 'environments/environment';
 import 'rxjs/add/observable/of';
 
 const NAV_MODE = 'side';
@@ -18,10 +19,11 @@ export class MenuComponent implements OnInit {
   showShortMenu: boolean = true;
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
+  fullName: string;
   constructor(private menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
-
+        this.fullName = this.sessionService.UserFullName;
   }
 
   ngOnInit () {
@@ -95,7 +97,33 @@ export class MenuComponent implements OnInit {
     return null;
   }
 
-  shortMenuMouseLeave(){
+
+  /**
+   * navigateToHome - Navigate to the home tab.
+   *
+   * @return {type} - No return type.
+   */
+  navigateToHome () {
+
+  }
+
+  /**
+   * launchUnderWriting - Launch the underwriting application.
+   *
+   * @return {type} - No return type.
+   */
+  launchUnderWriting () {
+     const userId: number = this.sessionService.UserId;
+     const token: string = this.sessionService.Token;
+     const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
+     let winRef = window.open('', url, '', true);
+     if (winRef.location.href === 'about:blank'){
+        winRef.location.href = url;
+     }
+     winRef.location.href = url;
+  }
+
+  shortMenuMouseLeave () {
     if(!this.showShortMenu && !this.isMenuLock){
       this.showShortMenu = true;
       this.sideNavMode = NAV_MODE;

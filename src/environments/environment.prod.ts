@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  underwritingUrl: 'https://workups.advisen.com/dashboard',
+  landingPage: 'https://insite20twenty.advisen.com/login'
 };

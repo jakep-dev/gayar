@@ -279,8 +279,8 @@ export abstract class BaseChart {
         if(startPoint && startPoint.length > 0 &&
             linePoints && linePoints.length > 0) {
                 var pathArray = ['M', 'L'];
-                pathArray.splice(1, 0, ...startPoint);
-                pathArray.splice(pathArray.length, 0 , ...linePoints);
+                pathArray.splice(1, 0, ...startPoint.map((e)=> { return e.toString() }));
+                pathArray.splice(pathArray.length, 0 , ...linePoints.map((e)=>{ return e.toString() }));
 
                 var render = this.chart.renderer.path(pathArray)
                     .attr({
@@ -288,15 +288,15 @@ export abstract class BaseChart {
                         'stroke-width': width || 1,
                         zIndex: 999
                     })
-                    
+
                     render.add();
                     this.renderedObject.push(render);
             }
     }
-    
-    public removeRenderedObjects() {        
+
+    public removeRenderedObjects() {
         this.renderedObject.forEach(object => {
-            object.destroy(); 
+            object.destroy();
         });
         this.renderedObject = [];
     }
