@@ -1,32 +1,44 @@
 <div
-    fxLayout="column"
+    [dragula]='"sixth-bag"'
+    [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
     fxLayoutAlign="start start"
-    fxLayoutGap="2px">
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-peer-group-loss *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-                  <app-premium  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
-      </div>
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-limit    *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
-                  <app-retention *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
-      </div>
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-rate *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
-                  <div class="width-100"></div>
-      </div>
+    fxLayoutWrap>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_ADEQUACY'" [title]="'Limit Adequacy'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-peer-group-loss fxFlexFill *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+          </div>
+      </app-tile>
+    </div>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_PREMIUM'" [title]="'Premium Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-premium fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+          </div>
+      </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_LIMIT'" [title]="'Limit Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-limit fxFlexFill  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
+          </div>
+      </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_RETENTION'" [title]="'Retention Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+            <app-retention fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
+          </div>
+      </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_RATEPERMILLION'" [title]="'Rate Per Million Distribution by Values'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+            <app-rate  fxFlexFill *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+          </div>
+      </app-tile>
+    </div>
 </div>

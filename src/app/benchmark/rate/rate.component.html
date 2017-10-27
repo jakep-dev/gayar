@@ -1,14 +1,10 @@
-<app-tile [id]="'BENCHMARK_RATE'" [title]="chartHeader" class="width-100">
-    <div front class="width-100" fxLayout="row">
-        <boxplot-chart
-            fxFlexFill
-            *ngIf='modelData'
-            benchmark-rate-distribution-behavior
-            [modelData]="modelData"
-            [chartData]="chartData"
-            [chartComponent]="chartComponent$ | async"
-            (onDataComplete)="onDataComplete($event)"
-            (onChartRedraw)="onChartReDraw($event)">
-        </boxplot-chart>
-    </div>
-</app-tile>
+<boxplot-chart
+    fxFlexFill
+    *ngIf='modelData'
+    benchmark-rate-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData"
+    [chartComponent]="chartComponent$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    (onChartRedraw)="onChartReDraw($event)">
+</boxplot-chart>

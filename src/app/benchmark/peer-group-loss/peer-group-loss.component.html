@@ -1,13 +1,9 @@
-<app-tile [id]="'BENCHMARK_PEER_GROUP_LOSS'" [title]="chartHeader" class="width-100">
-    <div front class="width-100" fxLayout="row">
-        <bar-chart fxFlexFill
-            *ngIf='modelData'
-            benchmark-peergrouploss-distribution-behavior
-            [modelData]="modelData"
-            [chartData]="chartData"
-            [chartComponent]="chartComponent$ | async"
-            (onDataComplete)="onDataComplete($event)"
-            (onChartRedraw)="onChartReDraw($event)">
-        </bar-chart>
-    </div>
-</app-tile>
+<bar-chart fxFlexFill
+    *ngIf='modelData'
+    benchmark-peergrouploss-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData"
+    [chartComponent]="chartComponent$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    (onChartRedraw)="onChartReDraw($event)">
+</bar-chart>
