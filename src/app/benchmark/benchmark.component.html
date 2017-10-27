@@ -1,32 +1,22 @@
 <div
-    fxLayout="column"
+    fxLayout.gt-sm="row"
+    fxHide.lt-md="true"
     fxLayoutAlign="start start"
-    fxLayoutGap="2px">
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-peer-group-loss *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-                  <app-premium  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
-      </div>
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-limit    *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
-                  <app-retention *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
-      </div>
-      <div  class="width-100"
-            fxLayout="row"
-            fxLayoutAlign="start start"
-            fxLayout.lt-lg="column"
-            fxLayoutAlign.lt-lg="start start"
-            fxLayoutGap="2px">
-                  <app-rate *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
-                  <div class="width-100"></div>
-      </div>
+    fxLayoutWrap>
+    <app-peer-group-loss fxFlexFill fxFlex="50" fxFlex.lt-md="100"  *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+    <app-premium fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+    <app-limit fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
+    <app-retention fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
+    <app-rate  fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+</div>
+
+<div
+    fxHide.gt-sm="true"
+    fxLayoutAlign="start start"
+    fxLayout.lt-md="column">
+    <app-peer-group-loss fxFlex="50" fxFlex.lt-md="100"  *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+    <app-premium fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+    <app-limit fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
+    <app-retention fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
+    <app-rate fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
 </div>
