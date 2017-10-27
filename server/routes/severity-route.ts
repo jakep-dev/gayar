@@ -58,7 +58,7 @@ export class SeverityRouter extends BaseRoute {
 
     public getSeverityIndustryOverview(req: Request, res: Response, next: NextFunction) {
         try {
-            super.PerformGetRequest("getIndustryOverviewDisplayDataset", {
+            super.PerformGetRequest("severity/getIndustryOverviewDisplayDataset", {
                 'companyId': req.body.companyId,
                 'naics': req.body.naics,
                 'ssnid': req.body.token

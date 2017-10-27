@@ -151,7 +151,7 @@ export class FrequencyTimePeriodDirective {
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
                 },
                 plotOptions: {
                     scatter: {
@@ -276,6 +276,15 @@ export class FrequencyTimePeriodDirective {
         tempChartData.onDrillUp = function (event, chart) {
             chart.setTitle({ text: defaultTitle });
         }
+        
+        if(this.modelData.maxValue === 0) {
+            tempChartData.title = '';
+            tempChartData.subtitle = '';
+            tempChartData.customChartSettings.subtitle.text = '';
+            tempChartData.customChartSettings.title.text = '';
+            tempChartData.series = [];
+            tempChartData.drilldown = [];
+        }
 
         this.onDataComplete.emit(tempChartData);
 
@@ -382,7 +391,7 @@ export class FrequencyTimePeriodDirective {
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
                 },
                 plotOptions: {
                     scatter: {
@@ -601,7 +610,7 @@ export class FrequencyTimePeriodDirective {
                 },
                 tooltip: {
                     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
                 },
                 plotOptions: {
                     scatter: {
