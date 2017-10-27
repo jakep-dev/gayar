@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { SearchService, MenuService } from '../services/services';
 import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput } from '../model/benchmark.model';
+import {Subscription} from "rxjs/Subscription";
+import {MediaChange, ObservableMedia} from "@angular/flex-layout";
 
 @Component({
     selector: 'app-benchmark',
@@ -21,14 +23,25 @@ export class BenchmarkComponent implements OnInit {
     public benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
     public benchmarkRateInput: BenchmarkRateInput;
 
-    constructor(private searchService: SearchService, 
-                private menuService: MenuService) { }
+    watcher: Subscription;
+
+    constructor(private searchService: SearchService,
+                private menuService: MenuService,
+                private media: ObservableMedia) {
+                this.watchForMedia(); }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Benchmark';
         this.setupDistributionInput();
         this.setupLimitAdequacyInput();
         this.setupRateInput();
+    }
+
+    watchForMedia () {
+      this.watcher = this.media.subscribe((change: MediaChange) => {
+      //this.activeMediaQuery = change ? `'${change.mqAlias}' = (${change.mediaQuery})` : "";
+      console.log(change);
+    });
     }
 
     /**

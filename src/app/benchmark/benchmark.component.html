@@ -1,22 +1,44 @@
 <div
-    fxLayout.gt-sm="row"
-    fxHide.lt-md="true"
+    [dragula]='"sixth-bag"'
+    [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
     fxLayoutAlign="start start"
     fxLayoutWrap>
-    <app-peer-group-loss fxFlexFill fxFlex="50" fxFlex.lt-md="100"  *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-    <app-premium fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
-    <app-limit fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
-    <app-retention fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
-    <app-rate  fxFlexFill fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
-</div>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_ADEQUACY'" [title]="'Limit Adequacy'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-peer-group-loss fxFlexFill *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
+          </div>
+      </app-tile>
+    </div>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_PREMIUM'" [title]="'Premium Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-premium fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+          </div>
+      </app-tile>
+    </div>
 
-<div
-    fxHide.gt-sm="true"
-    fxLayoutAlign="start start"
-    fxLayout.lt-md="column">
-    <app-peer-group-loss fxFlex="50" fxFlex.lt-md="100"  *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
-    <app-premium fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
-    <app-limit fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
-    <app-retention fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
-    <app-rate fxFlex="50" fxFlex.lt-md="100" *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_LIMIT'" [title]="'Limit Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+              <app-limit fxFlexFill  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
+          </div>
+      </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_RETENTION'" [title]="'Retention Distribution by Counts'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+            <app-retention fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
+          </div>
+      </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+      <app-tile [id]="'BENCHMARK_RATEPERMILLION'" [title]="'Rate Per Million Distribution by Values'" class="width-100">
+          <div front class="width-100" fxLayout="row">
+            <app-rate  fxFlexFill *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+          </div>
+      </app-tile>
+    </div>
 </div>
