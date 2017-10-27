@@ -47,29 +47,31 @@ export class LossBarComponent implements OnInit {
 	}
 
 	addLabelAndImage(chart) {
-		if (this.modelData.datasets && this.modelData.datasets.length > 0) {
-			if (this.modelData.displayText && this.modelData.displayText.length > 0) {
-				let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
+		if (this.modelData.maxValue > 0) {
+			if (this.modelData.datasets && this.modelData.datasets.length > 0) {
+				if (this.modelData.displayText && this.modelData.displayText.length > 0) {
+					let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
 
-				chart.addChartLabel(
-					this.modelData.displayText,
-					10,
-					chart.chart.chartHeight - labelHeight,
-					'#000000',
-					10,
-					null,
-					chart.chart.chartWidth - 85
-				);
+					chart.addChartLabel(
+						this.modelData.displayText,
+						10,
+						chart.chart.chartHeight - labelHeight,
+						'#000000',
+						10,
+						null,
+						chart.chart.chartWidth - 85
+					);
+				}
 			}
-		}
 
-		chart.addChartImage(
-			'https://www.advisen.com/img/advisen-logo.png',
-			chart.chart.chartWidth - 80,
-			chart.chart.chartHeight - 20,
-			69,
-			17
-		);
+			chart.addChartImage(
+				'https://www.advisen.com/img/advisen-logo.png',
+				chart.chart.chartWidth - 80,
+				chart.chart.chartHeight - 20,
+				69,
+				17
+			);
+		}
 	}
 
 	constructor(private severityService: SeverityService) {
