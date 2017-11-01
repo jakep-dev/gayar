@@ -54,7 +54,14 @@ export class SubCheckboxComponent implements OnInit {
 
   onSubComponentSelection (value, subComponent: SubComponent) {
     subComponent.value = value;
+    this.watchForHeaderStatus();
     this.onIndividualSubComponentChange.emit(subComponent);
     this.onAllSubComponents.emit(this.subComponents);
+  }
+
+  watchForHeaderStatus () {
+    this.hasAllSelected = this.subComponents.every((sub)=>{
+      return sub.value === true;
+    })
   }
 }

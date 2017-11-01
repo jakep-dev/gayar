@@ -1,4 +1,4 @@
-<btn-checkbox [name]="headerName" (onSelectable)="onHeaderSelection($event)"></btn-checkbox>
+<btn-checkbox [name]="headerName" (onSelectable)="onHeaderSelection($event)" [isSelected]="hasAllSelected"></btn-checkbox>
 <div *ngFor="let sub of subComponents">
   <btn-checkbox [name]="sub.name" [isSubComponent]="true" [isSelected]="sub.value" (onSelectable)="onSubComponentSelection($event, sub)"></btn-checkbox>
 </div>
