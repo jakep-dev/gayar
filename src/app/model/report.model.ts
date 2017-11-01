@@ -1,4 +1,4 @@
-export interface IReportModel {
+export interface ReportModel {
     reportId: string;
     isDashboard: boolean;
     isBenchmark: boolean;

@@ -1,7 +1,7 @@
-import { BarChartData } from '../../../../model/charts/bar-chart.model';
+import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
 import { BaseChart } from '../../base-chart';
-import { ChartModule } from 'angular2-highcharts'; 
+import { ChartModule } from 'angular2-highcharts';
 
 @Component({
     selector: 'bar-chart-with-break',
@@ -201,7 +201,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     addBreakLines() {
 
         this.chartWithBreak.renderer.path([
-            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 10, 
+            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 10,
             'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight
         ]).attr({
             stroke: '#ccd6eb',
@@ -210,7 +210,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         }).add();
 
         this.chartWithBreak.renderer.path([
-            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 15, 
+            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 15,
             'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight - 5
         ]).attr({
             stroke: '#ccd6eb',
