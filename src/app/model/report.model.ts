@@ -1,6 +1,10 @@
 export interface IReportModel {
     reportId: string;
     isDashboard: boolean;
+    isBenchmark: boolean;
+    isFrequency: boolean;
+    isSeverity: boolean;
+    isAppendix: boolean;
     benchmark: IBenchmarkReportModel;
     severity: ISeverityReportModel;
     frequency: IFrequencyReportModel;
@@ -31,6 +35,7 @@ export interface ISeverityReportModel {
   isTimePeriod: boolean;
   typeOfIncident: ITypeOfIncidentReportModel;
   typeOfLoss: ITypeOfLossReportModel;
+  isTop5Cases: boolean;
 }
 
 
@@ -41,6 +46,8 @@ export interface IFrequencyReportModel {
   isIndustryOverview: boolean;
   isTimePeriod: boolean;
   typeofIncident: ITypeOfIncidentReportModel;
+  typeofLoss: ITypeOfLossReportModel;
+  isMost5RecentCases: boolean;
 }
 
 export interface ITypeOfIncidentReportModel {
