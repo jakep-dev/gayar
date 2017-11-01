@@ -16,7 +16,10 @@ export class TileComponent implements OnInit {
   @Input() isFlippable: boolean = false;
   @Input() isFullScreen: boolean = true;
   @Input() isDragable: boolean = false;
+  @Input() isSelectable: boolean = false;
   @Input() showProgress: boolean = false;
+  @Input() isSelected: boolean = false;
+
 
   /**
    * Fires on flip.
@@ -34,13 +37,19 @@ export class TileComponent implements OnInit {
   @Output() onFullScreen: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
+  /**
+   * Fires on checkbox selection
+   */
+  @Output() onSelectable: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+
   isContent:    boolean = true;
   isFlipped:    boolean = false;
   isSplitted:   boolean = false;
   isMaximize:   boolean = false;
   isTileVisible: boolean = true;
 
-  constructor(private menuService: MenuService, 
+  constructor(private menuService: MenuService,
               private element: ElementRef) {
   }
 
