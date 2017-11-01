@@ -41,7 +41,7 @@
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
             </button>
-          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu('Report')" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active" routerLink="/report" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">pie_chart</md-icon>
                 <span>Report</span>
           </button>
@@ -72,7 +72,7 @@
           <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
           </button>
-          <button md-button (click)="onMenu()" [disabled]="true">
+          <button md-button (click)="onMenu('Report')" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active" routerLink="/report">
                 <md-icon class="md-18">pie_chart</md-icon>
           </button>
       </div>
