@@ -1,0 +1,85 @@
+<div style="border:1px solid lightgrey" fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlexFill fxLayout="row" fxLayoutAlign="end center">
+      <md-input-container floatPlaceholder="never" style="width: 50%" dividerColor="accent" class="md-block">
+          <input mdInput type="text" #filter placeholder="Filter search results">
+      </md-input-container>
+  </div>
+  <md-table #table fxFlexFill [dataSource]="dataSource" mdSort>
+
+    <!-- Company Id Column -->
+    <ng-container cdkColumnDef="companyId">
+      <md-header-cell  class="table-header" *cdkHeaderCellDef>#</md-header-cell>
+      <md-cell *cdkCellDef="let element" style="cursor: pointer">
+        <md-radio-button color="primary" value="1" [checked]="element.isSelected" (click)="onRowSelection(element)" ></md-radio-button>
+      </md-cell>
+    </ng-container>
+
+    <!-- Depth Score Column -->
+    <ng-container cdkColumnDef="depthScore">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Data Depth </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.depthScore}} </md-cell>
+    </ng-container>
+
+    <!-- Company Name Column -->
+    <ng-container cdkColumnDef="companyName">
+      <md-header-cell style="min-width:30%" *cdkHeaderCellDef md-sort-header> Name </md-header-cell>
+      <md-cell style="min-width:30%" *cdkCellDef="let element" > {{element.companyName}} </md-cell>
+    </ng-container>
+
+    <!-- City Column -->
+    <ng-container cdkColumnDef="city">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> City </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.city}} </md-cell>
+    </ng-container>
+
+    <!-- State Column -->
+    <ng-container cdkColumnDef="state">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> State </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.state}} </md-cell>
+    </ng-container>
+
+    <!-- Country Column -->
+    <ng-container cdkColumnDef="country">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Country </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.country}} </md-cell>
+    </ng-container>
+
+    <!-- Ticker Column -->
+    <ng-container cdkColumnDef="ticker">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Ticker </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.ticker}} </md-cell>
+    </ng-container>
+
+    <!-- Exchange Column -->
+    <ng-container cdkColumnDef="exchange">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Exchange </md-header-cell>
+      <md-cell *cdkCellDef="let element"> {{element.exchange}} </md-cell>
+    </ng-container>
+
+    <!-- Exchange Column -->
+    <ng-container cdkColumnDef="topLevel">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Top Level </md-header-cell>
+      <md-cell *cdkCellDef="let element"> {{element.topLevel}} </md-cell>
+    </ng-container>
+
+    <!-- Exchange Column -->
+    <ng-container cdkColumnDef="status">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
+      <md-cell *cdkCellDef="let element" > {{element.status}} </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+  <div *ngIf="noResultMsg" fxFlexFill  style="padding:10px 0px 10px 0px; text-align: center ;background: white; border: 1px solid lightgrey; border-top: none">
+    {{noResultMsg}}
+  </div>
+  <div *ngIf="isProcessing" fxFlexFill style="background: lightgrey; padding:10px 0px 10px 0px; text-align: center;">
+    Processing...
+  </div>
+  <md-paginator #paginator fxFlexFill style="border: 1px solid lightgrey; border-top: none; border-bottom: none; padding: 0px"
+      [length]="searchTableDatabase.data.length"
+      [pageIndex]="0"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 20]"></md-paginator>
+</div>

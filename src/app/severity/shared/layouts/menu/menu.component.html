@@ -1,0 +1,108 @@
+<md-progress-bar mode="indeterminate" color="warn" *ngIf="isLoading"></md-progress-bar>
+<md-sidenav-container [style.background]="menuService.containerBgColor">
+  <md-sidenav style="overflow: hidden !important"
+    #sidenav
+    [style.display]="menuService.isFullScreen ? 'none' : ''"
+    mode="{{sideNavMode}}"
+    opened="true">
+    <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
+          <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
+          <div class="top-logo-name">Cyber OverVue</div>
+      </md-toolbar>
+      <div style="border: 1px solid lightgray"></div>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">account_circle</md-icon>
+                <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
+            </button>
+          <button md-button routerLink="/search" (click)="onMenu('Search');"
+              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">search</md-icon>
+                <span>Search</span>
+          </button>
+          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');"
+             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">dashboard</md-icon>
+                <span>Dashboard</span>
+          </button>
+          <button md-button routerLink="/frequency" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Frequency');"
+            routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+            <md-icon class="md-18">wifi</md-icon>
+                <span>Frequency</span>
+            </button>
+          <button md-button routerLink="/severity" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Severity');"
+            routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+            <md-icon class="md-18">gamepad</md-icon>
+                <span>Severity</span>
+            </button>
+          <button md-button routerLink="/benchmark" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Benchmark');"
+          routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">insert_chart</md-icon>
+                <span>Benchmark</span>
+            </button>
+          <button md-button (click)="onMenu()" fxLayout="row" [disabled]="true" fxLayoutAlign="start center">
+                <md-icon class="md-18">pie_chart</md-icon>
+                <span>Report</span>
+          </button>
+      </div>
+    </div>
+    <div id="ShortMenu" *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important"
+          (mouseover)="shortMenuMouseOver()"  >
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
+           <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
+      </md-toolbar>
+      <div style="border: 1px solid lightgray"></div>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="overflow-y: hidden !important">
+          <button md-button (click)="onMenu()">
+                <md-icon class="md-18">account_circle</md-icon>
+          </button>
+          <button md-button routerLink="/search" (click)="onMenu('Search');" routerLinkActive="active">
+            <md-icon class="md-18">search</md-icon>
+          </button>
+          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
+                <md-icon class="md-18">dashboard</md-icon>
+          </button>
+          <button md-button routerLink="/frequency" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Frequency');" routerLinkActive="active">
+                <md-icon class="md-18">wifi</md-icon>
+          </button>
+          <button md-button routerLink="/severity" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Severity');" routerLinkActive="active">
+                <md-icon class="md-18">gamepad</md-icon>
+          </button>
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
+                <md-icon class="md-18">insert_chart</md-icon>
+          </button>
+          <button md-button (click)="onMenu()" [disabled]="true">
+                <md-icon class="md-18">pie_chart</md-icon>
+          </button>
+      </div>
+    </div>
+  </md-sidenav>
+  <md-toolbar
+      [style.display]="menuService.isFullScreen ? 'none' : ''"
+      class="top-menu" color="warn">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
+        <div >
+          <button md-icon-button (click)="toggleMenu();"
+            [ngClass]="{'menu-open':showShortMenu, 'menu-close':!showShortMenu}">
+            <i class="icon-backburger expand-collapse"></i>
+          </button>
+          <span class="bread-crumb">{{this.menuService.breadCrumb}}</span>
+        </div>
+        <div>
+          <div  fxLayout="row" fxLayoutAlign="end center">
+             <span class="bread-crumb" >{{searchCompanyName}}</span>
+             <div style="font-size: 13px;">{{getSearchCompanyName()}}</div>
+             <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home" (onClick)="navigateToHome()"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_Glossary.png" imgAlt="Glossary"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_UnderwritingFramework.png" imgAlt="UnderWriting" (onClick)="launchUnderWriting()"></icon-img>
+             <icon-img imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
+          </div>
+        </div>
+    </div>
+  </md-toolbar>
+  <div class="app-content">
+    <router-outlet></router-outlet>
+    <div style="height: 100px"></div>
+  </div>
+</md-sidenav-container>

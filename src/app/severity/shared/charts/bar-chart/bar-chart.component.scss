@@ -1,0 +1,20 @@
+// .bar-chart1 {
+//     width:100%;
+// }
+
+// @media only screen and (max-width : 680px) {
+// .bar-chart1 .highcharts-container{
+//     width: 401px !important;
+//     height: 269px !important;
+    
+//   }
+
+// .bar-chart1  .highcharts-root{
+//       width: 100% !important;
+//       height: 100% !important;
+//   }
+// }
+
+.incident-below1, .time-below1, .loss-below1{ 
+    top: -3px !important;
+}
