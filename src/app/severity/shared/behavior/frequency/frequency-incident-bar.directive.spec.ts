@@ -1,6 +1,6 @@
 import { FrequencyIncidentBarDirective } from './frequency-incident-bar.directive';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 describe('FrequencyIncidentBarDirective', () => {
   let fixture: ComponentFixture<SearchService>;

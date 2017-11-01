@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BenchmarkRateDistributionDirective } from './benchmark-rate-distribution.directive';
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 describe('BenchmarkRateDistributionDirective', () => {
   let fixture: ComponentFixture<SearchService>;

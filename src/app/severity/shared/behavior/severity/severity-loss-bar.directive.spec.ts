@@ -1,6 +1,6 @@
 import { SeverityLossBarDirective } from './severity-loss-bar.directive';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 describe('SeverityLossBarDirective', () => {
   let fixture: ComponentFixture<SearchService>;

@@ -1,4 +1,4 @@
-import { BarChartData } from '../../../../model/charts/bar-chart.model';
+import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
 import { BaseChart } from '../../base-chart';
 import { ChartModule } from 'angular2-highcharts'; 
