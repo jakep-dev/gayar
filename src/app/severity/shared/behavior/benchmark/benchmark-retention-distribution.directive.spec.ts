@@ -1,6 +1,6 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { BenchmarkRetentionDistributionDirective } from './benchmark-retention-distribution.directive';
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 describe('BenchmarkRetentionDistributionDirective', () => {
   let fixture: ComponentFixture<SearchService>;

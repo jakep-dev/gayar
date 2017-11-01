@@ -1,6 +1,6 @@
 import { BaseChart } from '../../charts/base-chart';
 
-import { BarChartData } from '../../../model/charts/bar-chart.model';
+import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FrequencyIndustryOverviewModel } from "app/model/model";
 
