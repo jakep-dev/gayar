@@ -6,6 +6,12 @@ export interface IReportModel {
     frequency: IFrequencyReportModel;
 }
 
+export interface SubComponent {
+    name: string;
+    key: string;
+    value: boolean
+}
+
 /**
  * Benchmark model for the report
  */

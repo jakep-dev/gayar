@@ -9,7 +9,10 @@
               <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
             </button>
 
-            <mat-checkbox *ngIf="isSelectable"></mat-checkbox>
+            <button md-icon-button *ngIf="isSelectable" (click)="toggleSelected()" [disabled]="isSelectableDisabled">
+              <md-icon *ngIf="isSelected">check_box</md-icon>
+              <md-icon *ngIf="!isSelected">check_box_outline_blank</md-icon>
+            </button>
             <button md-icon-button *ngIf="isDragable"><md-icon>open_with</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><i class="icon-content-duplicate fa-lg"></i></button>
             <button md-icon-button *ngIf="isFlippable"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>

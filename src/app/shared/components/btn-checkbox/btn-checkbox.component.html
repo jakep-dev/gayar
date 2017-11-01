@@ -1,0 +1,11 @@
+<button md-button class="width-100" (click)="toggleSelected()" autofocus>
+    <div fxLayout="row" fxLayoutAlign="space-between center" [ngClass]="{'sub-component-padding': isSubComponent}">
+      <div class="btn-checkbox-name">
+          {{name}}
+      </div>
+      <div class="btn-checkbox-img">
+        <md-icon *ngIf="isSelected">check_box</md-icon>
+        <md-icon *ngIf="!isSelected">check_box_outline_blank</md-icon>
+      </div>
+    </div>
+</button>

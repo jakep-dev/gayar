@@ -2,27 +2,76 @@
     fxLayout="row"
     fxLayoutAlign="start start"
     fxLayoutWrap>
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+    <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_DASHBOARD'"  class="width-100"
-          [title]="'Dashboard'" [isAccordion]="false" [isFullScreen]="false">
+          [title]="'Dashboard'" [isAccordion]="false" [isFullScreen]="false"
+          [isSelectable]="true" [isSelected]="true" [isSelectableDisabled]="true">
           <div front class="width-100" fxLayout="row">
 
           </div>
       </app-tile>
     </div>
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
-
+    <div fxFlexFill fxFlex="100">
+      <app-tile [id]="'REPORT_FREQUENCY'"  class="width-100"
+          [title]="'Frequency'" [isAccordion]="false" [isFullScreen]="false" [isSelectable]="true">
+          <div front fxLayout="column" class="width-100 sub-components">
+              <btn-checkbox  class="width-100" [name]="'Industry Overview'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Time Period'"></btn-checkbox>
+              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]="frequencyTypeOfIncidentSubComponents"></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]="frequencyTypeOfLossSubComponents"></sub-checkbox>
+              <btn-checkbox  class="width-100" [name]="'5 Most Recent Cases'"></btn-checkbox>
+          </div>
+      </app-tile>
     </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
-
+    <div fxFlexFill fxFlex="100">
+      <app-tile [id]="'REPORT_SEVERITY'"  class="width-100"
+          [title]="'Severity'" [isAccordion]="false" [isFullScreen]="false" [isSelectable]="true">
+          <div front fxLayout="column" class="width-100 sub-components">
+              <btn-checkbox  class="width-100" [name]="'Industry Overview'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Time Period'"></btn-checkbox>
+              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]="severityTypeOfIncidentSubComponents"></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]="severityTypeOfLossSubComponents"></sub-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Top 5 Cases'"></btn-checkbox>
+          </div>
+      </app-tile>
     </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
-
+    <div fxFlexFill fxFlex="100">
+      <app-tile [id]="'REPORT_BENCHMARK'"  class="width-100"
+          [title]="'Benchmark'" [isAccordion]="false" [isFullScreen]="false" [isSelectable]="true">
+          <div front fxLayout="column" class="width-100 sub-components">
+              <btn-checkbox  class="width-100" [name]="'Limit Adequacy'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Premium Distribution'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Limit Distribution'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Retention Distribution'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Rate per Million Distribution by Values'"></btn-checkbox>
+          </div>
+      </app-tile>
     </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+    <div fxFlexFill fxFlex="100">
+      <app-tile [id]="'REPORT_APPENDIX'"  class="width-100"
+          [title]="'Appendix'" [isAccordion]="false" [isFullScreen]="false" [isSelectable]="true">
+          <div front fxLayout="column" class="width-100 sub-components">
+              <btn-checkbox  class="width-100" [name]="'Glossary'"></btn-checkbox>
+          </div>
+      </app-tile>
+    </div>
 
+
+    <div fxFlexFill fxFlex="100">
+      <blank-tile [id]="'REPORT_ACTIONS'">
+          <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="padding-right-5">
+            <button md-raised-button (click)="onReport()">
+              <md-icon>pie_chart</md-icon>
+              Report
+            </button>
+          </div>
+      </blank-tile>
+    </div>
+
+    <div style="height: 50px">
+      &nbsp;
     </div>
 </div>

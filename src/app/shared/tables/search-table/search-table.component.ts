@@ -120,11 +120,11 @@ export class SearchTableComponent implements OnInit {
   getCompanyDetails () {
     this._resetPagination();
     this.searchTableDatabase.deleteAllRecords();
-    this.isProcessing = true;
     if(this.searchResultSubscription && !this.searchResultSubscription.closed){
       this.isProcessing = false;
       this.searchResultSubscription.unsubscribe();
     }
+    this.isProcessing = true;
     this.searchResultSubscription = this.searchService
         .getSearchResult(this.searchType, this.searchValue)
         .subscribe((data: SearchModel) =>

@@ -19,6 +19,7 @@ export class TileComponent implements OnInit {
   @Input() isSelectable: boolean = false;
   @Input() showProgress: boolean = false;
   @Input() isSelected: boolean = false;
+  @Input() isSelectableDisabled: boolean = false;
 
 
   /**
@@ -98,5 +99,16 @@ export class TileComponent implements OnInit {
   toggleSplit(){
     this.isSplitted = !this.isSplitted;
     this.onSplit.emit(this.isSplitted);
+  }
+
+
+  /**
+   * toggleSelected - description
+   *
+   * @return {type}  description
+   */
+  toggleSelected () {
+    this.isSelected = !this.isSelected;
+    this.onSelectable.emit(this.isSelected);
   }
 }
