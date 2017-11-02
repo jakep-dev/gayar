@@ -1,4 +1,4 @@
-export interface ReportModel {
+export interface IReportModel {
     reportId: string;
     isDashboard: boolean;
     isBenchmark: boolean;
@@ -6,8 +6,8 @@ export interface ReportModel {
     isSeverity: boolean;
     isAppendix: boolean;
     benchmark: IBenchmarkReportModel;
-    severity: ISeverityReportModel;
-    frequency: IFrequencyReportModel;
+    // severity: ISeverityReportModel;
+    // frequency: IFrequencyReportModel;
 }
 
 export interface SubComponent {
