@@ -136,6 +136,47 @@ export class ReportComponent implements OnInit {
     this.model.benchmark.isRatePerMillionDistributionByValues = val;
   }
 
+  onBenchmarkSubCompSelectionChange (val, type) {
+    if (!val) {
+      this.model.isBenchmark = val;
+    }
+    switch (type) {
+      case 'LimitAdequacy':
+        this.model.benchmark.isLimitAdequacy = val;
+      break;
+
+      case 'PremiumDistribution':
+        this.model.benchmark.isPremiumDistribution = val;
+      break;
+
+      case 'LimitDistribution':
+        this.model.benchmark.isLimitDistribution = val;
+      break;
+
+      case 'RetentionDistribution':
+        this.model.benchmark.isRetentionDistribution = val;
+      break;
+
+      case 'RatePerMillionDistributionByValues':
+        this.model.benchmark.isRatePerMillionDistributionByValues = val;
+      break;
+    }
+
+    if (val) {
+      this.checkForBenchmarkCompRelationship();
+    }
+  }
+
+  checkForBenchmarkCompRelationship () {
+    if (this.model.benchmark.isLimitAdequacy &&
+        this.model.benchmark.isLimitDistribution &&
+        this.model.benchmark.isPremiumDistribution &&
+        this.model.benchmark.isRatePerMillionDistributionByValues &&
+        this.model.benchmark.isRetentionDistribution) {
+          this.model.isBenchmark = true;
+        }
+  }
+
   /**
    * onBenchmarkTileSelectionChange - Fires on severity tile selection.
    *
