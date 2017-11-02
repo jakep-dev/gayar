@@ -5,6 +5,7 @@ export interface IReportModel {
     isFrequency: boolean;
     isSeverity: boolean;
     isAppendix: boolean;
+    dashboard: IDashboardReportModel;
     benchmark: IBenchmarkReportModel;
     // severity: ISeverityReportModel;
     // frequency: IFrequencyReportModel;
@@ -14,6 +15,12 @@ export interface SubComponent {
     name: string;
     key: string;
     value: boolean
+}
+
+export interface IDashboardReportModel {
+    isBenchmark: boolean;
+    isSeverity: boolean;
+    isFrequency: boolean;
 }
 
 /**

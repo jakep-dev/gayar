@@ -19,7 +19,7 @@ export class ReportComponent implements OnInit {
 
   constructor(private menuService: MenuService,
               private reportService: ReportService) {
-                //this.model = null;
+
   }
 
   ngOnInit() {
@@ -41,6 +41,11 @@ export class ReportComponent implements OnInit {
         isPremiumDistribution: false,
         isRatePerMillionDistributionByValues: false,
         isRetentionDistribution: false
+      },
+      dashboard: {
+        isSeverity: false,
+        isFrequency: false,
+        isBenchmark: false
       }
     };
   }

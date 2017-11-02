@@ -16,10 +16,10 @@
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
-          <button md-button routerLink="/search" (click)="onMenu('Search');"
+          <button md-button routerLink="/search" (click)="onMenu('Company Search');"
               routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">search</md-icon>
-                <span>Search</span>
+                <span>Company Search</span>
           </button>
           <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');"
              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
@@ -57,7 +57,7 @@
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
           </button>
-          <button md-button routerLink="/search" (click)="onMenu('Search');" routerLinkActive="active">
+          <button md-button routerLink="/search" (click)="onMenu('Company Search');" routerLinkActive="active">
             <md-icon class="md-18">search</md-icon>
           </button>
           <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
