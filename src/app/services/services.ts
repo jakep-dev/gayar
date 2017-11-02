@@ -7,6 +7,7 @@ export * from './dashboard.service';
 export * from './frequency.service';
 export * from './severity.service'
 export * from './session-storage.service';
+export * from './report.service';
 
 
 import { BenchmarkService } from './benchmark.service';
@@ -18,6 +19,7 @@ import { DashboardService } from './dashboard.service';
 import { FrequencyService } from './frequency.service';
 import { SeverityService } from './severity.service';
 import { SessionStorageService } from './session-storage.service';
+import { ReportService } from './report.service';
 
 export const BLOCK_SERVICES = [
     BenchmarkService,
@@ -28,7 +30,6 @@ export const BLOCK_SERVICES = [
     DashboardService,
     FrequencyService,
     SeverityService,
-    SessionStorageService
+    SessionStorageService,
+    ReportService
 ];
-
-

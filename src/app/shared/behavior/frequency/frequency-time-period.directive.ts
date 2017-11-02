@@ -1,8 +1,8 @@
 import { BaseChart } from '../../charts/base-chart';
-import { BarChartData } from '../../../model/charts/bar-chart.model';
+import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FrequencyTimePeriodModel, FrequencyTimePeriodGroup } from "app/model/frequency.model";
-import { SearchService } from './../../../services/services';
+import { SearchService } from 'app/services/services';
 
 @Directive({
     selector: '[frequeny-time-period]'

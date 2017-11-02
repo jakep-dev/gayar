@@ -1,6 +1,6 @@
 import { BaseChart } from '../../charts/base-chart';
 
-import { BarChartData } from '../../../model/charts/bar-chart.model';
+import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FrequencyIndustryOverviewModel } from "app/model/model";
 
@@ -16,7 +16,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     @Input() chartComponent: BaseChart;
 
     ngOnChanges(changes: SimpleChanges) {}
-  
+
     public static defaultLineColor: string = '#487AA1';
     static maxCharactersPerLine: number = 105;
     seriesColor: string[];
@@ -25,8 +25,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     displayText: string = '';
 
     constructor() {
-        this.seriesColor = [];     
-        this.seriesColor["All Industries"] = '#B1D23B';        
+        this.seriesColor = [];
+        this.seriesColor["All Industries"] = '#B1D23B';
         this.categories =  ['Less Than $25M', '$25M to < $100M', '$100M to < $250M', '$250M to < $500M', '$500M to < $1B', '$1B to Greater'];
     }
 
@@ -52,12 +52,12 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                 xAxisLabel: this.modelData.xAxis,
                 yAxisLabel: this.modelData.yAxis,
                 xAxisFormatter: null,
-                customChartSettings: {    
-                  chart: { 
-                    marginLeft: 75, 
+                customChartSettings: {
+                  chart: {
+                    marginLeft: 75,
                     marginRight: 25,
                     marginTop: 25
-                   },                
+                   },
                     xAxis: {
                         type: 'category',
                         labels: {
@@ -65,8 +65,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                             step: 1
                         },
                         title: {
-                            style: {          
-                                fontWeight: 'bold',                       
+                            style: {
+                                fontWeight: 'bold',
                                 fontSize: '11px'
                             }
                         },
@@ -79,8 +79,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                         lineWidth: 1,
                         allowDecimals: false,
                         min: 0,
-                        title: {                            
-                            style: {                                
+                        title: {
+                            style: {
                                 fontSize: '11px'
                             }
                         }
@@ -104,11 +104,11 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     }
                 },
                 hasRedrawActions: true
-            }          
-            
+            }
+
             let seriesData = new Array();
-            let seriesNames = new Array();           
-            let series: any; 
+            let seriesNames = new Array();
+            let series: any;
             this.displayText = this.modelData.displayText;
 
             this.modelData.datasets.forEach(function (industryOverviewDataset) {
@@ -117,16 +117,16 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     seriesNames.push(industryOverviewDataset.description);
                 }
                 seriesData[industryOverviewDataset.description].push(industryOverviewDataset.incidentCount);
-            });            
-                     
-            seriesNames.forEach(seriesName => {                   
+            });
+
+            seriesNames.forEach(seriesName => {
                 series = new Object();
                 series.data = new Array();
                 series.name = seriesName;
-                series.color = this.getSeriesColor(seriesName);                                  
-                series.data = seriesData[seriesName];                    
-                tempChartData.series.push(series);      
-            });  
+                series.color = this.getSeriesColor(seriesName);
+                series.data = seriesData[seriesName];
+                tempChartData.series.push(series);
+            });
             this.onDataComplete.emit(tempChartData);
         }
     }
