@@ -181,9 +181,7 @@ export abstract class BaseChart {
                         enabled: false,
                         radius: 8
                     },
-                    scatter: {
-                        enableMouseTracking: false
-                    },
+                    stickyTracking:false,
                     events: {
                         legendItemClick: function () {
                             //return false to disable hiding of series when legend item is click

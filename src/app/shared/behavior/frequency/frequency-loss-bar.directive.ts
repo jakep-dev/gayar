@@ -157,14 +157,16 @@ export class FrequencyLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,
@@ -331,7 +333,8 @@ export class FrequencyLossBarDirective {
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 165
+                    verticalAlign: 'bottom',
+                    y: -30
                 },
                 subtitle: {
                     text: false,
@@ -407,14 +410,16 @@ export class FrequencyLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,
@@ -630,14 +635,16 @@ export class FrequencyLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,

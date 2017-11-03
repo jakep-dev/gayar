@@ -156,21 +156,23 @@ export class SeverityTimePeriodDirective {
 				},
 				plotOptions: {
 					scatter: {
-						enableMouseTracking: true,
-					},
-					series: {
-						borderWidth: 0,
-						dataLabels: {
-							enabled: false,
-						},
-						scatter: {
-							enableMouseTracking: true
-						},
-						marker: {
-							enabled: true,
-							radius: 5
-						}
-					}
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        marker: {
+                            enabled: true,
+                            radius: 5
+                        }
+                    }
 				},
 				drilldown: {
 					activeAxisLabelStyle: {
@@ -396,21 +398,23 @@ export class SeverityTimePeriodDirective {
 				},
 				plotOptions: {
 					scatter: {
-						enableMouseTracking: true,
-					},
-					series: {
-						borderWidth: 0,
-						dataLabels: {
-							enabled: false,
-						},
-						scatter: {
-							enableMouseTracking: true
-						},
-						marker: {
-							enabled: true,
-							radius: 5
-						}
-					}
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        marker: {
+                            enabled: true,
+                            radius: 5
+                        }
+                    }
 				},
 				drilldown: {
 					activeAxisLabelStyle: {
@@ -615,21 +619,23 @@ export class SeverityTimePeriodDirective {
 				},
 				plotOptions: {
 					scatter: {
-						enableMouseTracking: true,
-					},
-					series: {
-						borderWidth: 0,
-						dataLabels: {
-							enabled: false,
-						},
-						scatter: {
-							enableMouseTracking: true
-						},
-						marker: {
-							enabled: true,
-							radius: 5
-						}
-					}
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        marker: {
+                            enabled: true,
+                            radius: 5
+                        }
+                    }
 				},
 				drilldown: {
 					activeAxisLabelStyle: {

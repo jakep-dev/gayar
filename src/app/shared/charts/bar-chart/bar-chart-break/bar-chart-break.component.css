@@ -8,6 +8,15 @@
 .chart-style {
     margin: 0 auto;
 }
+
+.incident-upper1, .time-upper1, .loss-upper1, .incident-upper1 .highcharts-root, .time-upper1 .highcharts-root, .loss-upper1 .highcharts-root{
+    overflow:visible !important;
+    z-index:9999 !important;
+  }
+
+.incident-upper1 .highcharts-drilldown-axis-label, .time-upper1 .highcharts-drilldown-axis-label, .loss-upper1 .highcharts-drilldown-axis-label,.incident-upper1 .highcharts-xaxis-labels, .time-upper1 .highcharts-xaxis-labels, .loss-upper1 .highcharts-xaxis-labels{
+  display: none !important;
+}
 /* 
 @media only screen and (max-width : 680px) {
 .chart-style .highcharts-container{

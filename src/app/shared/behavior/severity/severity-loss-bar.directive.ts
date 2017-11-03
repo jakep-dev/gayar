@@ -158,14 +158,16 @@ export class SeverityLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,
@@ -408,14 +410,16 @@ export class SeverityLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,
@@ -631,14 +635,16 @@ export class SeverityLossBarDirective {
                 plotOptions: {
                     scatter: {
                         enableMouseTracking: true,
+                        stickyTracking:false
+                    },
+                    column:{
+                        enableMouseTracking: true,
+                        stickyTracking:false
                     },
                     series: {
                         borderWidth: 0,
                         dataLabels: {
                             enabled: false,
-                        },
-                        scatter: {
-                            enableMouseTracking: true
                         },
                         marker: {
                             enabled: true,
