@@ -11,7 +11,7 @@ import { SearchService } from 'app/services/services';
 export class SeverityLossBarDirective {
 
     @Input() modelData: SeverityLossBarModel;
-z
+
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input() chartComponent: BaseChart;
