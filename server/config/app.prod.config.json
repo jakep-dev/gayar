@@ -113,6 +113,10 @@
             {
                 "name": "getSeverityScore",
                 "contract": "/cybermetrix/chart/severity/getSeverityScore"
+            },
+            {
+                "name": "checkValidationPeerGroupLoss",
+                "contract": "/cybermetrix/util/validatePeerGroupLosses"
             }
         ]
     },

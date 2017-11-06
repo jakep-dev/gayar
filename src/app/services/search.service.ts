@@ -6,13 +6,14 @@ import { Subject } from 'rxjs/Subject';
 import { SessionStorageService } from 'app/services/session-storage.service';
 import { APPCONSTANTS } from 'app/app.const';
 import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel,
-         SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel } from 'app/model/model';
+         SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel, ValidationPeerGroupLossModel } from 'app/model/model';
 
 @Injectable()
 export class SearchService extends BaseService {
     private _sessionStorageService: SessionStorageService;
     private _searchCriteria: SearchCriteriaModel = null;
     private _selectedCompany: CompanyModel = null;
+    private componentValidation: any;
     public get selectedCompany(): CompanyModel {
         return this._selectedCompany ||
                this._sessionStorageService.getItem<CompanyModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
@@ -20,6 +21,22 @@ export class SearchService extends BaseService {
     public set selectedCompany(companyModel: CompanyModel) {
         this._selectedCompany = companyModel;
         this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY, companyModel);
+    }
+
+    public set setvalidationPeerGroup(validateModel: ValidationPeerGroupLossModel){
+        this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS, validateModel);
+    }
+
+    public getcheckValidationPeerGroup() : ValidationPeerGroupLossModel {
+        return this.componentValidation || this._sessionStorageService.getItem<ValidationPeerGroupLossModel[]>(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS);
+    }
+
+    public hasValidPeerGroupLoss (): boolean{
+        let validate :ValidationPeerGroupLossModel  = this.getcheckValidationPeerGroup() ;
+        if(validate != undefined){
+            return validate.hasSeverityData && validate.hasFrequencyData;
+        }
+        return false;
     }
 
     public get searchCriteria(): SearchCriteriaModel {
@@ -152,6 +169,25 @@ export class SearchService extends BaseService {
          }
          catch(e){
 
+         }
+    }
+    
+    /**
+     * Check if Frequency and Severity has a data
+     * @param hasFrequencyData = boolean
+     * @param hasSeverityData = boolean
+     */
+    public checkValidationPeerGroupLoss(companyId: number, limit: number, retention: number, naics: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/checkValidationPeerGroupLoss', {
+                'company_id': companyId,
+                'limit': limit,
+                'retention': retention,
+                'naics': naics
+            });
+         }
+         catch(e){
+ 
          }
     }
 
