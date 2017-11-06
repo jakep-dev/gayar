@@ -1,4 +1,4 @@
-.pie-chart1 {
+/*.pie-chart1 {
     width:100%;
 }
 
@@ -13,4 +13,12 @@
       width: 100% !important;
       height: 100% !important;
   }
+}*/
+.chart-pie{
+    height: 400px;
+    min-height: 275px;
+}
+.tile-maximize .chart-pie{
+  min-height: 275px !important;
+  height: 86vh !important;
 }

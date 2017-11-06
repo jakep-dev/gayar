@@ -33,6 +33,11 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
         this.initializeBarChart();
     }
 
+    ngDoCheck() {  
+        if(this.chart) { 
+            this.chart.reflow(); 
+        } 
+    }
     /**
      * Initialze simple barchart settings that doens't require the underlying HighChart chart object
      */

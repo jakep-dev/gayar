@@ -1,8 +1,13 @@
-<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="2px">
-    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
-        fxLayoutGap="2px">
+<div [dragula]='"sixth-bag"'
+    [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
+    fxLayoutAlign="start start"
+    fxLayoutWrap>
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
         <frequency-industry-overview *ngIf="frequencyInput" class="width-100" [componentData]="frequencyInput">
         </frequency-industry-overview>
+    </div>
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
         <app-tile [id]="'FREQ_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
             <div front class="width-100" fxLayout="row">
                 <frequency-time-period [componentData]="frequencyInput" class="width-100" fxFlexFill>
@@ -10,8 +15,8 @@
             </div>
         </app-tile>
     </div>
-    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
-        fxLayoutGap="2px">
+
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
         <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="isIncidentShowFlip" [isFlippable]="isIncidentShowSplit"
             (onFlip)="showIncidentPie=true" (onSplit)="showIncidentPie=true">
             <div front class="width-100" fxLayout="row">
@@ -21,7 +26,9 @@
                 <frequency-incident-pie [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-incident-pie>
             </div>
         </app-tile>
+    </div>
 
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
         <app-tile [id]="'FREQ_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="isLossShowFlip" [isFlippable]="isLossShowSplit"
             (onFlip)="showLossPie=true" (onSplit)="showLossPie=true">
             <div front class="width-100" fxLayout="row">
@@ -32,8 +39,8 @@
             </div>
         </app-tile>
     </div>
-    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
-        fxLayoutGap="2px">
+
+    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
         <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'5 Most Recent Peer Group Losses'" class="width-100">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
@@ -42,8 +49,8 @@
             </div>
         </app-tile>
     </div>
-    <div class="width-100" fxLayout="row" fxLayoutAlign="start start" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start start"
-        fxLayoutGap="2px">
+    
+    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
         <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"

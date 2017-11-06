@@ -23,6 +23,12 @@ export class PieChartComponent extends BaseChart implements OnInit {
         this.initializePieChart();
     }plot
 
+    ngDoCheck() { 
+        if(this.chart) { 
+            this.chart.reflow(); 
+        } 
+    }
+
     /**
      * Initialze simple Piechart settings that doens't require the underlying HighChart chart object
      */
