@@ -321,8 +321,8 @@ export class FrequencyLossBarDirective {
                     marginLeft: 70,
                     spacingBottom: 45,
                     marginBottom: 120,
-                    width: 600,
-                    height: 250,
+                    //width: 600,
+                    //height: 250,
                     drilled: false,
                     className: 'loss-below1'
                 },
@@ -463,8 +463,8 @@ export class FrequencyLossBarDirective {
                     marginTop: 60,
                     marginBottom: 0,
                     marginLeft: 70,
-                    width: 600,
-                    height: 150,
+                    //width: 600,
+                    //height: 150,
                     className: 'loss-upper1'
                 },
                 title: {

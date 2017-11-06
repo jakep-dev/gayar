@@ -321,8 +321,8 @@ export class SeverityIncidentBarDirective {
                     marginLeft: 70,
                     spacingBottom: 45,
                     marginBottom: 135,
-                    width: 600,
-                    height: 250,
+                    // width: 600,
+                    // height: 250,
                     drilled: false,
                     className: 'incident-below1'
                 },
@@ -333,7 +333,8 @@ export class SeverityIncidentBarDirective {
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 165
+                    verticalAlign: 'bottom',
+                    y: -30
                 },
                 subtitle: {
                     text: false,
@@ -462,8 +463,8 @@ export class SeverityIncidentBarDirective {
                     marginTop: 60,
                     marginBottom: 0,
                     marginLeft: 70,
-                    width: 600,
-                    height: 150,
+                    // width: 600,
+                    // height: 150,
                     className: 'incident-upper1'
                 },
                 title: {

@@ -11,7 +11,7 @@ import { SearchService } from 'app/services/services';
 export class SeverityLossBarDirective {
 
     @Input() modelData: SeverityLossBarModel;
-
+z
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input() chartComponent: BaseChart;
@@ -322,8 +322,8 @@ export class SeverityLossBarDirective {
                     marginLeft: 70,
                     spacingBottom: 45,
                     marginBottom: 120,
-                    width: 600,
-                    height: 250,
+                    // width: 600,
+                    // height: 250,
                     drilled: false,
                     className: 'loss-below1'
                 },
@@ -334,7 +334,8 @@ export class SeverityLossBarDirective {
                         fontSize: '11px'
                     },
                     align: 'center',
-                    y: 165
+                    verticalAlign: 'bottom',
+                    y: -30
                 },
                 subtitle: {
                     text: false,
@@ -463,8 +464,8 @@ export class SeverityLossBarDirective {
                     marginTop: 60,
                     marginBottom: 0,
                     marginLeft: 70,
-                    width: 600,
-                    height: 150,
+                    // width: 600,
+                    // height: 150,
                     className: 'loss-upper1'
                 },
                 title: {

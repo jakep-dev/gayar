@@ -1,12 +1,22 @@
 .chart-holder {
     float: left;
     min-height: 275px;
+    height: 400px;
     overflow:visible;
     z-index: 4;
+    margin: 0px;
+    min-height: 100%;
+    min-width: 100%;
+    width: 100%;
 }
 
 .chart-style {
     margin: 0 auto;
+}
+
+.tile-maximize .chart-holder{
+  min-height: 275px !important;
+  height: 86vh !important;
 }
 
 .incident-upper1, .time-upper1, .loss-upper1, .incident-upper1 .highcharts-root, .time-upper1 .highcharts-root, .loss-upper1 .highcharts-root{
@@ -14,7 +24,7 @@
     z-index:9999 !important;
   }
 
-.incident-upper1 .highcharts-drilldown-axis-label, .time-upper1 .highcharts-drilldown-axis-label, .loss-upper1 .highcharts-drilldown-axis-label,.incident-upper1 .highcharts-xaxis-labels, .time-upper1 .highcharts-xaxis-labels, .loss-upper1 .highcharts-xaxis-labels{
+.incident-below1 .highcharts-drillup-button, .time-below1 .highcharts-drillup-button, .loss-below1 .highcharts-drillup-button, .incident-upper1 .highcharts-drilldown-axis-label, .time-upper1 .highcharts-drilldown-axis-label, .loss-upper1 .highcharts-drilldown-axis-label,.incident-upper1 .highcharts-xaxis-labels, .time-upper1 .highcharts-xaxis-labels, .loss-upper1 .highcharts-xaxis-labels{
   display: none !important;
 }
 /* 

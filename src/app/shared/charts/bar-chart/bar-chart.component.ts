@@ -24,6 +24,12 @@ export class BarChartComponent extends BaseChart implements OnInit {
     ngOnInit() {
         this.initializeBarChart();
     }
+    
+    ngDoCheck() {  
+        if(this.chart) { 
+            this.chart.reflow(); 
+        }
+    }
 
     /**
      * Initialze simple barchart settings that doens't require the underlying HighChart chart object

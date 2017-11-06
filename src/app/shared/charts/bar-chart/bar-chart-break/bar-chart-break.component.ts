@@ -27,6 +27,15 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     ngOnInit() {
         this.initializeBarChart();
     }
+	
+	ngDoCheck() { 
+        if(this.chart) { 
+            this.chart.reflow(); 
+        } 
+        if(this.chartWithBreak) { 
+            this.chartWithBreak.reflow(); 
+        } 
+    }
 
     initializeBarChart() {
         //update simple settings
@@ -176,10 +185,10 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     }
 
     onRedraw(chart: BaseChart) {
-        if (this.hasRedrawActions) {
+       // if (this.hasRedrawActions) {
             this.onChartRedraw.emit(this);
             this.hasRedrawActions = false;
-        }
+       // }
     }
 
     onDrilldown(event, withBreak) {
