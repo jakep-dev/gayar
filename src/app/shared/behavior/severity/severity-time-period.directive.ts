@@ -114,7 +114,8 @@ export class SeverityTimePeriodDirective {
 						fontSize: '11px'
 					},
 					align: 'center',
-					y: 320
+                    verticalAlign: 'bottom',
+                    y: -30
 				},
 				subtitle: {
 					y: 15
