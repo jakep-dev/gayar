@@ -1,3 +1,13 @@
+.chart-bar{
+    height: 400px;
+    min-height: 275px;
+}
+
+.tile-maximize .chart-bar{
+  min-height: 275px !important;
+  height: 86vh !important;
+}
+
 // .bar-chart1 {
 //     width:100%;
 // }
@@ -15,6 +25,6 @@
 //   }
 // }
 
-.incident-below1, .time-below1, .loss-below1{ 
-    top: -3px !important;
-}
+// .incident-below1, .time-below1, .loss-below1{ 
+//     top: -3px !important;
+// }

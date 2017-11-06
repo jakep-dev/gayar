@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService, SessionService, MenuService } from 'app/services/services';
-import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, RevenueRangeResponseModel, SearchCriteriaModel, RevenueModel } from 'app/model/model';
+import { SearchByModel, SearchModel, CompanyModel, IndustryModel, IndustryResponseModel, RevenueRangeResponseModel, SearchCriteriaModel, RevenueModel, ValidationPeerGroupLossModel } from 'app/model/model';
 import { KmbConversionPipe, CommaConversionPipe } from 'app/shared/pipes/pipes';
 import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
 import { SnackBarService } from 'app/shared/shared';
-import 'rxjs/add/observable/of';
-
+import 'rxjs/add/observable/forkJoin';
 
 /**
  * All constants related to search screen goes here.
@@ -35,10 +34,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedRevenue: RevenueModel;
   selectedCompanyModel: CompanyModel = null;
   loadedCompanyModel: CompanyModel = null;
+  validatePeerGroup: ValidationPeerGroupLossModel = null;
   enteredSearchFilter: string;
   isManual: boolean;
   isSearching: boolean;
   isActionEnabled:boolean;
+  hasFrequencyData: boolean;
+  hasSeverityData: boolean;
   searchByList: Array<SearchByModel>;
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
@@ -317,11 +319,73 @@ export class SearchComponent implements OnInit, OnDestroy {
   onAssessment(){
     if(this.isManual){
       this.setSelectedSearchCriteria();
+      this.checkValidationPeerGroupLoss();
       this.router.navigate(['/dashboard']);
       return;
     }
-    this.validateRevenueAndIndustry();
+    this.validatePeerGroupAndRevenueIndustry();
   }
+
+  validatePeerGroupAndRevenueIndustry(){
+    let validatePeer;
+    let limit = new KmbConversionPipe().transform(this.selectedLimit);
+    let premium = new KmbConversionPipe().transform(this.selectedPremium);
+    let retention = new KmbConversionPipe().transform(this.selectedRetention);
+    let companyId = this.searchService.getCompanyId;
+    let naics: string ;
+    const selectedCompany = this.selectedCompanyModel;
+    
+
+    if(this.searchService.searchCriteria &&
+       this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
+        naics = this.selectedIndustry.naicsDescription;
+    }
+
+    Observable.forkJoin(
+      [this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics),
+        this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId)])
+          .subscribe((data) => {
+            this.validatePeerGroup = data[0];
+            this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
+            this.searchService.getcheckValidationPeerGroup();
+
+            if(data[1] && data[1].message){
+              this.snackBarService.Simple(data[1].message);
+            }else{
+              this.setSelectedSearchCriteria();
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          err => console.error(err)
+        );
+  }
+
+  /**
+   * onGaugeValidation - validate data of frequency and severity dial
+   */
+
+  checkValidationPeerGroupLoss(){
+    let validatePeer;
+    let limit = new KmbConversionPipe().transform(this.selectedLimit);
+    let premium = new KmbConversionPipe().transform(this.selectedPremium);
+    let retention = new KmbConversionPipe().transform(this.selectedRetention);
+    let companyId = this.searchService.getCompanyId;
+    let naics: string ;
+
+    if(this.searchService.searchCriteria &&
+       this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
+        naics = this.selectedIndustry.naicsDescription;
+    }
+
+    this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics).subscribe(
+      (res : ValidationPeerGroupLossModel) => {
+      this.validatePeerGroup = res;
+      this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
+      this.searchService.getcheckValidationPeerGroup();
+    });
+
+
+   }
 
   /**
    * onClearSearchValue - description

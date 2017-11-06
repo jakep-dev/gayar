@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
 import { DashboardService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
+import { SearchService } from 'app/services/search.service';
 
 @Component({
   selector: 'app-dashboard-frequency',
@@ -15,6 +16,7 @@ export class FrequencyComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
+  hasFrequencyData: boolean = false;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -66,11 +68,12 @@ export class FrequencyComponent implements OnInit {
         ); 
     }
   
-  constructor(private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService, private searchService : SearchService) {
   }
 
   ngOnInit() {
       this.getFrequencyData();
+      this.hasFrequencyData = this.searchService.getcheckValidationPeerGroup().hasFrequencyData;
   }
 
   /**

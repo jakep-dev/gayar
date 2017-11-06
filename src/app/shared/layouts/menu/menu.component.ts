@@ -4,6 +4,7 @@ import { DOCUMENT } from "@angular/platform-browser";
 import { Observable } from 'rxjs/Observable';
 import { environment } from 'environments/environment';
 import 'rxjs/add/observable/of';
+import { ValidationPeerGroupLossModel } from 'app/model/model';
 
 const NAV_MODE = 'side';
 
@@ -67,7 +68,6 @@ export class MenuComponent implements OnInit {
   isSearchCriteriaValid () : boolean {
     return this.searchService.hasValidSearchCriteria();
   }
-
 
   /**
    * watchForInprogress - watch for the in progress http request.

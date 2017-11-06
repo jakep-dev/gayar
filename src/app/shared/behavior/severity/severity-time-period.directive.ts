@@ -114,7 +114,8 @@ export class SeverityTimePeriodDirective {
 						fontSize: '11px'
 					},
 					align: 'center',
-					y: 320
+                    verticalAlign: 'bottom',
+                    y: -30
 				},
 				subtitle: {
 					y: 15
@@ -315,8 +316,8 @@ export class SeverityTimePeriodDirective {
 					marginLeft: 70,
 					spacingBottom: 40,
 					marginBottom: 110,
-					width: 600,
-					height: 250,
+					// width: 600,
+					// height: 250,
 					drilled: false,
 					className: 'time-below1'
 				},
@@ -327,7 +328,8 @@ export class SeverityTimePeriodDirective {
 						fontSize: '11px'
 					},
 					align: 'center',
-					y: 170
+                    verticalAlign: 'bottom',
+                    y: -30
 				},
 				subtitle: {
 					text: false,
@@ -452,8 +454,8 @@ export class SeverityTimePeriodDirective {
 					marginTop: 60,
 					marginBottom: 0,
 					marginLeft: 70,
-					width: 600,
-					height: 150,
+					// width: 600,
+					// height: 150,
 					className: 'time-upper1'
 				},
 				title: {

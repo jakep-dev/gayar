@@ -4,6 +4,7 @@ import { BaseChart } from './../../shared/charts/base-chart';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { SearchService } from 'app/services/search.service';
 
 @Component({
   selector: 'app-dashboard-severity',
@@ -15,6 +16,7 @@ export class SeverityComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
+  hasSeverityData: boolean = false;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -66,17 +68,19 @@ export class SeverityComponent implements OnInit {
         ); 
     }
   
-  constructor(private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService, private searchService : SearchService) {
   }
 
   ngOnInit() {
-      this.getFrequencyData();
+      this.getSeverityData();
+      this.hasSeverityData = this.searchService.getcheckValidationPeerGroup().hasSeverityData;
+     
   }
 
   /**
    * Get Benchmark Data from back end nodejs server
    */
-  getFrequencyData() {   
+  getSeverityData() {   
     this.dashboardService.getSeverityScore(this.componentData.companyId, this.componentData.naics, 
                                             this.componentData.revenueRange, this.componentData.limit, this.componentData.retention).
                                             subscribe(chartData => this.setModelData(chartData));;

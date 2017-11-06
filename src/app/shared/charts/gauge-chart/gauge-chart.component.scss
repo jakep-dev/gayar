@@ -1,3 +1,13 @@
+.chart-gauge{
+    height: 400px;
+    min-height: 275px;
+}
+
+.tile-maximize .chart-gauge{
+  min-height: 275px !important;
+  height: 86vh !important;
+}
+
 // .gauge-chart1 {
 //     width:100%;
 // }

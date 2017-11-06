@@ -1,14 +1,16 @@
-<div class="chart-holder width-100">
+<div fxLayout="column" fxFlex class="chart-holder width-100">
     <chart id="chart-break" class="chart-style width-100" 
-        [options]="chartWithBreakOptions" 
-        (load)="setChartWithBreak($event.context)"
-        (drilldown)="onDrilldown($event, true)" 
-        (drillup)="onDrillup($event, true)">
-    </chart>
-    <chart id="chart-main" class="chart-style width-100" 
-        [options]="chartOptions" 
-        (load)="setChart($event.context)" 
-        (redraw)="onRedraw($event.context)"
-        (drilldown)="onDrilldown($event, false)" 
-        (drillup)="onDrillup($event, false)"></chart>
+        fxFill fxFlex="30"
+		[options]="chartWithBreakOptions" 
+		(load)="setChartWithBreak($event.context)"
+		(drilldown)="onDrilldown($event, true)" 
+		(drillup)="onDrillup($event, true)">
+	</chart>
+	<chart id="chart-main" class="chart-style width-100" 
+        fxFill fxFlex="70"
+		[options]="chartOptions" 
+		(load)="setChart($event.context)" 
+		(redraw)="onRedraw($event.context)"
+		(drilldown)="onDrilldown($event, false)" 
+		(drillup)="onDrillup($event, false)"></chart>
 </div>

@@ -3,7 +3,7 @@
       <gauge-chart 
           fxFlexFill
           *ngIf='modelData' 
-          routerLink="/severity"
+          [routerLink]=" hasSeverityData ? ['/severity'] : []"
           routerLinkActive="active"
           dashboard-score
           [modelData]="modelData"
