@@ -90,6 +90,29 @@ export class SearchRouter extends BaseRoute {
     }
 
     /**
+     * Get the needed Range List
+     * @param req - Request details
+     * @param res - Response details
+     * @param next - Execute next functionality
+     */
+    public checkValidationPeerGroupLoss(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("checkValidationPeerGroupLoss", {
+                'ssnid': req.body.token,
+                'limit': req.body.limit,
+                'retention': req.body.retention,
+                'naics': req.body.naics,
+                'company_id': req.body.company_id
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }   
+    }
+
+    /**
      * Initialize all the api call endpoints
      */
     init(){
@@ -97,6 +120,7 @@ export class SearchRouter extends BaseRoute {
        this.app.post('/api/getIndustries', this.getIndustries);
        this.app.post('/api/checkForRevenueAndIndustry', this.checkForRevenueAndIndustry);
        this.app.post('/api/getRangeList', this.getRangeList);
+       this.app.post('/api/checkValidationPeerGroupLoss', this.checkValidationPeerGroupLoss);
     }
 }
 

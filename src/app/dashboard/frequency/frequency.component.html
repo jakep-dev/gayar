@@ -3,7 +3,7 @@
         <gauge-chart 
             fxFlexFill
             *ngIf='modelData' 
-            routerLink="/frequency" 
+            [routerLink]=" hasFrequencyData ? ['/frequency'] : []"
             routerLinkActive="active"
             dashboard-score
             [modelData]="modelData"

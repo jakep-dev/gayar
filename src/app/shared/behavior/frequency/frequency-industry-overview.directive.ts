@@ -27,7 +27,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     constructor() {
         this.seriesColor = [];
         this.seriesColor["All Industries"] = '#B1D23B';
-        this.categories =  ['Less Than $25M', '$25M to < $100M', '$100M to < $250M', '$250M to < $500M', '$500M to < $1B', '$1B to Greater'];
+        this.categories =  ['Less than $25M', '$25M to < $100M', '$100M to < $250M', '$250M to < $500M', '$500M to < $1B', '$1B to Greater'];
     }
 
     private getSeriesColor(seriesName: string) {
