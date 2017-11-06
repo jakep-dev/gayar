@@ -1,8 +1,8 @@
 <div
-    [dragula]='"sixth-bag"'
     [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
-    fxLayoutAlign="start start"
-    fxLayoutWrap>
+    fxLayoutAlign="start start" fxLayoutWrap
+    [ngClass]="{'maximize-container': menuService.isFullScreen}">
+
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
       <app-tile [id]="'BENCHMARK_ADEQUACY'" [title]="'Limit Adequacy'" class="width-100">
           <div front class="width-100" fxLayout="row">

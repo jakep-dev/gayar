@@ -60,18 +60,11 @@
 }
 
 .tile-maximize {
-  position: fixed;
+  //position: fixed;
   top: 0px;
   left: 0px;
   max-height: 100%;
   width: 99%;
   background-color: #eee;
-  overflow-y: auto;
-    //  left: 0px;
-    //  overflow: visible;
-
-  //   .mat-table {
-  //     overflow: hidden !important;
-  //     max-height: 100% !important;
-  //  }
+  overflow-y: hidden;
 }
