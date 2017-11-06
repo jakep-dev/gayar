@@ -70,18 +70,6 @@ export class MenuComponent implements OnInit {
   }
 
   /**
-   * Validates Peer Group Loss whether there is a valid data for Frequency and Severity.
-   * @return {boolean} - Is a valid PeerGroupLoss data or not.
-   */
-  isPeerGroupLossValid (): boolean{
-    var validate :boolean = false;
-    if(this.searchService.hasValidSearchCriteria() && this.searchService.hasValidPeerGroupLoss()){
-      validate = true;
-    }
-    return validate;
-  }
-
-  /**
    * watchForInprogress - watch for the in progress http request.
    *
    * @return {type}  description

@@ -7,8 +7,7 @@ import { BehaviorSubject  } from 'rxjs/BehaviorSubject';
 import { AsyncSubject  } from 'rxjs/AsyncSubject';
 import { Observable  } from 'rxjs/Observable';
 import { SnackBarService } from 'app/shared/shared';
-import 'rxjs/add/observable/of';
-
+import 'rxjs/add/observable/forkJoin';
 
 /**
  * All constants related to search screen goes here.
@@ -324,8 +323,41 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.router.navigate(['/dashboard']);
       return;
     }
-    this.checkValidationPeerGroupLoss();
-    this.validateRevenueAndIndustry();
+    this.validatePeerGroupAndRevenueIndustry();
+  }
+
+  validatePeerGroupAndRevenueIndustry(){
+    let validatePeer;
+    let limit = new KmbConversionPipe().transform(this.selectedLimit);
+    let premium = new KmbConversionPipe().transform(this.selectedPremium);
+    let retention = new KmbConversionPipe().transform(this.selectedRetention);
+    let companyId = this.searchService.getCompanyId;
+    let naics: string ;
+    const selectedCompany = this.selectedCompanyModel;
+    
+
+    if(this.searchService.searchCriteria &&
+       this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
+        naics = this.selectedIndustry.naicsDescription;
+    }
+
+    Observable.forkJoin(
+      [this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics),
+        this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId)])
+          .subscribe((data) => {
+            this.validatePeerGroup = data[0];
+            this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
+            this.searchService.getcheckValidationPeerGroup();
+
+            if(data[1] && data[1].message){
+              this.snackBarService.Simple(data[1].message);
+            }else{
+              this.setSelectedSearchCriteria();
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          err => console.error(err)
+        );
   }
 
   /**
@@ -347,7 +379,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics).subscribe(
       (res : ValidationPeerGroupLossModel) => {
-        console.log(res);
       this.validatePeerGroup = res;
       this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
       this.searchService.getcheckValidationPeerGroup();

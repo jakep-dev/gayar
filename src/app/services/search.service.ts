@@ -13,7 +13,7 @@ export class SearchService extends BaseService {
     private _sessionStorageService: SessionStorageService;
     private _searchCriteria: SearchCriteriaModel = null;
     private _selectedCompany: CompanyModel = null;
-    private componentValidation: any;
+    private componentValidation: ValidationPeerGroupLossModel = null;
     public get selectedCompany(): CompanyModel {
         return this._selectedCompany ||
                this._sessionStorageService.getItem<CompanyModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
@@ -25,18 +25,11 @@ export class SearchService extends BaseService {
 
     public set setvalidationPeerGroup(validateModel: ValidationPeerGroupLossModel){
         this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS, validateModel);
+        this.componentValidation = validateModel;
     }
 
     public getcheckValidationPeerGroup() : ValidationPeerGroupLossModel {
-        return this.componentValidation || this._sessionStorageService.getItem<ValidationPeerGroupLossModel[]>(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS);
-    }
-
-    public hasValidPeerGroupLoss (): boolean{
-        let validate :ValidationPeerGroupLossModel  = this.getcheckValidationPeerGroup() ;
-        if(validate != undefined){
-            return validate.hasSeverityData && validate.hasFrequencyData;
-        }
-        return false;
+        return this.componentValidation || this._sessionStorageService.getItem<ValidationPeerGroupLossModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS);
     }
 
     public get searchCriteria(): SearchCriteriaModel {
@@ -56,8 +49,10 @@ export class SearchService extends BaseService {
     public clearSearchCookies () {
         this.searchCriteria = null;
         this.selectedCompany = null;
+        this.componentValidation = null;
         this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY);
         this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_SEARCH_CRITERIA);
+        this._sessionStorageService.removeItem(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS);
     }
 
     /**
