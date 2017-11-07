@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pdf-download.component.scss']
 })
 export class PdfDownloadComponent implements OnInit {
-  constructor() {  }
+  constructor() {
+
+   }
 
   ngOnInit() {}
+
+
 }
