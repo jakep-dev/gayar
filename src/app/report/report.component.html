@@ -5,22 +5,23 @@
     <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_DASHBOARD'"  class="width-100"
           [title]="'Dashboard'" [isFullScreen]="false"
-          [isSelectable]="true">
+          [isSelectable]="true" [isSelected]="model.isDashboard">
           <div front fxLayout="column" class="width-100 sub-components">
-              <btn-checkbox  class="width-100" [name]="'Benchmark'"></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Frequency'"></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Severity'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Benchmark'" [isSelected]="model.dashboard.isBenchmark"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Frequency'" [isSelected]="model.dashboard.isFrequency"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Severity'"  [isSelected]="model.dashboard.isSeverity"></btn-checkbox>
           </div>
       </app-tile>
     </div>
     <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_FREQUENCY'"  class="width-100"
-          [title]="'Frequency'" [isFullScreen]="false" [isSelectable]="true">
+          [title]="'Frequency'" [isFullScreen]="false" [isSelectable]="true"
+          [isSelected]="model.isFrequency" (onSelectable)="onFrequencyTileSelectionChange($event)">
           <div front fxLayout="column" class="width-100 sub-components">
               <btn-checkbox  class="width-100" [name]="'Industry Overview'"></btn-checkbox>
               <btn-checkbox  class="width-100" [name]="'Time Period'"></btn-checkbox>
-              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]=""></sub-checkbox>
-              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]=""></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]="frequencyTypeOfIncidentSubComponents"></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]="frequencyTypeOfLossSubComponents"></sub-checkbox>
               <btn-checkbox  class="width-100" [name]="'5 Most Recent Cases'"></btn-checkbox>
           </div>
       </app-tile>
@@ -28,12 +29,13 @@
 
     <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_SEVERITY'"  class="width-100"
-          [title]="'Severity'" [isFullScreen]="false" [isSelectable]="true">
+          [title]="'Severity'" [isFullScreen]="false" [isSelectable]="true"
+          [isSelected]="model.isSeverity" (onSelectable)="onSeverityTileSelectionChange($event)">
           <div front fxLayout="column" class="width-100 sub-components">
               <btn-checkbox  class="width-100" [name]="'Industry Overview'"></btn-checkbox>
               <btn-checkbox  class="width-100" [name]="'Time Period'"></btn-checkbox>
-              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]=""></sub-checkbox>
-              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]=""></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Incident'" [subComponents]="severityTypeOfIncidentSubComponents"></sub-checkbox>
+              <sub-checkbox [headerName]="'Type of Loss'" [subComponents]="severityTypeOfLossSubComponents"></sub-checkbox>
               <btn-checkbox  class="width-100" [name]="'Top 5 Cases'"></btn-checkbox>
           </div>
       </app-tile>
@@ -42,13 +44,18 @@
     <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_BENCHMARK'"  class="width-100"
           [title]="'Benchmark'" [isFullScreen]="false" [isSelectable]="true"
-          >
+          [isSelected]="model.isBenchmark" (onSelectable)="onBenchmarkTileSelectionChange($event)">
           <div front fxLayout="column" class="width-100 sub-components">
-              <btn-checkbox  class="width-100" [name]="'Limit Adequacy'" ></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Premium Distribution'" ></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Limit Distribution'" ></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Retention Distribution'" ></btn-checkbox>
-              <btn-checkbox  class="width-100" [name]="'Rate per Million Distribution by Values'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Limit Adequacy'"
+                [isSelected]="model.benchmark.isLimitAdequacy" (onSelectable)="onBenchmarkSubCompSelectionChange($event, 'LimitAdequacy')"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Premium Distribution'"
+                [isSelected]="model.benchmark.isPremiumDistribution" (onSelectable)="onBenchmarkSubCompSelectionChange($event, 'PremiumDistribution')"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Limit Distribution'"
+                [isSelected]="model.benchmark.isLimitDistribution" (onSelectable)="onBenchmarkSubCompSelectionChange($event, 'LimitDistribution')"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Retention Distribution'"
+                [isSelected]="model.benchmark.isRetentionDistribution" (onSelectable)="onBenchmarkSubCompSelectionChange($event, 'RetentionDistribution')"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Rate per Million Distribution by Values'"
+                [isSelected]="model.benchmark.isRatePerMillionDistributionByValues" (onSelectable)="onBenchmarkSubCompSelectionChange($event, 'RatePerMillionDistributionByValues')"></btn-checkbox>
           </div>
       </app-tile>
     </div>
@@ -56,9 +63,9 @@
     <div fxFlexFill fxFlex="100">
       <app-tile [id]="'REPORT_APPENDIX'"  class="width-100"
           [title]="'Appendix'" [isFullScreen]="false"
-          [isSelectable]="true">
+          [isSelectable]="true" [isSelected]="model.isAppendix">
           <div front fxLayout="column" class="width-100 sub-components">
-              <btn-checkbox  class="width-100" [name]="'Glossary'"></btn-checkbox>
+              <btn-checkbox  class="width-100" [name]="'Glossary'" [isSelected]="isAppendix"></btn-checkbox>
           </div>
       </app-tile>
     </div>

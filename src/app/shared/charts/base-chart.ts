@@ -94,6 +94,8 @@ export abstract class BaseChart {
      * initialize common options for all chart types
      */
     initializeChart() {
+        console.log('window - ', window.innerHeight * .6);
+
         this.renderedObject = new Array();
         this.chartOptions = {
             chart: {

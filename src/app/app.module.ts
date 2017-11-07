@@ -1,5 +1,6 @@
 //Library Components
 import 'hammerjs';
+import 'jspdf';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -28,6 +29,7 @@ import { BLOCK_SEVERITY } from './severity/severity';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
 import { ReportComponent } from './report/report.component';
+import { PdfDownloadComponent } from './pdf-download/pdf-download.component';
 import { BLOCK_SERVICES } from './services/services';
 import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
@@ -46,6 +48,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
 		MenuComponent,
 		SearchComponent,
 		ReportComponent,
+		PdfDownloadComponent,
 		SsoComponent,
 		BLOCK_CHART_TYPES,
 		BLOCK_CHART_BEHAVIORS,
