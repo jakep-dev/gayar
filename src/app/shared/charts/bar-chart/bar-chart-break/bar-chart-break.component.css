@@ -15,9 +15,19 @@
 }
 
 .tile-maximize .chart-holder{
-  min-height: 275px !important;
+ /* min-height: 275px !important;*/
   height: 86vh !important;
 }
+
+/*Align chart breaks fixes for maximize*/
+.tile-maximize .incident-upper1, .tile-maximize .time-upper1, .tile-maximize .loss-upper1{
+    height: 26.125vh !important;
+}
+
+.tile-maximize .incident-below1, .tile-maximize .time-below1, .tile-maximize .loss-below1{
+    height: 60.35vh !important;
+}
+/*Align chart breaks fixes for maximize*/
 
 .incident-upper1, .time-upper1, .loss-upper1, .incident-upper1 .highcharts-root, .time-upper1 .highcharts-root, .loss-upper1 .highcharts-root{
     overflow:visible !important;

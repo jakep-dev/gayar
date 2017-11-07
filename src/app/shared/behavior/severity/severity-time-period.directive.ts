@@ -358,6 +358,7 @@ export class SeverityTimePeriodDirective {
 					{
 						max: 10,
 						min: 0,
+						showLastLabel: false,
 						tickInterval: 2,
 						gridLineWidth: 0,
 						tickWidth: 0,
