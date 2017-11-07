@@ -9,7 +9,7 @@ export class DashboardService extends BaseService {
         super(http);
     }
 
-    public getBenchmarkScore(companyId: number, chartType: string, limit: string, retention: string): Observable<any>{
+    public getBenchmarkScore (companyId: number, chartType: string, limit: string, retention: string): Observable<any> {
         try{
             return super.Post<any>('/api/getBenchmarkScore', {
                 'companyId': companyId,
@@ -23,7 +23,7 @@ export class DashboardService extends BaseService {
         }
     }
 
-    public getBenchmarkScoreByManualInput(chartType: string, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
+    public getBenchmarkScoreByManualInput (chartType: string, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
         try{
             return super.Post<any>('/api/getBenchmarkScore', {
                 'chartType': chartType,
@@ -38,7 +38,7 @@ export class DashboardService extends BaseService {
         }
     }
 
-    public getFrequencyScore(companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
+    public getFrequencyScore (companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
         try{
             return super.Post<any>('/api/getFrequencyScore', {
                 'companyId': companyId,
@@ -53,7 +53,7 @@ export class DashboardService extends BaseService {
         }
     }
 
-    public getSeverityScore(companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
+    public getSeverityScore (companyId: number, naics: string, revenueRange: string, limit: string, retention: string): Observable<any>{
         try{
             return super.Post<any>('/api/getSeverityScore', {
                 'companyId': companyId,
