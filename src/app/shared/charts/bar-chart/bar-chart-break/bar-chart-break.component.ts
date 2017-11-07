@@ -17,6 +17,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     hasRedrawActions: boolean;
     chartWithBreakOptions: any;
     chartWithBreak: any;
+    breakLines:any = [];
 
     constructor() {
         super();
@@ -181,14 +182,12 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     setChartWithBreak(chart: any) {
         this.chartWithBreak = chart;
         this.loadBarChartWithBreakData();
-        this.addBreakLines();
     }
 
     onRedraw(chart: BaseChart) {
-       // if (this.hasRedrawActions) {
-            this.onChartRedraw.emit(this);
-            this.hasRedrawActions = false;
-       // }
+       this.onChartRedraw.emit(this);
+        this.hasRedrawActions = false;
+        this.addBreakLines();
     }
 
     onDrilldown(event, withBreak) {
@@ -209,23 +208,43 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
 
     addBreakLines() {
 
-        this.chartWithBreak.renderer.path([
+        this.breakLines.forEach(line => {
+            line.destroy();
+        });
+        this.breakLines = [];        
+        
+        var upperBreakLine = this.chartWithBreak.renderer.path([
             'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 10,
             'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight
         ]).attr({
             stroke: '#ccd6eb',
             'stroke-width': 2,
             zIndex: 999
-        }).add();
+        })
+        upperBreakLine.add();
+        this.breakLines.push(upperBreakLine);
 
-        this.chartWithBreak.renderer.path([
+        var betweenBreakLine = this.chartWithBreak.renderer.path([
             'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 15,
             'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight - 5
+        ]).attr({
+            stroke: '#FFFFFF',
+            'stroke-width': 5.5,
+            zIndex: 999
+        })
+        betweenBreakLine.add();
+        this.breakLines.push(betweenBreakLine);
+
+        var lowerBreakLine = this.chartWithBreak.renderer.path([
+            'M', this.chartWithBreak.plotLeft - 5, this.chartWithBreak.chartHeight - 20,
+            'L', this.chartWithBreak.plotLeft + 5, this.chartWithBreak.chartHeight - 10
         ]).attr({
             stroke: '#ccd6eb',
             'stroke-width': 2,
             zIndex: 999
-        }).add();
+        })
+        lowerBreakLine.add();
+        this.breakLines.push(lowerBreakLine);
     }
 
 }
