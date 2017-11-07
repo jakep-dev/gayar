@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService, ReportService } from 'app/services/services';
-import { SubComponent } from 'app/model/model';
+import { SubComponent, IReportModel, IBenchmarkReportModel } from 'app/model/model';
 
 @Component({
   selector: 'app-report',
@@ -8,11 +8,7 @@ import { SubComponent } from 'app/model/model';
   styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit {
-  isDashboard: boolean;
-  isBenchmark: boolean;
-  isFrequency: boolean;
-  isSeverity: boolean;
-  isAppendix: boolean;
+  model: IReportModel;
 
   frequencyTypeOfIncidentSubComponents: Array<SubComponent> = this.buildTypeOfIncident();
   frequencyTypeOfLossSubComponents: Array<SubComponent> = this.buildTypeOfLoss();
@@ -22,12 +18,36 @@ export class ReportComponent implements OnInit {
 
 
   constructor(private menuService: MenuService,
-              private reportService: ReportService) {
-                //this.model = null;
+              private reportService: ReportService) { 
+
   }
 
   ngOnInit() {
+    this.initializeModel();
     this.menuService.breadCrumb = 'Report';
+  }
+
+  initializeModel () {
+    this.model = {
+      reportId: '',
+      isDashboard: false,
+      isBenchmark: false,
+      isFrequency: false,
+      isSeverity: false,
+      isAppendix: false,
+      benchmark: {
+        isLimitAdequacy: false,
+        isLimitDistribution: false,
+        isPremiumDistribution: false,
+        isRatePerMillionDistributionByValues: false,
+        isRetentionDistribution: false
+      },
+      dashboard: {
+        isSeverity: false,
+        isFrequency: false,
+        isBenchmark: false
+      }
+    };
   }
 
   /**
@@ -81,13 +101,13 @@ export class ReportComponent implements OnInit {
     return typeOfLosses;
   }
 
-
   /**
    * onFrequencyTileSelectionChange - Fires on frequency tile selection.
    *
    * @param  {type} val - true or false based on selection.
    */
   onFrequencyTileSelectionChange (val) {
+    this.model.isFrequency = val;
     ////this.model.isFrequency = val;
     //this.model.frequency.isIndustryOverview = val;
     //this.model.frequency.isTimePeriod = val;
@@ -100,19 +120,69 @@ export class ReportComponent implements OnInit {
     //this.model.frequency.typeofLoss.isPersonalInformation = val;
   }
 
-
   /**
    * onBenchmarkTileSelectionChange - Fires on benchmark tile selection.
    *
    * @param  {type} val description - true of false based on selection.
    */
   onBenchmarkTileSelectionChange (val) {
-    ////this.model.isBenchmark = val;
-    //this.model.benchmark.isLimitAdequacy = val;
-    //this.model.benchmark.isPremiumDistribution = val;
-    //this.model.benchmark.isLimitDistribution = val;
-    //this.model.benchmark.isRetentionDistribution = val;
-    //this.model.benchmark.isRatePerMillionDistributionByValues = val;
+    this.model.isBenchmark = val;
+    this.model.benchmark.isLimitAdequacy = val;
+    this.model.benchmark.isPremiumDistribution = val;
+    this.model.benchmark.isLimitDistribution = val;
+    this.model.benchmark.isRetentionDistribution = val;
+    this.model.benchmark.isRatePerMillionDistributionByValues = val;
+  }
+
+  /**
+   * onBenchmarkSubCompSelectionChange - Fires on benchmark sub component selection.
+   *
+   * @param  {type} val  description - true or false based on selection.
+   * @param  {type} type description - type of each sub component.
+   */
+  onBenchmarkSubCompSelectionChange (val, type) {
+    if (!val) {
+      this.model.isBenchmark = val;
+    }
+    switch (type) {
+      case 'LimitAdequacy':
+        this.model.benchmark.isLimitAdequacy = val;
+      break;
+
+      case 'PremiumDistribution':
+        this.model.benchmark.isPremiumDistribution = val;
+      break;
+
+      case 'LimitDistribution':
+        this.model.benchmark.isLimitDistribution = val;
+      break;
+
+      case 'RetentionDistribution':
+        this.model.benchmark.isRetentionDistribution = val;
+      break;
+
+      case 'RatePerMillionDistributionByValues':
+        this.model.benchmark.isRatePerMillionDistributionByValues = val;
+      break;
+    }
+
+    if (val) {
+      this.checkForBenchmarkCompRelationship();
+    }
+  }
+
+  /**
+   * checkForBenchmarkCompRelationship - Checks for the benchmark component relationship.
+   *
+   */
+  checkForBenchmarkCompRelationship () {
+    if (this.model.benchmark.isLimitAdequacy &&
+        this.model.benchmark.isLimitDistribution &&
+        this.model.benchmark.isPremiumDistribution &&
+        this.model.benchmark.isRatePerMillionDistributionByValues &&
+        this.model.benchmark.isRetentionDistribution) {
+          this.model.isBenchmark = true;
+        }
   }
 
   /**
@@ -121,7 +191,7 @@ export class ReportComponent implements OnInit {
    * @param  {type} val description - true of false based on selection.
    */
   onSeverityTileSelectionChange (val) {
-    ////this.model.isSeverity = val;
+    this.model.isSeverity = val;
     //this.model.severity.isIndustryOverview = val;
     //this.model.severity.isTimePeriod = val;
     //this.model.severity.isTop5Cases = val;
@@ -131,5 +201,9 @@ export class ReportComponent implements OnInit {
     //this.model.severity.typeOfIncident.isPrivacyViolation = val;
     //this.model.severity.typeOfLoss.isCorporateLosses = val;
     //this.model.severity.typeOfLoss.isPersonalInformation = val;
+  }
+
+  onReport () {
+    console.log(this.model);
   }
 }

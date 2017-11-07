@@ -1,5 +1,5 @@
 <div  class="tile-container" *ngIf="isTileVisible" [ngClass]="{'tile-maximize': isMaximize}">
-  <md-toolbar color="primary" class="tile-toolbar" style="cursor:  move">
+  <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
           <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
           <ng-content select="[header]" ></ng-content>
@@ -15,7 +15,7 @@
             </button>
             <button md-icon-button *ngIf="isDragable"><md-icon>open_with</md-icon></button>
             <button md-icon-button *ngIf="isSplittable" (click)="toggleSplit($event)"><i class="icon-content-duplicate fa-lg"></i></button>
-            <button md-icon-button *ngIf="isFlippable"  (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
+            <button md-icon-button *ngIf="isFlippable" [disabled]="isSplitted" (click)="toggleFlip($event)"><md-icon>flip_to_back</md-icon></button>
             <button md-icon-button *ngIf="isAccordion"  (click)="toggleContent($event)"
                 [ngClass]="{'collapse':isContent, 'expand':!isContent}">
                 <i class="icon-backburger expand-collapse"></i>

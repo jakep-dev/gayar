@@ -63,7 +63,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}  description
    */
   ngOnInit() {
-     this.menuService.breadCrumb = 'Search';
+     this.menuService.breadCrumb = 'Company Search';
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
