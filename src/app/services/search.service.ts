@@ -23,12 +23,12 @@ export class SearchService extends BaseService {
         this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.SELECTED_COMPANY, companyModel);
     }
 
-    public set setvalidationPeerGroup(validateModel: ValidationPeerGroupLossModel){
+    public set validationPeerGroup(validateModel: ValidationPeerGroupLossModel){
         this._sessionStorageService.setItem(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS, validateModel);
         this.componentValidation = validateModel;
     }
 
-    public getcheckValidationPeerGroup() : ValidationPeerGroupLossModel {
+    public checkValidationPeerGroup() : ValidationPeerGroupLossModel {
         return this.componentValidation || this._sessionStorageService.getItem<ValidationPeerGroupLossModel>(APPCONSTANTS.SESSION_STORAGE_KEYS.PEER_GROUP_LOSS);
     }
 

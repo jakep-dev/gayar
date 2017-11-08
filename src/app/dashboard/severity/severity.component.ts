@@ -16,7 +16,6 @@ export class SeverityComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
-  hasSeverityData: boolean = false;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -73,7 +72,6 @@ export class SeverityComponent implements OnInit {
 
   ngOnInit() {
       this.getSeverityData();
-      this.hasSeverityData = this.searchService.getcheckValidationPeerGroup().hasSeverityData;
      
   }
 

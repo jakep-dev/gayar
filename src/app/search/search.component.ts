@@ -345,9 +345,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       [this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics),
         this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId)])
           .subscribe((data) => {
-            this.validatePeerGroup = data[0];
-            this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
-            this.searchService.getcheckValidationPeerGroup();
+            this.searchService.validationPeerGroup = data[0];
 
             if(data[1] && data[1].message){
               this.snackBarService.Simple(data[1].message);
@@ -379,9 +377,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics).subscribe(
       (res : ValidationPeerGroupLossModel) => {
-      this.validatePeerGroup = res;
-      this.searchService.setvalidationPeerGroup = this.validatePeerGroup;
-      this.searchService.getcheckValidationPeerGroup();
+      this.searchService.validationPeerGroup = res;
     });
 
 
