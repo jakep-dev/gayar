@@ -3,7 +3,7 @@
       <gauge-chart 
           fxFlexFill
           *ngIf='modelData' 
-          [routerLink]=" hasSeverityData ? ['/severity'] : []"
+          [routerLink]=" (this.searchService?.checkValidationPeerGroup()?.hasSeverityData) ? ['/severity'] : []"
           routerLinkActive="active"
           dashboard-score
           [modelData]="modelData"

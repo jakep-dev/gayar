@@ -16,7 +16,6 @@ export class FrequencyComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
-  hasFrequencyData: boolean = false;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -73,7 +72,6 @@ export class FrequencyComponent implements OnInit {
 
   ngOnInit() {
       this.getFrequencyData();
-      this.hasFrequencyData = this.searchService.getcheckValidationPeerGroup().hasFrequencyData;
   }
 
   /**
