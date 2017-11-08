@@ -9,4 +9,3 @@ export * from './charts/gauge-chart.model';
 export * from './charts/boxplot-chart.model';
 export * from './charts/pie-chart.model';
 export * from './report.model';
-export * from './reports';

@@ -1,0 +1,15 @@
+<app-tile
+    [id]="reportTileId" [title]="header" class="width-100"
+    [isFullScreen]="false" [isSelectable]="true"
+    [isSelected]="isParentChecked" (onSelectable)="onParentChange($event)">
+    <div front class="width-100" fxLayout="column">
+      <btn-checkbox
+          *ngFor="let sub of subComponent"
+          class="width-100"
+          [id]="sub.id"
+          [name]="sub.description"
+          [isSelected]="sub.value"
+          (onSelectable)="onSubComponentChange($event, sub)">
+      </btn-checkbox>
+  </div>
+</app-tile>
