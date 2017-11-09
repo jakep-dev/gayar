@@ -99,8 +99,7 @@ export class SearchRouter extends BaseRoute {
         try{
             super.PerformGetRequest("checkValidationPeerGroupLoss", {
                 'ssnid': req.body.token,
-                'limit': req.body.limit,
-                'retention': req.body.retention,
+                'revenue_range': req.body.revenue_range,
                 'naics': req.body.naics,
                 'company_id': req.body.company_id
             }, (data)=>{

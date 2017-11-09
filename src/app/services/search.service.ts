@@ -172,12 +172,11 @@ export class SearchService extends BaseService {
      * @param hasFrequencyData = boolean
      * @param hasSeverityData = boolean
      */
-    public checkValidationPeerGroupLoss(companyId: number, limit: number, retention: number, naics: string): Observable<any>{
+    public checkValidationPeerGroupLoss(companyId: number,  revenue_range: string, naics: string): Observable<any>{
         try{
             return super.Post<any>('/api/checkValidationPeerGroupLoss', {
                 'company_id': companyId,
-                'limit': limit,
-                'retention': retention,
+                'revenue_range': revenue_range,
                 'naics': naics
             });
          }
