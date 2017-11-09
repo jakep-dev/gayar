@@ -66,10 +66,7 @@ export interface ValidationMessageModel {
 }
 
 export interface ValidationPeerGroupLossModel{
-    limit: number,
-    retention: number,
-    naics: string,
-    company_id: number,
     hasFrequencyData: boolean,
-    hasSeverityData: boolean
+    hasSeverityData: boolean,
+    resp: ResponseModel
 }

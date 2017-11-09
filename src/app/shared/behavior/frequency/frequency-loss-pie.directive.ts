@@ -119,7 +119,8 @@ export class FrequencyLossPieDirective {
               dataLabels: {
                 enabled: true,
                 distance: -30,
-                color: '#000000'
+                color: '#000000',
+                useHTML: true
               },
               point: {
                   events: {
@@ -134,6 +135,7 @@ export class FrequencyLossPieDirective {
             }
           },
           tooltip: {  
+            useHTML: true,
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}%</b><br/>'
           },

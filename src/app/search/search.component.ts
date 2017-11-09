@@ -34,7 +34,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedRevenue: RevenueModel;
   selectedCompanyModel: CompanyModel = null;
   loadedCompanyModel: CompanyModel = null;
-  validatePeerGroup: ValidationPeerGroupLossModel = null;
   enteredSearchFilter: string;
   isManual: boolean;
   isSearching: boolean;
@@ -331,18 +330,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     let limit = new KmbConversionPipe().transform(this.selectedLimit);
     let premium = new KmbConversionPipe().transform(this.selectedPremium);
     let retention = new KmbConversionPipe().transform(this.selectedRetention);
-    let companyId = this.searchService.getCompanyId;
-    let naics: string ;
+    let companyId : any =  this.selectedCompanyModel.companyId;
     const selectedCompany = this.selectedCompanyModel;
-    
-
-    if(this.searchService.searchCriteria &&
-       this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
-        naics = this.selectedIndustry.naicsDescription;
-    }
+    let naics: string ;
+    let revenue_range: string;
 
     Observable.forkJoin(
-      [this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics),
+      [this.searchService.checkValidationPeerGroupLoss(companyId, revenue_range,  naics),
         this.searchService.checkForRevenueAndIndustry(selectedCompany.companyId)])
           .subscribe((data) => {
             this.searchService.validationPeerGroup = data[0];
@@ -367,15 +361,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     let limit = new KmbConversionPipe().transform(this.selectedLimit);
     let premium = new KmbConversionPipe().transform(this.selectedPremium);
     let retention = new KmbConversionPipe().transform(this.selectedRetention);
-    let companyId = this.searchService.getCompanyId;
+    let companyId : any;
     let naics: string ;
+    let revenue_range: string;
 
     if(this.searchService.searchCriteria &&
-       this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
+      this.searchService.searchCriteria.type === "SEARCH_BY_MANUAL_INPUT"){
         naics = this.selectedIndustry.naicsDescription;
+        revenue_range = this.selectedRevenue.rangeDisplay;
     }
 
-    this.searchService.checkValidationPeerGroupLoss(companyId, limit, retention, naics).subscribe(
+    this.searchService.checkValidationPeerGroupLoss(companyId, revenue_range, naics).subscribe(
       (res : ValidationPeerGroupLossModel) => {
       this.searchService.validationPeerGroup = res;
     });

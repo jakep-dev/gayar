@@ -118,7 +118,8 @@ export class SeverityIncidentPieDirective {
                   dataLabels: {
                     enabled: true,
                     distance: -30,
-                    color: '#000000'
+                    color: '#000000',
+                    useHTML: true
                   },
                   point: {
                       events: {
@@ -133,6 +134,7 @@ export class SeverityIncidentPieDirective {
                 }
               },
               tooltip: {  
+                useHTML: true,
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}%</b><br/>'
               },
