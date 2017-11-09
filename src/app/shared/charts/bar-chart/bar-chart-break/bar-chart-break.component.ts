@@ -6,7 +6,7 @@ import { ChartModule } from 'angular2-highcharts';
 @Component({
     selector: 'bar-chart-with-break',
     templateUrl: './bar-chart-break.component.html',
-    styleUrls: ['./bar-chart-break.component.css'],
+    styleUrls: ['./bar-chart-break.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 export class BarChartBreakComponent extends BaseChart implements OnInit {
@@ -18,6 +18,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
     chartWithBreakOptions: any;
     chartWithBreak: any;
     breakLines:any = [];
+    hasMillionValue: boolean = false;
 
     constructor() {
         super();
@@ -76,6 +77,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         if (this.chartData.breakChartSettings &&
             this.chartData.breakChartSettings.yAxis) {
             this.chartWithBreakOptions.yAxis = this.chartData.breakChartSettings.yAxis;
+            this.checkHasMillion();
         }
 
         if (this.chartData.breakChartSettings.drilldown) {
@@ -245,6 +247,21 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         })
         lowerBreakLine.add();
         this.breakLines.push(lowerBreakLine);
+    }
+    
+    checkHasMillion() {
+        let tickPosition;
+        this.chartWithBreakOptions.yAxis.forEach(yAxis => {
+
+            if(yAxis && yAxis.tickPositions) {
+                tickPosition = yAxis.tickPositions;
+                return true;
+            }
+        });
+
+        if(tickPosition && tickPosition.length && tickPosition.length > 6) {
+            this.hasMillionValue = true;
+        }
     }
 
 }

@@ -313,7 +313,7 @@ export class SeverityTimePeriodDirective {
 			customChartSettings: {
 				chart: {
 					marginTop: 0,
-					marginLeft: 70,
+					marginLeft: this.getMarginLeft(),
 					spacingBottom: 40,
 					marginBottom: 110,
 					// width: 600,
@@ -454,7 +454,7 @@ export class SeverityTimePeriodDirective {
 				chart: {
 					marginTop: 60,
 					marginBottom: 0,
-					marginLeft: 70,
+					marginLeft: this.getMarginLeft(),
 					// width: 600,
 					// height: 150,
 					className: 'time-upper1'
@@ -555,7 +555,7 @@ export class SeverityTimePeriodDirective {
 						lineColor: "#ff0000",
 						title: false,
 						lineWidth: 2,
-						height: '85%',
+						height: '93%',
 						tickWidth: 0,
 						labels: {
 							formatter: function () {
@@ -780,6 +780,16 @@ export class SeverityTimePeriodDirective {
 		}
 
 		return tickPosition;
-
 	}
+
+	getMarginLeft() {
+        let maxValue = this.modelData.maxValue;
+        let marginLeft = 70;
+
+        if(maxValue > 100000) {
+            marginLeft = (maxValue.toString().length + 2) * 10
+        }
+
+        return marginLeft;
+    }
 }

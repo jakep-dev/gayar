@@ -1,7 +1,8 @@
 <div [dragula]='"sixth-bag"'
     [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
     fxLayoutAlign="start start"
-    fxLayoutWrap>
+    fxLayoutWrap
+    [ngClass]="{'maximize-container': menuService.isFullScreen}">
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">    
         <severity-industry-overview *ngIf="severityInput" class="width-100" [componentData]="severityInput"></severity-industry-overview>                          
     </div>
