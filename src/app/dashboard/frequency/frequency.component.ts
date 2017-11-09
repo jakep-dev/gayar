@@ -20,6 +20,14 @@ export class FrequencyComponent implements OnInit {
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
       this.chartHeader = this.modelData.chartTitle;
+      if(this.searchService.checkValidationPeerGroup()){
+            if(!this.searchService.checkValidationPeerGroup().hasFrequencyData){
+                this.modelData.score.finalScore = null;
+                this.modelData.displayText = null;
+            }
+
+      }
+     
   }
 
   chartData: GaugeChartData;

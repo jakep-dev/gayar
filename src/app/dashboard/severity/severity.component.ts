@@ -20,6 +20,13 @@ export class SeverityComponent implements OnInit {
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
       this.chartHeader = this.modelData.chartTitle;
+      if(this.searchService.checkValidationPeerGroup()){
+        if(!this.searchService.checkValidationPeerGroup().hasSeverityData){
+            this.modelData.score.finalScore = null;
+            this.modelData.displayText = null;
+        }
+
+  }
   }
 
   chartData: GaugeChartData;
