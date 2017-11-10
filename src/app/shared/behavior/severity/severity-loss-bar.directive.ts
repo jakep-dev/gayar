@@ -107,7 +107,7 @@ export class SeverityLossBarDirective {
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
                     style: {
-                        fontWeight: 'bold',
+                        fontWeight: 'normal',
                         fontSize: '11px'
                     },
                     align: 'center',
@@ -320,7 +320,7 @@ export class SeverityLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginTop: 0,
-                    marginLeft: 70,
+                    marginLeft: this.getMarginLeft(),
                     spacingBottom: 45,
                     marginBottom: 120,
                     // width: 600,
@@ -331,7 +331,7 @@ export class SeverityLossBarDirective {
                 title: {
                     text: this.modelData.xAxis,
                     style: {
-                        fontWeight: 'bold',
+                        fontWeight: 'normal',
                         fontSize: '11px'
                     },
                     align: 'center',
@@ -465,7 +465,7 @@ export class SeverityLossBarDirective {
                 chart: {
                     marginTop: 60,
                     marginBottom: 0,
-                    marginLeft: 70,
+                    marginLeft: this.getMarginLeft(),
                     // width: 600,
                     // height: 150,
                     className: 'loss-upper1'
@@ -570,7 +570,7 @@ export class SeverityLossBarDirective {
                         lineColor: "#ff0000",
                         title: false,
                         lineWidth: 2,
-                        height: '90%',
+                        height: '93%',
                         tickWidth: 0,
                         labels: {
                             formatter: function() {
@@ -799,6 +799,16 @@ export class SeverityLossBarDirective {
         }
 
         return tickPosition;
+    }
 
+    getMarginLeft() {
+        let maxValue = this.modelData.maxValue;
+        let marginLeft = 70;
+
+        if(maxValue > 100000) {
+            marginLeft = (maxValue.toString().length + 2) * 10
+        }
+
+        return marginLeft;
     }
 }

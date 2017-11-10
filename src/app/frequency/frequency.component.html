@@ -1,7 +1,8 @@
 <div [dragula]='"sixth-bag"'
     [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
     fxLayoutAlign="start start"
-    fxLayoutWrap>
+    fxLayoutWrap
+    [ngClass]="{'maximize-container': menuService.isFullScreen}">
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
         <frequency-industry-overview *ngIf="frequencyInput" class="width-100" [componentData]="frequencyInput">
         </frequency-industry-overview>
@@ -41,7 +42,7 @@
     </div>
 
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
-        <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'5 Most Recent Peer Group Losses'" class="width-100">
+        <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'Most Recent Peer Group Losses'" class="width-100">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
                     [columnsWidth]="columnsWidth">
@@ -51,7 +52,7 @@
     </div>
     
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
-        <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'5 Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
+        <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
                     [columnsWidth]="columnsWidth">

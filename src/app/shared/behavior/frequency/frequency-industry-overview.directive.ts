@@ -66,7 +66,6 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                         },
                         title: {
                             style: {
-                                fontWeight: 'bold',
                                 fontSize: '11px'
                             }
                         },

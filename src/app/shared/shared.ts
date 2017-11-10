@@ -9,7 +9,6 @@ export * from './tables/tables'
 export * from './blocks/blocks';
 export * from './components/components';
 
-
 import { TileComponent } from './tile/tile.component';
 import { BlankComponent } from './tile/blank/blank.component';
 import { CubeComponent } from './loading/cube/cube.component';
@@ -21,7 +20,6 @@ import { BLOCK_SEARCH_TABLE } from './tables/tables'
 import { SHARED_BLOCKS } from './blocks/blocks';
 import { BLOCK_UTIL } from './util/util';
 import { BLOCK_COMPONENTS } from './components/components';
-
 
 export const BLOCK_SHARED = [
     TileComponent,

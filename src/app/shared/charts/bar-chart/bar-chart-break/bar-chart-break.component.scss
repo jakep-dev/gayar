@@ -27,6 +27,18 @@
 .tile-maximize .incident-below1, .tile-maximize .time-below1, .tile-maximize .loss-below1{
     height: 60.35vh !important;
 }
+
+.tile-maximize {
+  .more-than-million {
+    .incident-upper1, .time-upper1, .loss-upper1{
+      height: 33vh !important; 
+    }
+    .incident-below1, .time-below1, .loss-below1{
+      height: 53.35vh !important;
+    }
+  }
+}
+
 /*Align chart breaks fixes for maximize*/
 
 .incident-upper1, .time-upper1, .loss-upper1, .incident-upper1 .highcharts-root, .time-upper1 .highcharts-root, .loss-upper1 .highcharts-root{
