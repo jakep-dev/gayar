@@ -106,7 +106,7 @@ export class FrequencyLossBarDirective {
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
                     style: {
-                        fontWeight: 'bold',
+                        fontWeight: 'normal',
                         fontSize: '11px'
                     },
                     align: 'center',
@@ -330,7 +330,7 @@ export class FrequencyLossBarDirective {
                 title: {
                     text: this.modelData.xAxis,
                     style: {
-                        fontWeight: 'bold',
+                        fontWeight: 'normal',
                         fontSize: '11px'
                     },
                     align: 'center',

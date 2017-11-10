@@ -71,8 +71,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                             step: 1
                         },
                         title: {
-                            style: {          
-                                fontWeight: 'bold',                       
+                            style: {                       
                                 fontSize: '11px'
                             }
                         },
