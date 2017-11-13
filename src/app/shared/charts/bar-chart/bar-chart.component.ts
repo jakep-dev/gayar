@@ -51,6 +51,16 @@ export class BarChartComponent extends BaseChart implements OnInit {
         if (this.chartData.customChartSettings.drilldown) {
             this.chartOptions.drilldown = this.chartData.customChartSettings.drilldown;
         }
+
+        if (this.chartData.customChartSettings &&
+            this.chartData.customChartSettings.yAxis) {
+            this.chartOptions.yAxis = this.chartData.customChartSettings.yAxis;
+        }
+
+        if (this.chartData.customChartSettings &&
+            this.chartData.customChartSettings.xAxis) {
+            this.chartOptions.xAxis = this.chartData.customChartSettings.xAxis;
+        }
     }
 
     /**

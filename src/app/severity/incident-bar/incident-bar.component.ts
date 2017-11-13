@@ -71,6 +71,11 @@ export class IncidentBarComponent implements OnInit {
 				69,
 				17
 			);
+
+			let  yBreakPoint = chart.getYAxisPosition(0);
+			chart.addLine([chart.chart.plotLeft - 5, yBreakPoint], [chart.chart.plotLeft + 5, yBreakPoint + 10], '#ccd6eb', 2);
+			chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 5], [chart.chart.plotLeft + 5, yBreakPoint + 5], '#FFFFFF', 5.5);
+			chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 10], [chart.chart.plotLeft + 5, yBreakPoint], '#ccd6eb', 2);
 		}
 	}
 

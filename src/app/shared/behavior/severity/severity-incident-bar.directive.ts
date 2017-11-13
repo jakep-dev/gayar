@@ -75,15 +75,12 @@ export class SeverityIncidentBarDirective {
      * Use chart data from web service to build parts of Highchart chart options object
      */
     buildHighChartObject() {
-        if (this.modelData && this.modelData.withBreak) {
-            this.buildWithBreakChart();
-        } else {
-            this.buildNoBreakChart();
-        }
+        this.buildNoBreakChart();
     }
 
     buildNoBreakChart() {
-
+        let tickPosition = this.getTickPosition(this.modelData.maxValue);
+        tickPosition.splice(0,0,-0.9, -0.01);
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -100,7 +97,7 @@ export class SeverityIncidentBarDirective {
             onDrillUp: null,
             customChartSettings: {
                 chart: {
-                    marginLeft: 80,
+                    marginLeft: this.getMarginLeft(),
                     marginBottom: 135
                 },
                 title: {
@@ -136,17 +133,71 @@ export class SeverityIncidentBarDirective {
                     tickWidth: 0,
                     lineWidth: 2,
                 },
-                yAxis: {
-                    tickInterval: 2,
-                    gridLineWidth: 0,
-                    lineWidth: 2,
-                    title: {
-                        text: this.modelData.yAxis,
-                        style: {
-                            fontSize: '11px'
-                        }
+                yAxis: [
+                    {
+                        tickPositions: tickPosition,
+                        type:'logarithmic',
+                        gridLineWidth: 0,  
+                        tickWidth:0,
+                        lineWidth: 0,
+                        labels: {
+                            format: '{value:,.0f}',
+                            formatter: function() {
+                                return (this.value.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                            },
+                            style:{
+                                color:'transparent'
+                            }
+                        },
+                        title: false,
+                    },
+                    {
+                        tickPositions: tickPosition,
+                        //we can set break point in yaxis based in this value in tickPositions in the yaxis. eg. -0.31 is for 0 and 4 is for 10,000 values
+                        type:'logarithmic',
+                        breaks: [{
+                            from: -0.125,
+                            to: 1,
+                            breakSize:1
+                        }],
+                        gridLineWidth: 0,  
+                        tickWidth:0,
+                        lineWidth: 2,
+                        labels: {
+                            format: '{value:,.0f}',
+                            formatter: function() {
+                                return (this.value.toFixed().toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) : insertCommas(before + after));
+                                    }
+                                );
+                            }
+                        },
+                        title: {
+                            text: this.modelData.yAxis,
+                            style:{
+                                fontSize: '11px'
+                            }
+                        },
+                        offset:-0.125        
                     }
-                },
+                ],
                 legend: {
                     enabled: true,
                     symbolHeight: 8
@@ -806,7 +857,7 @@ export class SeverityIncidentBarDirective {
         let marginLeft = 70;
 
         if(maxValue > 100000) {
-            marginLeft = (maxValue.toString().length + 2) * 10
+            marginLeft = (maxValue.toString().length + 4) * 10
         }
 
         return marginLeft;
