@@ -68,7 +68,7 @@ export class BenchmarkComponent implements OnInit {
             companyId: this.searchService.getCompanyId,
             limits: this.searchService.getLimit,
             naics: this.searchService.getNaics,
-            revenueRange: this.searchService.getRevenueRange
+            revenueRange: this.searchService.getRevenueRangeId
         };
     }
 
