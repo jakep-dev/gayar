@@ -172,6 +172,14 @@ html, body, material-app, md-sidenav-container, .my-content {
   height: 100% !important;
 }
 
+.highcharts-data-label-connector{
+  visibility: visible !important;
+}
+
+.highcharts-data-label{
+  visibility: visible !important;
+}
+
 .expand-collapse {
   font-size: 22px;
 }
