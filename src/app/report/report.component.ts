@@ -33,6 +33,6 @@ export class ReportComponent implements OnInit {
   }
 
   onReport () {
-
+    console.log(this.reportTileModel);
   }
 }

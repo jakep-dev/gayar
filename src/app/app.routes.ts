@@ -17,7 +17,7 @@ export const APP_ROUTES: Routes = [
     { path: 'severity',     component:  SeverityComponent,  canActivate: [ AuthRouteActivatorService ]},
     { path: 'search',       component:  SearchComponent,    canActivate: [ AuthRouteActivatorService ]},
     { path: 'report',       component:  ReportComponent},
-    { path: 'pdfdownload',  component:  PdfDownloadComponent},
+    { path: 'printPreview', component:  PdfDownloadComponent},
     { path: 'sso/:userId',  component:  SsoComponent },
     { path: '401',          component:  E401Component }
 ];

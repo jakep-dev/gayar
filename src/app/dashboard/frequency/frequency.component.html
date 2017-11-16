@@ -1,5 +1,5 @@
 <app-tile [id]="'Dashboard_Frequency'" [title]="chartHeader" class="width-100">
-    <div front class="width-100" fxLayout="row">
+    <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
         <gauge-chart 
             fxFlexFill
             *ngIf='modelData' 
@@ -10,7 +10,9 @@
             [chartData]="chartData"
             [chartComponent]="chartComponent$ | async"
             (onDataComplete)="onDataComplete($event)"
-            (onChartRedraw)="onChartReDraw($event)">
+            (onChartRedraw)="onChartReDraw($event)"
+            [printSettings]="printSettings"
+            >
         </gauge-chart>
     </div>
 </app-tile>

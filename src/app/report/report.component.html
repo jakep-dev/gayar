@@ -5,3 +5,15 @@
     [isParentChecked]="report.value"
     [subComponent]="report.subComponents">
 </report-tile>
+
+<div fxFlexFill fxFlex="100">
+  <blank-tile [id]="'REPORT_ACTIONS'">
+      <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="padding-right-5">
+        <button md-raised-button (click)="onReport()" routerLinkActive="active" routerLink="/printPreview">
+          <md-icon>pie_chart</md-icon>
+           Download Report
+        </button>
+      </div>
+  </blank-tile>
+</div>
+

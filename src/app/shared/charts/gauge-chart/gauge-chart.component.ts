@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { GaugeChartData } from 'app/model/model';
 import { BaseChart } from '../base-chart';
+import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
   selector: 'gauge-chart',
@@ -14,6 +15,8 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
 
     @Input() chartData: GaugeChartData;
 
+    @Input() printSettings: ComponentPrintSettings;
+    
     constructor() {
         super();
         this.setDefaultChartType('solidgauge');
@@ -24,11 +27,15 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
         this.initializeBarChart();
     }
 
+/*
     ngDoCheck() {  
+        console.log('GaugeChartComponent.ngDoCheck[start]');
         if(this.chart) { 
             this.chart.reflow(); 
         } 
+        console.log('GaugeChartComponent.ngDoCheck[end]');
     }
+*/
 
     /**
      * Initialze simple barchart settings that doens't require the underlying HighChart chart object
@@ -45,13 +52,16 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
      * Load barchart settings and data that requires the underlying HighChart chart object
      */
     loadBarChartData() {
+        console.log('GaugeChartComponent.loadBarChartData[start]');
         let seriesIndex: number;
         let seriesLength: number;
+        let isPrintMode: boolean;
         
         if (this.chartData && this.chartData.series.length > 0
             && this.chartData.series.data !== null 
             && this.chartData.customChartSettings !== null) {
 
+            isPrintMode = this.printSettings != null ? true : false;
             //clear out old series before adding new series data
             seriesLength = this.chart.series.length;
             for (seriesIndex = seriesLength - 1; seriesIndex >= 0; seriesIndex--) {
@@ -68,22 +78,54 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
                         type: 'solidgauge',
                         data: this.chartData.series[seriesIndex].data,
                         pane: this.chartData.customChartSettings.pane
-                    }
+                    },
+                    false,
+                    isPrintMode
                 );
             }
 
-            
             if (this.chartData.customChartSettings) {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartData.customChartSettings);
+                }
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartOptions);
+                }
                 this.chart.update(this.chartOptions, true);
             }
+        }
+        console.log('GaugeChartComponent.loadBarChartData[end]');
+    }
+
+    applyPrintSettings(chartOptions : any) {
+        chartOptions.chart.width = this.printSettings.width;
+        chartOptions.chart.height = this.printSettings.height;
+        chartOptions.chart.animation = false;
+
+        if(chartOptions.plotOptions) {
+            if(chartOptions.plotOptions.series) {
+                chartOptions.plotOptions.series.animation = false;
+            } else {
+                chartOptions.plotOptions.series = {
+                    animation : false
+                };
+            }
+        } else {
+            chartOptions.plotOptions = {
+                series: {
+                    animation: false
+                }
+            };
         }
     }
 
     setChart(chart: any) {
+        console.log('GaugeChartComponent.setChart[start]');
         this.chart = chart;
         this.loadBarChartData();
+        console.log('GaugeChartComponent.setChart[end]');
     }
 
     hasRedrawActions: boolean;
@@ -91,8 +133,10 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
     
     onRedraw(chart: BaseChart) {
+        console.log('GaugeChartComponent.onRedraw[start]');
         this.onChartRedraw.emit(this);
         this.hasRedrawActions = false;
+        console.log('GaugeChartComponent.onRedraw[end]');
     }
 
 }
