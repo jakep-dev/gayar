@@ -146,8 +146,22 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                         }
                     ],
                     tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
+                        shared: false,
+                        formatter: function () {
+                            let value =  (this.point.y.toString()).replace(
+                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                var insertCommas  = function(string) { 
+                                    var reversed  = reverseString(string);
+                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                    return reverseString(reversedWithCommas);
+                                };
+                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                }
+                            );
+                            return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
+                                '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
+                        }
                     },
                     plotOptions: {
                         column: {
@@ -203,12 +217,12 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
 
     getMarginLeft() {
         let maxValue = this.modelData.maxValue;
-        let marginLeft = 85;
+        let marginLeft = 65;
 
         if(maxValue > 100000) {
-            marginLeft = (maxValue.toString().length + 4) * 10
+            marginLeft = marginLeft + (maxValue.toString().length) * 5
         }
-
+        
         return marginLeft;
     }
   
