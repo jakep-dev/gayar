@@ -49,6 +49,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
        */
       buildHighChartObject() {
         if (this.modelData) {
+            let tickPosition = this.getTickPosition(this.modelData.maxValue);
+            tickPosition.splice(0,0,-0.9, -0.01);
             let tempChartData: BarChartData = {
                 series: [],
                 title: '',
@@ -60,7 +62,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                 xAxisFormatter: null,
                 customChartSettings: {    
                   chart: { 
-                    marginLeft: 75, 
+                    marginLeft: this.getMarginLeft(), 
                     marginRight: 25,
                     marginTop: 25
                    },                
@@ -78,19 +80,71 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
 
                         crosshair: false
                     },
-                    yAxis: {
-                        gridLineWidth: 0,
-                        tickWidth: 1,
-                        lineWidth: 1,
-                        allowDecimals: false,
-                        min: 0,
-                        title: {                            
-                            style: {                                
-                                fontSize: '11px'
-                            }
+                    yAxis: [
+                        {
+                            tickPositions: tickPosition,
+                            type:'logarithmic',
+                            gridLineWidth: 0,  
+                            tickWidth:0,
+                            lineWidth: 0,
+                            labels: {
+                                format: '{value:,.0f}',
+                                formatter: function() {
+                                    return (this.value.toString()).replace(
+                                        /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                        var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                        var insertCommas  = function(string) { 
+                                            var reversed  = reverseString(string);
+                                            var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                            return reverseString(reversedWithCommas);
+                                        };
+                                        return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                        }
+                                    );
+                                },
+                                style:{
+                                    color:'transparent'
+                                }
+                            },
+                            title: false,
+                        },
+                        {
+                            tickPositions: tickPosition,
+                            //we can set break point in yaxis based in this value in tickPositions in the yaxis. eg. -0.31 is for 0 and 4 is for 10,000 values
+                            type:'logarithmic',
+                            breaks: [{
+                                from: -0.125,
+                                to: 1,
+                                breakSize:1
+                            }],
+                            gridLineWidth: 0,  
+                            tickWidth:0,
+                            lineWidth: 2,
+                            labels: {
+                                format: '{value:,.0f}',
+                                formatter: function() {
+                                    return (this.value.toFixed().toString()).replace(
+                                        /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                        var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                        var insertCommas  = function(string) { 
+                                            var reversed  = reverseString(string);
+                                            var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                            return reverseString(reversedWithCommas);
+                                        };
+                                        return sign + (decimal ? insertCommas(before) : insertCommas(before + after));
+                                        }
+                                    );
+                                }
+                            },
+                            title: {
+                                text: this.modelData.yAxis,
+                                style:{
+                                    fontSize: '11px'
+                                }
+                            },
+                            offset:-0.125        
                         }
-
-                    },
+                    ],
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
                         pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
@@ -135,6 +189,28 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
               this.onDataComplete.emit(tempChartData);
           }
       }
+
+      getTickPosition(maxData: number) {
+        let maxLog = Math.ceil(Math.log10(maxData));
+        let tickPosition = new Array();
+
+        for (let index = 0; index < maxLog; index++) {
+            tickPosition.push(index + 1);
+        }
+
+        return tickPosition;
+    }
+
+    getMarginLeft() {
+        let maxValue = this.modelData.maxValue;
+        let marginLeft = 85;
+
+        if(maxValue > 100000) {
+            marginLeft = (maxValue.toString().length + 4) * 10
+        }
+
+        return marginLeft;
+    }
   
   }
   
