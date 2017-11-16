@@ -53,12 +53,14 @@ export class BarChartComponent extends BaseChart implements OnInit {
         }
 
         if (this.chartData.customChartSettings &&
-            this.chartData.customChartSettings.yAxis) {
+            this.chartData.customChartSettings.yAxis && 
+            this.chartData.customChartSettings.yAxis.length) {
             this.chartOptions.yAxis = this.chartData.customChartSettings.yAxis;
         }
 
         if (this.chartData.customChartSettings &&
-            this.chartData.customChartSettings.xAxis) {
+            this.chartData.customChartSettings.xAxis && 
+            this.chartData.customChartSettings.xAxis.length) {
             this.chartOptions.xAxis = this.chartData.customChartSettings.xAxis;
         }
     }

@@ -205,8 +205,22 @@ export class SeverityLossBarDirective {
                     symbolHeight: 8
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+                    shared: false,
+                    formatter: function () {
+                        let value =  (this.point.y.toString()).replace(
+                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                            var reverseString = function(string) { return string.split('').reverse().join(''); };
+                            var insertCommas  = function(string) { 
+                                var reversed  = reverseString(string);
+                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                return reverseString(reversedWithCommas);
+                            };
+                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                            }
+                        );
+                        return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
+                            '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
+                    }
                 },
                 plotOptions: {
                     scatter: {
@@ -277,7 +291,7 @@ export class SeverityLossBarDirective {
         groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
                 eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
-                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count <= 0)
             );
 
             if (groups && groups.length > 0) {
@@ -289,7 +303,7 @@ export class SeverityLossBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company') ? null : group.type
+                        drilldown: (group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -301,7 +315,7 @@ export class SeverityLossBarDirective {
                 groups = this.modelData.datasets.filter(
                     eachGroup => eachGroup.comp_or_peer === name && 
                     eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
-                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count <= 0)
                 );
 
                 if (groups && groups.length > 0) {
@@ -757,7 +771,7 @@ export class SeverityLossBarDirective {
         groupNames.sort().reverse().forEach(name => {
             groups = this.modelData.datasets.filter(
                 eachGroup => eachGroup.comp_or_peer === name && eachGroup.sub_type === null &&
-                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
+                !(eachGroup.comp_or_peer === 'Company' && eachGroup.count <=  1)
             );
 
             if (groups && groups.length > 0) {
@@ -769,7 +783,7 @@ export class SeverityLossBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
+                        drilldown: (group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -781,7 +795,7 @@ export class SeverityLossBarDirective {
                 groups = this.modelData.datasets.filter(
                     eachGroup => eachGroup.comp_or_peer === name && 
                     eachGroup.type === drilldownName && eachGroup.sub_type !== null &&
-                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count < 1)
+                    !(eachGroup.comp_or_peer === 'Company' && eachGroup.count <= 0)
                 );
 
                 if (groups && groups.length > 0) {
@@ -855,12 +869,12 @@ export class SeverityLossBarDirective {
 
     getMarginLeft() {
         let maxValue = this.modelData.maxValue;
-        let marginLeft = 70;
+        let marginLeft = 100;
 
         if(maxValue > 100000) {
-            marginLeft = (maxValue.toString().length + 4) * 10
+            marginLeft = marginLeft + (maxValue.toString().length) * 5
         }
-
+        
         return marginLeft;
     }
 }

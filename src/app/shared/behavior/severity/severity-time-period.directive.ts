@@ -204,8 +204,22 @@ export class SeverityTimePeriodDirective {
 					symbolHeight: 8
 				},
 				tooltip: {
-					headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-					pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+                    shared: false,
+                    formatter: function () {
+                        let value =  (this.point.y.toString()).replace(
+                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                            var reverseString = function(string) { return string.split('').reverse().join(''); };
+                            var insertCommas  = function(string) { 
+                                var reversed  = reverseString(string);
+                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                return reverseString(reversedWithCommas);
+                            };
+                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                            }
+                        );
+                        return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
+                            '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
+                    }
 				},
 				plotOptions: {
 					scatter: {
@@ -277,7 +291,7 @@ export class SeverityTimePeriodDirective {
 		groupNames.sort().reverse().forEach(name => {
 			let mainGroup = this.modelData.datasets.filter(
 				eachGroup => eachGroup.compOrPeer === name && eachGroup.ruleTypeCode === 'TPS' &&
-					!(eachGroup.compOrPeer === 'Company' && eachGroup.count < 1)
+					!(eachGroup.compOrPeer === 'Company' && eachGroup.count <= 0)
 			);
 
 			if (mainGroup && mainGroup.length > 0) {
@@ -285,7 +299,7 @@ export class SeverityTimePeriodDirective {
 				series.data = mainGroup.map(eachGroup => {
 					return {
 						name: eachGroup.period,
-						drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count < 1) ? null : eachGroup.period,
+						drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count <= 0) ? null : eachGroup.period,
 						y: eachGroup.count
 					}
 				});
@@ -836,12 +850,12 @@ export class SeverityTimePeriodDirective {
 
 	getMarginLeft() {
         let maxValue = this.modelData.maxValue;
-        let marginLeft = 70;
+        let marginLeft = 85;
 
         if(maxValue > 100000) {
-            marginLeft = (maxValue.toString().length + 4) * 10
+            marginLeft = marginLeft + (maxValue.toString().length) * 5
         }
-
+        
         return marginLeft;
     }
 }
