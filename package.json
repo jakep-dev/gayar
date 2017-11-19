@@ -37,6 +37,7 @@
     "ng2-dnd": "^4.2.0",
     "ng2-dragula": "^1.5.0",
     "ngx-perfect-scrollbar": "^4.5.6",
+    "pdfmake": "^0.1.33",
     "rgbcolor": "^1.0.1",
     "rxjs": "^5.5.2",
     "stackblur": "^1.0.0",

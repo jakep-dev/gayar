@@ -1,11 +1,12 @@
-import canvg from 'new-canvg';
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ElementRef, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
-import { SearchService, MenuService } from 'app/services/services';
+import { SearchService, MenuService, FontService } from 'app/services/services';
 import {DashboardScore} from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { canvasFactory } from 'app/shared/pdf/pdfExport';
+import { getPdfMake } from 'app/shared/pdf/pdfExport';
 
 @Component({
     selector: 'pdf-download',
@@ -16,6 +17,8 @@ import { ComponentPrintSettings } from 'app/model/pdf.model';
     host: { '[@routerTransition]': '' }
 })
 export class PdfDownloadComponent implements OnInit {
+
+    private pdfMake: any;
 
     public searchType: string;
     public companyId: number;
@@ -31,10 +34,11 @@ export class PdfDownloadComponent implements OnInit {
     @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
 
     @ViewChild('canvas') canvas: ElementRef;
-    
+
     //@ViewChild('img') img: ElementRef;
 
-    constructor(private rootElement: ElementRef,
+    constructor(private fontService: FontService,
+        private rootElement: ElementRef,
         private componentFactoryResolver: ComponentFactoryResolver,
         private searchService: SearchService, 
         private menuService: MenuService) {
@@ -98,7 +102,7 @@ export class PdfDownloadComponent implements OnInit {
             //Firefox requires a specific xlink for external images
             data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
 
-            canvg(this.canvas.nativeElement, data,  
+            canvasFactory(this.canvas.nativeElement, data,  
                 { 
                     ignoreMouse: true, 
                     ignoreAnimation: true, 
@@ -114,10 +118,14 @@ export class PdfDownloadComponent implements OnInit {
         this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
         this.entryPoint.clear();
         //this.img.nativeElement.src = buffer;
-        console.log(buffer);
+        //console.log(buffer);
+        //console.log(this.pdfMake);
+
+        console.log('image size = ' + buffer.length);
     }
 
     ngOnInit() {
+        this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
         this.setupDashboardScoreInput();
 
         this.printSettings = {

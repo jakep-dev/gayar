@@ -8,7 +8,7 @@ export * from './frequency.service';
 export * from './severity.service'
 export * from './session-storage.service';
 export * from './report.service';
-
+export * from './font.service';
 
 import { BenchmarkService } from './benchmark.service';
 import { SearchService } from './search.service';
@@ -20,6 +20,7 @@ import { FrequencyService } from './frequency.service';
 import { SeverityService } from './severity.service';
 import { SessionStorageService } from './session-storage.service';
 import { ReportService } from './report.service';
+import { FontService } from './font.service';
 
 export const BLOCK_SERVICES = [
     BenchmarkService,
@@ -31,5 +32,6 @@ export const BLOCK_SERVICES = [
     FrequencyService,
     SeverityService,
     SessionStorageService,
-    ReportService
+    ReportService,
+    FontService
 ];
