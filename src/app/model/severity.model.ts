@@ -42,6 +42,7 @@ export interface SeverityIndustryOverviewModel {
     chartTitle: string;
     filterDescription: string;
     displayText: string;
+    maxValue: number;
     xAxis: string;
     yAxis: string;
     datasets: Array<SeverityIndustryOverviewDataset>

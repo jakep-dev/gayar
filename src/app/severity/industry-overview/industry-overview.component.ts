@@ -62,12 +62,17 @@ export class IndustryOverviewComponent implements OnInit {
     }
 
     chart.addChartImage(
-        'https://www.advisen.com/img/advisen-logo.png',
+        '../assets/images/advisen-logo.png',
         chart.chart.chartWidth - 80,
         chart.chart.chartHeight - 20,
         69,
         17
     );
+
+    let  yBreakPoint = chart.getYAxisPosition(0);
+    chart.addLine([chart.chart.plotLeft - 5, yBreakPoint], [chart.chart.plotLeft + 5, yBreakPoint + 10], '#ccd6eb', 2);
+    chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 5], [chart.chart.plotLeft + 5, yBreakPoint + 5], '#FFFFFF', 5.5);
+    chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 10], [chart.chart.plotLeft + 5, yBreakPoint], '#ccd6eb', 2);
 }
 
   constructor(private severityService: SeverityService) {

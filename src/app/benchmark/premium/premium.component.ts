@@ -59,7 +59,7 @@ export class PremiumComponent implements OnInit {
             chart.chart.chartWidth - 85
         );
         chart.addChartImage(
-            'https://www.advisen.com/img/advisen-logo.png',
+            '../assets/images/advisen-logo.png',
             chart.chart.chartWidth - 80,
             chart.chart.chartHeight - 20,
             69,

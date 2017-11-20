@@ -1,5 +1,5 @@
 <div *ngIf='modelData'>
-  <bar-chart *ngIf='!modelData?.withBreak' 
+  <bar-chart
       class="width-100"
       severity-time-period
       [modelData]="modelData" 
@@ -8,13 +8,4 @@
       (onDataComplete)="onDataComplete($event)" 
       (onChartRedraw)="onChartReDraw($event)">
   </bar-chart>
-  <bar-chart-with-break *ngIf='modelData?.withBreak'  
-      class="width-100"
-      severity-time-period
-      [modelData]="modelData" 
-      [chartData]="chartData"
-      [chartComponent]="chartComponent$ | async" 
-      (onDataComplete)="onDataComplete($event)" 
-      (onChartRedraw)="onChartReDraw($event)">
-  </bar-chart-with-break>
 </div>
