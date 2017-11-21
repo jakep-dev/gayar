@@ -883,11 +883,8 @@ export class SeverityIncidentBarDirective {
     
     getMarginLeft() {
         let maxValue = this.modelData.maxValue;
-        let marginLeft = 100;
-
-        if(maxValue > 100000) {
-            marginLeft = marginLeft + (maxValue.toString().length) * 5
-        }
+        let maxCharactersLength:number = maxValue.toFixed(0).toString().length + 1;       
+        let marginLeft = 60 + (maxCharactersLength * 8);
 
         return marginLeft;
     }
