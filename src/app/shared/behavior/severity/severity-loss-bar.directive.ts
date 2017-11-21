@@ -192,7 +192,7 @@ export class SeverityLossBarDirective {
                             }
                         },
                         title: {
-                            text: '<div style="text-align:center;min-width:180px;margin:0 auto;">'+ this.modelData.yAxis +'</div>',
+                            text: '<div style="text-align:center;width:180px;margin:0 auto;">'+ this.modelData.yAxis +'</div>',
                             useHTML: true,
                             style:{
                                 fontSize: '11px'
