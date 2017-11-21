@@ -22,8 +22,11 @@ export class SeverityComponent implements OnInit {
     public columnsWidth: Array<string>;
     public severityInput: SeverityInput;
 
+    public showLossPie: boolean;
+    public showIncidentPie: boolean;
+
     constructor(private severityService: SeverityService,
-        private menuService: MenuService,
+        public menuService: MenuService,
         private searchService: SearchService) { }
 
     ngOnInit() {

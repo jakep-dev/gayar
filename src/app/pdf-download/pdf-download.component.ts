@@ -39,7 +39,7 @@ export class PdfDownloadComponent implements OnInit {
 
     pdfContent = {
         pageOrientation: 'landscape',
-        pageMargins: [ 8, 10, 8, 0 ],    
+        pageMargins: [ 8, 45, 8, 45 ],
         content: [
             {
                 style: 'coverPageTable1',
@@ -48,7 +48,7 @@ export class PdfDownloadComponent implements OnInit {
                     body: [
                         [
                             {
-                                text: '\n\n\n\n',
+                                text: '\n\n\n',
                                 border: [false, false, false, false]
                             }
                         ],
@@ -167,7 +167,7 @@ export class PdfDownloadComponent implements OnInit {
                     body: [
                         [
                             {
-                                text: '\n\n\n\n\n',
+                                text: '\n',
                                 border: [false, false, false, false]
                             }
                         ]
@@ -175,6 +175,11 @@ export class PdfDownloadComponent implements OnInit {
                 },
                 pageBreak: 'after',
             },
+            {
+                text: 'First paragraph',
+                margin: [64,40,40,0]
+            },
+            'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',
             {
                 image: 'frequencyGaugeComponent'
             }
@@ -185,6 +190,7 @@ export class PdfDownloadComponent implements OnInit {
         styles: {
             coverPageTable1: {
                 fillColor: '#464646',
+                margin: [0,-3,0,0],
                 alignment: 'center'
             },
             coverPageStyle1: {
@@ -216,13 +222,97 @@ export class PdfDownloadComponent implements OnInit {
             coverPageStyle6: {
                 color: 'black',
                 fontSize: 14
+            },
+            headerTable1: {
+                fillColor: '#464646',
+                alignment: 'center',
+                margin: [8,7,8,0]
+            },
+            footerTable1: {
+                fillColor: '#464646',
+                alignment: 'center',
+                margin: [8,-12,8,0]
+            },
+            footerTable2: {
+                fontSize: 8,
+                color: '#7f7f7f',
+                margin: [64,0,70,0]
             }
         },
         images: {
             frequencyGaugeComponent: '',
             logo: ''
-        }
+        },
+        header: this.header,
+        footer: this.footer
     };
+
+    private header(currentPage: number, pageCount: number): any {
+	    if(currentPage == 1) {
+            return {
+                style: 'headerTable1',
+                table: {
+                    widths: ['*'],
+                    body: [
+                        [
+                            {
+                                text: '\n\n',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                },                
+            };
+	    } else {
+	        return {
+                text: 'Cyber OverVue Report',
+                alignment: 'right',
+                fontSize: 11,
+                color: '#7f7f7f',
+                margin: [70,25,70,0]
+            };
+	    }
+    }
+
+    private footer(currentPage: number, pageCount: number): any {
+	    if(currentPage == 1) {
+            return {
+                style: 'footerTable1',
+                table: {
+                    widths: ['*'],
+                    body: [
+                        [
+                            {
+                                text: '\n\n\n',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                }
+            };
+	    } else {
+	        return {
+                style: 'footerTable2',
+                table: {
+                    widths: ['*','10'],
+                    body: [
+                        [
+                            {
+                                text: 'For a detailed explanation of terms and analytics, please see the Appendix at the end of this report',
+                                alignment: 'center',
+                                border: [false, true, false, false]
+                            },
+                            {
+                                text: currentPage,
+                                alignment: 'right',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                }
+            };
+	    }
+    }
 
     constructor(private fontService: FontService,
         private getFileService: GetFileService,

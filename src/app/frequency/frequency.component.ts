@@ -24,8 +24,11 @@ export class FrequencyComponent implements OnInit {
     public isLossShowSplit: boolean;
     public frequencyInput: FrequencyInput;
 
+    public showLossPie: boolean;
+    public showIncidentPie: boolean;
+
     constructor(private frequencyService: FrequencyService,
-        private menuService: MenuService,
+        public menuService: MenuService,
         private searchService: SearchService) { }
 
     ngOnInit() {
