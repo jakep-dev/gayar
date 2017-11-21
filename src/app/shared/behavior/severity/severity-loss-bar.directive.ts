@@ -192,7 +192,8 @@ export class SeverityLossBarDirective {
                             }
                         },
                         title: {
-                            text: this.modelData.yAxis,
+                            text: '<div style="text-align:center;width:180px;margin:0 auto;">'+ this.modelData.yAxis +'</div>',
+                            useHTML: true,
                             style:{
                                 fontSize: '11px'
                             }
@@ -869,11 +870,8 @@ export class SeverityLossBarDirective {
 
     getMarginLeft() {
         let maxValue = this.modelData.maxValue;
-        let marginLeft = 100;
-
-        if(maxValue > 100000) {
-            marginLeft = marginLeft + (maxValue.toString().length) * 5
-        }
+        let maxCharactersLength:number = maxValue.toFixed(0).toString().length + 1;       
+        let marginLeft = 60 + (maxCharactersLength * 8);
         
         return marginLeft;
     }
