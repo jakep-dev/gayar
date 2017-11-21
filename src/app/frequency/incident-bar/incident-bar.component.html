@@ -6,12 +6,11 @@
         (onDataComplete)="onDataComplete($event)" 
         (onChartRedraw)="onChartReDraw($event)">
     </bar-chart>
-    <bar-chart-with-break *ngIf='modelData?.withBreak' 
-        frequeny-bar-incident 
-        [modelData]="modelData" 
-        [chartData]="chartData"
-        [chartComponent]="chartComponent$ | async" 
+    <bar-chart-logarithm *ngIf='modelData?.withBreak' 
+        frequeny-bar-incident [modelData]="modelData" 
+        [chartData]="chartData" 
+        [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)" 
         (onChartRedraw)="onChartReDraw($event)">
-    </bar-chart-with-break>
+    </bar-chart-logarithm>
 </div>
