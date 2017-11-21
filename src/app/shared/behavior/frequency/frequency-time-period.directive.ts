@@ -79,11 +79,7 @@ export class FrequencyTimePeriodDirective {
      * Use chart data from web service to build parts of Highchart chart options object
      */
     buildHighChartObject() {
-        if (this.modelData && this.modelData.withBreak) {
-            this.buildWithBreakChart();
-        } else {
-            this.buildNoBreakChart();
-        }
+        this.buildNoBreakChart();
     }
 
     buildNoBreakChart() {
@@ -144,15 +140,57 @@ export class FrequencyTimePeriodDirective {
                         style: {
                             fontSize: '11px'
                         }
-                    }
+                    },
+                    labels: {
+                        formatter: function() {
+                            let value = 0;
+                            if(this.value > 10) {
+                                value = Math.pow(10, ((this.value -10) / 2) + 1);
+                            } else {
+                                value = this.value;
+                            }
+
+                            return (value.toString()).replace(
+                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                var insertCommas  = function(string) { 
+                                    var reversed  = reverseString(string);
+                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                    return reverseString(reversedWithCommas);
+                                };
+                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                }
+                            );
+                        }
+                    },
                 },
                 legend: {
                     enabled: true,
                     symbolHeight: 8
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+                    shared: false,
+                    formatter: function () {
+                        let value1 = this.point.y;
+                        if(this.point.y > 10) {
+                            value1 = Math.pow(10, ((this.point.y-10 + 2)/2)).toFixed(0);
+
+                        }
+                         
+                        let value =  (value1.toString()).replace(
+                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                            var reverseString = function(string) { return string.split('').reverse().join(''); };
+                            var insertCommas  = function(string) { 
+                                var reversed  = reverseString(string);
+                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                return reverseString(reversedWithCommas);
+                            };
+                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                            }
+                        );
+                        return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
+                            '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
+                    }
                 },
                 plotOptions: {
                     scatter: {
@@ -233,7 +271,7 @@ export class FrequencyTimePeriodDirective {
                     return {
                         name: eachGroup.period,
                         drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count < 1) ? null : eachGroup.period,
-                        y: eachGroup.count
+                        y: this.getPlotValue(eachGroup.count)
                     }
                 });
                 tempChartData.series.push(series);
@@ -252,7 +290,7 @@ export class FrequencyTimePeriodDirective {
                         series.id = eachMainGroup.period;
                         series.data = detailedGroup.map(group => {
                             return [
-                                group.period, group.count
+                                group.period, this.getPlotValue(group.count)
                             ];
                         });
                         tempChartData.drilldown.push(series);
@@ -779,6 +817,13 @@ export class FrequencyTimePeriodDirective {
         }
 
         return tickPosition;
+    }
 
+    getPlotValue(value) {
+        if(value < 11) {
+            return value;
+        } else {
+            return 10 + (Math.log10(value) * 2) - 2;
+        }
     }
 }
