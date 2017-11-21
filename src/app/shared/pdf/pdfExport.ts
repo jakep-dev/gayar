@@ -8,7 +8,7 @@ export var pdfMakeInstance = null;
 
 export function getPdfMake(fontFiles: any, fontNames: any) {
     if (!pdfMakeInstance) {
-        pdfMake.vfs = fontFiles
+        pdfMake.vfs = fontFiles;
         pdfMake.fonts = fontNames;
         pdfMakeInstance = pdfMake;
         console.log(pdfMakeInstance);

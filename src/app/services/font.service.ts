@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BaseService } from './base.service';
 
 @Injectable()
@@ -9,10 +9,10 @@ export class FontService extends BaseService{
 
     private fontNameMapping = {
         CenturyGothic: {
-            normal: 'gothic-regular.ttf',
-            bold: 'gothic-bold.ttf',
-            bolditalics: 'gothic-bold-italic.ttf',
-            italics: 'gothic-italic.ttf'
+            normal: 'GOTHIC.TTF',
+            bold: 'GOTHICB.TTF',
+            bolditalics: 'GOTHICBI.TTF',
+            italics: 'GOTHICI.TTF'
         }
     };
 
@@ -20,7 +20,18 @@ export class FontService extends BaseService{
         return this.fontNameMapping;
     }
 
-    private fonts: any = {};
+    private fonts: any = {
+    };
+
+    private fontFileCount = 4;
+    private fontFilesLoaded = 0;
+
+    public isLoadComplete(): boolean {
+        return this.fontFileCount == this.fontFilesLoaded;
+    }
+
+    private loadCompleted = new BehaviorSubject<boolean>(false);
+    public loadCompleted$: Observable<boolean> = this.loadCompleted.asObservable();
 
     public getFontFiles(): any {
         return this.fonts;
@@ -32,7 +43,10 @@ export class FontService extends BaseService{
     }
 
     private setFontFile(fileName: string, base64Blob: string) {
+        console.log(fileName + ' loaded.');
         this.fonts[fileName] = base64Blob;
+        this.fontFilesLoaded++;
+        this.loadCompleted.next(this.isLoadComplete());
     }
 
     private convertBlob(fileName: string, blob: Blob) {
@@ -52,7 +66,10 @@ export class FontService extends BaseService{
                     )
                 )
             );
-            callback(fileName, output.substr(35));
+            //IE have a different data url.  it has an extra character set parameter
+            //Firefox and Chrome don't have this parameter
+            //Only common reference point is to locate 'base64,' and get all the data after it
+            callback(fileName, output.substr(output.indexOf('base64') + 7));
         };
     }
 

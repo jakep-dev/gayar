@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ElementRef, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
-import { SearchService, MenuService, FontService } from 'app/services/services';
+import { SearchService, MenuService, FontService, GetFileService } from 'app/services/services';
 import {DashboardScore} from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
@@ -37,13 +37,214 @@ export class PdfDownloadComponent implements OnInit {
 
     //@ViewChild('img') img: ElementRef;
 
+    pdfContent = {
+        pageOrientation: 'landscape',
+        pageMargins: [ 8, 10, 8, 0 ],    
+        content: [
+            {
+                style: 'coverPageTable1',
+                table: {
+                    widths: ['*'],
+                    body: [
+                        [
+                            {
+                                text: '\n\n\n\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: 'Cyber OverVue Report',
+                                style: 'coverPageStyle1',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: 'for',
+                                style: 'coverPageStyle2',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '<Company Name>',
+                                style: 'coverPageStyle3',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '<Industry>',
+                                style: 'coverPageStyle4',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '<Revenue Range>',
+                                style: 'coverPageStyle4',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n\n\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: 'Created for <Company Name of the user>',
+                                style: 'coverPageStyle5',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '<Date Generated>',
+                                style: 'coverPageStyle5',
+                                border: [false, false, false, false]
+                            }
+                        ],
+                        [
+                            {
+                                text: '\n',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                }
+            },	    
+            {
+                style: 'coverPageTable2',
+                table: {
+                    widths: ['*'],
+                    body: [
+                        [
+                            {
+                                image: 'logo',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                }
+            },
+            {
+                style: 'coverPageTable1',
+                table: {
+                    widths: ['*'],
+                    body: [
+                        [
+                            {
+                                text: '\n\n\n\n\n',
+                                border: [false, false, false, false]
+                            }
+                        ]
+                    ]
+                },
+                pageBreak: 'after',
+            },
+            {
+                image: 'frequencyGaugeComponent'
+            }
+        ],
+        defaultStyle: {
+            font: 'CenturyGothic'
+        },
+        styles: {
+            coverPageTable1: {
+                fillColor: '#464646',
+                alignment: 'center'
+            },
+            coverPageStyle1: {
+                color: 'white',
+                fontSize: 28,
+                bold: true
+            },
+            coverPageStyle2: {
+                color: '#b1d23b',
+                fontSize: 28,
+                italics: true
+            },
+            coverPageStyle3: {
+                color: 'white',
+                fontSize: 28
+            },
+            coverPageStyle4: {
+                color: 'white',
+                fontSize: 20
+            },
+            coverPageStyle5: {
+                color: 'white',
+                fontSize: 14
+            },
+            coverPageTable2: {
+                fillColor: 'white',
+                alignment: 'right'
+            },
+            coverPageStyle6: {
+                color: 'black',
+                fontSize: 14
+            }
+        },
+        images: {
+            frequencyGaugeComponent: '',
+            logo: ''
+        }
+    };
+
     constructor(private fontService: FontService,
+        private getFileService: GetFileService,
         private rootElement: ElementRef,
         private componentFactoryResolver: ComponentFactoryResolver,
         private searchService: SearchService, 
         private menuService: MenuService) {
 
-        this.menuService.breadCrumb = 'Dashboard';
+        this.menuService.breadCrumb = 'Reports';
+
+        this.getFileService.getAsDataUrl('/assets/images/advisen-logo.png');
+        this.getFileService.fileData$.subscribe(this.updateAdvisenLogo.bind(this));
+
+        if(this.fontService.isLoadComplete()) {
+            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+        } else {
+            this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
+        }
+    }
+
+    private updateAdvisenLogo(dataUrl: string) {
+        this.pdfContent.images.logo = dataUrl;
     }
 
     /**
@@ -122,10 +323,18 @@ export class PdfDownloadComponent implements OnInit {
         //console.log(this.pdfMake);
 
         console.log('image size = ' + buffer.length);
+
+        this.pdfContent.images.frequencyGaugeComponent = buffer;
+        this.pdfMake.createPdf(this.pdfContent).download('test.pdf');
+    }
+
+    private configurePDFMake(isReady: boolean) {
+        if(isReady) {
+            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+        }
     }
 
     ngOnInit() {
-        this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
         this.setupDashboardScoreInput();
 
         this.printSettings = {
