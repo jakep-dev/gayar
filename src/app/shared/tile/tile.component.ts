@@ -20,7 +20,6 @@ export class TileComponent implements OnInit {
   @Input() showProgress: boolean = false;
   @Input() isSelected: boolean = false;
   @Input() isSelectableDisabled: boolean = false;
-  @Input() maximize:  boolean = false;
 
   /**
    * Fires on flip.
@@ -56,7 +55,6 @@ export class TileComponent implements OnInit {
 
   ngOnInit() {
     this.menuService.appTileComponents.push(this);
-    this.setMaximize();
   }
 
 
@@ -111,14 +109,5 @@ export class TileComponent implements OnInit {
   toggleSelected () {
     this.isSelected = !this.isSelected;
     this.onSelectable.emit(this.isSelected);
-  }
-  /**
-   * set the chart size in maximize mode
-   *   
-   */
-  setMaximize(){
-    if(this.maximize){
-      this.isMaximize = true;
-    }
   }
 }

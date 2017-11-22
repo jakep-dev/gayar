@@ -36,14 +36,17 @@ export class DashboardComponent implements OnInit {
         this.searchType = this.searchService.searchCriteria.type;
         if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
             this.companyId = this.searchService.selectedCompany.companyId;
+            this.naics = null;
+            this.revenueRange = null;
         }else{
             this.companyId = null;
+            this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+            this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
+    
         }
 
         this.chartType = 'BENCHMARK';
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
-
+       
         this.getDashboardScoreByManualInput = {
             searchType: this.searchType,
             chartType: this.chartType,
