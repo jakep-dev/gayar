@@ -146,9 +146,9 @@ export class SeverityTimePeriodDirective {
                         lineWidth: 2,
 						tickPositioner: function() {
 							let maxLog = Math.ceil(Math.log10(this.dataMax));
-							let tickPosition = [-0.9, -0.01];
+                            let tickPosition = [-0.9, -0.01, 1];
 					
-							for (let index = 0; index < maxLog; index++) {
+							for (let index = 1; index < maxLog; index++) {
 								tickPosition.push(index + 1);
 							}
 							return tickPosition;
