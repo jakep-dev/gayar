@@ -84,8 +84,6 @@ export class SeverityTimePeriodDirective {
 	}
 
 	buildNoBreakChart() {
-		let tickPosition = this.getTickPosition(this.modelData.maxValue);
-        tickPosition.splice(0,0,-0.9, -0.01);
 		let tempChartData: BarChartData = {
 			series: [],
 			title: this.modelData.chartTitle,
@@ -137,36 +135,6 @@ export class SeverityTimePeriodDirective {
 				},
 				yAxis: [
                     {
-                        tickPositions: tickPosition,
-                        type:'logarithmic',
-                        gridLineWidth: 0,  
-                        tickWidth:0,
-                        lineWidth: 0,
-                        labels: {
-                            format: '{value:,.0f}',
-                            formatter: function() {
-                                return (this.value.toString()).replace(
-                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                    var insertCommas  = function(string) { 
-                                        var reversed  = reverseString(string);
-                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                        return reverseString(reversedWithCommas);
-                                    };
-                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                    }
-                                );
-                            },
-                            style:{
-                                color:'transparent'
-                            }
-                        },
-                        title: false,               
-        
-                    },
-                    {
-                        tickPositions: tickPosition,
-                        //we can set break point in yaxis based in this value in tickPositions in the yaxis. eg. -0.31 is for 0 and 4 is for 10,000 values
                         type:'logarithmic',
                         breaks: [{
                             from: -0.125,
@@ -176,6 +144,15 @@ export class SeverityTimePeriodDirective {
                         gridLineWidth: 0,  
                         tickWidth:0,
                         lineWidth: 2,
+						tickPositioner: function() {
+							let maxLog = Math.ceil(Math.log10(this.dataMax));
+							let tickPosition = [-0.9, -0.01];
+					
+							for (let index = 0; index < maxLog; index++) {
+								tickPosition.push(index + 1);
+							}
+							return tickPosition;
+						},
                         labels: {
                             format: '{value:,.0f}',
                             formatter: function() {
@@ -361,17 +338,6 @@ export class SeverityTimePeriodDirective {
 		
 		this.onDataComplete.emit(tempChartData);
 
-	}
-
-	getTickPosition(maxData: number) {
-		let maxLog = Math.ceil(Math.log10(maxData));
-		let tickPosition = new Array();
-
-		for (let index = 0; index < maxLog; index++) {
-			tickPosition.push(index + 1);
-		}
-
-		return tickPosition;
 	}
 
 	getMarginLeft() {
