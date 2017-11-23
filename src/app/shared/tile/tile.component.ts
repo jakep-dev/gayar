@@ -21,7 +21,6 @@ export class TileComponent implements OnInit {
   @Input() isSelected: boolean = false;
   @Input() isSelectableDisabled: boolean = false;
 
-
   /**
    * Fires on flip.
    */
