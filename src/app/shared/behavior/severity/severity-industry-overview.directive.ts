@@ -160,7 +160,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                                 }
                             );
                             return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
-                                '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
+                                '<span style="color:' + this.point.color + '">' + this.point.category + '</span>: <b>' + value + '</b><br/>';
                         }
                     },
                     plotOptions: {
