@@ -146,21 +146,25 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                         }
                     ],
                     tooltip: {
-                        shared: false,
+                        shared: true,
                         formatter: function () {
-                            let value =  (this.point.y.toString()).replace(
-                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                var insertCommas  = function(string) { 
-                                    var reversed  = reverseString(string);
-                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                    return reverseString(reversedWithCommas);
-                                };
-                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                }
-                            );
-                            return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
-                                '<span style="color:' + this.point.color + '">' + this.point.category + '</span>: <b>' + value + '</b><br/>';
+                            let tooltip = '<span style="font-size:11px">' + this.x + '</span><br>';
+                            this.points.forEach(point => {
+                                let value =  (point.y.toString()).replace(
+                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                    var insertCommas  = function(string) { 
+                                        var reversed  = reverseString(string);
+                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                        return reverseString(reversedWithCommas);
+                                    };
+                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                    }
+                                );
+                                tooltip += '<span style="color:' + point.color + '">' + point.series.name + '</span>: <b>' + value + '</b><br/>';
+                            }); 
+
+                            return tooltip;
                         }
                     },
                     plotOptions: {
