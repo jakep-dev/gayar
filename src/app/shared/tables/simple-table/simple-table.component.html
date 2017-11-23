@@ -11,8 +11,8 @@
             <table cellpadding="0" cellspacing="0" id="innerTable">
                 <tr (click)="row.hidden = !row.hidden">
                     <td style="width:35px">
-                        <md-icon *ngIf="!row.hidden">arrow_drop_up</md-icon>
-                        <md-icon *ngIf="row.hidden">arrow_drop_down</md-icon>
+                        <md-icon *ngIf="!row.hidden" class="icon-menu-right fa-2x"></md-icon>
+                        <md-icon *ngIf="row.hidden" class="icon-menu-down fa-2x"></md-icon>
                     </td>
                     <td *ngFor="let columnHAlignment of columnsHAlignment; let columnNdx=index;" align="{{ columnHAlignment }}" class="column"
                         [ngStyle]="{'width': columnsWidth[columnNdx]}">
