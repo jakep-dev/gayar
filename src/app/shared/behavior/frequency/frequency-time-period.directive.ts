@@ -101,6 +101,7 @@ export class FrequencyTimePeriodDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
+					marginTop:80
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',

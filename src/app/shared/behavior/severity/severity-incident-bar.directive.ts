@@ -98,6 +98,7 @@ export class SeverityIncidentBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: this.getMarginLeft(),
+					marginTop:80,
                     marginBottom: 135
                 },
                 title: {

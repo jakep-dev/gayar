@@ -99,6 +99,7 @@ export class SeverityLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: this.getMarginLeft(),
+                    marginTop:80,
                     marginBottom: 120
                 },
                 title: {

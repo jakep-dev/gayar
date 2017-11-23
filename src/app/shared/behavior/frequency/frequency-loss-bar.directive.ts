@@ -97,6 +97,7 @@ export class FrequencyLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
+					marginTop:80,
                     marginBottom: 120
                 },
                 title: {

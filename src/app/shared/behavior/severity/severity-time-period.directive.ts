@@ -103,6 +103,7 @@ export class SeverityTimePeriodDirective {
 			customChartSettings: {
 				chart: {
 					marginLeft: this.getMarginLeft(),
+					marginTop:80
 				},
 				title: {
 					text: (this.modelData.datasets && this.modelData.datasets.length > 0) ? this.modelData.xAxis : '',
