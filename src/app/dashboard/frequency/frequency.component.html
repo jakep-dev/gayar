@@ -1,5 +1,5 @@
-<app-tile [id]="'Dashboard_Frequency'" [title]="chartHeader" class="width-100">
-    <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
+<app-tile [id]="'Dashboard_Frequency'" [title]="chartHeader" class="width-100" [isFullScreen]="false" [isAccordion]="false">
+    <div front class="width-100" fxLayout="row">
         <gauge-chart 
             fxFlexFill
             *ngIf='modelData' 

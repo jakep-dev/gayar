@@ -173,13 +173,78 @@ export class PdfDownloadComponent implements OnInit {
                         ]
                     ]
                 },
-                pageBreak: 'after',
+                pageBreak: 'after'
+            },
+            {
+                toc: {
+                    id: 'mainToc',
+                    title: {
+                        text: [
+                            {
+                                text: "TABLE",
+                                style: "TOCStyle1"
+                            },
+                            {
+                                text: " of ",
+                                style: "TOCStyle2"
+                            },
+                            {
+                                text: "CONTENTS",
+                                style: "TOCStyle1"
+                            }
+                        ]
+                    }
+                },
+                margin: [64,0,70,0],
+                style: 'coverPageStyle2',
+                pageBreak: 'after'
+            },
+            {
+                margin: [64, 5, 70, 10],
+                tocItem: 'mainToc',
+                //text: 'Test',
+                table: {
+                    widths: ['94%', '6%'],
+                    body: [
+                        [
+                            {
+                                text: 'Chart ..........................................................................................................................................................................................................................................................................',
+                                noWrap: false,
+                                maxHeight: 20
+                            }, 
+                            '8888'
+                        ],
+                    ]
+                }
+            },
+            
+            {
+                text: [
+                    {
+                        text: "TABLE",
+                        style: "TOCStyle1"
+                    },
+                    {
+                        text: " of ",
+                        style: "TOCStyle2"
+                    },
+                    {
+                        text: "CONTENTS",
+                        style: "TOCStyle1"
+                    }
+                ],
+                margin: [64,0,0,0]
             },
             {
                 text: 'First paragraph',
                 margin: [64,40,40,0]
             },
             'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',
+            {
+                text: 'Dashboard',
+                style: 'TOCStyle1',
+                tocItem: 'mainToc'
+            },            
             {
                 image: 'frequencyGaugeComponent'
             }
@@ -237,6 +302,17 @@ export class PdfDownloadComponent implements OnInit {
                 fontSize: 8,
                 color: '#7f7f7f',
                 margin: [64,0,70,0]
+            },
+            TOCStyle1: {
+                color: '#7a9bc',
+                fontSize: 22,
+                bold: true
+            },
+            TOCStyle2: {
+                color: '#b1d23b',
+                fontSize: 22,
+                bold: true,
+                italics: true
             }
         },
         images: {
