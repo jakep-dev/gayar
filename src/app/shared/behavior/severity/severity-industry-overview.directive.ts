@@ -148,7 +148,16 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     tooltip: {
                         shared: true,
                         formatter: function () {
-                            let tooltip = '<span style="font-size:11px">' + this.x + '</span><br>';
+                            let entityMap = {
+                                "&": "&amp;",
+                                "<": "&lt;",
+                                ">": "&gt;",
+                                '"': '&quot;',
+                                "'": '&#39;',
+                                "/": '&#x2F;'
+                            };
+                            let category =  String(this.x).replace(/[&<>"'\/]/g, s => entityMap[s]);
+                            let tooltip = '<span style="font-size:11px">' + category + '</span><br>';
                             this.points.forEach(point => {
                                 let value =  (point.y.toString()).replace(
                                     /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
