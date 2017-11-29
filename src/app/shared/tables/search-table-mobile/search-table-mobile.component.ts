@@ -29,6 +29,10 @@ export class SearchTableMobileComponent implements OnInit {
 
   }
 
+  onClick() {
+    
+  }
+
   transformData () {
     console.log('DataSource', this.dataSource)
     this.dataSource.asObservable().subscribe(()=> {

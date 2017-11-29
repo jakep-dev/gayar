@@ -125,10 +125,17 @@ export class SearchComponent implements OnInit, OnDestroy {
    * @return {type}  description
    */
   setSelectedSearchCriteria () {
-    let revenueModel: RevenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
+    let revenueModel: RevenueModel;
     let limit = new KmbConversionPipe().transform(this.selectedLimit);
     let premium = new KmbConversionPipe().transform(this.selectedPremium);
     let retention = new KmbConversionPipe().transform(this.selectedRetention);
+
+    if(!this.isManual){
+      this.searchService.selectedCompany = this.selectedCompanyModel;
+      revenueModel = this.selectedRevenue;
+    } else {
+      revenueModel = this.revenueModellist.find(f=>this.selectedRevenue && f.id === this.selectedRevenue.id);
+    }
 
     this.searchService.searchCriteria = {
       type: this.selectedSearchType,
@@ -140,10 +147,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       retention: (retention || retention === 0)? retention.toString(): null,
       filter: this.enteredSearchFilter
     };
-
-    if(!this.isManual){
-      this.searchService.selectedCompany = this.selectedCompanyModel;
-    }
   }
 
 
@@ -344,6 +347,8 @@ export class SearchComponent implements OnInit, OnDestroy {
             if(data[1] && data[1].message){
               this.snackBarService.Simple(data[1].message);
             }else{
+              this.selectedIndustry = data[1].industry;
+              this.selectedRevenue = data[1].revenueRange;
               this.setSelectedSearchCriteria();
               this.router.navigate(['/dashboard']);
             }

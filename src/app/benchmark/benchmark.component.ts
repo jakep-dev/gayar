@@ -26,7 +26,7 @@ export class BenchmarkComponent implements OnInit {
     watcher: Subscription;
 
     constructor(private searchService: SearchService,
-                private menuService: MenuService,
+                public menuService: MenuService,
                 private media: ObservableMedia) {
                 this.watchForMedia(); }
 
