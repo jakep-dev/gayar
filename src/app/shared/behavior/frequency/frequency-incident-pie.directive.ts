@@ -98,7 +98,14 @@ export class FrequencyIncidentPieDirective {
             series: {
               dataLabels: {
                 enabled: true,
-                format: '{point.y:.1f}%',
+                formatter : function(){
+                  let value = this.point.y.toString(); 
+                  if(value.indexOf('.') > -1) { 
+                    return value.substring(0, value.indexOf('.') + 2 ) + '%'; 
+                  } else { 
+                    return value + '%'; 
+                  } 
+                },
                 style:{
                     textOutline: false,
                 },
@@ -136,7 +143,7 @@ export class FrequencyIncidentPieDirective {
           tooltip: {
             useHTML: true,
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.1f}%</b><br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}%</b><br/>'
           },
           drilldown:{
             activeAxisLabelStyle: {
