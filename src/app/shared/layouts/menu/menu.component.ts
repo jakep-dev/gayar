@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
   fullName: string;
-  constructor(private menuService: MenuService,
+  constructor(public menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
         this.fullName = this.sessionService.UserFullName;
