@@ -62,7 +62,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                         marginBottom: 150,
                     },
                     credits: {
-                        enabled: true
+                        enabled: false
                     },
                     subtitle: {
                         labels: {
