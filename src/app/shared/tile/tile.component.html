@@ -27,20 +27,23 @@
   <div class="tile-content">
     <div
       *ngIf="isContent"
-      fxLayout="column"
+      fxLayout="row"
       fxLayoutAlign="center center">
 
-      <ng-content
-        select="[front]"
-        *ngIf="!isFlipped || isSplitted">
+      <div class="width-100" *ngIf="!isFlipped || isSplitted">
+        <ng-content
+          select="[front]">
 
-      </ng-content>
+        </ng-content>
+      </div>
 
-      <ng-content
-        select="[back]"
-        *ngIf="isFlipped || isSplitted">
 
-      </ng-content>
+      <div class="width-100" [ngClass]="{'border-left-2': isSplitted}"  *ngIf="isFlipped || isSplitted">
+        <ng-content
+          select="[back]">
+
+        </ng-content>
+      </div>
     </div>
   </div>
 </div>
