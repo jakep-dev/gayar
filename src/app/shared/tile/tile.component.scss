@@ -24,6 +24,7 @@
 .tile-container{
     padding: 5px;
     min-width: 400px;
+    background: white;
 }
 
 .tile-toolbar{
@@ -60,11 +61,10 @@
 }
 
 .tile-maximize {
-  //position: fixed;
+  position: relative;
   top: 0px;
   left: 0px;
   max-height: 100%;
   width: 99%;
-  background-color: #eee;
-  overflow-y: hidden;
+  //overflow-y: visible;
 }
