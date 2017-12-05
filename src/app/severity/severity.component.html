@@ -1,13 +1,13 @@
-<div [dragula]='"sixth-bag"'
+<div
     [fxLayout.gt-sm]="menuService.isFullScreen ? 'column' : 'row'"
     fxLayoutAlign="start start"
     fxLayoutWrap
     [ngClass]="{'maximize-container': menuService.isFullScreen}">
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">    
-        <severity-industry-overview *ngIf="severityInput" class="width-100" [componentData]="severityInput"></severity-industry-overview>                          
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100" fxFlexOrder="0">
+        <severity-industry-overview *ngIf="severityInput" class="width-100" [componentData]="severityInput"></severity-industry-overview>
     </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100"> 
+    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100" fxFlexOrder="1">
         <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
             <div front class="width-100" fxLayout="row">
                 <severity-time-period [componentData]="severityInput" class="width-100" fxFlexFill>
@@ -16,31 +16,31 @@
         </app-tile>
     </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
+    <div fxFlexFill [fxFlex]="showIncidentPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '3' : '2'">
         <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true"
-            (onFlip)="showIncidentPie=true" (onSplit)="showIncidentPie=true">
+            (onFlip)="showIncidentPie=false" (onSplit)="showIncidentPie=!showIncidentPie">
             <div front class="width-100" fxLayout="row">
                 <severity-incident-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-bar>
             </div>
-            <div back *ngIf="showIncidentPie" class="width-100" fxLayout="row">
+            <div back class="width-100" fxLayout="row">
                 <severity-incident-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-pie>
             </div>
         </app-tile>
-    </div>  
+    </div>
 
-    <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">      
-        <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" (onFlip)="showLossPie=true"
-            (onSplit)="showLossPie=true">
+    <div fxFlexFill [fxFlex]="showLossPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '2' : '3'">
+        <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" (onFlip)="showLossPie=false"
+            (onSplit)="showLossPie=!showLossPie">
             <div front class="width-100" fxLayout="row">
                 <severity-loss-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-bar>
             </div>
-            <div back *ngIf="showLossPie" class="width-100" fxLayout="row">
+            <div back class="width-100" fxLayout="row">
                 <severity-loss-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-pie>
             </div>
         </app-tile>
     </div>
 
-    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
+    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="4">
         <app-tile [id]="'SEV_PEER_TABLE'" [title]="'Top Peer Group Losses'" class="width-100">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
@@ -49,7 +49,7 @@
             </div>
         </app-tile>
     </div>
-    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100">
+    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
         <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'Top Company Losses'" class="width-100" *ngIf="companyLossesTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
