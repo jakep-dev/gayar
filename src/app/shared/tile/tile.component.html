@@ -30,7 +30,7 @@
       fxLayout="row"
       fxLayoutAlign="center center">
 
-      <div class="width-100" *ngIf="!isFlipped || isSplitted">
+      <div class="width-100" [hidden]="hideFront()">
         <ng-content
           select="[front]">
 
@@ -38,7 +38,7 @@
       </div>
 
 
-      <div class="width-100" [ngClass]="{'border-left-2': isSplitted}"  *ngIf="isFlipped || isSplitted">
+      <div class="width-100" [ngClass]="{'border-left-2': isSplitted}"  [hidden]="hideBack()">
         <ng-content
           select="[back]">
 
