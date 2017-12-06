@@ -110,4 +110,22 @@ export class TileComponent implements OnInit {
     this.isSelected = !this.isSelected;
     this.onSelectable.emit(this.isSelected);
   }
+
+  /**
+   * hideFront - Checks for the visibility of front view.
+   *
+   * @return {type} - boolean.
+   * */
+  hideFront () : boolean {
+    return this.isSplitted ? false : this.isFlipped;
+  }
+
+  /**
+   * hideBack - Checks for the visibility of back view.
+   *
+   * @return {type} - boolean.
+   * */
+  hideBack () : boolean {
+    return this.isSplitted ? false : !this.isFlipped;
+  }
 }
