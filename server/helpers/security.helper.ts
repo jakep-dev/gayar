@@ -22,7 +22,7 @@ export class Security{
     }
 
     init(): void {
-        if (this.environment.toLocaleLowerCase() !== 'DEV') {
+        if (this.environment.toLocaleUpperCase() !== 'DEBUG') {
           this.setupHeader();
         }
         this.setupServer();
