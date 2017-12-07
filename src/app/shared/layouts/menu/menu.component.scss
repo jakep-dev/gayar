@@ -6,7 +6,9 @@
     }
 }
 
-
+.user-preference {
+  color: white !important;
+}
 
 .top-short-logo {
   height: 35px;
@@ -38,10 +40,7 @@
 
 .app-content{
     padding: 4px;
-    background: hsla(0, 0%, 83%, 0.13);;
-    // overflow-x: hidden !important;
-    // overflow-y: scroll;
-    height: 100vh; 
+    background: white;
 }
 
 .mat-sidenav {

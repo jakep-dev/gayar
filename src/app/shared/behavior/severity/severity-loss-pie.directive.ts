@@ -99,11 +99,14 @@ export class SeverityLossPieDirective {
                   enabled: true,
                   formatter : function(){
                     let value = this.point.y.toString(); 
-                    if(value.indexOf('.') > -1) { 
-                      return value.substring(0, value.indexOf('.') + 2 ) + '%'; 
-                    } else { 
-                      return value + '%'; 
-                    } 
+                    if(this.point && this.point.y){
+                      value = Number(this.point.y).toFixed(8).replace(/\.?0+$/,"");
+                      if(value.indexOf('.') > -1) { 
+                        return value.substring(0, value.indexOf('.') + 2 ) + '%'; 
+                      } else { 
+                        return value + '%'; 
+                      } 
+                    }
                   },
                   style:{
                       textOutline: false,
@@ -142,7 +145,12 @@ export class SeverityLossPieDirective {
             tooltip: {  
               useHTML: true,
               headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}%</b><br/>'
+              formatter: function(){
+                if(this.point && this.point.y){
+                  var e = Number(this.point.y).toFixed(8).replace(/\.?0+$/,"");
+                  return '<span style="color:{point.color}">'+this.point.name+'</span>: <b>'+e+'%</b><br/>'
+                }
+              }
             },
             drilldown:{
               activeAxisLabelStyle: {

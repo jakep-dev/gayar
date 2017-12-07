@@ -7,12 +7,12 @@ import { MenuService } from 'app/services/services';
 @Component({
   selector: 'app-sso',
   templateUrl: './sso.component.html',
-  styleUrls: ['./sso.component.css']
+  styleUrls: ['./sso.component.scss']
 })
 export class SsoComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, 
-              private sessionService: SessionService, 
+  constructor(private route: ActivatedRoute,
+              private sessionService: SessionService,
               private menuService: MenuService,
               private router: Router) { }
 
@@ -30,7 +30,7 @@ export class SsoComponent implements OnInit {
       if(userId){
           this.sessionService.getCurrentIdentity(userId).subscribe((res: SessionModel)=>{
             if(this.sessionService.isLoggedIn()){
-              this.router.navigate(['/search']);    
+              this.router.navigate(['/search']);
               }
               else{
                 this.router.navigate(['/401']);

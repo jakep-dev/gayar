@@ -12,7 +12,7 @@
       </md-toolbar>
       <div style="border: 1px solid lightgray"></div>
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
-          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center" [disabled]="true" class="user-preference">
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
@@ -103,6 +103,6 @@
   </md-toolbar>
   <div class="app-content">
     <router-outlet></router-outlet>
-    <div style="height: 100px"></div>
+    <div style="height: 10px"></div>
   </div>
 </md-sidenav-container>
