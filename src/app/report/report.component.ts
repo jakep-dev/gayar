@@ -1,38 +1,313 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuService, ReportService } from 'app/services/services';
-import { IReportTileModel } from 'app/model/model';
+import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
+
+import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
+import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
+import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
+
+import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
+import { DashboardScore, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
+import { BasePage, CoverPage, DashboardPage } from 'app/pdf-download/pages/pages'
+import { PDFGenerator } from 'app/pdf-download/pdf-generator';
+
+import { BaseChart } from 'app/shared/charts/base-chart';
+import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { canvasFactory } from 'app/shared/pdf/pdfExport';
+import { getPdfMake } from 'app/shared/pdf/pdfExport';
 
 @Component({
-  selector: 'app-report',
-  templateUrl: 'report.component.html',
-  styleUrls: ['./report.component.scss']
+    selector: 'app-report',
+    templateUrl: 'report.component.html',
+    styleUrls: ['./report.component.scss'],
+    entryComponents: [Dashboard_BenchmarkComponent, Dashboard_FrequencyComponent, Dashboard_SeverityComponent]
 })
 export class ReportComponent implements OnInit {
-  reportTileModel: Array<IReportTileModel> = null;
 
-  constructor(private menuService: MenuService,
-              private reportService: ReportService) {
+    reportTileModel: Array<IReportTileModel> = null;
+    pageCollection: Array<BasePage> = [];
 
+    chartDataCollection: Array<IChartMetaData> = [];
+    chartLoadCount: number;
+
+    @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
+    
+    @ViewChild('canvas') canvas: ElementRef;
+
+    public searchType: string;
+    public companyId: number;
+    public naics: string;
+    public revenueRange: string;
+    public getDashboardScoreByManualInput: DashboardScore;
+    public printSettings: ComponentPrintSettings;
+    
+    private chart: BaseChart;
+
+    private pdfMake: any;
+
+    private coverPage: CoverPage;
+    
+    constructor(
+        private rootElement: ElementRef,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private fontService: FontService,
+        private getFileService: GetFileService,
+        private menuService: MenuService,
+        private searchService: SearchService,
+        private reportService: ReportService) {
+
+        if(this.fontService.isLoadComplete()) {
+            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+        } else {
+            this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
+        }
+
+        this.coverPage = new CoverPage();
+        this.coverPage.setFileService(this.getFileService);
+    }
+
+    private configurePDFMake(isReady: boolean) {
+        if(isReady) {
+            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+        }
+    }
+
+    ngOnInit() {
+        this.menuService.breadCrumb = 'Report';
+        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
+
+        this.coverPage.setCompanyName((this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value);
+        if(this.naics) {
+            this.coverPage.setIndustryName(this.naics);
+        }
+        if(this.revenueRange) {
+            this.coverPage.setRevenueRangeText(this.revenueRange);
+        }
+        this.coverPage.setUserCompanyName('Advisen');
+        
+        this.setupDashboardScoreInput();
+        this.getReportConfig();
+    }
+
+    setupDashboardScoreInput() {
+        this.searchType = this.searchService.searchCriteria.type;
+        if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+            this.companyId = this.searchService.selectedCompany.companyId;
+        } else {
+            this.companyId = null;
+        }
+
+        this.getDashboardScoreByManualInput = {
+            searchType: this.searchType,
+            chartType: 'BENCHMARK',
+            companyId: this.companyId,
+            naics: this.naics,
+            revenueRange: this.revenueRange,
+            limit : this.searchService.searchCriteria.limit,
+            retention: this.searchService.searchCriteria.retention,
+          };
+      }
+
+    /**
+     * getReportConfig - Load the report configuration.
+     *
+     * @return {} - No return types.
+     */
+    getReportConfig () {
+        this.reportService.getReportConfig().subscribe((data)=> {
+            this.reportTileModel = data;
+            //console.log(this.reportTileModel[0].subComponents)
+        });
+    }
+
+    onReport () {
+        //console.log(this.reportTileModel);
+        this.chartLoadCount = 0;
+        this.chartDataCollection.length = 0;
+        this.reportTileModel.forEach(reportSection => {
+            if(reportSection.value) {
+                this.processReportSection(reportSection);
+            }
+        });
+    }
+
+    processReportSection(section: IReportTileModel) {
+        if(section.value) {
+            section.subComponents.forEach(reportSectionItem => {
+                if(reportSectionItem.value) {
+                    console.log(reportSectionItem.description);
+                    if(!this.hasPageType(reportSectionItem.pageType)) {
+                        this.addPageType(reportSectionItem.pageType);
+                        console.log('Page type = ' + reportSectionItem.pageType);
+                    }
+                    let n: number;
+                    let i: number;
+                    n = reportSectionItem.chartComponents.length;
+                    for(i = 0; i < n; i++) {
+                        this.chartDataCollection.push(
+                            {
+                                chartSetting: reportSectionItem.chartComponents[i],
+                                imageData: '',
+                                imageIndex: reportSectionItem.chartComponents[i].componentName + '-' + this.chartDataCollection.length,
+                                pagePosition: reportSectionItem.chartComponents[i].pagePosition,
+                                targetPage: this.pageCollection[reportSectionItem.pageType]
+                            }
+                        );
+                    }
+                    if(reportSectionItem.subSubComponents) {
+                      reportSectionItem.subSubComponents.forEach(reportSubSectionItem => {
+                          if(reportSubSectionItem.value) {
+                              console.log(reportSubSectionItem.description);
+                              if(!this.hasPageType(reportSubSectionItem.pageType)) {
+                                  this.addPageType(reportSubSectionItem.pageType);
+                                  console.log('Page type = ' + reportSubSectionItem.pageType);
+                              }
+
+                              n = reportSubSectionItem.chartComponents.length;
+                              for(i = 0; i < n; i++) {
+                                this.chartDataCollection.push(
+                                      {
+                                          chartSetting: reportSubSectionItem.chartComponents[i],
+                                          imageData: '',
+                                          imageIndex: reportSubSectionItem.chartComponents[i].componentName + '-' + this.chartDataCollection.length,
+                                          pagePosition: reportSubSectionItem.chartComponents[i].pagePosition,
+                                          targetPage: this.pageCollection[reportSubSectionItem.pageType]
+                                      }
+                                  );
+                              }
+                              reportSubSectionItem.chartComponents.forEach(chartComponent => {
+                              });
+                                        
+                          }
+                      });
+                    }
+                }
+            });
+            console.log(this.chartDataCollection);
+            if(this.chartDataCollection.length > 0) {
+                this.loadChartImage();
+            }
+        }
+    }
+    
+    loadChartImage() {
+        let componentFactory: ComponentFactory<any>;
+        
+        let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
+        let dashboardFrequencyGaugeComponent: Dashboard_FrequencyComponent;
+        let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
+
+        let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
+        this.printSettings = chartData.targetPage.getPrinteSettings(chartData.pagePosition);
+        this.canvas.nativeElement.width = this.printSettings.width;
+        this.canvas.nativeElement.height = this.printSettings.height;
+        this.entryPoint.clear();
+        
+        switch(chartData.chartSetting.componentName) {
+            case 'app-dashboard-frequency':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_FrequencyComponent);
+                dashboardFrequencyGaugeComponent = <Dashboard_FrequencyComponent>this.entryPoint.createComponent(componentFactory).instance;
+                dashboardFrequencyGaugeComponent.componentData = this.getDashboardScoreByManualInput;
+                dashboardFrequencyGaugeComponent.printSettings = this.printSettings;
+                dashboardFrequencyGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                dashboardFrequencyGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'app-dashboard-severity':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_SeverityComponent);
+                dashboardSeverityGaugeComponent = <Dashboard_SeverityComponent>this.entryPoint.createComponent(componentFactory).instance;
+                dashboardSeverityGaugeComponent.componentData = this.getDashboardScoreByManualInput;
+                dashboardSeverityGaugeComponent.printSettings = this.printSettings;
+                dashboardSeverityGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                dashboardSeverityGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'dashboard-benchmark-score':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_BenchmarkComponent);
+                dashboardBenchmarkGaugeComponent = <Dashboard_BenchmarkComponent>this.entryPoint.createComponent(componentFactory).instance;
+                dashboardBenchmarkGaugeComponent.componentData = this.getDashboardScoreByManualInput;
+                dashboardBenchmarkGaugeComponent.printSettings = this.printSettings;
+                dashboardBenchmarkGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                dashboardBenchmarkGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            default:
+                break;
+        }
+    }
+
+    setWorkingChart(chart: BaseChart) {
+        this.chart = chart;
+    }
+
+    startImageConversion(start: boolean) {
+        if(start && this.chart != null) {
+            setTimeout(this.loadCurrentChartImage.bind(this), 500);
+        }
+    }
+
+    loadCurrentChartImage() {
+
+        let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
+        if(childImages.length > 0) {
+            //First child is th SVG image, calling chart.getSVG changes the underlying svg
+            let svgElement = childImages[0];
+            //IE doesn't support outerHTML for svg tag
+            let data = svgElement.parentNode.innerHTML;
+            //Filter out all child nodes except for the svg tag
+            let indexPosition = data.indexOf('</svg>');
+            if(indexPosition < 0) {
+                indexPosition = data.indexOf('</SVG>');
+            }
+            if(indexPosition > 0) {
+                //console.log("fragment = " + data.substr(indexPosition, 6));
+                data = data.substr(0, indexPosition + 6);
+            }
+            //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
+            //Firefox requires a specific xlink for external images
+            data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
+
+            canvasFactory(this.canvas.nativeElement, data,  
+                { 
+                    ignoreMouse: true, 
+                    ignoreAnimation: true, 
+                    useCORS: true,
+                    renderCallback: this.renderCompleteCallback.bind(this)
+                }
+            );
+        }
+    }
+
+  renderCompleteCallback() {
+      let buffer = this.canvas.nativeElement.toDataURL('image/png');
+      this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
+      this.entryPoint.clear();
+      this.chartDataCollection[this.chartLoadCount].imageData = buffer;
+      this.chartLoadCount++;
+      console.log('image size = ' + buffer.length);
+      if(this.chartLoadCount < this.chartDataCollection.length) {
+          this.loadChartImage();
+      } else {
+          let pg = new PDFGenerator();
+          pg.addStyle("coverPageTable1", 
+              {
+                fillColor: '#464646',
+                margin: [0,-3,0,0],
+                alignment: 'center'
+              }
+          );
+          console.log(pg.getContent());
+      }
   }
 
-  ngOnInit() {
-    this.menuService.breadCrumb = 'Report';
-    this.getReportConfig();
-  }
 
-  /**
-   * getReportConfig - Load the report configuration.
-   *
-   * @return {} - No return types.
-   */
-  getReportConfig () {
-    this.reportService.getReportConfig().subscribe((data)=> {
-      this.reportTileModel = data;
-      console.log(this.reportTileModel[0].subComponents)
-    });
-  }
+    hasPageType(pageType: string):boolean {
+        return (this.pageCollection[pageType] ? true : false);
+    }
 
-  onReport () {
-    console.log(this.reportTileModel);
-  }
+    addPageType(pageType: string) {
+        switch(pageType) {
+            case "DashboardPage":
+                this.pageCollection[pageType] = new DashboardPage();
+                break;
+            default:
+                break;
+        }
+    }
 }

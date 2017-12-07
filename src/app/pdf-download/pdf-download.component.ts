@@ -1,7 +1,8 @@
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ElementRef, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
 import { SearchService, MenuService, FontService, GetFileService } from 'app/services/services';
-import {DashboardScore} from 'app/model/model';
+import { DashboardScore } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { ComponentPrintSettings } from 'app/model/pdf.model';
@@ -36,6 +37,34 @@ export class PdfDownloadComponent implements OnInit {
     @ViewChild('canvas') canvas: ElementRef;
 
     //@ViewChild('img') img: ElementRef;
+
+    companyNameTextObject = {
+        text: '<Company Name>',
+        style: 'coverPageStyle3',
+        border: [false, false, false, false]
+    };
+
+    industryTextObject = {
+        text: '<Industry>',
+        style: 'coverPageStyle4',
+        border: [false, false, false, false]
+    };
+
+    revenueRangeTextObject = {
+        text: '<Revenue Range>',
+        style: 'coverPageStyle4',
+        border: [false, false, false, false]
+    };
+
+    userCompanyTextObject =  {
+        text: '<Company Name of the user>',
+    };
+
+    dateGeneratedTextObject = {
+        text: '<Date Generated>',
+        style: 'coverPageStyle5',
+        border: [false, false, false, false]
+    };
 
     pdfContent = {
         pageOrientation: 'landscape',
@@ -78,39 +107,21 @@ export class PdfDownloadComponent implements OnInit {
                                 border: [false, false, false, false]
                             }
                         ],
-                        [
-                            {
-                                text: '<Company Name>',
-                                style: 'coverPageStyle3',
-                                border: [false, false, false, false]
-                            }
-                        ],
+                        [ this. companyNameTextObject ],
                         [
                             {
                                 text: '\n',
                                 border: [false, false, false, false]
                             }
                         ],
-                        [
-                            {
-                                text: '<Industry>',
-                                style: 'coverPageStyle4',
-                                border: [false, false, false, false]
-                            }
-                        ],
+                        [ this.industryTextObject ],
                         [
                             {
                                 text: '\n',
                                 border: [false, false, false, false]
                             }
                         ],
-                        [
-                            {
-                                text: '<Revenue Range>',
-                                style: 'coverPageStyle4',
-                                border: [false, false, false, false]
-                            }
-                        ],
+                        [ this.revenueRangeTextObject ],
                         [
                             {
                                 text: '\n\n\n',
@@ -119,7 +130,10 @@ export class PdfDownloadComponent implements OnInit {
                         ],
                         [
                             {
-                                text: 'Created for <Company Name of the user>',
+                                text: [
+                                    'Created for ',
+                                    this.userCompanyTextObject
+                                ],
                                 style: 'coverPageStyle5',
                                 border: [false, false, false, false]
                             }
@@ -130,13 +144,7 @@ export class PdfDownloadComponent implements OnInit {
                                 border: [false, false, false, false]
                             }
                         ],
-                        [
-                            {
-                                text: '<Date Generated>',
-                                style: 'coverPageStyle5',
-                                border: [false, false, false, false]
-                            }
-                        ],
+                        [ this.dateGeneratedTextObject ],
                         [
                             {
                                 text: '\n',
@@ -176,49 +184,6 @@ export class PdfDownloadComponent implements OnInit {
                 pageBreak: 'after'
             },
             {
-                toc: {
-                    id: 'mainToc',
-                    title: {
-                        text: [
-                            {
-                                text: "TABLE",
-                                style: "TOCStyle1"
-                            },
-                            {
-                                text: " of ",
-                                style: "TOCStyle2"
-                            },
-                            {
-                                text: "CONTENTS",
-                                style: "TOCStyle1"
-                            }
-                        ]
-                    }
-                },
-                margin: [64,0,70,0],
-                style: 'coverPageStyle2',
-                pageBreak: 'after'
-            },
-            {
-                margin: [64, 5, 70, 10],
-                tocItem: 'mainToc',
-                //text: 'Test',
-                table: {
-                    widths: ['94%', '6%'],
-                    body: [
-                        [
-                            {
-                                text: 'Chart ..........................................................................................................................................................................................................................................................................',
-                                noWrap: false,
-                                maxHeight: 20
-                            }, 
-                            '8888'
-                        ],
-                    ]
-                }
-            },
-            
-            {
                 text: [
                     {
                         text: "TABLE",
@@ -236,15 +201,47 @@ export class PdfDownloadComponent implements OnInit {
                 margin: [64,0,0,0]
             },
             {
-                text: 'First paragraph',
-                margin: [64,40,40,0]
+                margin: [64, 5, 70, 10],
+                table: {
+                    widths: ['94%', '6%'],
+                    body: [
+                        [
+                            {
+                                text: 'Chart ..........................................................................................................................................................................................................................................................................',
+                                noWrap: false,
+                                maxHeight: 20
+                            }, 
+                            '8888'
+                        ],
+                    ]
+                },
+                pageBreak: 'after'
             },
-            'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',
             {
                 text: 'Dashboard',
-                style: 'TOCStyle1',
-                tocItem: 'mainToc'
+                style: 'sectionHearderStyle1'
+            },
+            {
+                margin: [64, 20, 70, 0],
+                table: {
+                    widths: ['33.33%', '33.33%', '33.33%'],
+                    body: [
+                        [
+                            {
+                                image: 'frequencyGaugeComponent'
+                            },
+                            {
+                                image: 'frequencyGaugeComponent'
+                            },
+                            {
+                                image: 'frequencyGaugeComponent'
+                            }
+                        ],
+                    ]
+                },
+                pageBreak: 'after'
             },            
+            'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',        
             {
                 image: 'frequencyGaugeComponent'
             }
@@ -284,9 +281,18 @@ export class PdfDownloadComponent implements OnInit {
                 fillColor: 'white',
                 alignment: 'right'
             },
-            coverPageStyle6: {
-                color: 'black',
+            sectionHearderStyle1: {
+                color: '#27a9bc',
+                fontSize: 16,
+                margin: [64,0,40,0]
+            },
+            sectionHearderStyle2: {
+                color: '#b1d23b',
                 fontSize: 14
+            },
+            sectionHearderStyle3: {
+                color: '#464646',
+                fontSize: 12
             },
             headerTable1: {
                 fillColor: '#464646',
@@ -398,7 +404,18 @@ export class PdfDownloadComponent implements OnInit {
         private menuService: MenuService) {
 
         this.menuService.breadCrumb = 'Reports';
+        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
 
+        this.companyNameTextObject.text = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value;
+        if(this.naics) {
+            this.industryTextObject.text = this.naics;
+        }
+        if(this.revenueRange) {
+            this.revenueRangeTextObject.text = this.revenueRange;
+        }
+        this.userCompanyTextObject.text = 'Advisen';
+        
         this.getFileService.getAsDataUrl('/assets/images/advisen-logo.png');
         this.getFileService.fileData$.subscribe(this.updateAdvisenLogo.bind(this));
 
@@ -423,9 +440,6 @@ export class PdfDownloadComponent implements OnInit {
         } else {
             this.companyId = null;
         }
-
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
 
         this.getDashboardScoreByManualInput = {
             searchType: this.searchType,
@@ -491,6 +505,8 @@ export class PdfDownloadComponent implements OnInit {
         console.log('image size = ' + buffer.length);
 
         this.pdfContent.images.frequencyGaugeComponent = buffer;
+        let  dp = new DatePipe('en-US');
+        this.dateGeneratedTextObject.text = dp.transform(new Date(), 'MMMM d, yyyy');
         this.pdfMake.createPdf(this.pdfContent).download('test.pdf');
     }
 

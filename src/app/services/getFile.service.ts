@@ -16,7 +16,7 @@ export class GetFileService extends BaseService{
         super(http);
     }
 
-    private setFontFile(fileName: string, base64Blob: string) {
+    private setFileData(fileName: string, base64Blob: string) {
         console.log(fileName + ' loaded.');
         this.fileData.next(base64Blob);
     }
@@ -24,7 +24,7 @@ export class GetFileService extends BaseService{
     private convertBlob(fileName: string, blob: Blob) {
         let reader =  new FileReader();
         reader.readAsDataURL(blob);
-        var callback = this.setFontFile.bind(this);
+        var callback = this.setFileData.bind(this);
 
         reader.onloadend = async function() {
             var output = (await 
