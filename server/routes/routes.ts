@@ -4,3 +4,4 @@ export * from './session-route';
 export * from './dashboard-route';
 export * from './frequency-route';
 export * from './severity-route';
+export * from './glossary-route';

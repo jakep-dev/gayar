@@ -26,6 +26,7 @@ import { BLOCK_DASHBOARD } from './dashboard/dashboard';
 import { BLOCK_BENCHMARK } from './benchmark/benchmark';
 import { BLOCK_FREQUENCY } from './frequency/frequency';
 import { BLOCK_SEVERITY } from './severity/severity';
+import { BLOCK_GLOSSARY } from './glossary/glossary';
 import { MenuComponent } from './shared/layouts/menu/menu.component';
 import { SearchComponent } from './search/search.component';
 import { ReportComponent } from './report/report.component';
@@ -45,6 +46,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
 		BLOCK_BENCHMARK,
 		BLOCK_FREQUENCY,
 		BLOCK_SEVERITY,
+		BLOCK_GLOSSARY,
 		MenuComponent,
 		SearchComponent,
 		ReportComponent,
