@@ -27,7 +27,7 @@
   <div class="tile-content">
     <div
       *ngIf="isContent"
-      fxLayout="row"
+      fxLayout="row" fxLayout.lt-md="column"
       fxLayoutAlign="center center">
 
       <div class="width-100" [hidden]="hideFront()">
@@ -38,7 +38,7 @@
       </div>
 
 
-      <div class="width-100" [ngClass]="{'border-left-2': isSplitted}"  [hidden]="hideBack()">
+      <div class="width-100" [ngClass]="{'split-border': isSplitted}"  [hidden]="hideBack()">
         <ng-content
           select="[back]">
 
