@@ -5,6 +5,7 @@ import { FrequencyComponent} from 'app/frequency/frequency';
 import { SeverityComponent} from 'app/severity/severity';
 import { SearchComponent } from 'app/search/search.component';
 import { ReportComponent } from 'app/report/report.component';
+import { GlossaryComponent } from 'app/glossary/glossary.component';
 import { PdfDownloadComponent } from 'app/pdf-download/pdf-download.component';
 import { SsoComponent } from 'app/sso/sso.component';
 import { AuthRouteActivatorService } from './services/services';
@@ -17,6 +18,7 @@ export const APP_ROUTES: Routes = [
     { path: 'severity',     component:  SeverityComponent,  canActivate: [ AuthRouteActivatorService ]},
     { path: 'search',       component:  SearchComponent,    canActivate: [ AuthRouteActivatorService ]},
     { path: 'report',       component:  ReportComponent},
+    { path: 'glossary',  component:  GlossaryComponent},
     { path: 'pdfdownload',  component:  PdfDownloadComponent},
     { path: 'sso/:userId',  component:  SsoComponent },
     { path: '401',          component:  E401Component }
