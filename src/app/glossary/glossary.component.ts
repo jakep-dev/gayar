@@ -10,12 +10,12 @@ import { GlossaryDataModel } from 'app/model/model';
 })
 export class GlossaryComponent implements OnInit {
 
-  header: string = 'Appendix';
+  header: string = 'Glossary';
   terms: any;
 
   constructor(private menuService: MenuService,
     private applicationService: ApplicationService) {
-    this.menuService.breadCrumb = 'Glossary';
+    this.menuService.breadCrumb = 'Appendix';
   }
 
   ngOnInit() {
