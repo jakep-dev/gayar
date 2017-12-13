@@ -6,13 +6,30 @@ export abstract class BasePage {
     constructor() {
     }
 
-    getPrinteSettings(componentOrder: number) : ComponentPrintSettings {
+    public getPrefix(): string {
+        return '';
+    }
+
+    public setPrefix(value: string) {}
+
+    public getPrintSettings(componentOrder: number) : ComponentPrintSettings {
         return {
             width: 0,
             height: 0
         };
     }
 
-    addChartLabel(index: number, chart: IChartWidget) {}
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {}
 
+    public getPdfContent(): Array<any> {
+        return [];
+    }
+
+    public getStyles(): Array<any> {
+        return [];
+    }
+
+    public getImages(): Array<string> {
+        return [];
+    }
 }

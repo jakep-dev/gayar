@@ -69,14 +69,15 @@ export class BenchmarkComponent implements OnInit {
             null,
             (chart.chart.chartWidth * 0.75) + 50
         );
-
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png', 
-            chart.chart.chartWidth - 80, 
-            chart.chart.chartHeight - 20, 
-            69, 
-            17
-        ); 
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png', 
+                chart.chart.chartWidth - 80, 
+                chart.chart.chartHeight - 20, 
+                69, 
+                17
+            ); 
+        }
     }
     
     constructor(private dashboardService: DashboardService) {

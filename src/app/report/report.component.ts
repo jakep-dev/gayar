@@ -6,8 +6,8 @@ import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/
 
 import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
 import { DashboardScore, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
-import { BasePage, CoverPage, DashboardPage } from 'app/pdf-download/pages/pages'
-import { PDFGenerator } from 'app/pdf-download/pdf-generator';
+import { BasePage, CoverPage, DashboardPage, TOCPage } from 'app/pdf-download/pages/pages'
+import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
 
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { ComponentPrintSettings } from 'app/model/pdf.model';
@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
 
     reportTileModel: Array<IReportTileModel> = null;
     pageCollection: Array<BasePage> = [];
+    pageOrder: Array<string> = [];
 
     chartDataCollection: Array<IChartMetaData> = [];
     chartLoadCount: number;
@@ -44,6 +45,7 @@ export class ReportComponent implements OnInit {
     private pdfMake: any;
 
     private coverPage: CoverPage;
+    private tocPage: TOCPage;
     
     constructor(
         private rootElement: ElementRef,
@@ -62,6 +64,8 @@ export class ReportComponent implements OnInit {
 
         this.coverPage = new CoverPage();
         this.coverPage.setFileService(this.getFileService);
+
+        this.tocPage = new TOCPage();
     }
 
     private configurePDFMake(isReady: boolean) {
@@ -132,9 +136,11 @@ export class ReportComponent implements OnInit {
 
     processReportSection(section: IReportTileModel) {
         if(section.value) {
+            this.tocPage.addTocEntry(section.description, 1, section.subComponents[0].pageType);
             section.subComponents.forEach(reportSectionItem => {
                 if(reportSectionItem.value) {
                     console.log(reportSectionItem.description);
+                    this.tocPage.addTocEntry(reportSectionItem.description, 2, reportSectionItem.pageType);
                     if(!this.hasPageType(reportSectionItem.pageType)) {
                         this.addPageType(reportSectionItem.pageType);
                         console.log('Page type = ' + reportSectionItem.pageType);
@@ -147,7 +153,7 @@ export class ReportComponent implements OnInit {
                             {
                                 chartSetting: reportSectionItem.chartComponents[i],
                                 imageData: '',
-                                imageIndex: reportSectionItem.chartComponents[i].componentName + '-' + this.chartDataCollection.length,
+                                imageIndex: reportSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
                                 pagePosition: reportSectionItem.chartComponents[i].pagePosition,
                                 targetPage: this.pageCollection[reportSectionItem.pageType]
                             }
@@ -157,6 +163,7 @@ export class ReportComponent implements OnInit {
                       reportSectionItem.subSubComponents.forEach(reportSubSectionItem => {
                           if(reportSubSectionItem.value) {
                               console.log(reportSubSectionItem.description);
+                              this.tocPage.addTocEntry(reportSubSectionItem.description, 3, reportSubSectionItem.pageType);
                               if(!this.hasPageType(reportSubSectionItem.pageType)) {
                                   this.addPageType(reportSubSectionItem.pageType);
                                   console.log('Page type = ' + reportSubSectionItem.pageType);
@@ -168,15 +175,12 @@ export class ReportComponent implements OnInit {
                                       {
                                           chartSetting: reportSubSectionItem.chartComponents[i],
                                           imageData: '',
-                                          imageIndex: reportSubSectionItem.chartComponents[i].componentName + '-' + this.chartDataCollection.length,
+                                          imageIndex: reportSubSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
                                           pagePosition: reportSubSectionItem.chartComponents[i].pagePosition,
                                           targetPage: this.pageCollection[reportSubSectionItem.pageType]
                                       }
                                   );
                               }
-                              reportSubSectionItem.chartComponents.forEach(chartComponent => {
-                              });
-                                        
                           }
                       });
                     }
@@ -197,7 +201,7 @@ export class ReportComponent implements OnInit {
         let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
 
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
-        this.printSettings = chartData.targetPage.getPrinteSettings(chartData.pagePosition);
+        this.printSettings = chartData.targetPage.getPrintSettings(chartData.pagePosition);
         this.canvas.nativeElement.width = this.printSettings.width;
         this.canvas.nativeElement.height = this.printSettings.height;
         this.entryPoint.clear();
@@ -279,23 +283,35 @@ export class ReportComponent implements OnInit {
       this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
       this.entryPoint.clear();
       this.chartDataCollection[this.chartLoadCount].imageData = buffer;
+      this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
       this.chartLoadCount++;
       console.log('image size = ' + buffer.length);
       if(this.chartLoadCount < this.chartDataCollection.length) {
           this.loadChartImage();
       } else {
-          let pg = new PDFGenerator();
-          pg.addStyle("coverPageTable1", 
+          //first page is the cover sheet, second page is the table of contents
+          //start at page 3
+          let pageNumber = 3;
+          this.pageOrder.forEach(pageType => 
               {
-                fillColor: '#464646',
-                margin: [0,-3,0,0],
-                alignment: 'center'
+                  this.tocPage.setPageNumber(pageType, pageNumber);
+                  pageNumber++;
+              }
+          );
+          let pg = new PDFMakeBuilder();
+          pg.setDifferentFirstPage(true);
+          pg.addPage(this.coverPage);
+          pg.addPage(this.tocPage);
+          this.pageOrder.forEach(pageType => 
+              {
+                pg.addPage(this.pageCollection[pageType]);
               }
           );
           console.log(pg.getContent());
+          this.pdfMake.createPdf(pg.getContent()).download('test.pdf');
+          console.log(pg.getContent());
       }
   }
-
 
     hasPageType(pageType: string):boolean {
         return (this.pageCollection[pageType] ? true : false);
@@ -305,6 +321,7 @@ export class ReportComponent implements OnInit {
         switch(pageType) {
             case "DashboardPage":
                 this.pageCollection[pageType] = new DashboardPage();
+                this.pageOrder.push(pageType);
                 break;
             default:
                 break;

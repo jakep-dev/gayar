@@ -5,30 +5,40 @@ import { GetFileService } from 'app/services/services';
 
 export class CoverPage extends BasePage  {
 
-    fileService: GetFileService;
-    logoDataUrl: string;
+    private fileService: GetFileService;
+    private logoDataUrl: string;
 
-    prefix: string = 'coverPage-';
+    private prefix: string = 'coverPage_';
 
-    getPrefix() {
+    public getPrefix() {
         return this.prefix;
     }
 
-    setPrefix(prefix: string) {
+    public setPrefix(prefix: string) {
         this.prefix = prefix;
         this.updatePdfContent();
     }
     
-    updatePdfContent() {
+    private clearArray(array: Array<any>) {
+        array.length = 0;
+        for(let item in array) {
+            console.log('Deleting key ' + item);
+            delete array[item];
+        }
+    }
+
+    private updatePdfContent() {
         this.companyNameTextObject.style = this.prefix + 'style3';
         this.industryTextObject.style = this.prefix + 'style4';
         this.revenueRangeTextObject.style = this.prefix + 'style4';
         this.dateGeneratedTextObject.style = this.prefix + 'style5';
 
-        this.images = [];
+        //this.images = [];
+        this.clearArray(this.images);
         this.images[this.prefix + 'logo'] = this.logoDataUrl;
 
-        this.styles = [];
+        //this.styles = [];
+        this.clearArray(this.styles);
         this.styles[this.prefix + 'table1'] = this.table1;
         this.styles[this.prefix + 'table2'] = this.table2;
         this.styles[this.prefix + 'style1'] = this.style1;
@@ -37,7 +47,8 @@ export class CoverPage extends BasePage  {
         this.styles[this.prefix + 'style4'] = this.style4;
         this.styles[this.prefix + 'style5'] = this.style5;
         
-        this.pdfContent =  [
+        this.clearArray(this.pdfContent);
+        this.pdfContent.push(
             {
                 style: this.prefix + 'table1',
                 table: {
@@ -121,7 +132,9 @@ export class CoverPage extends BasePage  {
                         ]
                     ]
                 }
-            },	    
+            }
+        );
+        this.pdfContent.push(
             {
                 style: this.prefix + 'table2',
                 table: {
@@ -135,7 +148,9 @@ export class CoverPage extends BasePage  {
                         ]
                     ]
                 }
-            },
+            }
+        );
+        this.pdfContent.push(
             {
                 style: this.prefix + 'table1',
                 table: {
@@ -151,98 +166,110 @@ export class CoverPage extends BasePage  {
                 },
                 pageBreak: 'after'
             }
-        ];
+        );
     }
 
-    pdfContent: any;
+    private pdfContent: Array<any> = [];
 
-    styles: any;
+    public getPdfContent(): Array<any> {
+        return this.pdfContent;
+    }
 
-    images: any;
+    private styles: Array<any> = [];
 
-    table1: any = {
+    public getStyles(): Array<any> {
+        return this.styles;
+    }
+
+    private images: Array<string> = [];
+
+    public getImages(): Array<string> {
+        return this.images;
+    }
+
+    private table1: any = {
         fillColor: '#464646',
         margin: [0,-3,0,0],
         alignment: 'center'
     };
 
-    table2: any = {
+    private table2: any = {
         fillColor: 'white',
         alignment: 'right'
     };
 
-    style1: any =  {
+    private style1: any =  {
         color: 'white',
         fontSize: 28,
         bold: true
     };
 
-    style2: any = {
+    private style2: any = {
         color: '#b1d23b',
         fontSize: 28,
         italics: true
     };
 
-    style3: any = {
+    private style3: any = {
         color: 'white',
         fontSize: 28
     };
 
-    style4: any = {
+    private style4: any = {
         color: 'white',
         fontSize: 20
     };
 
-    style5: any = {
+    private style5: any = {
         color: 'white',
         fontSize: 14
     };
 
-    companyNameTextObject = {
+    private companyNameTextObject = {
         text: '<Company Name>',
         style: this.prefix + 'style3',
         border: [false, false, false, false]
     };
 
-    setCompanyName(name: string) {
+    public setCompanyName(name: string) {
         this.companyNameTextObject.text = name;
     }
 
-    industryTextObject = {
+    private industryTextObject = {
         text: '<Industry>',
         style: this.prefix + 'style4',
         border: [false, false, false, false]
     };
 
-    setIndustryName(name: string) {
+    public setIndustryName(name: string) {
         this.industryTextObject.text = name;
     }
 
-    revenueRangeTextObject = {
+    private revenueRangeTextObject = {
         text: '<Revenue Range>',
         style: this.prefix + 'style4',
         border: [false, false, false, false]
     };
 
-    setRevenueRangeText(text: string) {
+    public setRevenueRangeText(text: string) {
         this.revenueRangeTextObject.text = text;
     }
 
-    userCompanyTextObject =  {
+    private userCompanyTextObject =  {
         text: '<Company Name of the user>',
     };
 
-    setUserCompanyName(name: string) {
+    public setUserCompanyName(name: string) {
         this.userCompanyTextObject.text = name;
     }
 
-    dateGeneratedTextObject = {
+    private dateGeneratedTextObject = {
         text: '<Date Generated>',
         style: this.prefix + 'style5',
         border: [false, false, false, false]
     };
 
-    setReportDate(){
+    private setReportDate(){
         let  dp = new DatePipe('en-US');
         this.dateGeneratedTextObject.text = dp.transform(new Date(), 'MMMM d, yyyy');
     }
@@ -253,7 +280,7 @@ export class CoverPage extends BasePage  {
         this.updatePdfContent();
     }
 
-    setFileService(fileService: GetFileService) {
+    public setFileService(fileService: GetFileService) {
         this.fileService = fileService;
         this.fileService.getAsDataUrl('/assets/images/advisen-logo.png');
         this.fileService.fileData$.subscribe(this.updateAdvisenLogo.bind(this));
@@ -261,5 +288,6 @@ export class CoverPage extends BasePage  {
 
     private updateAdvisenLogo(dataUrl: string) {
         this.logoDataUrl = dataUrl;
+        this.images[this.prefix + 'logo'] = this.logoDataUrl;
     }
 }
