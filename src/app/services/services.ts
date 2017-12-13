@@ -10,6 +10,8 @@ export * from './session-storage.service';
 export * from './report.service';
 export * from './font.service';
 export * from './getFile.service';
+export * from './application.service';
+
 
 import { BenchmarkService } from './benchmark.service';
 import { SearchService } from './search.service';
@@ -23,6 +25,7 @@ import { SessionStorageService } from './session-storage.service';
 import { ReportService } from './report.service';
 import { FontService } from './font.service';
 import { GetFileService } from './getFile.service';
+import { ApplicationService } from './application.service';
 
 export const BLOCK_SERVICES = [
     BenchmarkService,
@@ -36,5 +39,6 @@ export const BLOCK_SERVICES = [
     SessionStorageService,
     ReportService,
     FontService,
-    GetFileService
+    GetFileService,
+    ApplicationService
 ];

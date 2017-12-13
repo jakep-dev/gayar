@@ -68,6 +68,7 @@
   //overflow-y: visible;
 }
 
-.border-left-2 {
-  border-left: 2px solid lightgrey;
+.split-border {
+  border-left: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
 }
