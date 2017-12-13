@@ -7,7 +7,7 @@ import * as methodOverride from 'method-override';
 import * as compress from 'compression';
 import * as cors from 'cors';
 import * as fs from 'fs';
-import { SearchRouter, BenchmarkRouter, SessionRouter, DashboardRouter, FrequencyRouter, SeverityRouter } from './routes/routes';
+import { SearchRouter, BenchmarkRouter, SessionRouter, DashboardRouter, FrequencyRouter, SeverityRouter, ApplicationRouter} from './routes/routes';
 import { EnvConfig } from './env.config';
 import { Security, Logger } from './helpers/helpers';
 import { ServerModel, LogModel } from './model/env.model';
@@ -44,6 +44,8 @@ export class App {
             sessionRouter: SessionRouter     = new SessionRouter(this.expressApp),
             frequencyRouter: FrequencyRouter   = new FrequencyRouter(this.expressApp),
             severityRouter: SeverityRouter   = new SeverityRouter(this.expressApp),
-            dashboardRouter: DashboardRouter   = new DashboardRouter(this.expressApp);
+            dashboardRouter: DashboardRouter   = new DashboardRouter(this.expressApp),
+            applicationRouter: ApplicationRouter   = new ApplicationRouter(this.expressApp);
+            
     }
 }
