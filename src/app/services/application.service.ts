@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
-export class GlossaryService extends BaseService {
+export class ApplicationService extends BaseService {
     constructor(http: Http){
         super(http);
     }

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Application } from 'express';
 import { BaseRoute } from './base-route';
 import { Logger } from '../helpers/helpers';
 
-export class GlossaryRouter extends BaseRoute {
+export class ApplicationRouter extends BaseRoute {
 
     constructor(private app: Application) {
         super();

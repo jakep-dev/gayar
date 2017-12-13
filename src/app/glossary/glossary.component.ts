@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MenuService, GlossaryService } from 'app/services/services';
+import { MenuService, ApplicationService} from 'app/services/services';
 import { GlossaryDataModel } from 'app/model/model';
 
 @Component({
@@ -14,7 +14,7 @@ export class GlossaryComponent implements OnInit {
   terms: any;
 
   constructor(private menuService: MenuService,
-    private glossaryService: GlossaryService) {
+    private applicationService: ApplicationService) {
     this.menuService.breadCrumb = 'Glossary';
   }
 
@@ -23,7 +23,7 @@ export class GlossaryComponent implements OnInit {
   }
 
   loadGlossaryData() {
-    this.glossaryService.getGlossary()
+    this.applicationService.getGlossary()
       .subscribe((res: GlossaryDataModel) => {
         this.terms = res.glossaries;
       });
