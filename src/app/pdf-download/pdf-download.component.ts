@@ -521,7 +521,8 @@ export class PdfDownloadComponent implements OnInit {
 
         this.printSettings = {
             width: 600,
-            height: 400
+            height: 400,
+            drillDown: ''
         };
 
         this.canvas.nativeElement.width = this.printSettings.width;

@@ -4,9 +4,16 @@ import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboar
 import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
 
+import { IndustryOverviewComponent } from 'app/frequency/industry-overview/industry-overview.component';
+import { TimePeriodComponent } from 'app/frequency/time-period/time-period.component';
+
 import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
-import { DashboardScore, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
-import { BasePage, CoverPage, DashboardPage, TOCPage } from 'app/pdf-download/pages/pages'
+import { DashboardScore, FrequencyInput, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
+
+import { 
+        BasePage, CoverPage, DashboardPage, TOCPage, FrequencyIndustryOverviewPage, FrequencyTimePeriodPage 
+} from 'app/pdf-download/pages/pages'
+
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
 
 import { BaseChart } from 'app/shared/charts/base-chart';
@@ -18,7 +25,13 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
     selector: 'app-report',
     templateUrl: 'report.component.html',
     styleUrls: ['./report.component.scss'],
-    entryComponents: [Dashboard_BenchmarkComponent, Dashboard_FrequencyComponent, Dashboard_SeverityComponent]
+    entryComponents: [
+        Dashboard_BenchmarkComponent, 
+        Dashboard_FrequencyComponent, 
+        Dashboard_SeverityComponent,
+        IndustryOverviewComponent,
+        TimePeriodComponent
+    ]
 })
 export class ReportComponent implements OnInit {
 
@@ -38,6 +51,7 @@ export class ReportComponent implements OnInit {
     public naics: string;
     public revenueRange: string;
     public getDashboardScoreByManualInput: DashboardScore;
+    public frequencyInput: FrequencyInput;
     public printSettings: ComponentPrintSettings;
     
     private chart: BaseChart;
@@ -109,6 +123,13 @@ export class ReportComponent implements OnInit {
             limit : this.searchService.searchCriteria.limit,
             retention: this.searchService.searchCriteria.retention,
           };
+
+          this.frequencyInput = {
+              searchType: this.searchService.getSearchType,
+              companyId: this.searchService.getCompanyId,
+              naics: this.searchService.getNaics,
+              revenueRange: this.searchService.getRevenueRange
+          };
       }
 
     /**
@@ -123,10 +144,20 @@ export class ReportComponent implements OnInit {
         });
     }
 
+    private clearArray(array: Array<any>) {
+        array.length = 0;
+        for(let item in array) {
+            console.log('Deleting key ' + item);
+            delete array[item];
+        }
+    }
+
     onReport () {
         //console.log(this.reportTileModel);
         this.chartLoadCount = 0;
         this.chartDataCollection.length = 0;
+        this.pageOrder.length = 0;
+        this.clearArray(this.pageCollection);
         this.reportTileModel.forEach(reportSection => {
             if(reportSection.value) {
                 this.processReportSection(reportSection);
@@ -186,7 +217,7 @@ export class ReportComponent implements OnInit {
                     }
                 }
             });
-            console.log(this.chartDataCollection);
+            //console.log(this.chartDataCollection);
             if(this.chartDataCollection.length > 0) {
                 this.loadChartImage();
             }
@@ -199,9 +230,12 @@ export class ReportComponent implements OnInit {
         let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
         let dashboardFrequencyGaugeComponent: Dashboard_FrequencyComponent;
         let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
+        let industryOverviewComponent: IndustryOverviewComponent;
+        let timePeriodComponent: TimePeriodComponent;
 
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
         this.printSettings = chartData.targetPage.getPrintSettings(chartData.pagePosition);
+        this.printSettings.drillDown = chartData.chartSetting.drillDownName;
         this.canvas.nativeElement.width = this.printSettings.width;
         this.canvas.nativeElement.height = this.printSettings.height;
         this.entryPoint.clear();
@@ -230,6 +264,22 @@ export class ReportComponent implements OnInit {
                 dashboardBenchmarkGaugeComponent.printSettings = this.printSettings;
                 dashboardBenchmarkGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 dashboardBenchmarkGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-industry-overview':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IndustryOverviewComponent);
+                industryOverviewComponent = <IndustryOverviewComponent>this.entryPoint.createComponent(componentFactory).instance;
+                industryOverviewComponent.componentData = this.frequencyInput;
+                industryOverviewComponent.printSettings = this.printSettings;
+                industryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                industryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-time-period':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(TimePeriodComponent);
+                timePeriodComponent = <TimePeriodComponent>this.entryPoint.createComponent(componentFactory).instance;
+                timePeriodComponent.componentData = this.frequencyInput;
+                timePeriodComponent.printSettings = this.printSettings;
+                timePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                timePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             default:
                 break;
@@ -319,9 +369,17 @@ export class ReportComponent implements OnInit {
 
     addPageType(pageType: string) {
         switch(pageType) {
-            case "DashboardPage":
+            case 'DashboardPage':
                 this.pageCollection[pageType] = new DashboardPage();
                 this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyIndustryOverviewPage':
+                this.pageCollection[pageType] = new FrequencyIndustryOverviewPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyTimePeriodPage':
+                this.pageCollection[pageType] = new FrequencyTimePeriodPage();
+                this.pageOrder.push(pageType);        
                 break;
             default:
                 break;

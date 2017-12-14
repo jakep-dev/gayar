@@ -18,7 +18,6 @@ export class SeverityComponent implements OnInit {
   modelData: DashboardScoreModel;
 
     setModelData(modelData: DashboardScoreModel) {
-        console.log('SeverityComponent.setModelData[start]');
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
         if(this.searchService.checkValidationPeerGroup()){
@@ -27,7 +26,6 @@ export class SeverityComponent implements OnInit {
                 this.modelData.displayText = null;
             }
         }
-        console.log('SeverityComponent.setModelData[end]');
     }
 
   chartData: GaugeChartData;
@@ -41,9 +39,7 @@ export class SeverityComponent implements OnInit {
    * @param newChartData GaugeChart's required data
    */
   onDataComplete(newChartData : GaugeChartData) {
-      console.log('SeverityComponent.onDataComplete[start]');
       this.chartData = newChartData;
-      console.log('SeverityComponent.onDataComplete[end]');
   }
 
   private chartComponent = new BehaviorSubject<BaseChart>(null);
@@ -56,14 +52,12 @@ export class SeverityComponent implements OnInit {
    * @param chart The chart commponent
    */
   onChartReDraw(chart: BaseChart) {
-      console.log('SeverityComponent.onChartReDraw[start] isFirstRedrawComplete = ' + this.isFirstRedrawComplete.getValue());
       chart.removeRenderedObjects();
       this.addLabelAndImage(chart);
       this.chartComponent.next(chart);
       if(!this.isFirstRedrawComplete.getValue()) {
           this.isFirstRedrawComplete.next(true);
       }
-      console.log('SeverityComponent.onChartReDraw[end] isFirstRedrawComplete = ' + this.isFirstRedrawComplete.getValue());
   }
 
     addLabelAndImage(chart: BaseChart){

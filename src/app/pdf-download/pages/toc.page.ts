@@ -84,14 +84,33 @@ export class TOCPage extends BasePage  {
 
     public addTocEntry(title: string, level: number, pageType: string) {
         let tocItem: any;
+        let subTable: any;
+        let titleLength = title.length * 5.5;
         switch(level) {
             case 1:
+                subTable = {
+                    //660 width of toc entry
+                    widths: [titleLength, 660 - titleLength],
+                    body: [
+                        [
+                            {
+                                text: title,
+                                style: this.prefix + 'tocLevel1Style',
+                                noWrap: true
+                            },
+                            {
+                                text: ' ..........................................................................................................................................................................................................................................................................',
+                                style: this.prefix + 'tocLevel1Style',
+                                noWrap: false,
+                                maxHeight: 15
+                            }
+                        ]
+                    ]
+                };
                 tocItem = [
                     {
-                        text: title + ' ..........................................................................................................................................................................................................................................................................',
-                        noWrap: false,
-                        style: this.prefix + 'tocLevel1Style',
-                        maxHeight: 15,
+                        table: subTable,
+                        layout: 'noBorders',
                         colSpan: 3
                     },
                     {
@@ -108,15 +127,32 @@ export class TOCPage extends BasePage  {
                 ];
                 break;
             case 2:
-                tocItem = [
+            subTable = {
+                //635 width of toc entry
+                widths: [titleLength, 635 - titleLength],
+                body: [
+                    [
+                        {
+                            text: title,
+                            style: this.prefix + 'tocLevel2Style',
+                            noWrap: true
+                        },
+                        {
+                            text: ' ..........................................................................................................................................................................................................................................................................',
+                            style: this.prefix + 'tocLevel2Style',
+                            noWrap: false,
+                            maxHeight: 15
+                        }
+                    ]
+                ]
+            };
+            tocItem = [
                     {
                         text: ''
                     },
                     {
-                        text: title + ' ..........................................................................................................................................................................................................................................................................',
-                        noWrap: false,
-                        style: this.prefix + 'tocLevel2Style',
-                        maxHeight: 15,
+                        table: subTable,
+                        layout: 'noBorders',
                         colSpan: 2
                     },
                     {
@@ -130,6 +166,25 @@ export class TOCPage extends BasePage  {
                 ];
                 break;
             case 3:
+                subTable = {
+                    //610 width of toc entry
+                    widths: [titleLength, 610 - titleLength],
+                    body: [
+                        [
+                            {
+                                text: title,
+                                style: this.prefix + 'tocLevel3Style',
+                                noWrap: true
+                            },
+                            {
+                                text: ' ..........................................................................................................................................................................................................................................................................',
+                                style: this.prefix + 'tocLevel3Style',
+                                noWrap: false,
+                                maxHeight: 15
+                            }
+                        ]
+                    ]
+                };
                 tocItem = [
                     {
                         text: ''
@@ -138,10 +193,8 @@ export class TOCPage extends BasePage  {
                         text: ''
                     },
                     {
-                        text: title + ' ..........................................................................................................................................................................................................................................................................',
-                        noWrap: false,
-                        style: this.prefix + 'tocLevel3Style',
-                        maxHeight: 15
+                        table: subTable,
+                        layout: 'noBorders'
                     },
                     {
                         text: '*',
@@ -199,13 +252,16 @@ export class TOCPage extends BasePage  {
         this.tocList.forEach(tocItem => 
             {
                 if(tocItem[0].text) {
-                    tocItem[0].style = this.prefix + 'tocLevel1Style';
+                    tocItem[0].table.body[0][0].style = this.prefix + 'tocLevel1Style';
+                    tocItem[0].table.body[0][1].style = this.prefix + 'tocLevel1Style';
                     tocItem[3].style = this.prefix + 'tocLevel1Style';
                 } else if(tocItem[1].text) {
-                    tocItem[1].style = this.prefix + 'tocLeve21Style';
+                    tocItem[1].table.body[0][0].style = this.prefix + 'tocLeve21Style';
+                    tocItem[1].table.body[0][1].style = this.prefix + 'tocLeve21Style';
                     tocItem[3].style = this.prefix + 'tocLevel2Style';
                 } else if(tocItem[2].text) {
-                    tocItem[2].style = this.prefix + 'tocLevel3Style';
+                    tocItem[2].table.body[0][0].style = this.prefix + 'tocLevel3Style';
+                    tocItem[2].table.body[0][1].style = this.prefix + 'tocLevel3Style';
                     tocItem[3].style = this.prefix + 'tocLevel3Style';
                 }
             }

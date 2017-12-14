@@ -73,5 +73,49 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             }
         ]
-    }
+    },
+    {
+      id: 'REPORT_TILE_FREQUENCY',
+      description: 'Frequency',
+      value: true,
+      subComponents: [
+          {
+              description: 'Industry Overview',
+              id: 'REPORT_FREQUENCY_INDUSTRY_OVERVIEW',
+              value: true,
+              pageType: 'FrequencyIndustryOverviewPage',
+              chartComponents: [
+                  {
+                      componentName: 'frequency-industry-overview',
+                      pagePosition: 0,
+                      drillDownName: '',
+                      viewName: ''
+                  }
+              ],
+              subSubComponents: null
+          },
+          {
+            description: 'Time Period',
+            id: 'REPORT_FREQUENCY_TIME_PERIOD',
+            value: true,
+            pageType: 'FrequencyTimePeriodPage',
+            chartComponents: [
+                {
+                    componentName: 'frequency-time-period',
+                    pagePosition: 0,
+                    drillDownName: '',
+                    viewName: ''
+                },
+                {
+                    componentName: 'frequency-time-period',
+                    pagePosition: 1,
+                    drillDownName: 'Past 10 years',
+                    viewName: ''
+                }                
+            ],
+            subSubComponents: null
+        }
+      ]
+  }
+
 ];

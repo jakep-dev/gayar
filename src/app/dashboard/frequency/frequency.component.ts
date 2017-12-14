@@ -19,7 +19,6 @@ export class FrequencyComponent implements OnInit {
   modelData: DashboardScoreModel;
 
   setModelData(modelData: DashboardScoreModel) {
-      console.log('FrequencyComponent.setModelData[start]');
       this.modelData = modelData;
       this.chartHeader = this.modelData.chartTitle;
       if(this.searchService.checkValidationPeerGroup()){
@@ -29,7 +28,6 @@ export class FrequencyComponent implements OnInit {
             }
 
       }
-      console.log('FrequencyComponent.setModelData[end]');
   }
 
   chartData: GaugeChartData;
@@ -43,9 +41,7 @@ export class FrequencyComponent implements OnInit {
    * @param newChartData GaugeChart's required data
    */
   onDataComplete(newChartData : GaugeChartData) {
-      console.log('FrequencyComponent.onDataComplete[start]');
       this.chartData = newChartData;
-      console.log('FrequencyComponent.onDataComplete[end]');
   }
 
   private chartComponent = new BehaviorSubject<BaseChart>(null);
@@ -58,14 +54,12 @@ export class FrequencyComponent implements OnInit {
    * @param chart The chart commponent
    */
   onChartReDraw(chart: BaseChart) {     
-        console.log('FrequencyComponent.onChartReDraw[start] isFirstRedrawComplete = ' + this.isFirstRedrawComplete.getValue());
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
         if(!this.isFirstRedrawComplete.getValue()) {
             this.isFirstRedrawComplete.next(true);
         }
-        console.log('FrequencyComponent.onChartReDraw[end] isFirstRedrawComplete = ' + this.isFirstRedrawComplete.getValue());
     }
 
     addLabelAndImage(chart: BaseChart){

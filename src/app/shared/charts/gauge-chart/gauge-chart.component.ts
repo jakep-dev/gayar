@@ -27,15 +27,13 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
         this.initializeBarChart();
     }
 
-/*
-    ngDoCheck() {  
-        console.log('GaugeChartComponent.ngDoCheck[start]');
-        if(this.chart) { 
-            this.chart.reflow(); 
-        } 
-        console.log('GaugeChartComponent.ngDoCheck[end]');
+    ngDoCheck() {
+        if(!this.printSettings) {
+            if(this.chart) { 
+                this.chart.reflow(); 
+            }     
+        }
     }
-*/
 
     /**
      * Initialze simple barchart settings that doens't require the underlying HighChart chart object
@@ -52,7 +50,6 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
      * Load barchart settings and data that requires the underlying HighChart chart object
      */
     loadBarChartData() {
-        console.log('GaugeChartComponent.loadBarChartData[start]');
         let seriesIndex: number;
         let seriesLength: number;
         let isPrintMode: boolean;
@@ -96,7 +93,6 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
                 this.chart.update(this.chartOptions, true);
             }
         }
-        console.log('GaugeChartComponent.loadBarChartData[end]');
     }
 
     applyPrintSettings(chartOptions : any) {
@@ -122,10 +118,8 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
     }
 
     setChart(chart: any) {
-        console.log('GaugeChartComponent.setChart[start]');
         this.chart = chart;
         this.loadBarChartData();
-        console.log('GaugeChartComponent.setChart[end]');
     }
 
     hasRedrawActions: boolean;
@@ -133,10 +127,8 @@ export class GaugeChartComponent extends BaseChart implements OnInit {
     @Output() onChartRedraw = new EventEmitter<BaseChart>();
     
     onRedraw(chart: BaseChart) {
-        console.log('GaugeChartComponent.onRedraw[start]');
         this.onChartRedraw.emit(this);
         this.hasRedrawActions = false;
-        console.log('GaugeChartComponent.onRedraw[end]');
     }
 
 }

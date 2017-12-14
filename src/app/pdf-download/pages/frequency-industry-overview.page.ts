@@ -1,9 +1,9 @@
 import { BasePage } from './base.page';
 import { ComponentPrintSettings } from 'app/model/pdf.model';
 
-export class DashboardPage extends BasePage  {
+export class FrequencyIndustryOverviewPage extends BasePage  {
 
-    private prefix: string = 'dashboardPage_';
+    private prefix: string = 'freqIndOverviewPage_';
 
     public getPrefix() {
         return this.prefix;
@@ -22,7 +22,7 @@ export class DashboardPage extends BasePage  {
     };
 
     private header: any = {
-        text: 'Dashboard',
+        text: 'Frequency',
         style: this.prefix + 'headerStyle'
     };
 
@@ -34,36 +34,21 @@ export class DashboardPage extends BasePage  {
 
     private imageLeft:string = '';
     private imageLeftUrl:string = '';
-    private imageMiddle:string = '';
-    private imageMiddleUrl:string = '';
-    private imageRight:string = '';
-    private imageRightUrl:string = '';
     
     private table: any = {
-        margin: [ 35, 20, 70, 0 ],
+        margin: [ 60, 20, 70, 0 ],
         table: {
             heights: [ 15, 300 ],
             body: [
                 [
-                    { text: 'Frequency', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
-                    { text: 'Severity', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
-                    { text: 'Benchmark', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
+                    { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
                 ],                
                 [
                     {
                         image: this.imageLeft,
                         //height: 460,
-                        width: 240
-                    },
-                    {
-                        image: this.imageMiddle,
-                        //height: 460,
-                        width: 240
-                    },
-                    {
-                        image: this.imageRight,
-                        //height: 460,
-                        width: 240
+                        width: 400,
+                        margin: [ -30, 0, 0, 0 ]
                     }
                 ],
             ]
@@ -105,7 +90,7 @@ export class DashboardPage extends BasePage  {
     }
 
     public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
-        if(index >= 0 && index <= 2) {
+        if(index == 0) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
             this.table.table.body[1][index].image = imageName;
@@ -114,14 +99,6 @@ export class DashboardPage extends BasePage  {
                     this.imageLeft = chartName;
                     this.imageLeftUrl = chartDataUrl
                     break;
-                case 1:
-                    this.imageMiddle = chartName;
-                    this.imageMiddleUrl = chartDataUrl;
-                break;
-                case 2:
-                    this.imageRight = chartName;
-                    this.imageRightUrl = chartDataUrl;
-                break;
                 default:
                     break;
             }
@@ -141,8 +118,6 @@ export class DashboardPage extends BasePage  {
 
         this.header.style = this.prefix + 'headerStyle';
         this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][2].style = this.prefix + 'tableHeaderStyle';
         
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
@@ -152,16 +127,8 @@ export class DashboardPage extends BasePage  {
         if(this.imageLeftUrl) {
             this.images[this.prefix + this.imageLeft] = this.imageLeftUrl;
         }
-        if(this.imageMiddleUrl) {
-            this.images[this.prefix + this.imageMiddle] = this.imageMiddleUrl;    
-        }
-        if(this.imageRightUrl) {
-            this.images[this.prefix + this.imageRight] = this.imageRightUrl;    
-        }
 
         this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[1][1].image = this.prefix + this.imageMiddle;
-        this.table.table.body[1][2].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

@@ -42,7 +42,6 @@ export class DashboardScoreDirective implements OnInit, OnChanges {
      * Use chart data from web service to build parts of Highchart chart options object
      */
     buildHighChartObject() {
-        console.log('DashboardScoreDirective.buildHighChartObject[start]');
         if (this.modelData) {
             let tempChartData: GaugeChartData = {
                 categories: [],
@@ -147,8 +146,7 @@ export class DashboardScoreDirective implements OnInit, OnChanges {
             }
             
             this.displayText = this.modelData.displayText;
-            this.onDataComplete.emit(tempChartData);
-            console.log('DashboardScoreDirective.buildHighChartObject[end]');
+            this.onDataComplete.emit(tempChartData)
         }
     }
 

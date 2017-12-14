@@ -15,7 +15,8 @@ export abstract class BasePage {
     public getPrintSettings(componentOrder: number) : ComponentPrintSettings {
         return {
             width: 0,
-            height: 0
+            height: 0,
+            drillDown: ''
         };
     }
 
