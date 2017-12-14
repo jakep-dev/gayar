@@ -25,7 +25,7 @@ export class BenchmarkComponent implements OnInit {
     @Input() componentData: DashboardScore;
 
     /**
-     * Event handler to indicate the construction of the GaugeChart's required data is built 
+     * Event handler to indicate the construction of the GaugeChart's required data is built
      * @param newChartData GaugeChart's required data
      */
     onDataComplete(newChartData : GaugeChartData) {
@@ -34,15 +34,21 @@ export class BenchmarkComponent implements OnInit {
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
     chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
-    
+
     /**
-     * Event handler to indicate the chart is loaded 
+     * Event handler to indicate the chart is loaded
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+    }
+
+    navigate () {
+      //Check for Permission here.
+      // yes route it.
+      // this.router.navigate(['/benchmark']);
     }
 
     addLabelAndImage(chart){
@@ -57,14 +63,14 @@ export class BenchmarkComponent implements OnInit {
         );
 
         chart.addChartImage(
-            '../assets/images/advisen-logo.png', 
-            chart.chart.chartWidth - 80, 
-            chart.chart.chartHeight - 20, 
-            69, 
+            '../assets/images/advisen-logo.png',
+            chart.chart.chartWidth - 80,
+            chart.chart.chartHeight - 20,
+            69,
             17
-        ); 
+        );
     }
-    
+
     constructor(private dashboardService: DashboardService) {
     }
 
@@ -83,6 +89,6 @@ export class BenchmarkComponent implements OnInit {
             this.dashboardService.getBenchmarkScoreByManualInput(this.componentData.chartType, this.componentData.naics, this.componentData.revenueRange, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
         }
-    }        
+    }
 
 }

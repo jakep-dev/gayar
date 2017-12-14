@@ -12,12 +12,11 @@ import { SessionModel, SessionResponseModel } from 'app/model/model';
 @Injectable()
 export class SessionService extends BaseService {
     private isLogin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
-
     constructor(http: Http) {
         super(http);
     }
 
-    public getCurrentIdentity(userId: string): Observable<SessionModel> {
+    public getCurrentIdentity(userId: string, applicationId: string): Observable<SessionModel> {
         try{
            return super.Post<SessionResponseModel>('/api/getCurrentIdentity', {
                'userId': userId
@@ -61,7 +60,7 @@ export class SessionService extends BaseService {
      * @return {type} string - FullName
      */
     public get UserFullName () : string {
-      return this.currentIdentity ? this.currentIdentity.fullName : ''; 
+      return this.currentIdentity ? this.currentIdentity.fullName : '';
     }
 
     public getUserFullName(): string {
@@ -83,6 +82,14 @@ export class SessionService extends BaseService {
 
     public isLoggedIn(): boolean {
         return this.isLogin.value;
+    }
+
+    public getUserPermission () {
+      return this.currentIdentity.permission;
+    }
+
+    public getDashboardPermission () {
+      return this.currentIdentity.permission.dashboard;
     }
 
     private setAuth(){

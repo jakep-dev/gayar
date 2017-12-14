@@ -21,6 +21,11 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
   fullName: string;
+
+  isDashboard: boolean;
+  isSearch: boolean;
+  isFrequency: boolean;
+
   constructor(public menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
@@ -36,6 +41,10 @@ export class MenuComponent implements OnInit {
     this.menuService.breadCrumb = name;
   }
 
+  setMenuPermission () {
+    let permissions = this.sessionService.getUserPermission();
+    //Set the local variables.
+  }
 
   /**
    * toggleMenu - toggle the menu details.

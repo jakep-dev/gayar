@@ -1,10 +1,9 @@
 <app-tile [id]="'Dashboard_Benchmark'" [title]="chartHeader" class="width-100" [isFullScreen]="false" [isAccordion]="false">
     <div front class="width-100" fxLayout="row">
-        <gauge-chart 
+        <gauge-chart
             fxFlexFill
-            *ngIf='modelData' 
-            routerLink="/benchmark"
-            routerLinkActive="active"
+            *ngIf='modelData'
+            (click)="navigate()"
             dashboard-score
             [modelData]="modelData"
             [chartData]="chartData"
