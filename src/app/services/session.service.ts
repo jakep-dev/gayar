@@ -19,7 +19,8 @@ export class SessionService extends BaseService {
     public getCurrentIdentity(userId: string, applicationId: string): Observable<SessionModel> {
         try{
            return super.Post<SessionResponseModel>('/api/getCurrentIdentity', {
-               'userId': userId
+               'userId': userId,
+               'productCode': applicationId
            }).map((res: SessionResponseModel)=>{
                this.currentIdentity = res.userinfo;
                if(this.currentIdentity && this.currentIdentity.token){
@@ -85,7 +86,10 @@ export class SessionService extends BaseService {
     }
 
     public getUserPermission () {
-      return this.currentIdentity.permission;
+      if( this.currentIdentity && this.currentIdentity.permission) {
+          return this.currentIdentity.permission
+      }
+      return null;
     }
 
     public getDashboardPermission () {

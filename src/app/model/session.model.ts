@@ -1,5 +1,5 @@
 import { ResponseModel } from './response.model';
-import { PermissionModel } from './permission.model';
+import { PermissionModel, DashboardPermissionModel, BenchmarkPermissionModel } from './permission.model';
 
 export interface SessionModel{
     userId: number;
@@ -8,8 +8,9 @@ export interface SessionModel{
     fullName: string;
     permission: {
       companySearch: PermissionModel,
-      dashboard: PermissionModel,
-      frequency: PermissionModel
+      dashboard: DashboardPermissionModel,
+      frequency: PermissionModel,
+      benchmark: BenchmarkPermissionModel
     }
 }
 

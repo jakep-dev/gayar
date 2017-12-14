@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
-import { DashboardService } from '../../services/services';
+import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
+import { Router } from '@angular/router';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'dashboard-benchmark-score',
@@ -46,9 +48,12 @@ export class BenchmarkComponent implements OnInit {
     }
 
     navigate () {
-      //Check for Permission here.
-      // yes route it.
-      // this.router.navigate(['/benchmark']);
+        let permission = this.sessionService.getUserPermission();
+        if (permission && permission.benchmark && permission.benchmark.hasAccess) {
+            this.router.navigate(['/benchmark']);
+        } else {
+            this.snackBarService.Simple('No Access');
+        }
     }
 
     addLabelAndImage(chart){
@@ -71,7 +76,10 @@ export class BenchmarkComponent implements OnInit {
         );
     }
 
-    constructor(private dashboardService: DashboardService) {
+    constructor(private dashboardService: DashboardService,
+                private sessionService: SessionService,
+                private snackBarService: SnackBarService,
+                private router: Router) {
     }
 
     ngOnInit() {

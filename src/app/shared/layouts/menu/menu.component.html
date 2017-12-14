@@ -16,12 +16,12 @@
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
-          <button md-button [disabled]="!isDashboard" routerLink="/search" (click)="onMenu('Company Search');"
+          <button md-button routerLink="/search" (click)="onMenu('Company Search');"
               routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">search</md-icon>
                 <span>Company Search</span>
           </button>
-          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');"
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard)" (click)="onMenu('Dashboard');"
              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
@@ -60,7 +60,7 @@
           <button md-button routerLink="/search" (click)="onMenu('Company Search');" routerLinkActive="active">
             <md-icon class="md-18">search</md-icon>
           </button>
-          <button md-button routerLink="/dashboard" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Dashboard');" routerLinkActive="active">
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid()  && isDashboard)" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
           </button>
           <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');" routerLinkActive="active">

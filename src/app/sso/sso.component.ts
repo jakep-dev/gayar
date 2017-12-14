@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../services/services';
 import { SessionModel } from '../model/model';
 import { MenuService } from 'app/services/services';
-//Imported from const.
+import { APPCONSTANTS } from 'app/app.const';
 
 @Component({
   selector: 'app-sso',
@@ -29,7 +29,7 @@ export class SsoComponent implements OnInit {
   private getCurrentIdentity(){
       let userId: string  = this.route.snapshot.params['userId'];
       if(userId){
-          this.sessionService.getCurrentIdentity(userId, applicationId).subscribe((res: SessionModel)=>{
+          this.sessionService.getCurrentIdentity(userId, APPCONSTANTS.APPLICATION_ID).subscribe((res: SessionModel)=>{
             if(this.sessionService.isLoggedIn()){
               this.router.navigate(['/search']);
               }

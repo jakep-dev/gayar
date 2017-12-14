@@ -22,10 +22,6 @@ export class MenuComponent implements OnInit {
   sideNavMode: string = NAV_MODE;
   fullName: string;
 
-  isDashboard: boolean;
-  isSearch: boolean;
-  isFrequency: boolean;
-
   constructor(public menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
@@ -39,11 +35,6 @@ export class MenuComponent implements OnInit {
 
   onMenu (name) {
     this.menuService.breadCrumb = name;
-  }
-
-  setMenuPermission () {
-    let permissions = this.sessionService.getUserPermission();
-    //Set the local variables.
   }
 
   /**
@@ -69,7 +60,10 @@ export class MenuComponent implements OnInit {
     }
   }
 
-
+  isDashboard(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.dashboard && permission.dashboard.hasAccess
+  }
   /**
    * Validates whether there is a valid search criteria or not.
    * @return {boolean} - Is a valid search criteria or not.
