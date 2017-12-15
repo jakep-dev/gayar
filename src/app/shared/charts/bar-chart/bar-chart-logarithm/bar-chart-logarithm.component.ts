@@ -123,7 +123,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
                 if(isPrintMode) {
-                    this.applyPrintSettings(this.chartData.customChartSettings);
+                    this.applyPrintSettings(this.chartOptions);
                 }
                 this.chart.update(this.chartOptions, true);
             }

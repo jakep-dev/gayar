@@ -56,7 +56,7 @@ export class TimePeriodComponent implements OnInit {
         } else {
             for(let i = 0; i < chart.chart.series[0].data.length; i++) {
                 if(chart.chart.series[0].data[i].drilldown === this.printSettings.drillDown) {
-                    chart.chart.series[0].data[i].firePointEvent('click', event);
+                    chart.chart.series[0].data[i].firePointEvent('click', null);
                 }
             }
             this.isDrillDownComplete = true;

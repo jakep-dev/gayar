@@ -75,47 +75,210 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         ]
     },
     {
-      id: 'REPORT_TILE_FREQUENCY',
-      description: 'Frequency',
-      value: true,
-      subComponents: [
-          {
-              description: 'Industry Overview',
-              id: 'REPORT_FREQUENCY_INDUSTRY_OVERVIEW',
-              value: true,
-              pageType: 'FrequencyIndustryOverviewPage',
-              chartComponents: [
-                  {
-                      componentName: 'frequency-industry-overview',
-                      pagePosition: 0,
-                      drillDownName: '',
-                      viewName: ''
-                  }
-              ],
-              subSubComponents: null
-          },
-          {
-            description: 'Time Period',
-            id: 'REPORT_FREQUENCY_TIME_PERIOD',
-            value: true,
-            pageType: 'FrequencyTimePeriodPage',
-            chartComponents: [
-                {
-                    componentName: 'frequency-time-period',
-                    pagePosition: 0,
-                    drillDownName: '',
-                    viewName: ''
-                },
-                {
-                    componentName: 'frequency-time-period',
-                    pagePosition: 1,
-                    drillDownName: 'Past 10 years',
-                    viewName: ''
-                }                
-            ],
-            subSubComponents: null
-        }
-      ]
-  }
-
+        id: 'REPORT_TILE_FREQUENCY',
+        description: 'Frequency',
+        value: true,
+        subComponents: [
+            {
+                description: 'Industry Overview',
+                id: 'REPORT_FREQUENCY_INDUSTRY_OVERVIEW',
+                value: true,
+                pageType: 'FrequencyIndustryOverviewPage',
+                chartComponents: [
+                    {
+                        componentName: 'frequency-industry-overview',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Time Period',
+                id: 'REPORT_FREQUENCY_TIME_PERIOD',
+                value: true,
+                pageType: 'FrequencyTimePeriodPage',
+                chartComponents: [
+                    {
+                        componentName: 'frequency-time-period',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    },
+                    {
+                        componentName: 'frequency-time-period',
+                        pagePosition: 1,
+                        drillDownName: 'Past 10 years',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Type of Incident',
+                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT',
+                value: true,
+                pageType: 'FrequencyTypeOfIncidentPage',
+                chartComponents: [
+                    {
+                        componentName: 'frequency-incident-bar',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    },
+                    {
+                        componentName: 'frequency-incident-pie',
+                        pagePosition: 1,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: [
+                    {
+                        description: 'Data Privacy',
+                        id: 'REPORT_FREQUENCY_INCIDENT_DATA_PRIVACY',
+                        value: true,
+                        pageType: 'FrequencyDataPrivacyPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-incident-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Data Privacy',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-incident-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Data Privacy',
+                                viewName: ''
+                            }
+                        ]
+                    },
+                    {
+                        description: 'Network Security',
+                        id: 'REPORT_FREQUENCY_INCIDENT_NETWORK_SECURITY',
+                        value: true,
+                        pageType: 'FrequencyNetworkSecurityPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-incident-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Network Security',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-incident-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Network Security',
+                                viewName: ''
+                            }
+                        ]
+                    },
+                    {
+                        description: 'Tech E&O',
+                        id: 'REPORT_FREQUENCY_INCIDENT_TECH_EO',
+                        value: true,
+                        pageType: 'FrequencyTechEOPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-incident-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Tech E&O',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-incident-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Tech E&O',
+                                viewName: ''
+                            }
+                        ]
+                    },
+                    {
+                        description: 'Privacy Violations',
+                        id: 'REPORT_FREQUENCY_INCIDENT_PRIVACY_VIOLATIONS',
+                        value: true,
+                        pageType: 'FrequencyPrivacyViolationsPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-incident-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Privacy Violations',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-incident-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Privacy Violations',
+                                viewName: ''
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                description: 'Type of Loss',
+                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS',
+                value: true,
+                pageType: 'FrequencyTypeOfLossPage',
+                chartComponents: [
+                    {
+                        componentName: 'frequency-loss-bar',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    },
+                    {
+                        componentName: 'frequency-loss-pie',
+                        pagePosition: 1,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: [
+                    {
+                        description: 'Personal Information',
+                        id: 'REPORT_FREQUENCY_LOSS_PERSONAL_INFORMATION',
+                        value: true,
+                        pageType: 'FrequencyPersonalInformationPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-loss-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Personal Information',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-loss-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Personal Information',
+                                viewName: ''
+                            }
+                        ]
+                    },
+                    {
+                        description: 'Corporate Losses',
+                        id: 'REPORT_FREQUENCY_LOSS_CORPORATE_LOSSES',
+                        value: true,
+                        pageType: 'FrequencyCorporateLossesPage',
+                        chartComponents: [
+                            {
+                                componentName: 'frequency-loss-bar',
+                                pagePosition: 0,
+                                drillDownName: 'Corporate Losses',
+                                viewName: ''
+                            },
+                            {
+                                componentName: 'frequency-loss-pie',
+                                pagePosition: 1,
+                                drillDownName: 'Corporate Losses',
+                                viewName: ''
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 ];

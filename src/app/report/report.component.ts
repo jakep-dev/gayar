@@ -6,12 +6,19 @@ import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/
 
 import { IndustryOverviewComponent } from 'app/frequency/industry-overview/industry-overview.component';
 import { TimePeriodComponent } from 'app/frequency/time-period/time-period.component';
+import { IncidentBarComponent } from 'app/frequency/incident-bar/incident-bar.component';
+import { IncidentPieComponent } from 'app/frequency/incident-pie/incident-pie.component';
+import { LossBarComponent } from 'app/frequency/loss-bar/loss-bar.component';
+import { LossPieComponent } from 'app/frequency/loss-pie/loss-pie.component';
 
 import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
 import { DashboardScore, FrequencyInput, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
 
 import { 
-        BasePage, CoverPage, DashboardPage, TOCPage, FrequencyIndustryOverviewPage, FrequencyTimePeriodPage 
+    BasePage, CoverPage, DashboardPage, TOCPage, FrequencyIndustryOverviewPage, 
+    FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, FrequencyDataPrivacyPage, 
+    FrequencyNetworkSecurityPage, FrequencyTechEOPage, FrequencyPrivacyViolationsPage, 
+    FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, FrequencyCorporateLossesPage
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
@@ -30,7 +37,11 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
         Dashboard_FrequencyComponent, 
         Dashboard_SeverityComponent,
         IndustryOverviewComponent,
-        TimePeriodComponent
+        TimePeriodComponent,
+        IncidentBarComponent,
+        IncidentPieComponent,
+        LossBarComponent,
+        LossPieComponent
     ]
 })
 export class ReportComponent implements OnInit {
@@ -158,6 +169,7 @@ export class ReportComponent implements OnInit {
         this.chartDataCollection.length = 0;
         this.pageOrder.length = 0;
         this.clearArray(this.pageCollection);
+        this.tocPage.clearTOC();
         this.reportTileModel.forEach(reportSection => {
             if(reportSection.value) {
                 this.processReportSection(reportSection);
@@ -232,8 +244,13 @@ export class ReportComponent implements OnInit {
         let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
         let industryOverviewComponent: IndustryOverviewComponent;
         let timePeriodComponent: TimePeriodComponent;
+        let incidentBarComponent: IncidentBarComponent;
+        let incidentPieComponent: IncidentPieComponent;
+        let lossBarComponent: LossBarComponent;
+        let lossPieComponent: LossPieComponent;
 
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
+        console.log(chartData.targetPage.getPrefix());
         this.printSettings = chartData.targetPage.getPrintSettings(chartData.pagePosition);
         this.printSettings.drillDown = chartData.chartSetting.drillDownName;
         this.canvas.nativeElement.width = this.printSettings.width;
@@ -280,6 +297,38 @@ export class ReportComponent implements OnInit {
                 timePeriodComponent.printSettings = this.printSettings;
                 timePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 timePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-incident-bar':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IncidentBarComponent);
+                incidentBarComponent = <IncidentBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                incidentBarComponent.componentData = this.frequencyInput;
+                incidentBarComponent.printSettings = this.printSettings;
+                incidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                incidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-incident-pie':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IncidentPieComponent);
+                incidentPieComponent = <IncidentPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                incidentPieComponent.componentData = this.frequencyInput;
+                incidentPieComponent.printSettings = this.printSettings;
+                incidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                incidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-loss-bar':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(LossBarComponent);
+                lossBarComponent = <LossBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                lossBarComponent.componentData = this.frequencyInput;
+                lossBarComponent.printSettings = this.printSettings;
+                lossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                lossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'frequency-loss-pie':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(LossPieComponent);
+                lossPieComponent = <LossPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                lossPieComponent.componentData = this.frequencyInput;
+                lossPieComponent.printSettings = this.printSettings;
+                lossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                lossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             default:
                 break;
@@ -379,7 +428,39 @@ export class ReportComponent implements OnInit {
                 break;
             case 'FrequencyTimePeriodPage':
                 this.pageCollection[pageType] = new FrequencyTimePeriodPage();
-                this.pageOrder.push(pageType);        
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyTypeOfIncidentPage':
+                this.pageCollection[pageType] = new FrequencyTypeOfIncidentPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyDataPrivacyPage':
+                this.pageCollection[pageType] = new FrequencyDataPrivacyPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyNetworkSecurityPage':
+                this.pageCollection[pageType] = new FrequencyNetworkSecurityPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyTechEOPage':
+                this.pageCollection[pageType] = new FrequencyTechEOPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyPrivacyViolationsPage':
+                this.pageCollection[pageType] = new FrequencyPrivacyViolationsPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyTypeOfLossPage':
+                this.pageCollection[pageType] = new FrequencyTypeOfLossPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyPersonalInformationPage':
+                this.pageCollection[pageType] = new FrequencyPersonalInformationPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'FrequencyCorporateLossesPage':
+                this.pageCollection[pageType] = new FrequencyCorporateLossesPage();
+                this.pageOrder.push(pageType);
                 break;
             default:
                 break;

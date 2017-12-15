@@ -65,7 +65,7 @@ export class DashboardPage extends BasePage  {
                         //height: 460,
                         width: 240
                     }
-                ],
+                ]
             ]
         },
         layout: 'noBorders',

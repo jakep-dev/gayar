@@ -229,6 +229,16 @@ export class TOCPage extends BasePage  {
         }
     }
 
+    public clearTOC() {
+        this.clearArray(this.styles);
+        this.clearArray(this.pdfContent);
+        this.clearArray(this.pageMapping);
+        this.toc.table.body.length = 0;
+        this.clearArray(this.tocList);
+        this.clearArray(this.pageMapping);
+        this.updatePdfContent();
+    }
+
     private pdfContent: Array<any> = [];
 
     public getPdfContent(): Array<any> {

@@ -158,7 +158,7 @@ export class FrequencyIncidentPieDirective {
               relativeTo: 'spacingBox',
               height: 10,
               position: {
-                y: 50,
+                y: 20,
                 x: 0
               },
               theme: {
