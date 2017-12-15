@@ -1,7 +1,6 @@
 import {BaseChart} from '../base-chart';
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { PieChartData } from 'app/model/model';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { PieChartData, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
   selector: 'pie-chart',

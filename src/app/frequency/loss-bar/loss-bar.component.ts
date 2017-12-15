@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { FrequencyLossBarModel, BarChartData, FrequencyInput } from 'app/model/model';
+import { FrequencyLossBarModel, BarChartData, FrequencyInput, ComponentPrintSettings } from 'app/model/model';
 import { FrequencyService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
     selector: 'frequency-loss-bar',

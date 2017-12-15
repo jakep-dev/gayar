@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { BoxPlotChartData } from 'app/model/model';
+import { BoxPlotChartData, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from '../base-chart';
 
 @Component({
@@ -12,6 +12,8 @@ import { BaseChart } from '../base-chart';
 export class BoxPlotChartComponent extends BaseChart implements OnInit {
 
     @Input() chartData: BoxPlotChartData;
+
+    @Input() printSettings: ComponentPrintSettings;
 
     constructor() {
         super();
@@ -33,10 +35,12 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
         this.initializeBarChart();
     }
 
-    ngDoCheck() {  
-        if(this.chart) { 
-            this.chart.reflow(); 
-        } 
+    ngDoCheck() {
+        if(!this.printSettings) {
+            if(this.chart) { 
+                this.chart.reflow(); 
+            } 
+        }
     }
     /**
      * Initialze simple barchart settings that doens't require the underlying HighChart chart object
@@ -57,6 +61,7 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
      */
     loadBarChartData() {
         if (this.chartData) {
+            let isPrintMode: boolean = this.printSettings != null ? true : false;
             if(this.chartData.series.length > 0) {
                 let seriesIndex: number;
                 let seriesLength: number;
@@ -76,18 +81,48 @@ export class BoxPlotChartComponent extends BaseChart implements OnInit {
                             data: this.chartData.series[seriesIndex].data,
                             pointWidth: this.chartData.series[seriesIndex].pointWidth,
                             whiskerLength: this.chartData.series[seriesIndex].whiskerLength
-                        }
+                        },
+                        false,
+                        isPrintMode
                     );
                 }
             }
             if (this.chartData.customChartSettings) {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartData.customChartSettings);
+                }
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartOptions);
+                }
                 this.chart.update(this.chartOptions, true);
             }
         }
     }        
 
+    applyPrintSettings(chartOptions : any) {
+        chartOptions.chart.width = this.printSettings.width;
+        chartOptions.chart.height = this.printSettings.height;
+        chartOptions.chart.animation = false;
+
+        if(chartOptions.plotOptions) {
+            if(chartOptions.plotOptions.series) {
+                chartOptions.plotOptions.series.animation = false;
+            } else {
+                chartOptions.plotOptions.series = {
+                    animation : false
+                };
+            }
+        } else {
+            chartOptions.plotOptions = {
+                series: {
+                    animation: false
+                }
+            };
+        }
+    }
+    
     setChart(chart: any) {
         this.chart = chart;
         this.loadBarChartData();

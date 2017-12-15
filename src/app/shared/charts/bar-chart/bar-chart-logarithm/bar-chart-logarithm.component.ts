@@ -1,7 +1,6 @@
 import { BaseChart } from '../../base-chart';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { BarChartData } from 'app/model/model';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { BarChartData, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
     selector: 'bar-chart-logarithm',

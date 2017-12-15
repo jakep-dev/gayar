@@ -1,10 +1,9 @@
 import { BaseChart } from '../../shared/charts/base-chart';
 import { Component, OnInit, Input } from '@angular/core';
-import { FrequencyIncidentPieFlipModel, PieChartData, FrequencyInput } from 'app/model/model';
+import { FrequencyIncidentPieFlipModel, PieChartData, FrequencyInput, ComponentPrintSettings } from 'app/model/model';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FrequencyService } from 'app/services/frequency.service';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
   selector: 'frequency-incident-pie',

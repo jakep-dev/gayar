@@ -1,4 +1,4 @@
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { ComponentPrintSettings } from 'app/model/model';
 import { IChartWidget } from 'app/model/report.model';
 
 export abstract class BasePage {

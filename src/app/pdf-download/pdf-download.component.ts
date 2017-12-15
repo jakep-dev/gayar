@@ -2,10 +2,9 @@ import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, Eleme
 import { DatePipe } from '@angular/common';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
 import { SearchService, MenuService, FontService, GetFileService } from 'app/services/services';
-import { DashboardScore } from 'app/model/model';
+import { DashboardScore, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
 

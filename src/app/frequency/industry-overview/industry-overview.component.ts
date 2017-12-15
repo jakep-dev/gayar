@@ -2,10 +2,9 @@ import { BaseChart }  from '../../shared/charts/base-chart';
 import { BarChartData } from '../../model/charts/bar-chart.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FrequencyIndustryOverviewModel, FrequencyInput } from "app/model/model";
+import { FrequencyIndustryOverviewModel, FrequencyInput, ComponentPrintSettings } from "app/model/model";
 import { FrequencyService } from "app/services/services";
 import { Observable } from 'rxjs/Observable';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
   selector: 'frequency-industry-overview',

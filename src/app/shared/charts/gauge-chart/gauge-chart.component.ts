@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { GaugeChartData } from 'app/model/model';
+import { GaugeChartData, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from '../base-chart';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
   selector: 'gauge-chart',

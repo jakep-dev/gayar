@@ -3,8 +3,7 @@ import { FrequencyService } from 'app/services/services';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { PieChartData, FrequencyInput, FrequencyLossPieFlipModel } from 'app/model/model';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { PieChartData, FrequencyInput, FrequencyLossPieFlipModel, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
   selector: 'frequency-loss-pie',

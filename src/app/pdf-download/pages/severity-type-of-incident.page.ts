@@ -1,9 +1,9 @@
 import { BasePage } from './base.page';
 import { ComponentPrintSettings } from 'app/model/model';
 
-export class FrequencyPersonalInformationPage extends BasePage  {
+export class SeverityTypeOfIncidentPage extends BasePage  {
 
-    private prefix: string = 'freqPersonalInformationPage_';
+    private prefix: string = 'severityTypeOfIncidentPage_';
 
     public getPrefix() {
         return this.prefix;
@@ -15,35 +15,47 @@ export class FrequencyPersonalInformationPage extends BasePage  {
     }
 
     private headerStyle: any = {
-        color: '#464646',
-        fontSize: 12,
+        color: '#b1d23b',
+        fontSize: 14,
         bold: true,
-        margin: [ 60, 0, 40, 0]
+        margin: [60,0,40,0]
     };
 
     private header: any = {
-        text: 'Personal Information',
+        text: 'Type of Incident',
         style: this.prefix + 'headerStyle'
+    };
+
+    private tableHeaderStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: true
     };
 
     private imageLeft:string = '';
     private imageLeftUrl:string = '';
     private imageRight:string = '';
     private imageRightUrl:string = '';
-    
+
     private table: any = {
-        margin: [ 30, 20, 70, 0 ],
+        margin: [ 60, 20, 70, 0 ],
         table: {
-            heights: [ 400 ],
-            body: [              
+            heights: [ 15, 400 ],
+            body: [
+                [
+                    { text: 'Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
+                    { text: '' }
+                ],                
                 [
                     {
                         image: this.imageLeft,
-                        width: 375
+                        width: 375,
+                        margin: [ -30, 0, 0, 0 ]
                     },
                     {
                         image: this.imageRight,
                         width: 375
+                        
                     }
                 ]
             ]
@@ -88,7 +100,7 @@ export class FrequencyPersonalInformationPage extends BasePage  {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
-            this.table.table.body[0][index].image = imageName;
+            this.table.table.body[1][index].image = imageName;
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
@@ -117,9 +129,11 @@ export class FrequencyPersonalInformationPage extends BasePage  {
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';
+        this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
         
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
+        this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
@@ -129,7 +143,7 @@ export class FrequencyPersonalInformationPage extends BasePage  {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;
         }
 
-        this.table.table.body[0][0].image = this.prefix + this.imageLeft;
+        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
         this.table.table.body[0][1].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);

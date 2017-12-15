@@ -1,10 +1,13 @@
 <div *ngIf='modelData'>
   <bar-chart
+      [ngClass]="{'width-100' : !printSettings}"
       severity-bar-incident
       [modelData]="modelData" 
       [chartData]="chartData" 
       [chartComponent]="chartComponent$ | async"
       (onDataComplete)="onDataComplete($event)" 
-      (onChartRedraw)="onChartReDraw($event)">
+      (onChartRedraw)="onChartReDraw($event)"
+      [printSettings]="printSettings"
+      >
   </bar-chart>
 </div>

@@ -1,5 +1,5 @@
 import { BasePage } from './base.page';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { ComponentPrintSettings } from 'app/model/model';
 
 export class FrequencyTypeOfIncidentPage extends BasePage  {
 
@@ -43,7 +43,7 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
             heights: [ 15, 400 ],
             body: [
                 [
-                    { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
+                    { text: 'Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
                     { text: '' }
                 ],                
                 [

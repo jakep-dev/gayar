@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
+import { DashboardScoreModel, GaugeChartData, DashboardScore, ComponentPrintSettings } from 'app/model/model';
 import { DashboardService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 import { SearchService } from 'app/services/search.service';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
   selector: 'app-dashboard-frequency',

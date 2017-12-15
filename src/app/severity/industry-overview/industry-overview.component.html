@@ -1,5 +1,5 @@
 <app-tile [id]="'SEVERITY_IND_OVERVIEW'" [title]="chartHeader" [isSplittable]="false" [isFlippable]="false">
-  <div front class="width-100" fxLayout="row">
+  <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
         <bar-chart fxFlexFill
             *ngIf='modelData'
             severity-industry-overview-behavior
@@ -7,7 +7,9 @@
             [chartData]="chartData"
             [chartComponent]="chartComponent$ | async"
             (onDataComplete)="onDataComplete($event)"
-            (onChartRedraw)="onChartReDraw($event)">
+            (onChartRedraw)="onChartReDraw($event)"
+            [printSettings]="printSettings"
+            >
         </bar-chart>
   </div>
 </app-tile>

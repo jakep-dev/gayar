@@ -1,5 +1,5 @@
 import { BasePage } from './base.page';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
+import { ComponentPrintSettings } from 'app/model/model';
 
 export class TOCPage extends BasePage  {
 
@@ -287,6 +287,14 @@ export class TOCPage extends BasePage  {
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);
         this.pdfContent.push(this.toc);
+    }
+
+    public getPageCount(): number {
+        if(this.tocList.length > 23) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     constructor() {

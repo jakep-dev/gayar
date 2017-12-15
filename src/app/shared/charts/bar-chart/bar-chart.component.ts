@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { BarChartData } from 'app/model/model';
+import { BarChartData, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from '../base-chart';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 
 @Component({
     selector: 'bar-chart',

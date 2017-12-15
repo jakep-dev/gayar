@@ -4,27 +4,41 @@ import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboar
 import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
 
-import { IndustryOverviewComponent } from 'app/frequency/industry-overview/industry-overview.component';
-import { TimePeriodComponent } from 'app/frequency/time-period/time-period.component';
-import { IncidentBarComponent } from 'app/frequency/incident-bar/incident-bar.component';
-import { IncidentPieComponent } from 'app/frequency/incident-pie/incident-pie.component';
-import { LossBarComponent } from 'app/frequency/loss-bar/loss-bar.component';
-import { LossPieComponent } from 'app/frequency/loss-pie/loss-pie.component';
+import { IndustryOverviewComponent as Frequency_IndustryOverviewComponent } from 'app/frequency/industry-overview/industry-overview.component';
+import { TimePeriodComponent as Frequency_TimePeriodComponent } from 'app/frequency/time-period/time-period.component';
+import { IncidentBarComponent as Frequency_IncidentBarComponent } from 'app/frequency/incident-bar/incident-bar.component';
+import { IncidentPieComponent as Frequency_IncidentPieComponent } from 'app/frequency/incident-pie/incident-pie.component';
+import { LossBarComponent as Frequency_LossBarComponent } from 'app/frequency/loss-bar/loss-bar.component';
+import { LossPieComponent as Frequency_LossPieComponent } from 'app/frequency/loss-pie/loss-pie.component';
+
+import { IndustryOverviewComponent as Severity_IndustryOverviewComponent } from 'app/severity/industry-overview/industry-overview.component';
+import { TimePeriodComponent as Severity_TimePeriodComponent } from 'app/severity/time-period/time-period.component';
+import { IncidentBarComponent as Severity_IncidentBarComponent } from 'app/severity/incident-bar/incident-bar.component';
+import { IncidentPieComponent as Severity_IncidentPieComponent } from 'app/severity/incident-pie/incident-pie.component';
+import { LossBarComponent as Severity_LossBarComponent } from 'app/severity/loss-bar/loss-bar.component';
+import { LossPieComponent as Severity_LossPieComponent } from 'app/severity/loss-pie/loss-pie.component';
 
 import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
-import { DashboardScore, FrequencyInput, IReportTileModel, ISubComponentModel, IChartMetaData } from 'app/model/model';
+
+import { 
+    DashboardScore, FrequencyInput, SeverityInput, ComponentPrintSettings,
+    IReportTileModel, ISubComponentModel, IChartMetaData 
+} from 'app/model/model';
 
 import { 
     BasePage, CoverPage, DashboardPage, TOCPage, FrequencyIndustryOverviewPage, 
     FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, FrequencyDataPrivacyPage, 
     FrequencyNetworkSecurityPage, FrequencyTechEOPage, FrequencyPrivacyViolationsPage, 
-    FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, FrequencyCorporateLossesPage
+    FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, FrequencyCorporateLossesPage,
+    SeverityIndustryOverviewPage, SeverityTimePeriodPage, SeverityTypeOfIncidentPage,
+    SeverityDataPrivacyPage, SeverityNetworkSecurityPage, SeverityTechEOPage,
+    SeverityPrivacyViolationsPage, SeverityTypeOfLossPage, SeverityPersonalInformationPage,
+    SeverityCorporateLossesPage
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
 
 import { BaseChart } from 'app/shared/charts/base-chart';
-import { ComponentPrintSettings } from 'app/model/pdf.model';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
 
@@ -36,12 +50,20 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
         Dashboard_BenchmarkComponent, 
         Dashboard_FrequencyComponent, 
         Dashboard_SeverityComponent,
-        IndustryOverviewComponent,
-        TimePeriodComponent,
-        IncidentBarComponent,
-        IncidentPieComponent,
-        LossBarComponent,
-        LossPieComponent
+
+        Frequency_IndustryOverviewComponent,
+        Frequency_TimePeriodComponent,
+        Frequency_IncidentBarComponent,
+        Frequency_IncidentPieComponent,
+        Frequency_LossBarComponent,
+        Frequency_LossPieComponent,
+
+        Severity_IndustryOverviewComponent,
+        Severity_TimePeriodComponent,
+        Severity_IncidentBarComponent,
+        Severity_IncidentPieComponent,
+        Severity_LossBarComponent,
+        Severity_LossPieComponent
     ]
 })
 export class ReportComponent implements OnInit {
@@ -63,6 +85,7 @@ export class ReportComponent implements OnInit {
     public revenueRange: string;
     public getDashboardScoreByManualInput: DashboardScore;
     public frequencyInput: FrequencyInput;
+    public severityInput: SeverityInput;
     public printSettings: ComponentPrintSettings;
     
     private chart: BaseChart;
@@ -133,15 +156,22 @@ export class ReportComponent implements OnInit {
             revenueRange: this.revenueRange,
             limit : this.searchService.searchCriteria.limit,
             retention: this.searchService.searchCriteria.retention,
-          };
+        };
 
-          this.frequencyInput = {
-              searchType: this.searchService.getSearchType,
-              companyId: this.searchService.getCompanyId,
-              naics: this.searchService.getNaics,
-              revenueRange: this.searchService.getRevenueRange
-          };
-      }
+        this.frequencyInput = {
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRange
+        };
+
+        this.severityInput = {
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRange
+        };
+    }
 
     /**
      * getReportConfig - Load the report configuration.
@@ -242,12 +272,21 @@ export class ReportComponent implements OnInit {
         let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
         let dashboardFrequencyGaugeComponent: Dashboard_FrequencyComponent;
         let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
-        let industryOverviewComponent: IndustryOverviewComponent;
-        let timePeriodComponent: TimePeriodComponent;
-        let incidentBarComponent: IncidentBarComponent;
-        let incidentPieComponent: IncidentPieComponent;
-        let lossBarComponent: LossBarComponent;
-        let lossPieComponent: LossPieComponent;
+
+        let frequencyIndustryOverviewComponent: Frequency_IndustryOverviewComponent;
+        let frequencyTimePeriodComponent: Frequency_TimePeriodComponent;
+        let frequencyIncidentBarComponent: Frequency_IncidentBarComponent;
+        let frequencyIncidentPieComponent: Frequency_IncidentPieComponent;
+        let frequencyLossBarComponent: Frequency_LossBarComponent;
+        let frequencyLossPieComponent: Frequency_LossPieComponent;
+
+        let severityIndustryOverviewComponent: Severity_IndustryOverviewComponent;
+        let severityTimePeriodComponent: Severity_TimePeriodComponent;
+        let severityIncidentBarComponent: Severity_IncidentBarComponent;
+        let severityIncidentPieComponent: Severity_IncidentPieComponent;
+        let severityLossBarComponent: Severity_LossBarComponent;
+        let severityLossPieComponent: Severity_LossPieComponent;
+
 
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
         console.log(chartData.targetPage.getPrefix());
@@ -282,54 +321,105 @@ export class ReportComponent implements OnInit {
                 dashboardBenchmarkGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 dashboardBenchmarkGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
+
             case 'frequency-industry-overview':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IndustryOverviewComponent);
-                industryOverviewComponent = <IndustryOverviewComponent>this.entryPoint.createComponent(componentFactory).instance;
-                industryOverviewComponent.componentData = this.frequencyInput;
-                industryOverviewComponent.printSettings = this.printSettings;
-                industryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                industryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_IndustryOverviewComponent);
+                frequencyIndustryOverviewComponent = <Frequency_IndustryOverviewComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyIndustryOverviewComponent.componentData = this.frequencyInput;
+                frequencyIndustryOverviewComponent.printSettings = this.printSettings;
+                frequencyIndustryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyIndustryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             case 'frequency-time-period':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(TimePeriodComponent);
-                timePeriodComponent = <TimePeriodComponent>this.entryPoint.createComponent(componentFactory).instance;
-                timePeriodComponent.componentData = this.frequencyInput;
-                timePeriodComponent.printSettings = this.printSettings;
-                timePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                timePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_TimePeriodComponent);
+                frequencyTimePeriodComponent = <Frequency_TimePeriodComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyTimePeriodComponent.componentData = this.frequencyInput;
+                frequencyTimePeriodComponent.printSettings = this.printSettings;
+                frequencyTimePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyTimePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             case 'frequency-incident-bar':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IncidentBarComponent);
-                incidentBarComponent = <IncidentBarComponent>this.entryPoint.createComponent(componentFactory).instance;
-                incidentBarComponent.componentData = this.frequencyInput;
-                incidentBarComponent.printSettings = this.printSettings;
-                incidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                incidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_IncidentBarComponent);
+                frequencyIncidentBarComponent = <Frequency_IncidentBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyIncidentBarComponent.componentData = this.frequencyInput;
+                frequencyIncidentBarComponent.printSettings = this.printSettings;
+                frequencyIncidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyIncidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             case 'frequency-incident-pie':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(IncidentPieComponent);
-                incidentPieComponent = <IncidentPieComponent>this.entryPoint.createComponent(componentFactory).instance;
-                incidentPieComponent.componentData = this.frequencyInput;
-                incidentPieComponent.printSettings = this.printSettings;
-                incidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                incidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_IncidentPieComponent);
+                frequencyIncidentPieComponent = <Frequency_IncidentPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyIncidentPieComponent.componentData = this.frequencyInput;
+                frequencyIncidentPieComponent.printSettings = this.printSettings;
+                frequencyIncidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyIncidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             case 'frequency-loss-bar':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(LossBarComponent);
-                lossBarComponent = <LossBarComponent>this.entryPoint.createComponent(componentFactory).instance;
-                lossBarComponent.componentData = this.frequencyInput;
-                lossBarComponent.printSettings = this.printSettings;
-                lossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                lossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_LossBarComponent);
+                frequencyLossBarComponent = <Frequency_LossBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyLossBarComponent.componentData = this.frequencyInput;
+                frequencyLossBarComponent.printSettings = this.printSettings;
+                frequencyLossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyLossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
             case 'frequency-loss-pie':
-                componentFactory = this.componentFactoryResolver.resolveComponentFactory(LossPieComponent);
-                lossPieComponent = <LossPieComponent>this.entryPoint.createComponent(componentFactory).instance;
-                lossPieComponent.componentData = this.frequencyInput;
-                lossPieComponent.printSettings = this.printSettings;
-                lossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-                lossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_LossPieComponent);
+                frequencyLossPieComponent = <Frequency_LossPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                frequencyLossPieComponent.componentData = this.frequencyInput;
+                frequencyLossPieComponent.printSettings = this.printSettings;
+                frequencyLossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                frequencyLossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
+
+            case 'severity-industry-overview':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_IndustryOverviewComponent);
+                severityIndustryOverviewComponent = <Severity_IndustryOverviewComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityIndustryOverviewComponent.componentData = this.severityInput;
+                severityIndustryOverviewComponent.printSettings = this.printSettings;
+                severityIndustryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityIndustryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'severity-time-period':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_TimePeriodComponent);
+                severityTimePeriodComponent = <Severity_TimePeriodComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityTimePeriodComponent.componentData = this.severityInput;
+                severityTimePeriodComponent.printSettings = this.printSettings;
+                severityTimePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityTimePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'severity-incident-bar':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_IncidentBarComponent);
+                severityIncidentBarComponent = <Severity_IncidentBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityIncidentBarComponent.componentData = this.frequencyInput;
+                severityIncidentBarComponent.printSettings = this.printSettings;
+                severityIncidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityIncidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'severity-incident-pie':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_IncidentPieComponent);
+                severityIncidentPieComponent = <Severity_IncidentPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityIncidentPieComponent.componentData = this.frequencyInput;
+                severityIncidentPieComponent.printSettings = this.printSettings;
+                severityIncidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityIncidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'severity-loss-bar':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_LossBarComponent);
+                severityLossBarComponent = <Severity_LossBarComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityLossBarComponent.componentData = this.frequencyInput;
+                severityLossBarComponent.printSettings = this.printSettings;
+                severityLossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityLossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'severity-loss-pie':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_LossPieComponent);
+                severityLossPieComponent = <Severity_LossPieComponent>this.entryPoint.createComponent(componentFactory).instance;
+                severityLossPieComponent.componentData = this.frequencyInput;
+                severityLossPieComponent.printSettings = this.printSettings;
+                severityLossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                severityLossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+
             default:
                 break;
         }
@@ -388,9 +478,8 @@ export class ReportComponent implements OnInit {
       if(this.chartLoadCount < this.chartDataCollection.length) {
           this.loadChartImage();
       } else {
-          //first page is the cover sheet, second page is the table of contents
-          //start at page 3
-          let pageNumber = 3;
+          //first page is the cover sheet, second to third page is the table of contents
+          let pageNumber = 2 + this.tocPage.getPageCount();
           this.pageOrder.forEach(pageType => 
               {
                   this.tocPage.setPageNumber(pageType, pageNumber);
@@ -422,6 +511,7 @@ export class ReportComponent implements OnInit {
                 this.pageCollection[pageType] = new DashboardPage();
                 this.pageOrder.push(pageType);
                 break;
+
             case 'FrequencyIndustryOverviewPage':
                 this.pageCollection[pageType] = new FrequencyIndustryOverviewPage();
                 this.pageOrder.push(pageType);
@@ -462,6 +552,48 @@ export class ReportComponent implements OnInit {
                 this.pageCollection[pageType] = new FrequencyCorporateLossesPage();
                 this.pageOrder.push(pageType);
                 break;
+
+            case 'SeverityIndustryOverviewPage':
+                this.pageCollection[pageType] = new SeverityIndustryOverviewPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityTimePeriodPage':
+                this.pageCollection[pageType] = new SeverityTimePeriodPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityTypeOfIncidentPage':
+                this.pageCollection[pageType] = new SeverityTypeOfIncidentPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityDataPrivacyPage':
+                this.pageCollection[pageType] = new SeverityDataPrivacyPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityNetworkSecurityPage':
+                this.pageCollection[pageType] = new SeverityNetworkSecurityPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityTechEOPage':
+                this.pageCollection[pageType] = new SeverityTechEOPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityPrivacyViolationsPage':
+                this.pageCollection[pageType] = new SeverityPrivacyViolationsPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityTypeOfLossPage':
+                this.pageCollection[pageType] = new SeverityTypeOfLossPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityPersonalInformationPage':
+                this.pageCollection[pageType] = new SeverityPersonalInformationPage();
+                this.pageOrder.push(pageType);
+                break;
+            case 'SeverityCorporateLossesPage':
+                this.pageCollection[pageType] = new SeverityCorporateLossesPage();
+                this.pageOrder.push(pageType);
+                break;
+
             default:
                 break;
         }

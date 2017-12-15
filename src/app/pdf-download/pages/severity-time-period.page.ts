@@ -1,9 +1,9 @@
 import { BasePage } from './base.page';
 import { ComponentPrintSettings } from 'app/model/model';
 
-export class FrequencyPersonalInformationPage extends BasePage  {
+export class SeverityTimePeriodPage extends BasePage  {
 
-    private prefix: string = 'freqPersonalInformationPage_';
+    private prefix: string = 'severityTimePeriodPage_';
 
     public getPrefix() {
         return this.prefix;
@@ -15,14 +15,14 @@ export class FrequencyPersonalInformationPage extends BasePage  {
     }
 
     private headerStyle: any = {
-        color: '#464646',
-        fontSize: 12,
+        color: '#b1d23b',
+        fontSize: 14,
         bold: true,
         margin: [ 60, 0, 40, 0]
     };
 
     private header: any = {
-        text: 'Personal Information',
+        text: 'Time Period',
         style: this.prefix + 'headerStyle'
     };
 

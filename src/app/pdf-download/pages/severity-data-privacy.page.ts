@@ -1,9 +1,9 @@
 import { BasePage } from './base.page';
 import { ComponentPrintSettings } from 'app/model/model';
 
-export class FrequencyPersonalInformationPage extends BasePage  {
+export class SeverityDataPrivacyPage extends BasePage  {
 
-    private prefix: string = 'freqPersonalInformationPage_';
+    private prefix: string = 'severityDataPrivacyPage_';
 
     public getPrefix() {
         return this.prefix;
@@ -22,7 +22,7 @@ export class FrequencyPersonalInformationPage extends BasePage  {
     };
 
     private header: any = {
-        text: 'Personal Information',
+        text: 'Data Privacy',
         style: this.prefix + 'headerStyle'
     };
 
