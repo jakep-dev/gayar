@@ -1,5 +1,6 @@
 export * from './tile/tile.component';
 export * from './tile/blank/blank.component';
+export * from './tile/disable/disable.component';
 export * from './loading/cube/cube.component';
 export * from './errors/errors';
 export * from './behavior/behaviors';
@@ -11,6 +12,7 @@ export * from './components/components';
 
 import { TileComponent } from './tile/tile.component';
 import { BlankComponent } from './tile/blank/blank.component';
+import { DisableComponent } from './tile/disable/disable.component';
 import { CubeComponent } from './loading/cube/cube.component';
 import { BLOCK_ERRORS  } from './errors/errors';
 import { BLOCK_CHART_BEHAVIORS } from './behavior/behaviors';
@@ -24,6 +26,7 @@ import { BLOCK_COMPONENTS } from './components/components';
 export const BLOCK_SHARED = [
     TileComponent,
     BlankComponent,
+    DisableComponent,
     CubeComponent,
     BLOCK_ERRORS,
     BLOCK_CHART_BEHAVIORS,

@@ -16,6 +16,8 @@ export class BenchmarkComponent implements OnInit {
 
     chartHeader:string = '';
     modelData: DashboardScoreModel;
+    permission: any;
+    isDisabled: boolean = false;
 
     setModelData(modelData: DashboardScoreModel) {
         this.modelData = modelData;
@@ -48,8 +50,8 @@ export class BenchmarkComponent implements OnInit {
     }
 
     navigate () {
-        let permission = this.sessionService.getUserPermission();
-        if (permission && permission.benchmark && permission.benchmark.hasAccess) {
+        
+        if (this.permission && this.permission.benchmark && this.permission.benchmark.hasAccess) {
             this.router.navigate(['/benchmark']);
         } else {
             this.snackBarService.Simple('No Access');
@@ -84,6 +86,7 @@ export class BenchmarkComponent implements OnInit {
 
     ngOnInit() {
         this.getBenchmarkData();
+        this.getPermission();
     }
 
     /**
@@ -96,6 +99,13 @@ export class BenchmarkComponent implements OnInit {
             } else {
             this.dashboardService.getBenchmarkScoreByManualInput(this.componentData.chartType, this.componentData.naics, this.componentData.revenueRange, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
+        }
+    }
+
+    getPermission() {
+        this.permission = this.sessionService.getUserPermission();
+        if (this.permission && this.permission.dashboard && this.permission.dashboard.hasAccess) {
+            this.isDisabled = this.permission.dashboard.hasAccess;
         }
     }
 

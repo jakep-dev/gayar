@@ -26,7 +26,7 @@
   <md-progress-bar mode="indeterminate" color="warn" *ngIf="showProgress"></md-progress-bar>
   <div class="tile-content">
     <div
-      *ngIf="isContent"
+      *ngIf="isContent && !isDisabled"
       fxLayout="row" fxLayout.lt-md="column"
       fxLayoutAlign="center center">
 
@@ -44,6 +44,12 @@
 
         </ng-content>
       </div>
+    </div>
+    <div
+      *ngIf="isDisabled"
+      fxLayout="row" fxLayout.lt-md="column"
+      fxLayoutAlign="center center">
+        <app-disable></app-disable>
     </div>
   </div>
 </div>
