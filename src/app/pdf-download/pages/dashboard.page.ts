@@ -51,19 +51,16 @@ export class DashboardPage extends BasePage  {
                 ],                
                 [
                     {
-                        image: this.imageLeft,
-                        //height: 460,
-                        width: 240
+                        // image: this.imageLeft,
+                        // width: 240
                     },
                     {
-                        image: this.imageMiddle,
-                        //height: 460,
-                        width: 240
+                        // image: this.imageMiddle,
+                        // width: 240
                     },
                     {
-                        image: this.imageRight,
-                        //height: 460,
-                        width: 240
+                        // image: this.imageRight,
+                        // width: 240
                     }
                 ]
             ]
@@ -75,6 +72,36 @@ export class DashboardPage extends BasePage  {
     private pdfContent: Array<any> = [];
 
     public getPdfContent(): Array<any> {
+        if(this.imageLeft && this.imageLeftUrl) {
+            this.table.table.body[1][0] = {
+                image: this.prefix + this.imageLeft,
+                width: 240
+            };
+        } else {
+            this.table.table.body[1][0] = {
+                text: ''
+            };
+        }
+        if(this.imageMiddle && this.imageMiddleUrl) {
+            this.table.table.body[1][1] = {
+                image: this.prefix + this.imageMiddle,
+                width: 240
+            };
+        } else {
+            this.table.table.body[1][1] = {
+                text: ''
+            };
+        }
+        if(this.imageRight && this.imageRightUrl) {
+            this.table.table.body[1][2] = {
+                image: this.prefix + this.imageRight,
+                width: 240
+            };
+        } else {
+            this.table.table.body[1][2] = {
+                text: ''
+            };
+        }
         return this.pdfContent;
     }
 
@@ -108,7 +135,7 @@ export class DashboardPage extends BasePage  {
         if(index >= 0 && index <= 2) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
-            this.table.table.body[1][index].image = imageName;
+            //this.table.table.body[1][index].image = imageName;
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
@@ -159,9 +186,9 @@ export class DashboardPage extends BasePage  {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;    
         }
 
-        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[1][1].image = this.prefix + this.imageMiddle;
-        this.table.table.body[1][2].image = this.prefix + this.imageRight;
+        // this.table.table.body[1][0].image = this.prefix + this.imageLeft;
+        // this.table.table.body[1][1].image = this.prefix + this.imageMiddle;
+        // this.table.table.body[1][2].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

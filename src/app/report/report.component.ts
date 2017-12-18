@@ -208,61 +208,68 @@ export class ReportComponent implements OnInit {
     }
 
     processReportSection(section: IReportTileModel) {
-        if(section.value) {
-            this.tocPage.addTocEntry(section.description, 1, section.subComponents[0].pageType);
-            section.subComponents.forEach(reportSectionItem => {
-                if(reportSectionItem.value) {
-                    console.log(reportSectionItem.description);
-                    this.tocPage.addTocEntry(reportSectionItem.description, 2, reportSectionItem.pageType);
-                    if(!this.hasPageType(reportSectionItem.pageType)) {
-                        this.addPageType(reportSectionItem.pageType);
-                        console.log('Page type = ' + reportSectionItem.pageType);
-                    }
-                    let n: number;
-                    let i: number;
-                    n = reportSectionItem.chartComponents.length;
-                    for(i = 0; i < n; i++) {
-                        this.chartDataCollection.push(
-                            {
-                                chartSetting: reportSectionItem.chartComponents[i],
-                                imageData: '',
-                                imageIndex: reportSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                                pagePosition: reportSectionItem.chartComponents[i].pagePosition,
-                                targetPage: this.pageCollection[reportSectionItem.pageType]
-                            }
-                        );
-                    }
-                    if(reportSectionItem.subSubComponents) {
-                      reportSectionItem.subSubComponents.forEach(reportSubSectionItem => {
-                          if(reportSubSectionItem.value) {
-                              console.log(reportSubSectionItem.description);
-                              this.tocPage.addTocEntry(reportSubSectionItem.description, 3, reportSubSectionItem.pageType);
-                              if(!this.hasPageType(reportSubSectionItem.pageType)) {
-                                  this.addPageType(reportSubSectionItem.pageType);
-                                  console.log('Page type = ' + reportSubSectionItem.pageType);
-                              }
-
-                              n = reportSubSectionItem.chartComponents.length;
-                              for(i = 0; i < n; i++) {
-                                this.chartDataCollection.push(
-                                      {
-                                          chartSetting: reportSubSectionItem.chartComponents[i],
-                                          imageData: '',
-                                          imageIndex: reportSubSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                                          pagePosition: reportSubSectionItem.chartComponents[i].pagePosition,
-                                          targetPage: this.pageCollection[reportSubSectionItem.pageType]
-                                      }
-                                  );
-                              }
-                          }
-                      });
-                    }
+        let n: number;
+        let i: number;
+        let headEntryAdded = false;
+        section.subComponents.forEach(reportSectionItem => {
+            if(reportSectionItem.value) {
+                console.log('Sub Component = ' + reportSectionItem.description);
+                if(!headEntryAdded) {
+                    this.tocPage.addTocEntry(section.description, 1, reportSectionItem.pageType);
+                    headEntryAdded = true;
                 }
-            });
-            //console.log(this.chartDataCollection);
-            if(this.chartDataCollection.length > 0) {
-                this.loadChartImage();
+                this.tocPage.addTocEntry(reportSectionItem.description, 2, reportSectionItem.pageType);
+                if(!this.hasPageType(reportSectionItem.pageType)) {
+                    this.addPageType(reportSectionItem.pageType);
+                    console.log('Page type = ' + reportSectionItem.pageType);
+                }
+                n = reportSectionItem.chartComponents.length;
+                for(i = 0; i < n; i++) {
+                    this.chartDataCollection.push(
+                        {
+                            chartSetting: reportSectionItem.chartComponents[i],
+                            imageData: '',
+                            imageIndex: reportSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
+                            pagePosition: reportSectionItem.chartComponents[i].pagePosition,
+                            targetPage: this.pageCollection[reportSectionItem.pageType]
+                        }
+                    );
+                }
             }
+            if(reportSectionItem.subSubComponents) {
+                reportSectionItem.subSubComponents.forEach(reportSubSectionItem => {
+                    if(reportSubSectionItem.value) {
+                        console.log('Sub Sub Component = ' + reportSubSectionItem.description);
+                        if(!headEntryAdded) {
+                            this.tocPage.addTocEntry(section.description, 1, reportSubSectionItem.pageType);
+                            headEntryAdded = true;
+                        }
+                        this.tocPage.addTocEntry(reportSubSectionItem.description, 3, reportSubSectionItem.pageType);
+                        if(!this.hasPageType(reportSubSectionItem.pageType)) {
+                            this.addPageType(reportSubSectionItem.pageType);
+                            console.log('Page type = ' + reportSubSectionItem.pageType);
+                        }
+
+                        n = reportSubSectionItem.chartComponents.length;
+                        for(i = 0; i < n; i++) {
+                        this.chartDataCollection.push(
+                                {
+                                    chartSetting: reportSubSectionItem.chartComponents[i],
+                                    imageData: '',
+                                    imageIndex: reportSubSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
+                                    pagePosition: reportSubSectionItem.chartComponents[i].pagePosition,
+                                    targetPage: this.pageCollection[reportSubSectionItem.pageType]
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+            
+        });
+        //console.log(this.chartDataCollection);
+        if(this.chartDataCollection.length > 0) {
+            this.loadChartImage();
         }
     }
     
