@@ -45,9 +45,9 @@ export class DashboardPage extends BasePage  {
             heights: [ 15, 300 ],
             body: [
                 [
-                    { text: 'Frequency', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
-                    { text: 'Severity', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
-                    { text: 'Benchmark', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
+                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
+                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
+                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
                 ],                
                 [
                     {
@@ -72,42 +72,87 @@ export class DashboardPage extends BasePage  {
     private pdfContent: Array<any> = [];
 
     public getPdfContent(): Array<any> {
+
+        let dashboardSectionList: Array<any> = [];
+        let i: number;
+
         if(this.imageLeft && this.imageLeftUrl) {
-            this.table.table.body[1][0] = {
-                image: this.prefix + this.imageLeft,
-                width: 240
-            };
-        } else {
-            this.table.table.body[0][0].text = '';
-            this.table.table.body[1][0] = {
-                text: '',
-                margin: [ 240, 0, 0, 0 ]
-            };
+            dashboardSectionList.push(
+                {
+                    header: "Frequency",
+                    imageLink: this.prefix + this.imageLeft
+                }
+            );
         }
         if(this.imageMiddle && this.imageMiddleUrl) {
-            this.table.table.body[1][1] = {
-                image: this.prefix + this.imageMiddle,
-                width: 240
-            };
-        } else {
-            this.table.table.body[0][1].text = '';
-            this.table.table.body[1][1] = {
-                text: '',
-                margin: [ 240, 0, 0, 0 ]
-            };
+            dashboardSectionList.push(
+                {
+                    header: "Severity",
+                    imageLink: this.prefix + this.imageMiddle
+                }
+            );
         }
         if(this.imageRight && this.imageRightUrl) {
-            this.table.table.body[1][2] = {
-                image: this.prefix + this.imageRight,
+            dashboardSectionList.push(
+                {
+                    header: "Benchmark",
+                    imageLink: this.prefix + this.imageRight
+                }
+            );
+        }
+        for(i = 0; i < dashboardSectionList.length; i++) {
+            this.table.table.body[0][i].text = dashboardSectionList[i].header;
+            this.table.table.body[1][i] = {
+                image: dashboardSectionList[i].imageLink,
                 width: 240
-            };
-        } else {
-            this.table.table.body[0][2].text = '';
-            this.table.table.body[1][2] = {
+            }
+        }
+        for(; i < 3; i++) {
+            this.table.table.body[0][i].text = '';
+            this.table.table.body[1][i] = {
                 text: '',
                 margin: [ 240, 0, 0, 0 ]
             };
         }
+
+        // if(this.imageLeft && this.imageLeftUrl) {
+        //     this.table.table.body[1][0] = {
+        //         image: this.prefix + this.imageLeft,
+        //         width: 240
+        //     };
+        // } else {
+        //     this.table.table.body[0][0].text = '';
+        //     this.table.table.body[1][0] = {
+        //         text: '',
+        //         margin: [ 240, 0, 0, 0 ]
+        //     };
+        // }
+
+        // if(this.imageMiddle && this.imageMiddleUrl) {
+        //     this.table.table.body[1][1] = {
+        //         image: this.prefix + this.imageMiddle,
+        //         width: 240
+        //     };
+        // } else {
+        //     this.table.table.body[0][1].text = '';
+        //     this.table.table.body[1][1] = {
+        //         text: '',
+        //         margin: [ 240, 0, 0, 0 ]
+        //     };    
+        // }
+
+        // if(this.imageRight && this.imageRightUrl) {
+        //     this.table.table.body[1][2] = {
+        //         image: this.prefix + this.imageRight,
+        //         width: 240
+        //     };
+        // } else {
+        //     this.table.table.body[0][2].text = '';
+        //     this.table.table.body[1][2] = {
+        //         text: '',
+        //         margin: [ 240, 0, 0, 0 ]
+        //     };
+        // }
         return this.pdfContent;
     }
 

@@ -111,7 +111,7 @@ export class ReportTileComponent implements OnInit {
     if(!subSubComponent) { return; }
 
     subSubComponent.value = value;
-    parent.value = parent.subSubComponents.every((sub)=> { return sub.value === true; })
+    parent.value = parent.subSubComponents.some((sub)=> { return sub.value === true; })
     this.executeParentChildPolicy();
   }
 

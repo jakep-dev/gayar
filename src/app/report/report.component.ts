@@ -22,7 +22,7 @@ import { MenuService, SearchService, ReportService, FontService, GetFileService 
 
 import { 
     DashboardScore, FrequencyInput, SeverityInput, ComponentPrintSettings,
-    IReportTileModel, ISubComponentModel, IChartMetaData 
+    IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget
 } from 'app/model/model';
 
 import { 
@@ -207,61 +207,63 @@ export class ReportComponent implements OnInit {
         });
     }
 
-    processReportSection(section: IReportTileModel) {
+    private loadChartCollection(chartComponents:IChartWidget[], pageType: string) {
         let n: number;
         let i: number;
-        let headEntryAdded = false;
-        section.subComponents.forEach(reportSectionItem => {
-            if(reportSectionItem.value) {
-                console.log('Sub Component = ' + reportSectionItem.description);
-                if(!headEntryAdded) {
-                    this.tocPage.addTocEntry(section.description, 1, reportSectionItem.pageType);
-                    headEntryAdded = true;
-                }
-                this.tocPage.addTocEntry(reportSectionItem.description, 2, reportSectionItem.pageType);
-                if(!this.hasPageType(reportSectionItem.pageType)) {
-                    this.addPageType(reportSectionItem.pageType);
-                    console.log('Page type = ' + reportSectionItem.pageType);
-                }
-                n = reportSectionItem.chartComponents.length;
-                for(i = 0; i < n; i++) {
-                    this.chartDataCollection.push(
-                        {
-                            chartSetting: reportSectionItem.chartComponents[i],
-                            imageData: '',
-                            imageIndex: reportSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                            pagePosition: reportSectionItem.chartComponents[i].pagePosition,
-                            targetPage: this.pageCollection[reportSectionItem.pageType]
-                        }
-                    );
-                }
-            }
-            if(reportSectionItem.subSubComponents) {
-                reportSectionItem.subSubComponents.forEach(reportSubSectionItem => {
-                    if(reportSubSectionItem.value) {
-                        console.log('Sub Sub Component = ' + reportSubSectionItem.description);
-                        if(!headEntryAdded) {
-                            this.tocPage.addTocEntry(section.description, 1, reportSubSectionItem.pageType);
-                            headEntryAdded = true;
-                        }
-                        this.tocPage.addTocEntry(reportSubSectionItem.description, 3, reportSubSectionItem.pageType);
-                        if(!this.hasPageType(reportSubSectionItem.pageType)) {
-                            this.addPageType(reportSubSectionItem.pageType);
-                            console.log('Page type = ' + reportSubSectionItem.pageType);
-                        }
 
-                        n = reportSubSectionItem.chartComponents.length;
-                        for(i = 0; i < n; i++) {
-                        this.chartDataCollection.push(
-                                {
-                                    chartSetting: reportSubSectionItem.chartComponents[i],
-                                    imageData: '',
-                                    imageIndex: reportSubSectionItem.chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                                    pagePosition: reportSubSectionItem.chartComponents[i].pagePosition,
-                                    targetPage: this.pageCollection[reportSubSectionItem.pageType]
-                                }
-                            );
+        if(!this.hasPageType(pageType)) {
+            this.addPageType(pageType);
+            console.log('Loaded Page type ' + pageType);
+        }
+        n = chartComponents.length;
+        for(i = 0; i < n; i++) {
+            this.chartDataCollection.push(
+                {
+                    chartSetting: chartComponents[i],
+                    imageData: '',
+                    imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
+                    pagePosition: chartComponents[i].pagePosition,
+                    targetPage: this.pageCollection[pageType]
+                }
+            );
+        }
+    }
+
+    processReportSection(section: IReportTileModel) {
+        let sectionHeaderAdded = false;
+        let subEntryAdded;
+
+        section.subComponents.forEach(subComponentItem => {
+            if(subComponentItem.value) {
+                if(!sectionHeaderAdded) {
+                    console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
+                    this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
+                    sectionHeaderAdded = true;
+                }
+                console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
+                this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
+                subEntryAdded = true;
+                this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType);
+            } else {
+                subEntryAdded = false;
+            }
+            if(subComponentItem.subSubComponents) {
+                subComponentItem.subSubComponents.forEach(subSubComponentItem => {
+                    if(subSubComponentItem.value) {
+                        if(!sectionHeaderAdded) {
+                            console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
+                            this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
+                            sectionHeaderAdded = true;
                         }
+                        if(!subEntryAdded) {
+                            console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
+                            this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
+                            this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType);
+                            subEntryAdded = true;
+                        }
+                        console.log('Sub Sub Component = ' + subSubComponentItem.description + ' pageType = ' + subSubComponentItem.pageType);
+                        this.tocPage.addTocEntry(subSubComponentItem.description, 3, subSubComponentItem.pageType);
+                        this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType);
                     }
                 });
             }
@@ -502,9 +504,9 @@ export class ReportComponent implements OnInit {
                 pg.addPage(this.pageCollection[pageType]);
               }
           );
-          console.log(pg.getContent());
+          //console.log(pg.getContent());
           this.pdfMake.createPdf(pg.getContent()).download('test.pdf');
-          console.log(pg.getContent());
+          //console.log(pg.getContent());
       }
   }
 
