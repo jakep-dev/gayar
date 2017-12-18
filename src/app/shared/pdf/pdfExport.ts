@@ -1,5 +1,5 @@
 import canvg from 'new-canvg';
-import pdfMake from 'pdfmake/build/pdfmake';
+import pdfMake from 'pdfmake/build/pdfmake.min';
 
 export const canvasFactory = canvg;
 

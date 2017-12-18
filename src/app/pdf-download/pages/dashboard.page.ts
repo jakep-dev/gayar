@@ -78,8 +78,10 @@ export class DashboardPage extends BasePage  {
                 width: 240
             };
         } else {
+            this.table.table.body[0][0].text = '';
             this.table.table.body[1][0] = {
-                text: ''
+                text: '',
+                margin: [ 240, 0, 0, 0 ]
             };
         }
         if(this.imageMiddle && this.imageMiddleUrl) {
@@ -88,8 +90,10 @@ export class DashboardPage extends BasePage  {
                 width: 240
             };
         } else {
+            this.table.table.body[0][1].text = '';
             this.table.table.body[1][1] = {
-                text: ''
+                text: '',
+                margin: [ 240, 0, 0, 0 ]
             };
         }
         if(this.imageRight && this.imageRightUrl) {
@@ -98,8 +102,10 @@ export class DashboardPage extends BasePage  {
                 width: 240
             };
         } else {
+            this.table.table.body[0][2].text = '';
             this.table.table.body[1][2] = {
-                text: ''
+                text: '',
+                margin: [ 240, 0, 0, 0 ]
             };
         }
         return this.pdfContent;
