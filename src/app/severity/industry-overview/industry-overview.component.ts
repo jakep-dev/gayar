@@ -4,7 +4,7 @@ import { BarChartData, SeverityInput } from 'app/model/model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { Observable } from 'rxjs/Observable';
-import { SeverityService } from 'app/services/services';
+import { SeverityService, SessionService } from 'app/services/services';
 
 @Component({
   selector: 'severity-industry-overview',
@@ -15,6 +15,7 @@ export class IndustryOverviewComponent implements OnInit {
 
   modelData: SeverityIndustryOverviewModel;
   chartHeader : string;
+  hasAccess: boolean;
 
   setModelData(modelData: SeverityIndustryOverviewModel) {
       this.modelData = modelData;
@@ -75,11 +76,12 @@ export class IndustryOverviewComponent implements OnInit {
     chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 10], [chart.chart.plotLeft + 5, yBreakPoint], '#ccd6eb', 2);
 }
 
-  constructor(private severityService: SeverityService) {
+  constructor(private severityService: SeverityService, private sessionService: SessionService) {
   }
 
   ngOnInit() {
       this.getFrequencyIndustryOverViewData();
+      this.getPermission();
   }
 
   /**
@@ -89,6 +91,13 @@ export class IndustryOverviewComponent implements OnInit {
       if(this.componentData) {           
         this.severityService.getSeverityIndustryOverview(this.componentData.companyId, this.componentData.naics)
         .subscribe(modelData => this.setModelData(modelData));            
+      }
+  }
+
+  getPermission() {
+      let permission = this.sessionService.getUserPermission();
+      if(permission) {
+          this.hasAccess = permission.severity && permission.severity.industry && permission.severity.industry.hasAccess
       }
   }
 
