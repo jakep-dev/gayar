@@ -4,5 +4,6 @@ export const APPCONSTANTS = {
     SELECTED_COMPANY:                       'Selected_Company',
     SELECTED_SEARCH_CRITERIA:               'Selected_Search_Criteria',
     PEER_GROUP_LOSS:                          'Peer_Group_Loss'
-  }
+  },
+  APPLICATION_ID: 'CYB_OVER_VUE' //will be the product id.
 }

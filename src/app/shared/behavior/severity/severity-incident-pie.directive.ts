@@ -1,6 +1,7 @@
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PieChartData, SeverityIncidentPieFlipModel } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
+import { SessionService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-incident-pie]'
@@ -26,11 +27,13 @@ export class SeverityIncidentPieDirective {
       public static LGRAY: string = '#CCCCCC';
     
       displayText: string = '';
+      hasDetailAccess: boolean;
     
-      constructor() {}
+      constructor(private sessionService: SessionService) {}
     
       ngOnInit() {
         this.setDataInDescendingOrder();
+        this.getDetailAccess();
         this.buildHighChartObject();
       }
     
@@ -236,7 +239,7 @@ export class SeverityIncidentPieDirective {
                 return {  
                   name: item.type,
                   y: item.pct_count,
-                  drilldown: item.type,
+                  drilldown: !this.hasDetailAccess? null : item.type,
                   dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
                 }
               }).forEach(item => series.data.push(item));
@@ -255,7 +258,7 @@ export class SeverityIncidentPieDirective {
             });
           });
           tempChartData.series = sortSeriesInDescOrder;
-    
+
           // Start Get Drilldown Data
           groupNameType.forEach(name => {
             dataDrilldownSeries = new Object();
@@ -295,7 +298,12 @@ export class SeverityIncidentPieDirective {
           this.onDataComplete.emit(tempChartData);
         }
       }
-    
+      
+      getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
+      }
+
       setDataInDescendingOrder(){
         this.modelData.datasets.sort(function(a,b){
           if(a.pct_count < b.pct_count){

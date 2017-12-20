@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
-import { DashboardService } from '../../services/services';
+import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
+import { Router } from '@angular/router';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'dashboard-benchmark-score',
@@ -14,6 +16,8 @@ export class BenchmarkComponent implements OnInit {
 
     chartHeader:string = '';
     modelData: DashboardScoreModel;
+    permission: any;
+    isDisabled: boolean = false;
 
     setModelData(modelData: DashboardScoreModel) {
         this.modelData = modelData;
@@ -25,7 +29,7 @@ export class BenchmarkComponent implements OnInit {
     @Input() componentData: DashboardScore;
 
     /**
-     * Event handler to indicate the construction of the GaugeChart's required data is built 
+     * Event handler to indicate the construction of the GaugeChart's required data is built
      * @param newChartData GaugeChart's required data
      */
     onDataComplete(newChartData : GaugeChartData) {
@@ -34,15 +38,26 @@ export class BenchmarkComponent implements OnInit {
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
     chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
-    
+
     /**
-     * Event handler to indicate the chart is loaded 
+     * Event handler to indicate the chart is loaded
      * @param chart The chart commponent
      */
     onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+    }
+
+    navigate () {
+
+        if (this.permission && this.permission.dashboard && 
+            this.permission.benchmark && 
+            this.permission.benchmark.hasAccess) {
+            this.router.navigate(['/benchmark']);
+        } else {
+            this.snackBarService.Simple('No Access');
+        }
     }
 
     addLabelAndImage(chart){
@@ -57,19 +72,23 @@ export class BenchmarkComponent implements OnInit {
         );
 
         chart.addChartImage(
-            '../assets/images/advisen-logo.png', 
-            chart.chart.chartWidth - 80, 
-            chart.chart.chartHeight - 20, 
-            69, 
+            '../assets/images/advisen-logo.png',
+            chart.chart.chartWidth - 80,
+            chart.chart.chartHeight - 20,
+            69,
             17
-        ); 
+        );
     }
-    
-    constructor(private dashboardService: DashboardService) {
+
+    constructor(private dashboardService: DashboardService,
+                private sessionService: SessionService,
+                private snackBarService: SnackBarService,
+                private router: Router) {
     }
 
     ngOnInit() {
         this.getBenchmarkData();
+        this.getPermission();
     }
 
     /**
@@ -83,6 +102,13 @@ export class BenchmarkComponent implements OnInit {
             this.dashboardService.getBenchmarkScoreByManualInput(this.componentData.chartType, this.componentData.naics, this.componentData.revenueRange, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
         }
-    }        
+    }
+
+    getPermission() {
+        this.permission = this.sessionService.getUserPermission();
+        if (this.permission && this.permission.dashboard && this.permission.dashboard.benchmarkGauge) {
+            this.isDisabled = !this.permission.dashboard.benchmarkGauge.hasAccess;
+        }
+    }
 
 }

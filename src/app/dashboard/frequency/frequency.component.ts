@@ -2,9 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
-import { DashboardService } from '../../services/services';
+import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 import { SearchService } from 'app/services/search.service';
+import { SnackBarService } from 'app/shared/shared';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-frequency',
@@ -16,6 +18,8 @@ export class FrequencyComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
+  permission: any;
+  isDisabled: boolean = false;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -49,11 +53,22 @@ export class FrequencyComponent implements OnInit {
    * Event handler to indicate the chart is loaded 
    * @param chart The chart commponent
    */
-  onChartReDraw(chart: BaseChart) {     
+  onChartReDraw(chart: BaseChart) {  
+      
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+  }
+
+  navigate () {
+    if (this.searchService.checkValidationPeerGroup() && 
+        this.searchService.checkValidationPeerGroup().hasFrequencyData &&
+        this.permission && this.permission.frequency && this.permission.frequency.hasAccess) {
+        this.router.navigate(['/frequency']);
+    } else {
+        this.snackBarService.Simple('No Access');
     }
+  }
 
     addLabelAndImage(chart){
         chart.addChartLabel(
@@ -75,11 +90,16 @@ export class FrequencyComponent implements OnInit {
         ); 
     }
   
-  constructor(private dashboardService: DashboardService, private searchService : SearchService) {
+  constructor(private dashboardService: DashboardService,
+              private searchService : SearchService,
+              private sessionService: SessionService,
+              private snackBarService: SnackBarService,
+              private router: Router) {
   }
 
   ngOnInit() {
       this.getFrequencyData();
+      this.getPermission();
   }
 
   /**
@@ -89,5 +109,12 @@ export class FrequencyComponent implements OnInit {
     this.dashboardService.getFrequencyScore(this.componentData.companyId, this.componentData.naics, 
                                             this.componentData.revenueRange, this.componentData.limit, this.componentData.retention).
                                             subscribe(chartData => this.setModelData(chartData));;
-  }        
+  }
+  
+  getPermission() {
+    this.permission = this.sessionService.getUserPermission();
+    if (this.permission && this.permission.dashboard && this.permission.dashboard.frequencyGauge) {
+        this.isDisabled = !this.permission.dashboard.frequencyGauge.hasAccess;
+    }
+   }
 }

@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityLossBarModel, SeverityLossGroup } from "app/model/severity.model";
-import { SearchService } from 'app/services/services';
+import { SearchService, SessionService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-loss]'
@@ -19,11 +19,12 @@ export class SeverityLossBarDirective {
     ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
+    hasDetailAccess: boolean;
     seriesColor: string[];
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -35,6 +36,7 @@ export class SeverityLossBarDirective {
 
     ngOnInit() {        
         this.getCompanyName();
+        this.getDetailAccess();
         this.buildHighChartObject();
     }
 
@@ -77,6 +79,11 @@ export class SeverityLossBarDirective {
      */
     buildHighChartObject() {
         this.buildNoBreakChart();
+    }
+
+    getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.severity && permission.severity.loss && permission.severity.loss.hasDetailAccess;
     }
 
     buildNoBreakChart() {
@@ -282,7 +289,7 @@ export class SeverityLossBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);

@@ -1,0 +1,56 @@
+export const ServerConstants = {
+    COMPANY_SEARCH: { 
+        PRODUCT_CODE : 'COV_SEARCH_PAGE'
+    }, DASHBOARD: {
+        PRODUCT_CODE :  'COV_DB_PAGE',
+        COMPONENTS_CODE : {
+            FREQUENCY:  'COV_DB_FREQUENCY_GUAGE',
+            SEVERITY:   'COV_DB_SEVERITY_GUAGE',
+            BENCHMARK:  'COV_DB_BENCHMARK_GUAGE'
+        }
+    }, FREQUENCY: { 
+        PRODUCT_CODE : 'COV_FQ_PAGE',
+        COMPONENTS_CODE : {
+            INDUSTRY:               'COV_FQ_IND_OVERVIEW_CHART',
+            TIME_PERIOD:            'COV_FQ_TIME_PERIOD_CHART',
+            TIME_PERIOD_DETAIL:     'COV_FQ_TIME_PERIOD_CHART_DETAIL',
+            INCIDENT:               'COV_FQ_TYPE_OF_INCIDENT_CHART',
+            INCIDENT_DETAIL:        'COV_FQ_TYPE_OF_INCIDENT_CHART_DETAIL',
+            LOSS:                   'COV_FQ_TYPE_OF_LOSS_CHART',
+            LOSS_DETAIL:            'COV_FQ_TYPE_OF_LOSS_CHART_DETAIL',
+            PEER_GROUP_TABLE:       'COV_FQ_PEERGROUP_LOSS_TABLE',
+            PEER_GROUP_TABLE_DESCR: 'COV_FQ_PEERGROUP_LOSS_TABLE_DESCR',
+            COMPANY_TABLE:          'COV_FQ_COMPANY_LOSS_DATA_TABLE',
+            COMPANY_TABLE_DESCR:    'COV_FQ_COMPANY_LOSS_DATA_TABLE_DESCR'
+        }
+    }, SEVERITY: { 
+        PRODUCT_CODE : 'COV_SV_PAGE',
+        COMPONENTS_CODE : {
+            INDUSTRY:               'COV_SV_INDUSTRY_OVERVIEW_CHART',
+            TIME_PERIOD:            'COV_SV_TIME_PERIOD_CHART',
+            TIME_PERIOD_DETAIL:     'COV_SV_TIME_PERIOD_CHART_DETAIL',
+            INCIDENT:               'COV_SV_TYPE_OF_INCIDENT_CHART',
+            INCIDENT_DETAIL:        'COV_SV_TYPE_OF_INCIDENT_CHART_DETAIL',
+            LOSS:                   'COV_SV_TYPE_OF_LOSS_CHART',
+            LOSS_DETAIL:            'COV_SV_TYPE_OF_LOSS_CHART_DETAIL',
+            PEER_GROUP_TABLE:       'COV_SV_PEER_GROUP_LOSS_TABLE',
+            PEER_GROUP_TABLE_DESCR: 'COV_SV_PEER_GROUP_LOSS_DESCRIPTION',
+            COMPANY_TABLE:          'COV_SV_COMPANY_LOSS_TABLE',
+            COMPANY_TABLE_DESCR:    'COV_SV_COMPANY_LOSS_DESCRIPTION'
+        }
+    }, BENCHMARK: {
+        PRODUCT_CODE :          'COV_BM_PAGE',
+        COMPONENTS_CODE : {
+            LIMIT_ADEQUACY :    'COV_BM_LIMIT_ADEQUACY_CHART',
+            PREMIUM:            'COV_BM_PERMIUM_DIST_CHART',
+            LIMIT:              'COV_BM_LIMIT_DIST_CHART',
+            RETENTION:          'COV_BM_RETENTION_DIST_CHART',
+            RATE:               'COV_BM_RATE_PER_MILLION_CHART'
+        }
+    }, GLOSSARY: {
+        PRODUCT_CODE : 'COV_GLOSSARY_PAGE'
+    }, REPORT : {
+        PRODUCT_CODE : 'COV_REPORT_PAGE'
+    }
+
+}

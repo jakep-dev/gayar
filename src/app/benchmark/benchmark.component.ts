@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { SearchService, MenuService } from '../services/services';
+import { Component, OnInit } from '@angular/core';
+import { SearchService, MenuService, SessionService } from '../services/services';
 import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput } from '../model/benchmark.model';
 import {Subscription} from "rxjs/Subscription";
 import {MediaChange, ObservableMedia} from "@angular/flex-layout";
@@ -18,6 +18,11 @@ export class BenchmarkComponent implements OnInit {
     public companyId: number;
     public naics: string;
     public revenueRange: string;
+    isLimitAdequacy: boolean = false;
+    isPremiumDist: boolean = false;
+    isLimitDist: boolean = false;
+    isRetentionDist: boolean = false;
+    isRatePerMillion: boolean = false;
 
     public benchmarkDistributionInput: BenchmarkDistributionInput;
     public benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
@@ -27,7 +32,8 @@ export class BenchmarkComponent implements OnInit {
 
     constructor(private searchService: SearchService,
                 public menuService: MenuService,
-                private media: ObservableMedia) {
+                private media: ObservableMedia,
+                private sessionService: SessionService) {
                 this.watchForMedia(); }
 
     ngOnInit() {
@@ -35,6 +41,7 @@ export class BenchmarkComponent implements OnInit {
         this.setupDistributionInput();
         this.setupLimitAdequacyInput();
         this.setupRateInput();
+        this.getPermission();
     }
 
     watchForMedia () {
@@ -84,6 +91,17 @@ export class BenchmarkComponent implements OnInit {
             naics: this.searchService.getNaics,
             revenueRange: this.searchService.getRevenueRangeId
         };
+    }
+
+    getPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission){
+            this.isLimitAdequacy = permission.benchmark && permission.benchmark.limitAdequacy && permission.benchmark.limitAdequacy.hasAccess;
+            this.isPremiumDist = permission.benchmark && permission.benchmark.premium && permission.benchmark.premium.hasAccess;
+            this.isLimitDist = permission.benchmark && permission.benchmark.limit && permission.benchmark.limit.hasAccess;
+            this.isRetentionDist = permission.benchmark && permission.benchmark.retention && permission.benchmark.retention.hasAccess;
+            this.isRatePerMillion = permission.benchmark && permission.benchmark.rate && permission.benchmark.rate.hasAccess;
+        }
     }
 
 }

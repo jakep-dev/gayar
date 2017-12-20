@@ -1,6 +1,7 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BaseChart } from './../../charts/base-chart';
 import { FrequencyIncidentPieFlipModel, PieChartData } from 'app/model/model';
+import { SessionService } from 'app/services/services';
 
 @Directive({
   selector: '[frequency-incident-pie]'
@@ -27,11 +28,13 @@ export class FrequencyIncidentPieDirective {
   public static LGRAY: string = '#CCCCCC';
 
   displayText: string = '';
+  hasDetailAccess: boolean;
 
-  constructor() {}
+  constructor(private sessionService: SessionService) {}
 
   ngOnInit() {
     this.setDataInDescendingOrder();
+    this.getDetailAccess();
     this.buildHighChartObject();
   }
 
@@ -229,7 +232,7 @@ export class FrequencyIncidentPieDirective {
             return {  
               name: item.type,
               y: item.pct_count,
-              drilldown: item.type,
+              drilldown: !this.hasDetailAccess? null : item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             }
           }).forEach(item => series.data.push(item));
@@ -287,6 +290,11 @@ export class FrequencyIncidentPieDirective {
 
       this.onDataComplete.emit(tempChartData);
     }
+  }
+
+  getDetailAccess() {
+    let permission = this.sessionService.getUserPermission();
+    this.hasDetailAccess = permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
   }
 
   setDataInDescendingOrder(){
