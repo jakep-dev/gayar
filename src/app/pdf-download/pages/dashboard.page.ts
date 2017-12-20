@@ -115,44 +115,6 @@ export class DashboardPage extends BasePage  {
             };
         }
 
-        // if(this.imageLeft && this.imageLeftUrl) {
-        //     this.table.table.body[1][0] = {
-        //         image: this.prefix + this.imageLeft,
-        //         width: 240
-        //     };
-        // } else {
-        //     this.table.table.body[0][0].text = '';
-        //     this.table.table.body[1][0] = {
-        //         text: '',
-        //         margin: [ 240, 0, 0, 0 ]
-        //     };
-        // }
-
-        // if(this.imageMiddle && this.imageMiddleUrl) {
-        //     this.table.table.body[1][1] = {
-        //         image: this.prefix + this.imageMiddle,
-        //         width: 240
-        //     };
-        // } else {
-        //     this.table.table.body[0][1].text = '';
-        //     this.table.table.body[1][1] = {
-        //         text: '',
-        //         margin: [ 240, 0, 0, 0 ]
-        //     };    
-        // }
-
-        // if(this.imageRight && this.imageRightUrl) {
-        //     this.table.table.body[1][2] = {
-        //         image: this.prefix + this.imageRight,
-        //         width: 240
-        //     };
-        // } else {
-        //     this.table.table.body[0][2].text = '';
-        //     this.table.table.body[1][2] = {
-        //         text: '',
-        //         margin: [ 240, 0, 0, 0 ]
-        //     };
-        // }
         return this.pdfContent;
     }
 
@@ -186,7 +148,6 @@ export class DashboardPage extends BasePage  {
         if(index >= 0 && index <= 2) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
-            //this.table.table.body[1][index].image = imageName;
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
@@ -204,14 +165,6 @@ export class DashboardPage extends BasePage  {
                     break;
             }
             this.images[imageName] = chartDataUrl;
-        }
-    }
-
-    private clearArray(array: Array<any>) {
-        array.length = 0;
-        for(let item in array) {
-            console.log('Deleting key ' + item);
-            delete array[item];
         }
     }
 
@@ -236,10 +189,6 @@ export class DashboardPage extends BasePage  {
         if(this.imageRightUrl) {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;    
         }
-
-        // this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        // this.table.table.body[1][1].image = this.prefix + this.imageMiddle;
-        // this.table.table.body[1][2].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

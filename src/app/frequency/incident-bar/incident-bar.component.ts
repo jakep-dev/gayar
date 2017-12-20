@@ -44,7 +44,7 @@ export class IncidentBarComponent implements OnInit {
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {        
+    onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);

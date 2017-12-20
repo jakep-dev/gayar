@@ -245,14 +245,6 @@ export class TOCPage extends BasePage  {
         return this.pdfContent;
     }
 
-    private clearArray(array: Array<any>) {
-        array.length = 0;
-        for(let item in array) {
-            console.log('Deleting key ' + item);
-            delete array[item];
-        }
-    }
-
     private updatePdfContent() {
         this.header.text[0].style = this.prefix + "tocStyle1";
         this.header.text[1].style = this.prefix + "tocStyle2";

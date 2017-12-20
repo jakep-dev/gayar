@@ -489,6 +489,89 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 ]
             }
         ]
+    },
+
+    {
+        id: 'REPORT_TILE_BENCHMARK',
+        description: 'Benchmark',
+        value: true,
+        subComponents: [
+            {
+                description: 'Premium Distribution by Counts',
+                id: 'REPORT_BENCHMARK_PREMIUM',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-premium',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Limit Distribution by Counts',
+                id: 'REPORT_BENCHMARK_LIMIT',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-limit',
+                        pagePosition: 1,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Retention Distribution by Counts',
+                id: 'REPORT_BENCHMARK_RETENTION',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-retention',
+                        pagePosition: 2,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Rate Per Million Distribution by Values',
+                id: 'REPORT_BENCHMARK_RATE_PER_MILLION',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-rate',
+                        pagePosition: 2,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
+                description: 'Limit Adequacy',
+                id: 'REPORT_BENCHMARK_LIMIT_ADEQUACY',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-peer-group-loss',
+                        pagePosition: 2,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            }
+        ]
     }
 
 ];

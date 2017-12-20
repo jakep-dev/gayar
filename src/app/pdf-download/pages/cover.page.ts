@@ -19,14 +19,6 @@ export class CoverPage extends BasePage  {
         this.updatePdfContent();
     }
     
-    private clearArray(array: Array<any>) {
-        array.length = 0;
-        for(let item in array) {
-            console.log('Deleting key ' + item);
-            delete array[item];
-        }
-    }
-
     private updatePdfContent() {
         this.companyNameTextObject.style = this.prefix + 'style3';
         this.industryTextObject.style = this.prefix + 'style4';

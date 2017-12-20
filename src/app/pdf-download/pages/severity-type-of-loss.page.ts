@@ -118,14 +118,6 @@ export class SeverityTypeOfLossPage extends BasePage  {
         }
     }
 
-    private clearArray(array: Array<any>) {
-        array.length = 0;
-        for(let item in array) {
-            console.log('Deleting key ' + item);
-            delete array[item];
-        }
-    }
-
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';

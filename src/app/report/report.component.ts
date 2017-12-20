@@ -492,7 +492,7 @@ export class ReportComponent implements OnInit {
           this.pageOrder.forEach(pageType => 
               {
                   this.tocPage.setPageNumber(pageType, pageNumber);
-                  pageNumber++;
+                  pageNumber = pageNumber + this.pageCollection[pageType].getPageCount();
               }
           );
           let pg = new PDFMakeBuilder();
