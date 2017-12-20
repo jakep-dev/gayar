@@ -95,7 +95,7 @@
 
 <blank-tile [id]="'SEARCH_ACTIONS'">
     <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="padding-right-5">
-      <button md-raised-button (click)="onAssessment()" [disabled]="!isActionEnabled">
+      <button md-raised-button (click)="onAssessment()" [disabled]="!(isActionEnabled && hasDashboardAccess)">
         <md-icon>speaker_notes</md-icon>
         Assessment
       </button>
