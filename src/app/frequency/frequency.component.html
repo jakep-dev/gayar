@@ -45,7 +45,7 @@
         <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'Most Recent Peer Group Losses'" class="width-100" [isDisabled]="!isPeerGroupTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>
@@ -55,7 +55,7 @@
         <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable" [isDisabled]="!isCompanyTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>

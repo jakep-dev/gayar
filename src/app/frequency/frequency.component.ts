@@ -32,6 +32,8 @@ export class FrequencyComponent implements OnInit {
     public isLoss: boolean;
     public isPeerGroupTable: boolean;
     public isCompanyTable: boolean;
+    public isPeerGroupTableHasDescriptionAccess: boolean = false;
+    public isCompanyTableHasDescriptionAccess: boolean = false;
 
     constructor(private frequencyService: FrequencyService,
         public menuService: MenuService,
@@ -90,6 +92,8 @@ export class FrequencyComponent implements OnInit {
             this.isLoss = permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
             this.isPeerGroupTable = permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
             this.isCompanyTable = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+            this.isPeerGroupTableHasDescriptionAccess = permission.frequency.peerGroupTable.hasDescriptionAccess;
+            this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
         }        
     }
 

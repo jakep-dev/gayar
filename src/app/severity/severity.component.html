@@ -44,7 +44,7 @@
         <app-tile [id]="'SEV_PEER_TABLE'" [title]="'Top Peer Group Losses'" class="width-100" [isDisabled]="!isPeerGroupTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>
@@ -53,7 +53,7 @@
         <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'Top Company Losses'" class="width-100" *ngIf="companyLossesTable" [isDisabled]="!isCompanyTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>

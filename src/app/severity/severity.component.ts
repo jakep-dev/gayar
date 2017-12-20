@@ -30,6 +30,8 @@ export class SeverityComponent implements OnInit {
     public isLoss: boolean;
     public isPeerGroupTable: boolean;
     public isCompanyTable: boolean;
+    public isPeerGroupTableHasDescriptionAccess: boolean;
+    public isCompanyTableHasDescriptionAccess: boolean;
 
     constructor(private severityService: SeverityService,
         public menuService: MenuService,
@@ -77,7 +79,8 @@ export class SeverityComponent implements OnInit {
             this.isLoss = permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
             this.isPeerGroupTable = permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
             this.isCompanyTable = permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+            this.isPeerGroupTableHasDescriptionAccess = permission.severity.peerGroupTable.hasDescriptionAccess;
+            this.isCompanyTableHasDescriptionAccess = permission.severity.companyTable.hasDescriptionAccess;
         }
-        
     }
 }
