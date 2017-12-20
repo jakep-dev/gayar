@@ -156,7 +156,7 @@ export class SessionRouter extends BaseRoute {
     private getBenchmarkPermission(componentPermission) {
         return {
             hasAccess: SessionRouter.prototype.getAccess(ServerConstants.BENCHMARK.PRODUCT_CODE, componentPermission),
-            limit_adequacy: {
+            limitAdequacy: {
                 hasAccess: SessionRouter.prototype.getAccess(ServerConstants.BENCHMARK.COMPONENTS_CODE.LIMIT_ADEQUACY, componentPermission)
             },
             premium: {

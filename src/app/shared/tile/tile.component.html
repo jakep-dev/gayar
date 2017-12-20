@@ -1,9 +1,18 @@
 <div  class="tile-container" *ngIf="isTileVisible" [ngClass]="{'tile-maximize': isMaximize}">
   <md-toolbar color="primary" class="tile-toolbar">
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
-          <div class="tile-title-parent"><span class="tile-title">{{title}}</span></div>
+          <div class="tile-title-parent">
+            <div>
+              <button md-icon-button *ngIf="isDisabled" [disabled]="isDisabled">
+                  <md-icon>lock</md-icon>
+              </button>
+              <span [ngClass]="(isDisabled) ? 'tile-title-disabled' : 'tile-title'">{{title}}</span>
+            </div>
+          </div>
           <ng-content select="[header]" ></ng-content>
-          <div fxLayout="row" fxFlex fxLayoutAlign="end center" class="tile-buttons">
+
+          <!--isDisabled is false-->
+          <div *ngIf="!isDisabled" fxLayout="row" fxFlex fxLayoutAlign="end center" class="tile-buttons">
             <button md-icon-button *ngIf="isFullScreen" (click)="toggleFullScreen($event)">
               <md-icon *ngIf="!isMaximize">fullscreen</md-icon>
               <md-icon *ngIf="isMaximize">fullscreen_exit</md-icon>
@@ -20,6 +29,25 @@
                 [ngClass]="{'collapse':isContent, 'expand':!isContent}">
                 <i class="icon-backburger expand-collapse"></i>
             </button>
+          </div>
+
+          <!--isDisabled is true-->
+          <div *ngIf="isDisabled" fxLayout="row" fxFlex fxLayoutAlign="end center" class="tile-buttons">
+              <button md-icon-button *ngIf="isFullScreen" [disabled]="isDisabled">
+                <md-icon *ngIf="!isMaximize" >fullscreen</md-icon>
+              </button>
+  
+              <button md-icon-button *ngIf="isSelectable" [disabled]="isDisabled">
+                <md-icon *ngIf="isSelected">check_box</md-icon>
+                <md-icon *ngIf="!isSelected">check_box_outline_blank</md-icon>
+              </button>
+              <button md-icon-button *ngIf="isDragable" [disabled]="isDisabled"><md-icon>open_with</md-icon></button>
+              <button md-icon-button *ngIf="isSplittable" [disabled]="isDisabled"><i class="icon-content-duplicate fa-lg"></i></button>
+              <button md-icon-button *ngIf="isFlippable" [disabled]="isDisabled"><md-icon>flip_to_back</md-icon></button>
+              <button md-icon-button *ngIf="isAccordion"  [disabled]="isDisabled"
+                  [ngClass]="{'collapse':isContent, 'expand':!isContent}">
+                  <i class="icon-backburger expand-collapse"></i>
+              </button>
           </div>
       </div>
   </md-toolbar>
@@ -49,7 +77,18 @@
       *ngIf="isDisabled"
       fxLayout="row" fxLayout.lt-md="column"
       fxLayoutAlign="center center">
-        <img src="/assets/images/svg/gauge-lock.svg"/>
+      <div class="container">
+        <img class="center-img" src="/assets/images/svg/chart-lock.svg"/>
+        <div class="alert-msg">
+            <p>
+                You do not have permission to access this content.
+                Please upgrade your subscription. You may contact 
+                <a target="_blank" href="mailto:support@advisen.com?subject=insite20twenty Website Inquiry">
+                    support@advisen.com
+                </a>
+            </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
