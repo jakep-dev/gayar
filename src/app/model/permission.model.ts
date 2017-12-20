@@ -33,3 +33,57 @@ export interface BenchmarkPermissionModel {
     hasAccess:boolean
   };
 }
+
+export interface FrequencyPermissionModel {
+  hasAccess: boolean;
+  industry: {
+    hasAccess: boolean
+  };
+  timePeriod: {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  incident: {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  loss : {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  peerGroupTable: {
+    hasAccess: boolean,
+    hasDescriptionAccess: boolean
+  };
+  companyTable: {
+    hasAccess: boolean,
+    hasDescriptionAccess: boolean
+  }
+}
+
+export interface SeverityPermissionModel {
+  hasAccess: boolean;
+  industry: {
+    hasAccess: boolean
+  };
+  timePeriod: {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  incident: {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  loss : {
+    hasAccess: boolean,
+    hasDetailAccess: boolean
+  };
+  peerGroupTable: {
+    hasAccess: boolean,
+    hasDescriptionAccess: boolean
+  };
+  companyTable: {
+    hasAccess: boolean,
+    hasDescriptionAccess: boolean
+  }
+}

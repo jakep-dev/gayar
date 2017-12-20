@@ -15,76 +15,30 @@ export class SessionRouter extends BaseRoute {
     //Get active session
     public getCurrentIdentity(req: Request, res: Response, next: NextFunction){
 
-        async.waterfall([
-            function(callback) {
-                SessionRouter.prototype.getUserDetails(req.body.userId, callback);
-            },
-            function (userInfo, callback) {
-                if( userInfo && 
-                    userInfo.userinfo && 
-                    userInfo.userinfo.token) {
-                        SessionRouter.prototype.getUserPermissionForComponents(userInfo, req.body.productCode, callback);
-                } else {
-                    res.send(userInfo);
-                }                
-            },
-            function (userInfo, componentPermissions, callback) {
-                res.send(SessionRouter.prototype.performUserPermission(userInfo, componentPermissions));
-            }
-        ], function (err, result) {
-            res.send(err);
-        });
-
-      //Implement the waterfall here.
-      // Get the Active Session. and call getPermissions only when we have an active token.
-      // If token is null we don't need to call the getPermissions, otherwise call.
-      //
-      // GetPremission
-      /*
-      Parameters:
-      user_id: req.body
-      product_id: req.body
-      ssnid: first function call output. i.e token.
-
-
-      Third Function;- will be contact the userInfo + Permission.
-
-      {
-          code:,
-          name:,
-          access:,
-          no_access_display_type:
-      }
-
-      Menu -
-      a. CompanySearch, - companySearchPermission()
-          i. searchCompany.
-          ii. programStructure.
-      b. Dashboard - dashboardPermission()
-      c. Frequency. - private frequencyPermission()
-
-      companySearch: {
-      hasAccess: true,
-      displayType: ''
-
-          searchCompany: {
-          hasAccess: true,
+        try {
+            async.waterfall([
+                function(callback) {
+                    SessionRouter.prototype.getUserDetails(req.body.userId, callback);
+                },
+                function (userInfo, callback) {
+                    if( userInfo && 
+                        userInfo.userinfo && 
+                        userInfo.userinfo.token) {
+                            SessionRouter.prototype.getUserPermissionForComponents(userInfo, req.body.productCode, callback);
+                    } else {
+                        res.send(userInfo);
+                    }                
+                },
+                function (userInfo, componentPermissions, callback) {
+                    res.send(SessionRouter.prototype.performUserPermission(userInfo, componentPermissions));
+                }
+            ], function (err, result) {
+                res.send(err);
+            });
+        } catch(e) {
 
         }
-    }
-
-      */
-        // try{
-        //     console.log(req.body.userId);
-        //     super.PerformGetRequest("getActiveSession", {
-        //         'user_id': req.body.userId
-        //     }, (data)=>{
-        //         res.send(data);
-        //     });
-        // }
-        // catch(e){
-        //     Logger.error(e);
-        // }
+        
     }
 
     private getUserDetails (userId: number, callback: any) {
@@ -109,14 +63,23 @@ export class SessionRouter extends BaseRoute {
     private performUserPermission (userInfo, componentPermission) {
         if( componentPermission && componentPermission.list) {
             let permission = {
-                companySearch: {},
+                companySearch: SessionRouter.prototype.getCompanySearchPermission(componentPermission.list),
                 dashboard: SessionRouter.prototype.getDashboardPermission(componentPermission.list),
-                frequency: {},
-                benchmark: SessionRouter.prototype.getBenchmarkPermission(componentPermission.list)
+                frequency: SessionRouter.prototype.getFrequencyPermission(componentPermission.list),
+                severity: SessionRouter.prototype.getSeverityPermission(componentPermission.list),
+                benchmark: SessionRouter.prototype.getBenchmarkPermission(componentPermission.list),
+                glossary: SessionRouter.prototype.getGlossaryPermission(componentPermission.list),
+                report: SessionRouter.prototype.getReportPermission(componentPermission.list)
             }
             userInfo.userinfo.permission = permission;
         }        
         return userInfo;
+    }
+
+    private getCompanySearchPermission(componentPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getAccess(ServerConstants.COMPANY_SEARCH.PRODUCT_CODE, componentPermission),
+        }
     }
 
     private getDashboardPermission(componentPermission) {
@@ -130,6 +93,62 @@ export class SessionRouter extends BaseRoute {
             },
             benchmarkGauge: {
                 hasAccess:SessionRouter.prototype.getAccess(ServerConstants.DASHBOARD.COMPONENTS_CODE.BENCHMARK, componentPermission)
+            }
+        }
+    }
+
+    private getFrequencyPermission(componentPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.PRODUCT_CODE, componentPermission),
+            industry: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.INDUSTRY, componentPermission)
+            },
+            timePeriod: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.TIME_PERIOD, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.TIME_PERIOD_DETAIL, componentPermission),
+            },
+            incident: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.INCIDENT, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.INCIDENT_DETAIL, componentPermission),
+            },
+            loss : {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.LOSS, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.LOSS_DETAIL, componentPermission),
+            },
+            peerGroupTable: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.PEER_GROUP_TABLE, componentPermission),
+                hasDescriptionAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.PEER_GROUP_TABLE_DESCR, componentPermission),
+            }, 
+            companyTable: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.COMPANY_TABLE, componentPermission),
+                hasDescriptionAccess: SessionRouter.prototype.getAccess(ServerConstants.FREQUENCY.COMPONENTS_CODE.COMPANY_TABLE_DESCR, componentPermission),
+            }
+        }
+    }
+
+    private getSeverityPermission(componentPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.PRODUCT_CODE, componentPermission),
+            industry: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.INDUSTRY, componentPermission)
+            },
+            timePeriod: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.TIME_PERIOD, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.TIME_PERIOD_DETAIL, componentPermission),
+            },
+            incident: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.INCIDENT, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.INCIDENT_DETAIL, componentPermission),
+            },
+            loss : {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.LOSS, componentPermission),
+                hasDetailAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.LOSS_DETAIL, componentPermission),
+            }, peerGroupTable: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.PEER_GROUP_TABLE, componentPermission),
+                hasDescriptionAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.PEER_GROUP_TABLE_DESCR, componentPermission),
+            }, companyTable: {
+                hasAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.COMPANY_TABLE, componentPermission),
+                hasDescriptionAccess: SessionRouter.prototype.getAccess(ServerConstants.SEVERITY.COMPONENTS_CODE.COMPANY_TABLE_DESCR, componentPermission),
             }
         }
     }
@@ -152,6 +171,18 @@ export class SessionRouter extends BaseRoute {
             rate: {
                 hasAccess:SessionRouter.prototype.getAccess(ServerConstants.BENCHMARK.COMPONENTS_CODE.RATE, componentPermission)
             }
+        }
+    }
+
+    private getGlossaryPermission(componentPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getAccess(ServerConstants.GLOSSARY.PRODUCT_CODE, componentPermission)
+        }
+    }
+
+    private getReportPermission(componentPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getAccess(ServerConstants.REPORT.PRODUCT_CODE, componentPermission)
         }
     }
 
