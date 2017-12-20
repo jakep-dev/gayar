@@ -1,10 +1,12 @@
 import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
-import { DashboardService } from '../../services/services';
+import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { SearchService } from 'app/services/search.service';
+import { Router } from '@angular/router';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'app-dashboard-severity',
@@ -16,6 +18,8 @@ export class SeverityComponent implements OnInit {
   
   chartHeader:string = '';
   modelData: DashboardScoreModel;
+  permission: any;
+  isDisabled: boolean = true;
 
   setModelData(modelData: DashboardScoreModel) {
       this.modelData = modelData;
@@ -52,7 +56,20 @@ export class SeverityComponent implements OnInit {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+  }
+
+  navigate () {
+    if (this.searchService.checkValidationPeerGroup() && 
+        this.searchService.checkValidationPeerGroup().hasSeverityData &&
+        this.permission && this.permission.severity && 
+        this.permission.severity.hasAccess) {
+        this.router.navigate(['/severity']);
+    } else {
+        this.snackBarService.Simple('No Access');
     }
+  }
+
+
 
     addLabelAndImage(chart){
         chart.addChartLabel(
@@ -74,12 +91,16 @@ export class SeverityComponent implements OnInit {
         ); 
     }
   
-  constructor(private dashboardService: DashboardService, private searchService : SearchService) {
+  constructor(private dashboardService: DashboardService,
+             private searchService : SearchService,
+             private sessionService: SessionService,
+             private snackBarService: SnackBarService,
+             private router: Router) {
   }
 
   ngOnInit() {
       this.getSeverityData();
-     
+      this.getPermission();
   }
 
   /**
@@ -89,5 +110,12 @@ export class SeverityComponent implements OnInit {
     this.dashboardService.getSeverityScore(this.componentData.companyId, this.componentData.naics, 
                                             this.componentData.revenueRange, this.componentData.limit, this.componentData.retention).
                                             subscribe(chartData => this.setModelData(chartData));;
-  }        
+  }
+  
+  getPermission() {
+    this.permission = this.sessionService.getUserPermission();
+    if (this.permission && this.permission.dashboard && this.permission.dashboard.severityGauge) {
+        this.isDisabled = !this.permission.dashboard.severityGauge.hasAccess;
+    }
+   }
 }

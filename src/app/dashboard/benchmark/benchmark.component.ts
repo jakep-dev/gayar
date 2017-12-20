@@ -50,8 +50,10 @@ export class BenchmarkComponent implements OnInit {
     }
 
     navigate () {
-        
-        if (this.permission && this.permission.benchmark && this.permission.benchmark.hasAccess) {
+
+        if (this.permission && this.permission.dashboard && 
+            this.permission.benchmark && 
+            this.permission.benchmark.hasAccess) {
             this.router.navigate(['/benchmark']);
         } else {
             this.snackBarService.Simple('No Access');
@@ -104,8 +106,8 @@ export class BenchmarkComponent implements OnInit {
 
     getPermission() {
         this.permission = this.sessionService.getUserPermission();
-        if (this.permission && this.permission.dashboard && this.permission.dashboard.hasAccess) {
-            this.isDisabled = this.permission.dashboard.hasAccess;
+        if (this.permission && this.permission.dashboard && this.permission.dashboard.benchmarkGauge) {
+            this.isDisabled = !this.permission.dashboard.benchmarkGauge.hasAccess;
         }
     }
 
