@@ -64,6 +64,37 @@ export class MenuComponent implements OnInit {
     let permission = this.sessionService.getUserPermission();
     return permission && permission.dashboard && permission.dashboard.hasAccess
   }
+
+  isCompanySearch(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.companySearch && permission.companySearch.hasAccess
+  }
+
+  isFrequency(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.frequency && permission.frequency.hasAccess
+  }
+
+  isSeverity(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.severity && permission.severity.hasAccess
+  }
+
+  isBenchmark(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.benchmark && permission.benchmark.hasAccess
+  }
+
+  isReport(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.report && permission.report.hasAccess
+  }
+
+  isGlossary(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.glossary && permission.glossary.hasAccess
+  }
+
   /**
    * Validates whether there is a valid search criteria or not.
    * @return {boolean} - Is a valid search criteria or not.

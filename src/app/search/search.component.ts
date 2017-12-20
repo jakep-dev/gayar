@@ -40,6 +40,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   isActionEnabled:boolean;
   hasFrequencyData: boolean;
   hasSeverityData: boolean;
+  hasDashboardAccess: boolean;
   searchByList: Array<SearchByModel>;
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
@@ -67,6 +68,7 @@ export class SearchComponent implements OnInit, OnDestroy {
      this.loadIndustry();
      this.loadRevenueModel();
      this.loadSearchCriteria();
+     this.getDashboardPermission();
   }
 
 
@@ -382,6 +384,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
 
 
+   }
+
+   getDashboardPermission() {
+     let permission = this.sessionService.getUserPermission();
+     if(permission) {
+       this.hasDashboardAccess = permission.dashboard && permission.dashboard.hasAccess;
+     }
    }
 
   /**
