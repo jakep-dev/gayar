@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityIncidentBarModel, SeverityIncidentGroup } from "app/model/severity.model";
-import { SearchService } from 'app/services/services';
+import { SearchService, SessionService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-incident]'
@@ -18,11 +18,12 @@ export class SeverityIncidentBarDirective {
     ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
+    hasDetailAccess: boolean;
     seriesColor: string[];
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -34,6 +35,7 @@ export class SeverityIncidentBarDirective {
 
     ngOnInit() {        
         this.getCompanyName();
+        this.getDetailAccess();
         this.buildHighChartObject();
     }
 
@@ -76,6 +78,11 @@ export class SeverityIncidentBarDirective {
      */
     buildHighChartObject() {
         this.buildNoBreakChart();
+    }
+
+    getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
     }
 
     buildNoBreakChart() {
@@ -281,7 +288,7 @@ export class SeverityIncidentBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);

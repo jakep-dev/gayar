@@ -1,6 +1,7 @@
 import { Directive, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { PieChartData, SeverityLossPieFlipModel } from 'app/model/model';
+import { SessionService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-loss-pie]'
@@ -26,11 +27,13 @@ export class SeverityLossPieDirective {
     public static LGRAY: string = '#CCCCCC';
   
     displayText: string = '';
+    hasDetailAccess: boolean;
   
-    constructor() {}
+    constructor(private sessionService: SessionService) {}
   
     ngOnInit() {
       this.setDataInDescendingOrder();
+      this.getDetailAccess();
       this.buildHighChartObject();
     }
   
@@ -236,7 +239,7 @@ export class SeverityLossPieDirective {
               return {  
                 name: item.type,
                 y: item.pct_count,
-                drilldown: item.type,
+                drilldown: (!this.hasDetailAccess) ? null : item.type,
                 dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
               }
             }).forEach(item => series.data.push(item));
@@ -296,6 +299,11 @@ export class SeverityLossPieDirective {
       }
     }
   
+    getDetailAccess() {
+      let permission = this.sessionService.getUserPermission();
+      this.hasDetailAccess = permission && permission.severity && permission.severity.loss && permission.severity.loss.hasDetailAccess;
+    }
+
     setDataInDescendingOrder(){
       this.modelData.datasets.sort(function(a,b){
         if(a.pct_count < b.pct_count){

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { SeverityService, SearchService, MenuService } from 'app/services/services';
+import { SeverityService, SearchService, MenuService, SessionService} from 'app/services/services';
 import { SeverityInput } from '../model/model';
 import { SeverityDataModel, SeverityDataResponseModel } from 'app/model/model';
 
@@ -25,8 +25,15 @@ export class SeverityComponent implements OnInit {
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
+    public isTimePeriod: boolean;
+    public isIncident: boolean;
+    public isLoss: boolean;
+    public isPeerGroupTable: boolean;
+    public isCompanyTable: boolean;
+
     constructor(private severityService: SeverityService,
         public menuService: MenuService,
+        private sessionService: SessionService,
         private searchService: SearchService) { }
 
     ngOnInit() {
@@ -34,6 +41,7 @@ export class SeverityComponent implements OnInit {
         this.buildCommonInput();
         this.setupTableDefinitions();
         this.loadSeverityDataTable();
+        this.setupChartPermission();
     }
 
     buildCommonInput() {
@@ -59,5 +67,17 @@ export class SeverityComponent implements OnInit {
                 this.companyLossesTable = res.company;
             }
         });
+    }
+    
+    setupChartPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission) {
+            this.isTimePeriod = permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasAccess;
+            this.isIncident = permission.severity && permission.severity.incident && permission.severity.incident.hasAccess;
+            this.isLoss = permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
+            this.isPeerGroupTable = permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+            this.isCompanyTable = permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+        }
+        
     }
 }
