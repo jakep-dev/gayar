@@ -16,32 +16,32 @@
                 <md-icon class="md-18">account_circle</md-icon>
                 <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
-          <button md-button routerLink="/search" (click)="onMenu('Company Search');"
+          <button md-button routerLink="/search" [disabled]="!isCompanySearch()" (click)="onMenu('Company Search');"
               routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">search</md-icon>
                 <span>Company Search</span>
           </button>
-          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard)" (click)="onMenu('Dashboard');"
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard())" (click)="onMenu('Dashboard');"
              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
           </button>
-          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');"
+          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && isFrequency() && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');"
             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
             <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
             </button>
-          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');"
+          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && isSeverity() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');"
             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
             <md-icon class="md-18">gamepad</md-icon>
                 <span>Severity</span>
             </button>
-          <button md-button routerLink="/benchmark" [disabled]="!this.isSearchCriteriaValid()" (click)="onMenu('Benchmark');"
+          <button md-button routerLink="/benchmark" [disabled]="!(this.isSearchCriteriaValid() && isBenchmark())" (click)="onMenu('Benchmark');"
           routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
             </button>
-          <button md-button (click)="onMenu('Report')" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active" routerLink="/report" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu('Report')" [disabled]="!(this.isSearchCriteriaValid() && isReport())" routerLinkActive="active" routerLink="/report" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">pie_chart</md-icon>
                 <span>Report</span>
           </button>
@@ -57,22 +57,22 @@
           <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
           </button>
-          <button md-button routerLink="/search" (click)="onMenu('Company Search');" routerLinkActive="active">
+          <button md-button routerLink="/search" [disabled]="!isCompanySearch()" (click)="onMenu('Company Search');" routerLinkActive="active">
             <md-icon class="md-18">search</md-icon>
           </button>
-          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid()  && isDashboard)" (click)="onMenu('Dashboard');" routerLinkActive="active">
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard())" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
           </button>
-          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');" routerLinkActive="active">
+          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && isFrequency() && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');" routerLinkActive="active">
                 <md-icon class="md-18">wifi</md-icon>
           </button>
-          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');" routerLinkActive="active">
+          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && isSeverity() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');" routerLinkActive="active">
                 <md-icon class="md-18">gamepad</md-icon>
           </button>
-          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active">
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!(this.isSearchCriteriaValid() && isBenchmark())" routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
           </button>
-          <button md-button (click)="onMenu('Report')" [disabled]="!this.isSearchCriteriaValid()" routerLinkActive="active" routerLink="/report">
+          <button md-button (click)="onMenu('Report')" [disabled]="!(this.isSearchCriteriaValid() && isReport())" routerLinkActive="active" routerLink="/report">
                 <md-icon class="md-18">pie_chart</md-icon>
           </button>
       </div>
