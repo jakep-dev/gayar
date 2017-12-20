@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { FrequencyService, SearchService, MenuService } from 'app/services/services';
+import { FrequencyService, SearchService, MenuService, SessionService } from 'app/services/services';
 import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
 
 @Component({
@@ -27,8 +27,15 @@ export class FrequencyComponent implements OnInit {
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
+    public isTimePeriod: boolean;
+    public isIncident: boolean;
+    public isLoss: boolean;
+    public isPeerGroupTable: boolean;
+    public isCompanyTable: boolean;
+
     constructor(private frequencyService: FrequencyService,
         public menuService: MenuService,
+        private sessionService: SessionService,
         private searchService: SearchService) { }
 
     ngOnInit() {
@@ -36,6 +43,7 @@ export class FrequencyComponent implements OnInit {
         this.setupTileButtons();
         this.setupTableDefinitions();
         this.loadFrequencyDataTable();
+        this.setupChartPermission();
         this.buildCommonInput();
     }
     
@@ -72,6 +80,17 @@ export class FrequencyComponent implements OnInit {
             naics: this.searchService.getNaics,
             revenueRange: this.searchService.getRevenueRange
         };
+    }
+
+    setupChartPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission) {
+            this.isTimePeriod = permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
+            this.isIncident = permission.frequency && permission.frequency.incident && permission.frequency.incident.hasAccess;
+            this.isLoss = permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
+            this.isPeerGroupTable = permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+            this.isCompanyTable = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+        }        
     }
 
 }
