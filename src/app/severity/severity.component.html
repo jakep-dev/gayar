@@ -8,7 +8,7 @@
     </div>
 
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100" fxFlexOrder="1">
-        <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
+        <app-tile [id]="'SEV_TIME_PERIOD'" [title]="'Time Period'" class="width-100" [isDisabled]="!isTimePeriod">
             <div front class="width-100" fxLayout="row">
                 <severity-time-period [componentData]="severityInput" class="width-100" fxFlexFill>
                 </severity-time-period>
@@ -17,7 +17,7 @@
     </div>
 
     <div fxFlexFill [fxFlex]="showIncidentPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '3' : '2'">
-        <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true"
+        <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true" [isDisabled]="!isIncident"
             (onFlip)="showIncidentPie=false" (onSplit)="showIncidentPie=!showIncidentPie">
             <div front class="width-100" fxLayout="row">
                 <severity-incident-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-bar>
@@ -29,8 +29,8 @@
     </div>
 
     <div fxFlexFill [fxFlex]="showLossPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '2' : '3'">
-        <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" (onFlip)="showLossPie=false"
-            (onSplit)="showLossPie=!showLossPie">
+        <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" [isDisabled]="!isLoss"
+            (onFlip)="showLossPie=false" (onSplit)="showLossPie=!showLossPie">
             <div front class="width-100" fxLayout="row">
                 <severity-loss-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-bar>
             </div>
@@ -41,19 +41,19 @@
     </div>
 
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="4">
-        <app-tile [id]="'SEV_PEER_TABLE'" [title]="'Top Peer Group Losses'" class="width-100">
+        <app-tile [id]="'SEV_PEER_TABLE'" [title]="'Top Peer Group Losses'" class="width-100" [isDisabled]="!isPeerGroupTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>
     </div>
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
-        <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'Top Company Losses'" class="width-100" *ngIf="companyLossesTable">
+        <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'Top Company Losses'" class="width-100" *ngIf="companyLossesTable" [isDisabled]="!isCompanyTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
         </app-tile>

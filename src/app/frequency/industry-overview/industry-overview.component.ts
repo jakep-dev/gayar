@@ -3,7 +3,7 @@ import { BarChartData } from '../../model/charts/bar-chart.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { FrequencyIndustryOverviewModel, FrequencyInput, ComponentPrintSettings } from "app/model/model";
-import { FrequencyService } from "app/services/services";
+import { FrequencyService, SessionService } from "app/services/services";
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -15,6 +15,7 @@ export class IndustryOverviewComponent implements OnInit {
   
     modelData: FrequencyIndustryOverviewModel;
     chartHeader : string;
+    hasAccess: boolean;
 
     setModelData(modelData: FrequencyIndustryOverviewModel) {
         this.modelData = modelData;
@@ -85,11 +86,12 @@ export class IndustryOverviewComponent implements OnInit {
         }
     }
 
-    constructor(private frequencyService: FrequencyService) {
+    constructor(private frequencyService: FrequencyService, private sessionService: SessionService) {
     }
 
     ngOnInit() {
         this.getFrequencyIndustryOverViewData();
+        this.getPermission();
     }
 
     /**
@@ -99,6 +101,13 @@ export class IndustryOverviewComponent implements OnInit {
         if(this.componentData) {           
           this.frequencyService.getFrequencyIndustryOverview(this.componentData.companyId, this.componentData.naics)
           .subscribe(modelData => this.setModelData(modelData));            
+        }
+    }
+
+    getPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission) {
+            this.hasAccess = permission.frequency && permission.frequency.industry && permission.frequency.industry.hasAccess
         }
     }
 

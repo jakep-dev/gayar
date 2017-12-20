@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
   fullName: string;
+
   constructor(public menuService: MenuService,
               private searchService: SearchService,
               private sessionService: SessionService) {
@@ -35,7 +36,6 @@ export class MenuComponent implements OnInit {
   onMenu (name) {
     this.menuService.breadCrumb = name;
   }
-
 
   /**
    * toggleMenu - toggle the menu details.
@@ -60,6 +60,40 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  isDashboard(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.dashboard && permission.dashboard.hasAccess
+  }
+
+  isCompanySearch(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.companySearch && permission.companySearch.hasAccess
+  }
+
+  isFrequency(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.frequency && permission.frequency.hasAccess
+  }
+
+  isSeverity(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.severity && permission.severity.hasAccess
+  }
+
+  isBenchmark(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.benchmark && permission.benchmark.hasAccess
+  }
+
+  isReport(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.report && permission.report.hasAccess
+  }
+
+  isGlossary(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.glossary && permission.glossary.hasAccess
+  }
 
   /**
    * Validates whether there is a valid search criteria or not.

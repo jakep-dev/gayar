@@ -12,6 +12,7 @@ export class SimpleTableComponent implements OnInit {
     @Input() columnsHAlignment: Array<String>;
     @Input() columnsWidth: Array<String>;
     @Input() dataSource: Array<any>;
+    @Input() hasDescriptionAccess: boolean = false;
 
     constructor() { }
 

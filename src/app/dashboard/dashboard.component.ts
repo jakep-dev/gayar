@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
-import { SearchService, MenuService } from 'app/services/services';
+import { SearchService, MenuService, SessionService } from 'app/services/services';
 import {DashboardScore} from 'app/model/model';
 
 @Component({
@@ -17,16 +17,24 @@ export class DashboardComponent implements OnInit {
     public companyId: number;
     public naics: string;
     public revenueRange: string;
-
     public getDashboardScoreByManualInput: DashboardScore;
+    public isFrequenycGuage: boolean;
+    public isBenchmarkGuage: boolean;
+    public isSeverityGuage: boolean;
 
     constructor(private searchService: SearchService,
-                private menuService: MenuService) {
+                private menuService: MenuService,
+                private sessionService: SessionService) {
         this.menuService.breadCrumb = 'Dashboard';
     }
 
     ngOnInit() {
-        this.setupDashboardScoreInput();      
+        this.setupDashboardScoreInput();
+    }
+
+    setDashboardPermission () {
+      //get the dashboard permission.
+      //
     }
 
     /**
@@ -41,12 +49,12 @@ export class DashboardComponent implements OnInit {
         }else{
             this.companyId = null;
             this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-            this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
-    
+            this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null;
+
         }
 
         this.chartType = 'BENCHMARK';
-       
+
         this.getDashboardScoreByManualInput = {
             searchType: this.searchType,
             chartType: this.chartType,

@@ -1,6 +1,7 @@
 import { Directive, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { PieChartData, FrequencyLossPieFlipModel } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
+import { SessionService } from 'app/services/services';
 
 @Directive({
   selector: '[frequency-loss-pie]'
@@ -27,11 +28,13 @@ export class FrequencyLossPieDirective {
   public static LGRAY: string = '#CCCCCC';
 
   displayText: string = '';
+  hasDetailAccess: boolean;
 
-  constructor() {}
+  constructor(private sessionService: SessionService) {}
 
   ngOnInit() {
     this.setDataInDescendingOrder();
+    this.getDetailAccess();
     this.buildHighChartObject();
   }
 
@@ -229,7 +232,7 @@ export class FrequencyLossPieDirective {
             return {  
               name: item.type,
               y: item.pct_count,
-              drilldown: item.type,
+              drilldown: !this.hasDetailAccess? null : item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             }
           }).forEach(item => series.data.push(item));
@@ -289,6 +292,10 @@ export class FrequencyLossPieDirective {
     }
   }
 
+  getDetailAccess() {
+    let permission = this.sessionService.getUserPermission();
+    this.hasDetailAccess = permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasDetailAccess;
+  }
   setDataInDescendingOrder(){
     this.modelData.datasets.sort(function(a,b){
       if(a.pct_count < b.pct_count){

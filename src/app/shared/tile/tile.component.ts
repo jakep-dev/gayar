@@ -20,6 +20,7 @@ export class TileComponent implements OnInit {
   @Input() showProgress: boolean = false;
   @Input() isSelected: boolean = false;
   @Input() isSelectableDisabled: boolean = false;
+  @Input() isDisabled: boolean = false;
 
   /**
    * Fires on flip.
