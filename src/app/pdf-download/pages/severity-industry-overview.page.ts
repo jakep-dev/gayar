@@ -5,7 +5,7 @@ export class SeverityIndustryOverviewPage extends BasePage  {
 
     public static pageType:string = 'SeverityIndustryOverviewPage';
 
-    private prefix: string = SeverityIndustryOverviewPage + '_';
+    private prefix: string = SeverityIndustryOverviewPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -48,13 +48,13 @@ export class SeverityIndustryOverviewPage extends BasePage  {
             body: [
                 [
                     { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
-                ],                
+                ],
                 [
                     {
                         image: this.imageLeft,
                         height: 430,
-                        width: 700,
-                        margin: [ -30, 0, 0, 0 ]
+                        width: 550,
+                        margin: [ -45, 0, 0, 0 ]
                     }
                 ]
             ]

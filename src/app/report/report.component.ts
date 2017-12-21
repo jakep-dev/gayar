@@ -24,10 +24,12 @@ import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/pr
 import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
-import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
+import { MenuService, SearchService, FrequencyService, ReportService, FontService, GetFileService } from 'app/services/services';
 
 import { 
-    DashboardScore, FrequencyInput, SeverityInput, 
+    DashboardScore, 
+    FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel,
+    SeverityInput, 
     BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
     IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget
 } from 'app/model/model';
@@ -102,6 +104,8 @@ export class ReportComponent implements OnInit {
     private revenueRange: string;
     private getDashboardScoreByManualInput: DashboardScore;
     private frequencyInput: FrequencyInput;
+    private frequencyPeerGroupTable: Array<FrequencyDataModel>;
+    private frequencyCompanyLossesTable: Array<FrequencyDataModel>;
     private severityInput: SeverityInput;
     private benchmarkDistributionInput: BenchmarkDistributionInput;
     private benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
@@ -114,7 +118,10 @@ export class ReportComponent implements OnInit {
 
     private coverPage: CoverPage;
     private tocPage: TOCPage;
-    
+
+    private reportDataDone: boolean = false;
+    private frequencyDataDone: boolean = false;
+
     constructor(
         private rootElement: ElementRef,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -122,10 +129,12 @@ export class ReportComponent implements OnInit {
         private getFileService: GetFileService,
         private menuService: MenuService,
         private searchService: SearchService,
+        private frequencyService: FrequencyService,
         private reportService: ReportService) {
 
         if(this.fontService.isLoadComplete()) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+            console.log('Font files already loaded!');
         } else {
             this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
         }
@@ -139,6 +148,7 @@ export class ReportComponent implements OnInit {
     private configurePDFMake(isReady: boolean) {
         if(isReady) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+            console.log('Font files loaded!');
         }
     }
 
@@ -158,6 +168,7 @@ export class ReportComponent implements OnInit {
         
         this.setupChartInput();
         this.getReportConfig();
+        this.getFrequencyTables();
     }
 
     setupChartInput() {
@@ -228,8 +239,23 @@ export class ReportComponent implements OnInit {
     getReportConfig () {
         this.reportService.getReportConfig().subscribe((data)=> {
             this.reportTileModel = data;
-            //console.log(this.reportTileModel[0].subComponents)
+            console.log('Report Data Done!');
+            this.reportDataDone = true;
         });
+    }
+
+    getFrequencyTables() {
+        this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
+            this.searchService.getNaics,
+            this.searchService.getRevenueRange)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                this.frequencyPeerGroupTable = res.peerGroup;
+                if (res.company != null && res.company.length > 0) {
+                    this.frequencyCompanyLossesTable = res.company;
+                }
+                console.log('Frequency Data Done!');
+                this.frequencyDataDone = true;
+        });        
     }
 
     private clearArray(array: Array<any>) {
@@ -240,8 +266,17 @@ export class ReportComponent implements OnInit {
         }
     }
 
-    onReport () {
-        //console.log(this.reportTileModel);
+    public onReport () {
+        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.frequencyDataDone) {
+            this.startReportProcess();
+        } else {
+            console.log('Waiting for resources to load before starting report.');
+            setTimeout(this.onReport.bind(this), 1000);
+        }
+
+    }
+
+    private startReportProcess() {
         this.chartLoadCount = 0;
         this.chartDataCollection.length = 0;
         this.pageOrder.length = 0;

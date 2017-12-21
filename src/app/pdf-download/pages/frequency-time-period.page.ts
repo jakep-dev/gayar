@@ -5,7 +5,7 @@ export class FrequencyTimePeriodPage extends BasePage  {
 
     public static pageType:string = 'FrequencyTimePeriodPage';
 
-    private prefix: string = FrequencyTimePeriodPage + '_';
+    private prefix: string = FrequencyTimePeriodPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -40,8 +40,12 @@ export class FrequencyTimePeriodPage extends BasePage  {
     private table: any = {
         margin: [ 30, 20, 70, 0 ],
         table: {
-            heights: [ 400 ],
-            body: [              
+            heights: [ 15, 400 ],
+            body: [
+                [
+                    { text: '' },
+                    { text: '' }
+                ],
                 [
                     {
                         image: this.imageLeft,
@@ -94,7 +98,7 @@ export class FrequencyTimePeriodPage extends BasePage  {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
-            this.table.table.body[0][index].image = imageName;
+            this.table.table.body[1][index].image = imageName;
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
@@ -129,8 +133,8 @@ export class FrequencyTimePeriodPage extends BasePage  {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;
         }
 
-        this.table.table.body[0][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[0][1].image = this.prefix + this.imageRight;
+        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
+        this.table.table.body[1][1].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

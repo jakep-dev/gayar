@@ -20,6 +20,14 @@ export class CoverPage extends BasePage  {
         return CoverPage.pageType;
     }
     
+    public isCoverPageLoaded(): boolean {
+        if((this.logoDataUrl != null)  && (this.logoDataUrl.length > 0))  {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public setPrefix(prefix: string) {
         this.prefix = prefix;
         this.updatePdfContent();

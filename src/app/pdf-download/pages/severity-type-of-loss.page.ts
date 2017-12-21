@@ -51,7 +51,7 @@ export class SeverityTypeOfLossPage extends BasePage  {
                 [
                     { text: 'Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
                     { text: '' }
-                ],                
+                ],
                 [
                     {
                         image: this.imageLeft,

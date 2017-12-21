@@ -32,6 +32,16 @@ export class BenchmarkPage extends BasePage  {
         style: this.prefix + 'headerStyle'
     };
 
+    private blankHeader1: any = {
+        text: ' ',
+        style: this.prefix + 'headerStyle'
+    };
+
+    private blankHeader2: any = {
+        text: ' ',
+        style: this.prefix + 'headerStyle'
+    };
+
     private tableHeaderStyle: any = {
         color: '#b1d23b',
         fontSize: 14,
@@ -132,29 +142,34 @@ export class BenchmarkPage extends BasePage  {
 
     private chartList: Array<any> = [
         {
+            chartTitle: 'Limit Adequacy',
+            imageName: '',
+            imageData: '',
+            leftMargin: -5
+        },
+        {
             chartTitle: 'Premium Distribution by Counts',
             imageName: '',
-            imageData: ''
+            imageData: '',
+            leftMargin: -15
         },
         {
             chartTitle: 'Limit Distribution by Counts',
             imageName: '',
-            imageData: ''
+            imageData: '',
+            leftMargin: -15
         },
         {
             chartTitle: 'Retention Distribution by Counts',
             imageName: '',
-            imageData: ''
+            imageData: '',
+            leftMargin: -15
         },
         {
             chartTitle: 'Rate Per Million Distribution by Values',
             imageName: '',
-            imageData: ''
-        },
-        {
-            chartTitle: 'Limit Adequacy',
-            imageName: '',
-            imageData: ''
+            imageData: '',
+            leftMargin: -10
         }
     ];
 
@@ -170,6 +185,7 @@ export class BenchmarkPage extends BasePage  {
                 this.headerTargetObjects[imageCount].text = this.chartList[i].chartTitle;
                 this.imageTargetObjects[imageCount].image = this.prefix + this.chartList[i].imageName;
                 this.imageTargetObjects[imageCount].width = 375;
+                this.imageTargetObjects[imageCount].margin[0] = this.chartList[i].leftMargin;
                 imageCount++;
             }
         }
@@ -185,10 +201,11 @@ export class BenchmarkPage extends BasePage  {
             this.pdfContent.push(this.tableRow1);
         }
         if(imageCount > 2) {
-
+            this.pdfContent.push(this.blankHeader1);
             this.pdfContent.push(this.tableRow2);
         }
         if(imageCount > 4) {
+            this.pdfContent.push(this.blankHeader2);
             this.pdfContent.push(this.tableRow3);
         }
         return this.pdfContent;
@@ -233,7 +250,7 @@ export class BenchmarkPage extends BasePage  {
 
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 4) {
-            chartName = chartName.replace('-','_');
+            chartName = chartName.replace(/\-/g,'_');
             let imageName = this.prefix + chartName;
             this.chartList[index].imageName = chartName;
             this.chartList[index].imageData = chartDataUrl;
@@ -245,6 +262,8 @@ export class BenchmarkPage extends BasePage  {
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';
+        this.blankHeader1.style = this.prefix + 'headerStyle';
+        this.blankHeader2.style = this.prefix + 'headerStyle';
         this.tableRow1.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
         this.tableRow1.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
         this.tableRow2.table.body[0][0].style = this.prefix + 'tableHeaderStyle';

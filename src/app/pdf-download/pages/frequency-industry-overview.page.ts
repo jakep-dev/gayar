@@ -53,8 +53,8 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
                     {
                         image: this.imageLeft,
                         height: 430,
-                        width: 700,
-                        margin: [ -30, 0, 0, 0 ]
+                        width: 550,
+                        margin: [ -45, 0, 0, 0 ]
                     }
                 ]
             ]

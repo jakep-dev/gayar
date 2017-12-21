@@ -497,6 +497,21 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         value: true,
         subComponents: [
             {
+                description: 'Limit Adequacy',
+                id: 'REPORT_BENCHMARK_LIMIT_ADEQUACY',
+                value: true,
+                pageType: 'BenchmarkPage',
+                chartComponents: [
+                    {
+                        componentName: 'app-peer-group-loss',
+                        pagePosition: 0,
+                        drillDownName: '',
+                        viewName: ''
+                    }
+                ],
+                subSubComponents: null
+            },
+            {
                 description: 'Premium Distribution by Counts',
                 id: 'REPORT_BENCHMARK_PREMIUM',
                 value: true,
@@ -504,7 +519,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-premium',
-                        pagePosition: 0,
+                        pagePosition: 1,
                         drillDownName: '',
                         viewName: ''
                     }
@@ -519,7 +534,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-limit',
-                        pagePosition: 1,
+                        pagePosition: 2,
                         drillDownName: '',
                         viewName: ''
                     }
@@ -534,7 +549,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-retention',
-                        pagePosition: 2,
+                        pagePosition: 3,
                         drillDownName: '',
                         viewName: ''
                     }
@@ -549,21 +564,6 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-rate',
-                        pagePosition: 3,
-                        drillDownName: '',
-                        viewName: ''
-                    }
-                ],
-                subSubComponents: null
-            },
-            {
-                description: 'Limit Adequacy',
-                id: 'REPORT_BENCHMARK_LIMIT_ADEQUACY',
-                value: true,
-                pageType: 'BenchmarkPage',
-                chartComponents: [
-                    {
-                        componentName: 'app-peer-group-loss',
                         pagePosition: 4,
                         drillDownName: '',
                         viewName: ''
