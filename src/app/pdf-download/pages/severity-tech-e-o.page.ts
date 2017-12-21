@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class SeverityTechEOPage extends BasePage  {
 
-    private prefix: string = 'severityTechEOPage_';
+    public static pageType:string = 'SeverityTechEOPage';
+
+    private prefix: string = SeverityTechEOPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class SeverityTechEOPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return SeverityTechEOPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#464646',
         fontSize: 12,
@@ -84,7 +90,7 @@ export class SeverityTechEOPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -104,6 +110,8 @@ export class SeverityTechEOPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

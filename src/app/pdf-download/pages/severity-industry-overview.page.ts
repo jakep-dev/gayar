@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class SeverityIndustryOverviewPage extends BasePage  {
 
-    private prefix: string = 'severityIndOverviewPage_';
+    public static pageType:string = 'SeverityIndustryOverviewPage';
+
+    private prefix: string = SeverityIndustryOverviewPage + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class SeverityIndustryOverviewPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return SeverityIndustryOverviewPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#27a9bc',
         fontSize: 16,
@@ -46,8 +52,8 @@ export class SeverityIndustryOverviewPage extends BasePage  {
                 [
                     {
                         image: this.imageLeft,
-                        //height: 460,
-                        width: 400,
+                        height: 430,
+                        width: 700,
                         margin: [ -30, 0, 0, 0 ]
                     }
                 ]
@@ -89,7 +95,7 @@ export class SeverityIndustryOverviewPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index == 0) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -104,6 +110,8 @@ export class SeverityIndustryOverviewPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

@@ -5,15 +5,21 @@ import { GetFileService } from 'app/services/services';
 
 export class CoverPage extends BasePage  {
 
+    public static pageType:string = 'CoverPage';
+
     private fileService: GetFileService;
     private logoDataUrl: string;
 
-    private prefix: string = 'coverPage_';
+    private prefix: string = CoverPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
     }
-
+    
+    public getPageType(): string {
+        return CoverPage.pageType;
+    }
+    
     public setPrefix(prefix: string) {
         this.prefix = prefix;
         this.updatePdfContent();

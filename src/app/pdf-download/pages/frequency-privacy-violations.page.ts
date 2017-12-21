@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class FrequencyPrivacyViolationsPage extends BasePage  {
 
-    private prefix: string = 'freqPrivacyViolationsPage_';
+    public static pageType:string = 'FrequencyPrivacyViolationsPage';
+
+    private prefix: string = FrequencyPrivacyViolationsPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class FrequencyPrivacyViolationsPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return FrequencyPrivacyViolationsPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#464646',
         fontSize: 12,
@@ -84,7 +90,7 @@ export class FrequencyPrivacyViolationsPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -104,6 +110,8 @@ export class FrequencyPrivacyViolationsPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

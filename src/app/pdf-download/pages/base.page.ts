@@ -3,9 +3,15 @@ import { IChartWidget } from 'app/model/report.model';
 
 export abstract class BasePage {
 
+    public static pageType:string = 'BasePage';
+
     constructor() {
     }
 
+    public getPageType(): string {
+        return BasePage.pageType;
+    }
+    
     public getPrefix(): string {
         return '';
     }
@@ -20,7 +26,9 @@ export abstract class BasePage {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {}
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number { 
+        return 1;
+    }
 
     public getPdfContent(): Array<any> {
         return [];

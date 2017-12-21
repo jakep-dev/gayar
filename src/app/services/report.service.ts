@@ -549,7 +549,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-rate',
-                        pagePosition: 2,
+                        pagePosition: 3,
                         drillDownName: '',
                         viewName: ''
                     }
@@ -564,7 +564,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 chartComponents: [
                     {
                         componentName: 'app-peer-group-loss',
-                        pagePosition: 2,
+                        pagePosition: 4,
                         drillDownName: '',
                         viewName: ''
                     }

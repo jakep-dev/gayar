@@ -51,7 +51,19 @@ export class PieChartComponent extends BaseChart implements OnInit {
         
         if (this.chartData.customChartSettings.drilldown) { 
             this.chartOptions.drilldown = this.chartData.customChartSettings.drilldown; 
-        }         
+            if(this.printSettings) {
+                if(this.chartOptions.drilldown) {
+                    if(this.chartOptions.drilldown.drillUpButton) {
+                        if(this.chartOptions.drilldown.drillUpButton.theme) {
+                            this.chartOptions.drilldown.drillUpButton.theme['stroke-width'] = 0;
+                            this.chartOptions.drilldown.drillUpButton.theme.style = { 
+                                color: 'white'
+                            };
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

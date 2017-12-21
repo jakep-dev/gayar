@@ -36,6 +36,7 @@ export interface IChartMetaData {
     imageIndex: string,
     targetPage: BasePage,
     pagePosition: number,
+    tocDescription: string,
     imageData: string
 }
 

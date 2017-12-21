@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class FrequencyTimePeriodPage extends BasePage  {
 
-    private prefix: string = 'freqTimePeriodPage_';
+    public static pageType:string = 'FrequencyTimePeriodPage';
+
+    private prefix: string = FrequencyTimePeriodPage + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class FrequencyTimePeriodPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return FrequencyTimePeriodPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#b1d23b',
         fontSize: 14,
@@ -84,7 +90,7 @@ export class FrequencyTimePeriodPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -104,6 +110,8 @@ export class FrequencyTimePeriodPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

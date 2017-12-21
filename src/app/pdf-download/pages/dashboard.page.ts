@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class DashboardPage extends BasePage  {
 
-    private prefix: string = 'dashboardPage_';
+    public static pageType:string = 'DashboardPage';
+
+    private prefix: string = DashboardPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class DashboardPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return DashboardPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#27a9bc',
         fontSize: 16,
@@ -144,7 +150,7 @@ export class DashboardPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 2) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -166,6 +172,8 @@ export class DashboardPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

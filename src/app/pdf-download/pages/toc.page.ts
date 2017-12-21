@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class TOCPage extends BasePage  {
 
-    private prefix: string = 'tocPage_';
+    public static pageType:string = 'TOCPage';
+
+    private prefix: string = TOCPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class TOCPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return TOCPage.pageType;
+    }
+    
     private styles: Array<any> = [];
 
     public getStyles(): Array<any> {
@@ -81,6 +87,8 @@ export class TOCPage extends BasePage  {
     tocList: Array<any> = [];
 
     pageMapping: Array<any> = [];
+
+    pageChartOffset: Array<any> = [];
 
     public addTocEntry(title: string, level: number, pageType: string) {
         let tocItem: any;
@@ -217,15 +225,42 @@ export class TOCPage extends BasePage  {
         }
     }
 
+    public registerTOCPageOffset(tocDescription: string, pageType: string, offSet: number) {
+        let pageOffset: any = this.pageChartOffset[pageType];
+        if(!pageOffset) {
+            pageOffset = this.pageChartOffset[pageType] = [];
+        }
+        pageOffset.push({
+            tocDescription: tocDescription,
+            offSet: offSet
+        });
+    }
+
     public setPageNumber(pageType: string, pageNumber: number) {
         let pageMappingList: any = this.pageMapping[pageType];
+        let pageOffSet: any = this.pageChartOffset[pageType];
+        let i: number;
+        let j: number;
+        let tocItem: any;
+        let tocTable: any;
+        let tocDescription: string;
+        let tocOffset: any;
+        let basePageNumber: number = pageNumber;
+
         if(pageMappingList) {
-            pageMappingList.forEach(tocItem => 
-                {
-                    tocItem[3].text = pageNumber;
-                    tocItem[3].linkToPage = pageNumber;
+            for(i = 0; i < pageMappingList.length; i++) {
+                tocItem = pageMappingList[i];
+                if(pageOffSet) {
+                    tocTable = tocItem[0].table || tocItem[1].table || tocItem[2].table;
+                    tocDescription = tocTable.body[0][0].text;
+                    tocOffset = pageOffSet.find(f => f.tocDescription === tocDescription);
+                    if(tocOffset) {
+                        pageNumber = basePageNumber + tocOffset.offSet - 1;
+                    }
                 }
-            );
+                tocItem[3].text = pageNumber;
+                tocItem[3].linkToPage = pageNumber;
+            }
         }
     }
 
@@ -233,9 +268,9 @@ export class TOCPage extends BasePage  {
         this.clearArray(this.styles);
         this.clearArray(this.pdfContent);
         this.clearArray(this.pageMapping);
+        this.clearArray(this.pageChartOffset);
         this.toc.table.body.length = 0;
         this.clearArray(this.tocList);
-        this.clearArray(this.pageMapping);
         this.updatePdfContent();
     }
 
@@ -282,6 +317,7 @@ export class TOCPage extends BasePage  {
     }
 
     public getPageCount(): number {
+        //the toc should be two pages or less
         if(this.tocList.length > 23) {
             return 2;
         } else {

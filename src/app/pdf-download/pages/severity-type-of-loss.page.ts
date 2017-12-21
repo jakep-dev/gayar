@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class SeverityTypeOfLossPage extends BasePage  {
 
-    private prefix: string = 'severityTypeOfLossPage_';
+    public static pageType:string = 'SeverityTypeOfLossPage';
+
+    private prefix: string = SeverityTypeOfLossPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class SeverityTypeOfLossPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return SeverityTypeOfLossPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#b1d23b',
         fontSize: 14,
@@ -96,7 +102,7 @@ export class SeverityTypeOfLossPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -116,6 +122,8 @@ export class SeverityTypeOfLossPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

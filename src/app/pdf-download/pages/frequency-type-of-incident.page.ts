@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class FrequencyTypeOfIncidentPage extends BasePage  {
 
-    private prefix: string = 'freqTypeOfIncidentPage_';
+    public static pageType:string = 'FrequencyTypeOfIncidentPage';
+
+    private prefix: string = FrequencyTypeOfIncidentPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return FrequencyTypeOfIncidentPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#b1d23b',
         fontSize: 14,
@@ -96,7 +102,7 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
@@ -116,6 +122,8 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
             }
             this.images[imageName] = chartDataUrl;
         }
+        //all content added are on first page
+        return 1;
     }
 
     private updatePdfContent() {

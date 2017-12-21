@@ -3,7 +3,9 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class BenchmarkPage extends BasePage  {
 
-    private prefix: string = 'benchmarkPage_';
+    public static pageType:string = 'BenchmarkPage';
+
+    private prefix: string = BenchmarkPage.pageType + '_';
 
     public getPrefix() {
         return this.prefix;
@@ -14,6 +16,10 @@ export class BenchmarkPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    public getPageType(): string {
+        return BenchmarkPage.pageType;
+    }
+    
     private headerStyle: any = {
         color: '#27a9bc',
         fontSize: 16,
@@ -45,14 +51,15 @@ export class BenchmarkPage extends BasePage  {
             heights: [ 15, 400 ],
             body: [
                 [
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' },
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
                 ],                
                 [
                     {
-                        margin: [ -30, 0, 0, 0 ]
+                        margin: [ -15, 0, 0, 0 ]
                     },
                     {
+                        margin: [ -15, 0, 0, 0 ]
                     }
                 ]
             ]
@@ -67,14 +74,15 @@ export class BenchmarkPage extends BasePage  {
             heights: [ 15, 400 ],
             body: [
                 [
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' },
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
                 ],                
                 [
                     {
-                        margin: [ -30, 0, 0, 0 ]
+                        margin: [ -15, 0, 0, 0 ]
                     },
                     {
+                        margin: [ -10, 0, 0, 0 ]
                     }
                 ]
             ]
@@ -89,12 +97,12 @@ export class BenchmarkPage extends BasePage  {
             heights: [ 15, 400 ],
             body: [
                 [
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' },
-                    { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
+                    { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
                 ],                
                 [
                     {
-                        margin: [ -30, 0, 0, 0 ]
+                        margin: [ -5, 0, 0, 0 ]
                     },
                     {
                         text: ''
@@ -181,7 +189,7 @@ export class BenchmarkPage extends BasePage  {
             this.pdfContent.push(this.tableRow2);
         }
         if(imageCount > 4) {
-            this.pdfContent.push(this.tableRow2);
+            this.pdfContent.push(this.tableRow3);
         }
         return this.pdfContent;
     }
@@ -206,20 +214,32 @@ export class BenchmarkPage extends BasePage  {
     public getPrintSettings(componentOrder: number) : ComponentPrintSettings {
         //all charts in this page type are the same size
         return {
-            width: 550,
+            width: 585,
             height: 400,
             drillDown: ''
         };
     }
 
-    public addChartLabel(index: number, chartName: string, chartDataUrl: string) {
+    private getImageCount(): number {
+        let i: number;
+        let imageCount: number = 0;
+        for(i = 0; i < this.chartList.length; i++) {
+            if(this.chartList[i].imageName && this.chartList[i].imageData) {
+                imageCount++;
+            }
+        }
+        return imageCount;        
+    }
+
+    public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 4) {
             chartName = chartName.replace('-','_');
             let imageName = this.prefix + chartName;
-            this.chartList[index].name = chartName;
+            this.chartList[index].imageName = chartName;
             this.chartList[index].imageData = chartDataUrl;
             this.images[imageName] = chartDataUrl;
         }
+        return this.getPageCount();
     }
 
     private updatePdfContent() {
@@ -249,9 +269,11 @@ export class BenchmarkPage extends BasePage  {
     }
 
     public getPageCount() {
-        if(this.images.length > 4) {
+        let imageCount: number = this.getImageCount();
+
+        if(imageCount > 4) {
             return 3;
-        } else if(this.images.length > 2) {
+        } else if(imageCount > 2) {
             return 2;
         } else {
             return 1;

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 
-import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
+import { BenchmarkComponent as Dashboard_BenchmarkComponent, BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
 import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
 
@@ -18,22 +18,33 @@ import { IncidentPieComponent as Severity_IncidentPieComponent } from 'app/sever
 import { LossBarComponent as Severity_LossBarComponent } from 'app/severity/loss-bar/loss-bar.component';
 import { LossPieComponent as Severity_LossPieComponent } from 'app/severity/loss-pie/loss-pie.component';
 
+import { LimitComponent as Benchmark_LimtComponent } from 'app/benchmark/limit/limit.component';
+import { PeerGroupLossComponent as Benchmark_PeerGroupLossComponent } from 'app/benchmark/peer-group-loss/peer-group-loss.component';
+import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/premium/premium.component';
+import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
+import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
+
 import { MenuService, SearchService, ReportService, FontService, GetFileService } from 'app/services/services';
 
 import { 
-    DashboardScore, FrequencyInput, SeverityInput, ComponentPrintSettings,
+    DashboardScore, FrequencyInput, SeverityInput, 
+    BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
     IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget
 } from 'app/model/model';
 
 import { 
-    BasePage, CoverPage, DashboardPage, TOCPage, FrequencyIndustryOverviewPage, 
-    FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, FrequencyDataPrivacyPage, 
-    FrequencyNetworkSecurityPage, FrequencyTechEOPage, FrequencyPrivacyViolationsPage, 
-    FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, FrequencyCorporateLossesPage,
+    BasePage, CoverPage, DashboardPage, TOCPage, 
+    FrequencyIndustryOverviewPage, FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, 
+    FrequencyDataPrivacyPage, FrequencyNetworkSecurityPage, FrequencyTechEOPage, 
+    FrequencyPrivacyViolationsPage, FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, 
+    FrequencyCorporateLossesPage,
+    
     SeverityIndustryOverviewPage, SeverityTimePeriodPage, SeverityTypeOfIncidentPage,
     SeverityDataPrivacyPage, SeverityNetworkSecurityPage, SeverityTechEOPage,
     SeverityPrivacyViolationsPage, SeverityTypeOfLossPage, SeverityPersonalInformationPage,
-    SeverityCorporateLossesPage
+    SeverityCorporateLossesPage,
+
+    BenchmarkPage
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
@@ -63,7 +74,13 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
         Severity_IncidentBarComponent,
         Severity_IncidentPieComponent,
         Severity_LossBarComponent,
-        Severity_LossPieComponent
+        Severity_LossPieComponent,
+
+        Benchmark_LimtComponent,
+        Benchmark_PeerGroupLossComponent,
+        Benchmark_PremiumComponent,
+        Benchmark_RateComponent,
+        Benchmark_RetentionComponent
     ]
 })
 export class ReportComponent implements OnInit {
@@ -79,14 +96,17 @@ export class ReportComponent implements OnInit {
     
     @ViewChild('canvas') canvas: ElementRef;
 
-    public searchType: string;
-    public companyId: number;
-    public naics: string;
-    public revenueRange: string;
-    public getDashboardScoreByManualInput: DashboardScore;
-    public frequencyInput: FrequencyInput;
-    public severityInput: SeverityInput;
-    public printSettings: ComponentPrintSettings;
+    private searchType: string;
+    private companyId: number;
+    private naics: string;
+    private revenueRange: string;
+    private getDashboardScoreByManualInput: DashboardScore;
+    private frequencyInput: FrequencyInput;
+    private severityInput: SeverityInput;
+    private benchmarkDistributionInput: BenchmarkDistributionInput;
+    private benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
+    private benchmarkRateInput: BenchmarkRateInput;
+    private printSettings: ComponentPrintSettings;
     
     private chart: BaseChart;
 
@@ -136,11 +156,11 @@ export class ReportComponent implements OnInit {
         }
         this.coverPage.setUserCompanyName('Advisen');
         
-        this.setupDashboardScoreInput();
+        this.setupChartInput();
         this.getReportConfig();
     }
 
-    setupDashboardScoreInput() {
+    setupChartInput() {
         this.searchType = this.searchService.searchCriteria.type;
         if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
             this.companyId = this.searchService.selectedCompany.companyId;
@@ -170,6 +190,33 @@ export class ReportComponent implements OnInit {
             companyId: this.searchService.getCompanyId,
             naics: this.searchService.getNaics,
             revenueRange: this.searchService.getRevenueRange
+        };
+
+        this.benchmarkDistributionInput = {
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            premiumValue: this.searchService.getPremium,
+            limitValue: this.searchService.getLimit,
+            retentionValue: this.searchService.getRetention,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRange
+        }
+
+        this.benchmarkLimitAdequacyInput = {
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            limits: this.searchService.getLimit,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRangeId
+        };
+
+        this.benchmarkRateInput = {
+            searchType: this.searchService.getSearchType,
+            companyId: this.searchService.getCompanyId,
+            premiumValue: this.searchService.getPremium,
+            limitValue: this.searchService.getLimit,
+            naics: this.searchService.getNaics,
+            revenueRange: this.searchService.getRevenueRangeId
         };
     }
 
@@ -207,7 +254,7 @@ export class ReportComponent implements OnInit {
         });
     }
 
-    private loadChartCollection(chartComponents:IChartWidget[], pageType: string) {
+    private loadChartCollection(chartComponents:IChartWidget[], pageType: string, tocDescription: string) {
         let n: number;
         let i: number;
 
@@ -223,6 +270,7 @@ export class ReportComponent implements OnInit {
                     imageData: '',
                     imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
                     pagePosition: chartComponents[i].pagePosition,
+                    tocDescription: tocDescription,
                     targetPage: this.pageCollection[pageType]
                 }
             );
@@ -243,7 +291,7 @@ export class ReportComponent implements OnInit {
                 console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                 this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
                 subEntryAdded = true;
-                this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType);
+                this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
             } else {
                 subEntryAdded = false;
             }
@@ -258,12 +306,12 @@ export class ReportComponent implements OnInit {
                         if(!subEntryAdded) {
                             console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                             this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
-                            this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType);
+                            this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
                             subEntryAdded = true;
                         }
                         console.log('Sub Sub Component = ' + subSubComponentItem.description + ' pageType = ' + subSubComponentItem.pageType);
                         this.tocPage.addTocEntry(subSubComponentItem.description, 3, subSubComponentItem.pageType);
-                        this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType);
+                        this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType, subSubComponentItem.description);
                     }
                 });
             }
@@ -296,9 +344,14 @@ export class ReportComponent implements OnInit {
         let severityLossBarComponent: Severity_LossBarComponent;
         let severityLossPieComponent: Severity_LossPieComponent;
 
+        let benchmarkLimitComponent: Benchmark_LimtComponent;
+        let benchmarkPeerGroupLossComponent: Benchmark_PeerGroupLossComponent;
+        let benchmarkPremiumComponent: Benchmark_PremiumComponent;
+        let benchmarkRateComponent: Benchmark_RateComponent;
+        let benchmarkRetentionComponent: Benchmark_RetentionComponent;
 
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
-        console.log(chartData.targetPage.getPrefix());
+        //console.log('Processing page ' + chartData.targetPage.getPageType());
         this.printSettings = chartData.targetPage.getPrintSettings(chartData.pagePosition);
         this.printSettings.drillDown = chartData.chartSetting.drillDownName;
         this.canvas.nativeElement.width = this.printSettings.width;
@@ -429,6 +482,47 @@ export class ReportComponent implements OnInit {
                 severityLossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
                 break;
 
+            case 'app-limit':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_LimtComponent);
+                benchmarkLimitComponent = <Benchmark_LimtComponent>this.entryPoint.createComponent(componentFactory).instance;
+                benchmarkLimitComponent.componentData = this.benchmarkDistributionInput;
+                benchmarkLimitComponent.printSettings = this.printSettings;
+                benchmarkLimitComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                benchmarkLimitComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'app-peer-group-loss':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_PeerGroupLossComponent);
+                benchmarkPeerGroupLossComponent = <Benchmark_PeerGroupLossComponent>this.entryPoint.createComponent(componentFactory).instance;
+                benchmarkPeerGroupLossComponent.componentData = this.benchmarkLimitAdequacyInput;
+                benchmarkPeerGroupLossComponent.printSettings = this.printSettings;
+                benchmarkPeerGroupLossComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                benchmarkPeerGroupLossComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'app-premium':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_PremiumComponent);
+                benchmarkPremiumComponent = <Benchmark_PremiumComponent>this.entryPoint.createComponent(componentFactory).instance;
+                benchmarkPremiumComponent.componentData = this.benchmarkDistributionInput;
+                benchmarkPremiumComponent.printSettings = this.printSettings;
+                benchmarkPremiumComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                benchmarkPremiumComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'app-rate':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_RateComponent);
+                benchmarkRateComponent = <Benchmark_RateComponent>this.entryPoint.createComponent(componentFactory).instance;
+                benchmarkRateComponent.componentData = this.benchmarkRateInput;
+                benchmarkRateComponent.printSettings = this.printSettings;
+                benchmarkRateComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                benchmarkRateComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+            case 'app-retention':
+                componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_RetentionComponent);
+                benchmarkRetentionComponent = <Benchmark_RetentionComponent>this.entryPoint.createComponent(componentFactory).instance;
+                benchmarkRetentionComponent.componentData = this.benchmarkDistributionInput;
+                benchmarkRetentionComponent.printSettings = this.printSettings;
+                benchmarkRetentionComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
+                benchmarkRetentionComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                break;
+
             default:
                 break;
         }
@@ -440,7 +534,7 @@ export class ReportComponent implements OnInit {
 
     startImageConversion(start: boolean) {
         if(start && this.chart != null) {
-            setTimeout(this.loadCurrentChartImage.bind(this), 500);
+            setTimeout(this.loadCurrentChartImage.bind(this), 1000);
         }
     }
 
@@ -481,7 +575,11 @@ export class ReportComponent implements OnInit {
       this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
       this.entryPoint.clear();
       this.chartDataCollection[this.chartLoadCount].imageData = buffer;
-      this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+      let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+      if(pageOffset > 1) {
+          //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
+          this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+      }
       this.chartLoadCount++;
       console.log('image size = ' + buffer.length);
       if(this.chartLoadCount < this.chartDataCollection.length) {
@@ -516,93 +614,98 @@ export class ReportComponent implements OnInit {
 
     addPageType(pageType: string) {
         switch(pageType) {
-            case 'DashboardPage':
+            case DashboardPage.pageType:
                 this.pageCollection[pageType] = new DashboardPage();
                 this.pageOrder.push(pageType);
                 break;
 
-            case 'FrequencyIndustryOverviewPage':
+            case FrequencyIndustryOverviewPage.pageType:
                 this.pageCollection[pageType] = new FrequencyIndustryOverviewPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyTimePeriodPage':
+            case FrequencyTimePeriodPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTimePeriodPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyTypeOfIncidentPage':
+            case FrequencyTypeOfIncidentPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTypeOfIncidentPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyDataPrivacyPage':
+            case FrequencyDataPrivacyPage.pageType:
                 this.pageCollection[pageType] = new FrequencyDataPrivacyPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyNetworkSecurityPage':
+            case FrequencyNetworkSecurityPage.pageType:
                 this.pageCollection[pageType] = new FrequencyNetworkSecurityPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyTechEOPage':
+            case FrequencyTechEOPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTechEOPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyPrivacyViolationsPage':
+            case FrequencyPrivacyViolationsPage.pageType:
                 this.pageCollection[pageType] = new FrequencyPrivacyViolationsPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyTypeOfLossPage':
+            case FrequencyTypeOfLossPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTypeOfLossPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyPersonalInformationPage':
+            case FrequencyPersonalInformationPage.pageType:
                 this.pageCollection[pageType] = new FrequencyPersonalInformationPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'FrequencyCorporateLossesPage':
+            case FrequencyCorporateLossesPage.pageType:
                 this.pageCollection[pageType] = new FrequencyCorporateLossesPage();
                 this.pageOrder.push(pageType);
                 break;
 
-            case 'SeverityIndustryOverviewPage':
+            case SeverityIndustryOverviewPage.pageType:
                 this.pageCollection[pageType] = new SeverityIndustryOverviewPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityTimePeriodPage':
+            case SeverityTimePeriodPage.pageType:
                 this.pageCollection[pageType] = new SeverityTimePeriodPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityTypeOfIncidentPage':
+            case SeverityTypeOfIncidentPage.pageType:
                 this.pageCollection[pageType] = new SeverityTypeOfIncidentPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityDataPrivacyPage':
+            case SeverityDataPrivacyPage.pageType:
                 this.pageCollection[pageType] = new SeverityDataPrivacyPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityNetworkSecurityPage':
+            case SeverityNetworkSecurityPage.pageType:
                 this.pageCollection[pageType] = new SeverityNetworkSecurityPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityTechEOPage':
+            case SeverityTechEOPage.pageType:
                 this.pageCollection[pageType] = new SeverityTechEOPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityPrivacyViolationsPage':
+            case SeverityPrivacyViolationsPage.pageType:
                 this.pageCollection[pageType] = new SeverityPrivacyViolationsPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityTypeOfLossPage':
+            case SeverityTypeOfLossPage.pageType:
                 this.pageCollection[pageType] = new SeverityTypeOfLossPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityPersonalInformationPage':
+            case SeverityPersonalInformationPage.pageType:
                 this.pageCollection[pageType] = new SeverityPersonalInformationPage();
                 this.pageOrder.push(pageType);
                 break;
-            case 'SeverityCorporateLossesPage':
+            case SeverityCorporateLossesPage.pageType:
                 this.pageCollection[pageType] = new SeverityCorporateLossesPage();
                 this.pageOrder.push(pageType);
                 break;
 
+            case BenchmarkPage.pageType:
+                this.pageCollection[pageType] = new BenchmarkPage();
+                this.pageOrder.push(pageType);
+                break;
+                
             default:
                 break;
         }
