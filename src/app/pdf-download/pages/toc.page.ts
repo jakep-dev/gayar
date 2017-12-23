@@ -4,6 +4,8 @@ import { ComponentPrintSettings } from 'app/model/model';
 export class TOCPage extends BasePage  {
 
     public static pageType:string = 'TOCPage';
+    private static FIRST_PAGE_TOC_ITEM_COUNT = 23;
+    private static TOC_ITEM_COUNT_PER_PAGE = 25;
 
     private prefix: string = TOCPage.pageType + '_';
 
@@ -318,10 +320,10 @@ export class TOCPage extends BasePage  {
 
     public getPageCount(): number {
         //the toc should be two pages or less
-        if(this.tocList.length > 23) {
-            return 2;
-        } else {
+        if(this.tocList.length <= TOCPage.FIRST_PAGE_TOC_ITEM_COUNT) {
             return 1;
+        } else {
+            return 1 + Math.ceil((this.tocList.length - TOCPage.FIRST_PAGE_TOC_ITEM_COUNT) / TOCPage.TOC_ITEM_COUNT_PER_PAGE);
         }
     }
 

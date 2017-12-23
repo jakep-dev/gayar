@@ -152,7 +152,7 @@ export class DashboardPage extends BasePage  {
 
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 2) {
-            chartName = chartName.replace('-','_');
+            chartName = chartName.replace(/\-/g,'_');
             let imageName = this.prefix + chartName;
             switch(index) {
                 case 0:

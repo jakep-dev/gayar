@@ -104,7 +104,7 @@ export class SeverityTypeOfIncidentPage extends BasePage  {
 
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
-            chartName = chartName.replace('-','_');
+            chartName = chartName.replace(/\-/g,'_');
             let imageName = this.prefix + chartName;
             this.table.table.body[1][index].image = imageName;
             switch(index) {
@@ -144,7 +144,7 @@ export class SeverityTypeOfIncidentPage extends BasePage  {
         }
 
         this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[0][1].image = this.prefix + this.imageRight;
+        this.table.table.body[1][1].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

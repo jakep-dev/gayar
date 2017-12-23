@@ -279,7 +279,25 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         ]
                     }
                 ]
+            },
+
+            {
+                description: 'Most Recent Peer Group Losses',
+                id: 'REPORT_FREQUENCY_MOST_RECENT_PEER_GROUP_LOSSES',
+                value: true,
+                pageType: 'FrequencyMostRecentPeerGroupLossesPage',
+                chartComponents: null,
+                subSubComponents: null
+            },
+            {
+                description: 'Most Recent Company Losses',
+                id: 'REPORT_FREQUENCY_MOST_RECENT_COMPANY_LOSSES',
+                value: true,
+                pageType: 'FrequencyMostRecentCompanyLossesPage',
+                chartComponents: null,
+                subSubComponents: null
             }
+
         ]
     },
 
@@ -487,7 +505,25 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         ]
                     }                    
                 ]
+            },
+
+            {
+                description: 'Top Peer Group Losses',
+                id: 'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES',
+                value: true,
+                pageType: 'SeverityTopPeerGroupLossesPage',
+                chartComponents: null,
+                subSubComponents: null
+            },
+            {
+                description: 'Top Company Losses',
+                id: 'REPORT_SEVERITY_TOP_COMPANY_LOSSES',
+                value: true,
+                pageType: 'SeverityTopCompanyLossesPage',
+                chartComponents: null,
+                subSubComponents: null
             }
+
         ]
     },
 

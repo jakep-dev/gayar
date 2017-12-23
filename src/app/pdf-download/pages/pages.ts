@@ -1,8 +1,7 @@
 export { BasePage } from 'app/pdf-download/pages/base.page';
 export { CoverPage } from 'app/pdf-download/pages/cover.page';
-export { DashboardPage } from 'app/pdf-download/pages/dashboard.page';
 export { TOCPage } from 'app/pdf-download/pages/toc.page';
-export { BenchmarkPage } from 'app/pdf-download/pages/benchmark.page';
+export { DashboardPage } from 'app/pdf-download/pages/dashboard.page';
 
 export { FrequencyIndustryOverviewPage } from 'app/pdf-download/pages/frequency-industry-overview.page';
 export { FrequencyTimePeriodPage } from 'app/pdf-download/pages/frequency-time-period.page';
@@ -25,3 +24,9 @@ export { SeverityPrivacyViolationsPage } from 'app/pdf-download/pages/severity-p
 export { SeverityTypeOfLossPage } from 'app/pdf-download/pages/severity-type-of-loss.page';
 export { SeverityPersonalInformationPage } from 'app/pdf-download/pages/severity-personal-information.page';
 export { SeverityCorporateLossesPage } from 'app/pdf-download/pages/severity-corporate-losses.page';
+
+export { BenchmarkPage } from 'app/pdf-download/pages/benchmark.page';
+export { FrequencyMostRecentPeerGroupLossesPage } from 'app/pdf-download/pages/frequency-most-recent-peer-group-losses.page';
+export { FrequencyMostRecentCompanyLossesPage } from 'app/pdf-download/pages/frequency-most-recent-company-losses.page';
+export { SeverityTopPeerGroupLossesPage } from 'app/pdf-download/pages/severity-top-peer-group-losses.page';
+export { SeverityTopCompanyLossesPage } from 'app/pdf-download/pages/severity-top-company-losses.page';

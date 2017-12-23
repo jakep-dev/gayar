@@ -97,7 +97,7 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
 
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index == 0) {
-            chartName = chartName.replace('-','_');
+            chartName = chartName.replace(/\-/g,'_');
             let imageName = this.prefix + chartName;
             this.table.table.body[1][index].image = imageName;
             switch(index) {

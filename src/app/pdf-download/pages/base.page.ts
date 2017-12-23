@@ -54,4 +54,10 @@ export abstract class BasePage {
         return 1;
     }
 
+    public isPageCountingRequired(): boolean {
+        return false;
+    }
+
+    public setPageCount(pageCount: number) {
+    }
 }

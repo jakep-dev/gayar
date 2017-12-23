@@ -142,6 +142,7 @@ export class PDFMakeBuilder {
     }
 
     private footerCallback(currentPage: number, pageCount: number): any {
+        this.pageCount = pageCount;
         if(this.differentFirstPage && (currentPage == 1)) {
             return this.firstPageFooter;
         } else {
@@ -159,6 +160,12 @@ export class PDFMakeBuilder {
     }
     public setPageMargins(left: number, top: number, right: number, bottom: number) {
         this.pdfContent.pageMargins = [left, top, right, bottom];
+    }
+
+    private pageCount: number = 0;
+
+    public getPageCount(): number {
+        return this.pageCount;
     }
 
     constructor() {
@@ -206,11 +213,13 @@ export class PDFMakeBuilder {
     }
     
     public getContent(): any {
+        //console.log(JSON.stringify(this.pdfContent.styles));
         return this.pdfContent;
     }
 
     public addPdfContent(pdfTextBlocks: Array<any>) {
         pdfTextBlocks.forEach(pdfTextBlock => {
+            //console.log(JSON.stringify(pdfTextBlock));
             this.pdfContent.content.push(pdfTextBlock);
         });
     }

@@ -24,18 +24,21 @@ import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/pr
 import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
-import { MenuService, SearchService, FrequencyService, ReportService, FontService, GetFileService } from 'app/services/services';
+import { MenuService, SearchService, 
+    FrequencyService, SeverityService, 
+    ReportService, FontService, GetFileService 
+} from 'app/services/services';
 
 import { 
     DashboardScore, 
     FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel,
-    SeverityInput, 
+    SeverityInput, SeverityDataModel, SeverityDataResponseModel,
     BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
     IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget
 } from 'app/model/model';
 
 import { 
-    BasePage, CoverPage, DashboardPage, TOCPage, 
+    BasePage, CoverPage, TOCPage, DashboardPage,
     FrequencyIndustryOverviewPage, FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, 
     FrequencyDataPrivacyPage, FrequencyNetworkSecurityPage, FrequencyTechEOPage, 
     FrequencyPrivacyViolationsPage, FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, 
@@ -46,7 +49,9 @@ import {
     SeverityPrivacyViolationsPage, SeverityTypeOfLossPage, SeverityPersonalInformationPage,
     SeverityCorporateLossesPage,
 
-    BenchmarkPage
+    BenchmarkPage, 
+    FrequencyMostRecentPeerGroupLossesPage, FrequencyMostRecentCompanyLossesPage,
+    SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
@@ -87,12 +92,13 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
 })
 export class ReportComponent implements OnInit {
 
-    reportTileModel: Array<IReportTileModel> = null;
-    pageCollection: Array<BasePage> = [];
-    pageOrder: Array<string> = [];
+    public reportTileModel: Array<IReportTileModel> = null;
+    private pageCollection: Array<BasePage> = [];
+    private pageOrder: Array<string> = [];
 
-    chartDataCollection: Array<IChartMetaData> = [];
-    chartLoadCount: number;
+    private chartDataCollection: Array<IChartMetaData> = [];
+    private chartLoadCount: number;
+    private pagesProcessedCount: number;
 
     @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
     
@@ -107,6 +113,8 @@ export class ReportComponent implements OnInit {
     private frequencyPeerGroupTable: Array<FrequencyDataModel>;
     private frequencyCompanyLossesTable: Array<FrequencyDataModel>;
     private severityInput: SeverityInput;
+    private severityPeerGroupTable: Array<SeverityDataModel>;
+    private severityCompanyLossesTable: Array<SeverityDataModel>;
     private benchmarkDistributionInput: BenchmarkDistributionInput;
     private benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
     private benchmarkRateInput: BenchmarkRateInput;
@@ -121,6 +129,7 @@ export class ReportComponent implements OnInit {
 
     private reportDataDone: boolean = false;
     private frequencyDataDone: boolean = false;
+    private severityDataDone: boolean = false;
 
     constructor(
         private rootElement: ElementRef,
@@ -130,6 +139,7 @@ export class ReportComponent implements OnInit {
         private menuService: MenuService,
         private searchService: SearchService,
         private frequencyService: FrequencyService,
+        private severityService: SeverityService,
         private reportService: ReportService) {
 
         if(this.fontService.isLoadComplete()) {
@@ -169,9 +179,10 @@ export class ReportComponent implements OnInit {
         this.setupChartInput();
         this.getReportConfig();
         this.getFrequencyTables();
+        this.getSeverityTables();
     }
 
-    setupChartInput() {
+    private setupChartInput() {
         this.searchType = this.searchService.searchCriteria.type;
         if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
             this.companyId = this.searchService.selectedCompany.companyId;
@@ -236,7 +247,7 @@ export class ReportComponent implements OnInit {
      *
      * @return {} - No return types.
      */
-    getReportConfig () {
+    private getReportConfig () {
         this.reportService.getReportConfig().subscribe((data)=> {
             this.reportTileModel = data;
             console.log('Report Data Done!');
@@ -244,7 +255,7 @@ export class ReportComponent implements OnInit {
         });
     }
 
-    getFrequencyTables() {
+    private getFrequencyTables() {
         this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
             this.searchService.getNaics,
             this.searchService.getRevenueRange)
@@ -258,6 +269,17 @@ export class ReportComponent implements OnInit {
         });        
     }
 
+    private getSeverityTables() {
+        this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
+            this.severityPeerGroupTable = res.peerGroup;
+            if (res.company != null && res.company.length > 0) {
+                this.severityCompanyLossesTable = res.company;
+            }
+            console.log('Severity Data Done!');
+            this.severityDataDone = true;
+        });
+    }
+
     private clearArray(array: Array<any>) {
         array.length = 0;
         for(let item in array) {
@@ -267,7 +289,7 @@ export class ReportComponent implements OnInit {
     }
 
     public onReport () {
-        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.frequencyDataDone) {
+        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.frequencyDataDone && this.severityDataDone) {
             this.startReportProcess();
         } else {
             console.log('Waiting for resources to load before starting report.');
@@ -278,6 +300,7 @@ export class ReportComponent implements OnInit {
 
     private startReportProcess() {
         this.chartLoadCount = 0;
+        this.pagesProcessedCount = 0;
         this.chartDataCollection.length = 0;
         this.pageOrder.length = 0;
         this.clearArray(this.pageCollection);
@@ -287,6 +310,12 @@ export class ReportComponent implements OnInit {
                 this.processReportSection(reportSection);
             }
         });
+        //console.log(this.chartDataCollection);
+        if(this.chartDataCollection.length > 0) {
+            this.loadChartImage();
+        } else if(this.pageOrder.length > 0) {
+            this.processPageCounts();
+        }
     }
 
     private loadChartCollection(chartComponents:IChartWidget[], pageType: string, tocDescription: string) {
@@ -297,22 +326,24 @@ export class ReportComponent implements OnInit {
             this.addPageType(pageType);
             console.log('Loaded Page type ' + pageType);
         }
-        n = chartComponents.length;
-        for(i = 0; i < n; i++) {
-            this.chartDataCollection.push(
-                {
-                    chartSetting: chartComponents[i],
-                    imageData: '',
-                    imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                    pagePosition: chartComponents[i].pagePosition,
-                    tocDescription: tocDescription,
-                    targetPage: this.pageCollection[pageType]
-                }
-            );
+        if(chartComponents) {
+            n = chartComponents.length;
+            for(i = 0; i < n; i++) {
+                this.chartDataCollection.push(
+                    {
+                        chartSetting: chartComponents[i],
+                        imageData: '',
+                        imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
+                        pagePosition: chartComponents[i].pagePosition,
+                        tocDescription: tocDescription,
+                        targetPage: this.pageCollection[pageType]
+                    }
+                );
+            }
         }
     }
 
-    processReportSection(section: IReportTileModel) {
+    private processReportSection(section: IReportTileModel) {
         let sectionHeaderAdded = false;
         let subEntryAdded;
 
@@ -352,13 +383,9 @@ export class ReportComponent implements OnInit {
             }
             
         });
-        //console.log(this.chartDataCollection);
-        if(this.chartDataCollection.length > 0) {
-            this.loadChartImage();
-        }
     }
     
-    loadChartImage() {
+    private loadChartImage() {
         let componentFactory: ComponentFactory<any>;
         
         let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
@@ -563,17 +590,17 @@ export class ReportComponent implements OnInit {
         }
     }
 
-    setWorkingChart(chart: BaseChart) {
+    private setWorkingChart(chart: BaseChart) {
         this.chart = chart;
     }
 
-    startImageConversion(start: boolean) {
+    private startImageConversion(start: boolean) {
         if(start && this.chart != null) {
             setTimeout(this.loadCurrentChartImage.bind(this), 1000);
         }
     }
 
-    loadCurrentChartImage() {
+    private loadCurrentChartImage() {
 
         let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
         if(childImages.length > 0) {
@@ -605,49 +632,90 @@ export class ReportComponent implements OnInit {
         }
     }
 
-  renderCompleteCallback() {
-      let buffer = this.canvas.nativeElement.toDataURL('image/png');
-      this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
-      this.entryPoint.clear();
-      this.chartDataCollection[this.chartLoadCount].imageData = buffer;
-      let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
-      if(pageOffset > 1) {
-          //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
-          this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
-      }
-      this.chartLoadCount++;
-      console.log('image size = ' + buffer.length);
-      if(this.chartLoadCount < this.chartDataCollection.length) {
-          this.loadChartImage();
-      } else {
-          //first page is the cover sheet, second to third page is the table of contents
-          let pageNumber = 2 + this.tocPage.getPageCount();
-          this.pageOrder.forEach(pageType => 
-              {
-                  this.tocPage.setPageNumber(pageType, pageNumber);
-                  pageNumber = pageNumber + this.pageCollection[pageType].getPageCount();
-              }
-          );
-          let pg = new PDFMakeBuilder();
-          pg.setDifferentFirstPage(true);
-          pg.addPage(this.coverPage);
-          pg.addPage(this.tocPage);
-          this.pageOrder.forEach(pageType => 
-              {
-                pg.addPage(this.pageCollection[pageType]);
-              }
-          );
-          //console.log(pg.getContent());
-          this.pdfMake.createPdf(pg.getContent()).download('test.pdf');
-          //console.log(pg.getContent());
-      }
-  }
+  private renderCompleteCallback() {
+        let buffer = this.canvas.nativeElement.toDataURL('image/png');
+        this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
+        this.entryPoint.clear();
+        this.chartDataCollection[this.chartLoadCount].imageData = buffer;
+        let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+        if(pageOffset > 1) {
+            //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
+            this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+        }
+        this.chartLoadCount++;
+        console.log('image size = ' + buffer.length);
+        if(this.chartLoadCount < this.chartDataCollection.length) {
+            this.loadChartImage();
+        } else {
+            this.processPageCounts();
+        }
+    }
 
-    hasPageType(pageType: string):boolean {
+    private processPageCounts() {
+        if(this.pagesProcessedCount < this.pageOrder.length) {
+            let pageType: string = this.pageOrder[this.pagesProcessedCount];
+            let page: BasePage = this.pageCollection[pageType];
+            if(page) {
+                this.calculatePageCount(page);
+            } else {
+                this.pagesProcessedCount++;
+                this.processPageCounts();                    
+            }
+        } else {
+            this.generatePDF();
+        }
+    }
+    private calculatePageCount(page: BasePage) {
+        if(page.isPageCountingRequired()) {
+            console.log('Counting pages for ' + page.getPageType());
+            let pg = new PDFMakeBuilder();
+            pg.setDifferentFirstPage(true);
+            pg.addPage(page);
+            const pdfDocGenerator = this.pdfMake.createPdf(pg.getContent());
+            pdfDocGenerator.getBuffer((data) => {
+                this.pagesProcessedCount++;
+                //subtract one from the page count due to page break
+                page.setPageCount(pg.getPageCount() - 1 );
+                console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
+                this.processPageCounts();
+            });    
+        } else {
+            console.log('No need to count pages for ' + page.getPageType());
+            this.pagesProcessedCount++;
+            this.processPageCounts();
+        }
+    }
+
+    private generatePDF() {
+
+
+        //first page is the cover sheet, second to third page is the table of contents
+        let pageNumber = 2 + this.tocPage.getPageCount();
+        this.pageOrder.forEach(pageType => 
+            {
+                this.tocPage.setPageNumber(pageType, pageNumber);
+                pageNumber = pageNumber + this.pageCollection[pageType].getPageCount();
+            }
+        );
+        let pg = new PDFMakeBuilder();
+        pg.setDifferentFirstPage(true);
+        pg.addPage(this.coverPage);
+        pg.addPage(this.tocPage);
+        this.pageOrder.forEach(pageType => 
+            {
+                pg.addPage(this.pageCollection[pageType]);
+            }
+        );
+        //console.log(pg.getContent());
+        this.pdfMake.createPdf(pg.getContent()).download('test.pdf');
+        //console.log(pg.getContent());
+    }
+
+    private hasPageType(pageType: string):boolean {
         return (this.pageCollection[pageType] ? true : false);
     }
 
-    addPageType(pageType: string) {
+    private addPageType(pageType: string) {
         switch(pageType) {
             case DashboardPage.pageType:
                 this.pageCollection[pageType] = new DashboardPage();
@@ -740,7 +808,33 @@ export class ReportComponent implements OnInit {
                 this.pageCollection[pageType] = new BenchmarkPage();
                 this.pageOrder.push(pageType);
                 break;
-                
+
+            case FrequencyMostRecentPeerGroupLossesPage.pageType:
+                let frequencyMostRecentPeerGroupLossesPage = new FrequencyMostRecentPeerGroupLossesPage();
+                frequencyMostRecentPeerGroupLossesPage.setPeerGroupData(this.frequencyPeerGroupTable);
+                this.pageCollection[pageType] = frequencyMostRecentPeerGroupLossesPage
+                this.pageOrder.push(pageType);
+                break;
+            case FrequencyMostRecentCompanyLossesPage.pageType:
+                let frequencyMostRecentCompanyLossesPage = new FrequencyMostRecentCompanyLossesPage();
+                frequencyMostRecentCompanyLossesPage.setPeerGroupData(this.frequencyCompanyLossesTable);
+                this.pageCollection[pageType] = frequencyMostRecentCompanyLossesPage
+                this.pageOrder.push(pageType);
+                break;
+
+            case SeverityTopPeerGroupLossesPage.pageType:
+                let severityTopPeerGroupLossesPage = new SeverityTopPeerGroupLossesPage();
+                severityTopPeerGroupLossesPage.setPeerGroupData(this.severityPeerGroupTable);
+                this.pageCollection[pageType] = severityTopPeerGroupLossesPage
+                this.pageOrder.push(pageType);
+                break;
+            case SeverityTopCompanyLossesPage.pageType:
+                let severityTopCompanyLossesPage = new SeverityTopCompanyLossesPage();
+                severityTopCompanyLossesPage.setPeerGroupData(this.severityCompanyLossesTable);
+                this.pageCollection[pageType] = severityTopCompanyLossesPage
+                this.pageOrder.push(pageType);
+                break;
+
             default:
                 break;
         }
