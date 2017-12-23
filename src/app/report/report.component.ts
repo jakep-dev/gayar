@@ -174,7 +174,14 @@ export class ReportComponent implements OnInit {
         if(this.revenueRange) {
             this.coverPage.setRevenueRangeText(this.revenueRange);
         }
-        this.coverPage.setUserCompanyName('Advisen');
+
+        //this.coverPage.setUserCompanyName('Advisen');
+        this.searchService.checkForRevenueAndIndustry(0).subscribe((data)=>{
+            if(data && data.message){
+                this.coverPage.setUserCompanyName(data.companyName);
+            }
+        });
+        
         
         this.setupChartInput();
         this.getReportConfig();
