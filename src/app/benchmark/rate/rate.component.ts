@@ -137,7 +137,7 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos, yPos - 3],
-            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.7), chart.getYAxisPosition(this.modelData.quartile.firstQuartile)],
+            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.5) + 40, chart.getYAxisPosition(this.modelData.quartile.firstQuartile)],
             lineColor,
             lineWidth);
 
@@ -160,7 +160,7 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos, yPos - 3],
-            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.7), chart.getYAxisPosition(this.modelData.quartile.fourthQuartile) - 1],
+            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.5) +  40, chart.getYAxisPosition(this.modelData.quartile.fourthQuartile) - 1],
             lineColor,
             lineWidth);
 
@@ -183,7 +183,7 @@ export class RateComponent implements OnInit {
         );
 
         chart.addLine([xPos + (label.length * 6.3), yPos - 3],
-            [xPos + (label.length * 6.3) + 10, yPos - 3, chart.getXAxisPosition(2.35), chart.getYAxisPosition(this.modelData.quartile.median)],
+            [xPos + (label.length * 6.3) + 10, yPos - 3, chart.getXAxisPosition(2.5) - 60, chart.getYAxisPosition(this.modelData.quartile.median)],
             lineColor,
             lineWidth);
 
