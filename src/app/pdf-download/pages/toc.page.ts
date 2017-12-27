@@ -3,31 +3,65 @@ import { ComponentPrintSettings } from 'app/model/model';
 
 export class TOCPage extends BasePage  {
 
+    //page type name for this page
     public static pageType:string = 'TOCPage';
     private static FIRST_PAGE_TOC_ITEM_COUNT = 23;
     private static TOC_ITEM_COUNT_PER_PAGE = 25;
 
+    //default page prefix of this page to prevent json object names from one page don't clash with other pages
     private prefix: string = TOCPage.pageType + '_';
 
+    /**
+     * get the page prefix for the current page of the assessment report
+     * 
+     * @public
+     * @function getPrefix
+     * @return {string} - page prefix for the current page of the assessment report.
+     */
     public getPrefix() {
         return this.prefix;
     }
 
+    /**
+     * Setter function to set the prefix for this page
+     * 
+     * @public
+     * @function setPrefix
+     * @param {string} prefix - prefix use for this page
+     * @return {} - No return types.
+     */
     public setPrefix(prefix: string) {
         this.prefix = prefix;
         this.updatePdfContent();
     }
 
+    /**
+     * get the page type for the current page of the assessment report
+     * 
+     * @public
+     * @function getPageType
+     * @return {string} - page type for the current page of the assessment report.
+     */
     public getPageType(): string {
         return TOCPage.pageType;
     }
     
+    //Associative array of styles for toc page
+    //Maps style name to style json object
     private styles: Array<any> = [];
 
+    /**
+     * get the style array for the assessment report
+     * 
+     * @public
+     * @function getStyles
+     * @return {Array<any>} - Associative array of styles for the assessment report.
+     */
     public getStyles(): Array<any> {
         return this.styles;
     }
 
+    //table of contents item style json objects
     private tocStyle1: any = {
         color: '#7a9bc',
         fontSize: 22,
@@ -57,6 +91,7 @@ export class TOCPage extends BasePage  {
         fontSize: 10
     };
 
+    //Page header json object
     private header: any = {
         text: [
             {
@@ -75,6 +110,7 @@ export class TOCPage extends BasePage  {
         margin: [60,0,0,0]
     };
 
+    //table of contents json object
     private toc: any = {
         margin: [60, 5, 60, 10],
         table: {
@@ -86,12 +122,25 @@ export class TOCPage extends BasePage  {
         pageBreak: 'after'
     };
 
+    //Array of toc items
     tocList: Array<any> = [];
 
+    //Associative array that maps page type to an array of toc items
     pageMapping: Array<any> = [];
 
+    //Associative array that maps page type to an array of objects containing toc description and page offset
     pageChartOffset: Array<any> = [];
 
+    /**
+     * Add a table of contents item to page object
+     * 
+     * @public
+     * @function addTocEntry
+     * @param {string} title - toc item title
+     * @param {string} level - indentation level of the toc item
+     * @param {string} pageType - page type
+     * @return {} - No return types.
+     */
     public addTocEntry(title: string, level: number, pageType: string) {
         let tocItem: any;
         let subTable: any;
@@ -227,6 +276,16 @@ export class TOCPage extends BasePage  {
         }
     }
 
+    /**
+     * Save multipage page offsets for page objects that render to multiple pdf pages
+     * 
+     * @public
+     * @function registerTOCPageOffset
+     * @param {string} tocDescription - table of contents item label
+     * @param {string} pageType - page type name
+     * @param {number} offSet - the page number within the page object for which toc item label is being mapped to
+     * @return {} - No return types.
+     */
     public registerTOCPageOffset(tocDescription: string, pageType: string, offSet: number) {
         let pageOffset: any = this.pageChartOffset[pageType];
         if(!pageOffset) {
@@ -238,6 +297,15 @@ export class TOCPage extends BasePage  {
         });
     }
 
+    /**
+     * Update table of contents items with the input page type name
+     * 
+     * @public
+     * @function setPageNumber
+     * @param {string} pageType - page type name
+     * @param {number} pageNumber - page number for the specified page type
+     * @return {} - No return types.
+     */
     public setPageNumber(pageType: string, pageNumber: number) {
         let pageMappingList: any = this.pageMapping[pageType];
         let pageOffSet: any = this.pageChartOffset[pageType];
@@ -252,6 +320,8 @@ export class TOCPage extends BasePage  {
         if(pageMappingList) {
             for(i = 0; i < pageMappingList.length; i++) {
                 tocItem = pageMappingList[i];
+                //if page object can be rendered past the first page
+                //calculate offset to match page number to toc item description
                 if(pageOffSet) {
                     tocTable = tocItem[0].table || tocItem[1].table || tocItem[2].table;
                     tocDescription = tocTable.body[0][0].text;
@@ -266,6 +336,13 @@ export class TOCPage extends BasePage  {
         }
     }
 
+    /**
+     * clear all the table of content items
+     * 
+     * @public
+     * @function clearTOC
+     * @return {} - No return types.
+     */
     public clearTOC() {
         this.clearArray(this.styles);
         this.clearArray(this.pdfContent);
@@ -276,12 +353,27 @@ export class TOCPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    //Array of json block for cover page
     private pdfContent: Array<any> = [];
 
+    /**
+     * get the pdf content array for the assessment report
+     * 
+     * @public
+     * @function getPdfContent
+     * @return {Array<any>} - array of json objects for the assessment report.
+     */
     public getPdfContent(): Array<any> {
         return this.pdfContent;
     }
 
+    /**
+     * Update style names, image names when the page prefix changes
+     * 
+     * @private
+     * @function updatePdfContent
+     * @return {} - No return types.
+     */
     private updatePdfContent() {
         this.header.text[0].style = this.prefix + "tocStyle1";
         this.header.text[1].style = this.prefix + "tocStyle2";
@@ -318,6 +410,13 @@ export class TOCPage extends BasePage  {
         this.pdfContent.push(this.toc);
     }
 
+    /**
+     * get the page count for the current page object
+     * 
+     * @public
+     * @function getPageCount
+     * @return {number} - number of pages this page object will render out to
+     */
     public getPageCount(): number {
         //the toc should be two pages or less
         if(this.tocList.length <= TOCPage.FIRST_PAGE_TOC_ITEM_COUNT) {

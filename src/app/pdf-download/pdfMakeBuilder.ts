@@ -212,6 +212,14 @@ export class PDFMakeBuilder {
         //this.pdfContent.images = {};
     }
     
+    public trimLastPageBreak() {
+        let n: number = this.pdfContent.content.length;
+        let lastContentBlock: any = this.pdfContent.content[n - 1];
+        if(lastContentBlock && lastContentBlock.pageBreak) {
+            delete lastContentBlock.pageBreak;
+        }
+    }
+
     public getContent(): any {
         //console.log(JSON.stringify(this.pdfContent.styles));
         return this.pdfContent;

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 import { BenchmarkComponent as Dashboard_BenchmarkComponent, BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
 import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
@@ -92,43 +93,89 @@ import { getPdfMake } from 'app/shared/pdf/pdfExport';
 })
 export class ReportComponent implements OnInit {
 
+    //list of high level report sections
     public reportTileModel: Array<IReportTileModel> = null;
+    
+    //associate array that maps page type to page object
     private pageCollection: Array<BasePage> = [];
+    
+    //list of  page type names
     private pageOrder: Array<string> = [];
 
+    //list of chart data objects
     private chartDataCollection: Array<IChartMetaData> = [];
+    
+    //indicate the number of chart objects processed
     private chartLoadCount: number;
+
+    //indicate the number of pages processed
     private pagesProcessedCount: number;
 
+    //The insertion point for the dynamic loading of chart components
     @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
     
+    //The html canvas object used to convert svg to png data url
     @ViewChild('canvas') canvas: ElementRef;
 
     private searchType: string;
     private companyId: number;
     private naics: string;
     private revenueRange: string;
+
+    //input to dashboard charts
     private getDashboardScoreByManualInput: DashboardScore;
+
+    //input to frequency charts
     private frequencyInput: FrequencyInput;
+
+    //input to frequency most recent peer group losses table
     private frequencyPeerGroupTable: Array<FrequencyDataModel>;
+    
+    //input to frequency most recent company losses table
     private frequencyCompanyLossesTable: Array<FrequencyDataModel>;
+    
+    //input to severity charts
     private severityInput: SeverityInput;
+
+    //input to severity top peer group losses table
     private severityPeerGroupTable: Array<SeverityDataModel>;
+
+    //input to severity top company losses table
     private severityCompanyLossesTable: Array<SeverityDataModel>;
+
+    //input for limit, premium and retention benchmark charts
     private benchmarkDistributionInput: BenchmarkDistributionInput;
+    
+    //input for peer group loss benchmark chart
     private benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
+
+    //input for rate benchmark chart
     private benchmarkRateInput: BenchmarkRateInput;
+
+    //print settings for the current chart being processed
     private printSettings: ComponentPrintSettings;
     
+    //Reference to the HighChart object
     private chart: BaseChart;
 
+    //Object used to generate PDF
     private pdfMake: any;
+
+    //Object used to assemble the final json object for pdfmake library
+    private pdfBuilder: PDFMakeBuilder;
+
+    //filename of the pdf download
+    //Cyber OverVue Report_' + Company Name + '_' + 'MMDDYYYY' + '.pdf'
+    private pdfFilename: string;
 
     private coverPage: CoverPage;
     private tocPage: TOCPage;
 
+    //boolean to indicate report data is loaded
     private reportDataDone: boolean = false;
+    //boolean to indicate frequency data is loaded
     private frequencyDataDone: boolean = false;
+    //boolean to indicate severity data is loaded
     private severityDataDone: boolean = false;
 
     constructor(
@@ -142,6 +189,7 @@ export class ReportComponent implements OnInit {
         private severityService: SeverityService,
         private reportService: ReportService) {
 
+        //If font files are not loaded setup the call back function to catch the event when font files are loaded
         if(this.fontService.isLoadComplete()) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
             console.log('Font files already loaded!');
@@ -149,12 +197,24 @@ export class ReportComponent implements OnInit {
             this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
         }
 
+        this.pdfBuilder = new PDFMakeBuilder();
+
+        //Create cover page
         this.coverPage = new CoverPage();
         this.coverPage.setFileService(this.getFileService);
 
+        //Create table of contents page
         this.tocPage = new TOCPage();
     }
 
+    /**
+     * Callback function to indicate the font files for pdf generation is loaded
+     * 
+     * @private
+     * @function configurePDFMake
+     * @param {boolean} isReady - indicate where the font files are loaded
+     * @return {} - No return types.
+     */
     private configurePDFMake(isReady: boolean) {
         if(isReady) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
@@ -162,11 +222,17 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * ngOnInit - Fires on initial load and loads the
+     * 
+     * @return {} - No return types.
+     */
     ngOnInit() {
         this.menuService.breadCrumb = 'Report';
         this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
         this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
 
+        //set cover page's company name, industry name and revenue range labels
         this.coverPage.setCompanyName((this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value);
         if(this.naics) {
             this.coverPage.setIndustryName(this.naics);
@@ -175,6 +241,10 @@ export class ReportComponent implements OnInit {
             this.coverPage.setRevenueRangeText(this.revenueRange);
         }
 
+        let dp = new DatePipe('en-US');
+        this.pdfFilename = 'Cyber OverVue Report_' + this.coverPage.getCompanyName() + '_' + dp.transform(new Date(), 'MMddyyyy') + '.pdf';
+
+        //Get logged in user's company name
         //this.coverPage.setUserCompanyName('Advisen');
         this.searchService.checkForRevenueAndIndustry(0).subscribe((data)=>{
             if(data && data.message){
@@ -182,13 +252,23 @@ export class ReportComponent implements OnInit {
             }
         });
         
-        
+        //initialize chart input objects
         this.setupChartInput();
+        //Call report service to get report structure
         this.getReportConfig();
+        //Call frequecy service to get frequency table data
         this.getFrequencyTables();
+        //Call severity service to get severity table data
         this.getSeverityTables();
     }
 
+    /**
+     * Setup chart component input objects used to instantiate chart components
+     * 
+     * @private
+     * @function setupChartInput
+     * @return {} - No return types.
+     */
     private setupChartInput() {
         this.searchType = this.searchService.searchCriteria.type;
         if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
@@ -252,6 +332,8 @@ export class ReportComponent implements OnInit {
     /**
      * getReportConfig - Load the report configuration.
      *
+     * @private
+     * @function getReportConfig
      * @return {} - No return types.
      */
     private getReportConfig () {
@@ -262,6 +344,14 @@ export class ReportComponent implements OnInit {
         });
     }
 
+    /**
+     * Get frequency table data for 
+     * Most Recent Peer Group Losses and Most Recent Company Losses sections
+     * 
+     * @private
+     * @function getFrequencyTables
+     * @return {} - No return types.
+     */
     private getFrequencyTables() {
         this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
             this.searchService.getNaics,
@@ -276,6 +366,14 @@ export class ReportComponent implements OnInit {
         });        
     }
 
+    /**
+     * Get severity table data for 
+     * Top Peer Group Losses and Top Company Losses sections
+     * 
+     * @private
+     * @function getSeverityTables
+     * @return {} - No return types.
+     */
     private getSeverityTables() {
         this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
             this.severityPeerGroupTable = res.peerGroup;
@@ -287,6 +385,15 @@ export class ReportComponent implements OnInit {
         });
     }
 
+    /**
+     * Clears the contents of the input array 
+     * Array can be an associative array or regular array
+     * 
+     * @private
+     * @function clearArray
+     * @param {Array<any} array - arbitrary array
+     * @return {} - No return types.
+     */
     private clearArray(array: Array<any>) {
         array.length = 0;
         for(let item in array) {
@@ -295,7 +402,20 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * Response to the download report button
+     * Continuosly wait for all resources and data are loaded before starting the pdf generation process
+     * 
+     * @public
+     * @function onReport
+     * @return {} - No return types.
+     */
     public onReport () {
+        //check if the pdf fonts are loaded
+        //check if cover page image is loaded
+        //check if report data is loaded
+        //check if frequency table data is loaded
+        //check if severity table data is loaded
         if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.frequencyDataDone && this.severityDataDone) {
             this.startReportProcess();
         } else {
@@ -305,6 +425,15 @@ export class ReportComponent implements OnInit {
 
     }
 
+    /**
+     * Process one high level report section at a time by calling processReportSection
+     * Start processing chart images serially.
+     * If no chart image are selected, we need to start page count procesing
+     * 
+     * @private
+     * @function startReportProcess
+     * @return {} - No return types.
+     */
     private startReportProcess() {
         this.chartLoadCount = 0;
         this.pagesProcessedCount = 0;
@@ -318,13 +447,27 @@ export class ReportComponent implements OnInit {
             }
         });
         //console.log(this.chartDataCollection);
+        //Start processing of chart images
         if(this.chartDataCollection.length > 0) {
             this.loadChartImage();
         } else if(this.pageOrder.length > 0) {
+            //if no chart images the start the page count processing
             this.processPageCounts();
         }
     }
 
+    /**
+     * Add page object's chart components to chartDataCollection.  If the chart 
+     * component's page type is not loaded yet then create 
+     * instance of the specified page type.  
+     * 
+     * @private
+     * @function loadChartCollection
+     * @param {IChartWidget[]} chartComponents - List of chart objects within report section or sub sectio or sub sub section
+     * @param {string} pageType - The page type where the chart component resides in
+     * @param {string} tocDescription - The table of contents entry for which the chart objects that is being mapped to
+     * @return {} - No return types.
+     */
     private loadChartCollection(chartComponents:IChartWidget[], pageType: string, tocDescription: string) {
         let n: number;
         let i: number;
@@ -350,6 +493,19 @@ export class ReportComponent implements OnInit {
         }
     }
 
+
+    /**
+     * Processes a single top level report section and collects 
+     * information on chart component parameters and the page 
+     * type the chart is rendered into by calling loadChartCollection.
+     * Maintain the list table of contents entries to page type mapping
+     * 
+     * @private
+     * @function processReportSection
+     * @param {IReportTileModel} section - top level report section that may contain zero or 
+     * more sub sections which may also have sub sub sections
+     * @return {} - No return types.
+     */
     private processReportSection(section: IReportTileModel) {
         let sectionHeaderAdded = false;
         let subEntryAdded;
@@ -392,6 +548,15 @@ export class ReportComponent implements OnInit {
         });
     }
     
+    /**
+     * Loads the next chart component from the chartDataCollection
+     * Wire callback event to get underlying chart object reference
+     * and trigger image conversion when svg image is rendered
+     * 
+     * @private
+     * @function loadChartImage
+     * @return {} - No return types.
+     */
     private loadChartImage() {
         let componentFactory: ComponentFactory<any>;
         
@@ -419,14 +584,20 @@ export class ReportComponent implements OnInit {
         let benchmarkRateComponent: Benchmark_RateComponent;
         let benchmarkRetentionComponent: Benchmark_RetentionComponent;
 
+        //load the next chart in the chartDataCollection
         let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
         //console.log('Processing page ' + chartData.targetPage.getPageType());
+        //setup chart component with fixed width and height
         this.printSettings = chartData.targetPage.getPrintSettings(chartData.pagePosition);
+        //setup default drilldown if any
         this.printSettings.drillDown = chartData.chartSetting.drillDownName;
+        //setup canvas to have the same dimensions as the chart
         this.canvas.nativeElement.width = this.printSettings.width;
         this.canvas.nativeElement.height = this.printSettings.height;
+        //clear the entry point for the dynamically loading of chart component before loading a new chart component
         this.entryPoint.clear();
         
+        //load chart component based on its selector tag name and wire up the callbacks
         switch(chartData.chartSetting.componentName) {
             case 'app-dashboard-frequency':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_FrequencyComponent);
@@ -597,18 +768,48 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * Call back function that is triggered when the chart object is available for use.
+     * Save the reference to the HighChart chart object
+     * 
+     * @private
+     * @function setWorkingChart
+     * @param {BaseChart} start - reference to the chart object that has the common superclass BaseChart
+     * @return {} - No return types.
+     */
     private setWorkingChart(chart: BaseChart) {
         this.chart = chart;
     }
 
+    /**
+     * Call back function that is triggered when the chart component if first rendered.
+     * It will trigger image conversion one second later to allow the browser to finished
+     * rendering chart's svg image.  Once done, call loadChartImage to perform conversion
+     * 
+     * @private
+     * @function startImageConversion
+     * @param {boolean} start - Indicate if the underlying chart component is rendered for the first time
+     * @return {} - No return types.
+     */
     private startImageConversion(start: boolean) {
         if(start && this.chart != null) {
             setTimeout(this.loadCurrentChartImage.bind(this), 1000);
         }
     }
 
+    /**
+     * This function is called after the rendering of the chart component.
+     * If there is a svg chart loaded then start the svg to png conversion.
+     * Otherwise, start loading the next chart image.
+     * If no more charts, start the page counting process
+     * 
+     * @private
+     * @function loadCurrentChartImage
+     * @return {} - No return types.
+     */
     private loadCurrentChartImage() {
-
+        //check if svg image is loaded.  If it is loaded then use the canvasFactory to 
+        //convert svg to png as a data URL
         let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
         if(childImages.length > 0) {
             //First child is th SVG image, calling chart.getSVG changes the underlying svg
@@ -636,15 +837,39 @@ export class ReportComponent implements OnInit {
                     renderCallback: this.renderCompleteCallback.bind(this)
                 }
             );
+        } else {
+            //if svg is not loaded, loaded the next chart
+            if(this.chartLoadCount < this.chartDataCollection.length) {
+                this.loadChartImage();
+            } else {
+                //Start off the page count process if no more chart images to load
+                this.processPageCounts();
+            }
         }
     }
 
-  private renderCompleteCallback() {
+    /**
+     * Call back functon that is called when the canvas object is 
+     * finished generating the png file as data url from svg object.
+     * Add data url to page object.  If the page determines more 
+     * pages are needed then update table of contents page object's 
+     * page number.  Continues to process the next chart image by 
+     * calling loadChartImage.  After all the pages' images are done, 
+     * start the process page counts on pages that can only be 
+     * counted by doing a test pdf rendering and counting the pages 
+     * rendered by calling processPageCounts.
+     * 
+     * @private
+     * @function renderCompleteCallback
+     * @return {} - No return types.
+     */
+    private renderCompleteCallback() {
         let buffer = this.canvas.nativeElement.toDataURL('image/png');
         this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
         this.entryPoint.clear();
         this.chartDataCollection[this.chartLoadCount].imageData = buffer;
         let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+        //if the image added is placed beyond the first page we need to update toc
         if(pageOffset > 1) {
             //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
             this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
@@ -658,6 +883,15 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * It start to serially perform page count on the next 
+     * page object in pageCollection in the order defined in pageOrder
+     * Once all pages counts are determined, generate PDF
+     * 
+     * @private
+     * @function processPageCounts
+     * @return {} - No return types.
+     */
     private processPageCounts() {
         if(this.pagesProcessedCount < this.pageOrder.length) {
             let pageType: string = this.pageOrder[this.pagesProcessedCount];
@@ -672,17 +906,36 @@ export class ReportComponent implements OnInit {
             this.generatePDF();
         }
     }
+
+    /**
+     * If a page has variable number of page from the function 
+     * call isPageCountingRequired.  Calculate the number of pages 
+     * the content of the page type takes within the pdf file.  It 
+     * converts page object content to pdf and discard the result.
+     * The page count comes from the footer callback code in 
+     * PDFMakeBuilder class.  Then the page count is saved via the 
+     * method setPageCount.  Then it continues to serially perform 
+     * page count on the next page object in pageCollection in the 
+     * order defined in pageOrder
+     * 
+     * @private
+     * @function calculatePageCount
+     * @param {string} pageType - name of the page type
+     * @return {} - No return types.
+     */
     private calculatePageCount(page: BasePage) {
         if(page.isPageCountingRequired()) {
             console.log('Counting pages for ' + page.getPageType());
-            let pg = new PDFMakeBuilder();
-            pg.setDifferentFirstPage(true);
-            pg.addPage(page);
-            const pdfDocGenerator = this.pdfMake.createPdf(pg.getContent());
+            this.pdfBuilder.clearImages();
+            this.pdfBuilder.clearStyles();
+            this.pdfBuilder.clearPdfContent();
+            this.pdfBuilder.setDifferentFirstPage(true);
+            this.pdfBuilder.addPage(page);
+            const pdfDocGenerator = this.pdfMake.createPdf(this.pdfBuilder.getContent());
             pdfDocGenerator.getBuffer((data) => {
                 this.pagesProcessedCount++;
                 //subtract one from the page count due to page break
-                page.setPageCount(pg.getPageCount() - 1 );
+                page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
                 console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
                 this.processPageCounts();
             });    
@@ -693,9 +946,15 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * Generate the pdf file based on the pages 
+     * with the chart images and tables loaded within
+     * 
+     * @private
+     * @function generatePDF
+     * @return {} - No return types.
+     */
     private generatePDF() {
-
-
         //first page is the cover sheet, second to third page is the table of contents
         let pageNumber = 2 + this.tocPage.getPageCount();
         this.pageOrder.forEach(pageType => 
@@ -704,24 +963,47 @@ export class ReportComponent implements OnInit {
                 pageNumber = pageNumber + this.pageCollection[pageType].getPageCount();
             }
         );
-        let pg = new PDFMakeBuilder();
-        pg.setDifferentFirstPage(true);
-        pg.addPage(this.coverPage);
-        pg.addPage(this.tocPage);
+        this.pdfBuilder.clearImages();
+        this.pdfBuilder.clearStyles();
+        this.pdfBuilder.clearPdfContent();
+        this.pdfBuilder.setDifferentFirstPage(true);
+        this.pdfBuilder.addPage(this.coverPage);
+        this.pdfBuilder.addPage(this.tocPage);
         this.pageOrder.forEach(pageType => 
             {
-                pg.addPage(this.pageCollection[pageType]);
+                this.pdfBuilder.addPage(this.pageCollection[pageType]);
             }
         );
+
         //console.log(pg.getContent());
-        this.pdfMake.createPdf(pg.getContent()).download('test.pdf');
+        this.pdfBuilder.trimLastPageBreak();
+        this.pdfMake.createPdf(this.pdfBuilder.getContent()).download(this.pdfFilename);
         //console.log(pg.getContent());
     }
 
+    /**
+     * Determine if a page type is already added to the 
+     * current collection of page objects.  Function returms
+     * true if the page type is already added, otherwise false
+     * 
+     * @private
+     * @function hasPageType
+     * @param {string} pageType - name of the page type
+     * @return {boolean} - true if the page type is already added, otherwise false
+     */
     private hasPageType(pageType: string):boolean {
         return (this.pageCollection[pageType] ? true : false);
     }
 
+    /**
+     * Adds a page object based on the pageType
+     * All page object have a common base class BasePage
+     * 
+     * @private
+     * @function addPageType
+     * @param {string} pageType - name of the page type
+     * @return {} - No return types.
+     */
     private addPageType(pageType: string) {
         switch(pageType) {
             case DashboardPage.pageType:
