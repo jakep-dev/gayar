@@ -1,7 +1,7 @@
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PieChartData, SeverityIncidentPieFlipModel } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
-import { SessionService, FrequencyService } from 'app/services/services';
+import { SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-incident-pie]'
@@ -60,7 +60,7 @@ export class SeverityIncidentPieDirective {
       displayText: string = '';
       hasDetailAccess: boolean;
     
-      constructor(private sessionService: SessionService, private frequencyService: FrequencyService) {}
+      constructor(private sessionService: SessionService, private severityService: SeverityService) {}
     
       ngOnInit() {
         this.setDataInDescendingOrder();
@@ -313,13 +313,13 @@ export class SeverityIncidentPieDirective {
             }
           });
           
-          var frequencyService = this.frequencyService;
+          var severityService = this.severityService;
 
           //Drilldown behavior
           tempChartData.onDrillDown = function(event, chart){
             var e = event.originalEvent;
             var drilldowns = this.chartData.customChartSettings.drilldown.series;
-            frequencyService.setIncidentChartView(e.point.name);     
+            severityService.setIncidentChartView(e.point.name);     
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name) ) {
@@ -330,7 +330,7 @@ export class SeverityIncidentPieDirective {
           };
           
           tempChartData.onDrillUp = function (event, chart) {
-            frequencyService.setIncidentChartView('main');
+            severityService.setIncidentChartView('main');
           }
 
           this.onDataComplete.emit(tempChartData);

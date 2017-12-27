@@ -39,8 +39,7 @@ export class SeverityComponent implements OnInit {
     constructor(private severityService: SeverityService,
         public menuService: MenuService,
         private sessionService: SessionService,
-        private searchService: SearchService,
-        private frequencyService: FrequencyService) { }
+        private searchService: SearchService) { }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Severity';

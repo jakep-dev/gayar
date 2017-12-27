@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityIncidentBarModel, SeverityIncidentGroup } from "app/model/severity.model";
-import { SearchService, SessionService, FrequencyService } from 'app/services/services';
+import { SearchService, SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-incident]'
@@ -54,7 +54,7 @@ export class SeverityIncidentBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private severityService: SeverityService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -349,12 +349,12 @@ export class SeverityIncidentBarDirective {
         });
 
         var defaultTitle = this.modelData.xAxis;
-        var frequencyService = this.frequencyService;   
+        var severityService = this.severityService;   
 
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-            frequencyService.setIncidentChartView(e.point.name);            
+            severityService.setIncidentChartView(e.point.name);            
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
@@ -367,7 +367,7 @@ export class SeverityIncidentBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
-            frequencyService.setIncidentChartView('main');
+            severityService.setIncidentChartView('main');
             chart.setTitle({ text: defaultTitle });
         }
 

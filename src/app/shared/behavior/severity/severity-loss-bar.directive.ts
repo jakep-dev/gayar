@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityLossBarModel, SeverityLossGroup } from "app/model/severity.model";
-import { SearchService, SessionService, FrequencyService } from 'app/services/services';
+import { SearchService, SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-loss]'
@@ -56,7 +56,7 @@ export class SeverityLossBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private severityService: SeverityService) {
         
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
@@ -353,12 +353,12 @@ export class SeverityLossBarDirective {
 
 
         var defaultTitle = this.modelData.xAxis;
-        var frequencyService = this.frequencyService;        
+        var severityService = this.severityService;        
 
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-            frequencyService.setLossChartView(e.point.name);            
+            severityService.setLossChartView(e.point.name);            
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
@@ -371,7 +371,7 @@ export class SeverityLossBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
-            frequencyService.setLossChartView('main');            
+            severityService.setLossChartView('main');            
             chart.setTitle({ text: defaultTitle });
         }
 
