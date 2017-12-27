@@ -97,7 +97,7 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos + (label.length * 7), yPos - 3],
-            [xPos + (label.length * 7) + 10, yPos - 3, chart.getXAxisPosition(2.3), chart.getYAxisPosition(this.modelData.quartile.minRPM)],
+            [xPos + (label.length * 7) + 10, yPos - 3, chart.getXAxisPosition(2.4), chart.getYAxisPosition(this.modelData.quartile.minRPM)],
             lineColor,
             lineWidth);
 
@@ -114,7 +114,7 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos + (label.length * 7), yPos - 3],
-            [xPos + (label.length * 7) + 10, yPos - 3, chart.getXAxisPosition(2.3), chart.getYAxisPosition(this.modelData.quartile.maxRPM) - 1],
+            [xPos + (label.length * 7) + 10, yPos - 3, chart.getXAxisPosition(2.4), chart.getYAxisPosition(this.modelData.quartile.maxRPM) - 1],
             lineColor,
             lineWidth);
 
@@ -137,7 +137,7 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos, yPos - 3],
-            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.8), chart.getYAxisPosition(this.modelData.quartile.firstQuartile)],
+            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.5) + 40, chart.getYAxisPosition(this.modelData.quartile.firstQuartile)],
             lineColor,
             lineWidth);
 
@@ -160,18 +160,32 @@ export class RateComponent implements OnInit {
             'bold'
         );
         chart.addLine([xPos, yPos - 3],
-            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.8), chart.getYAxisPosition(this.modelData.quartile.fourthQuartile) - 1],
+            [xPos - 10, yPos - 3, chart.getXAxisPosition(2.5) +  40, chart.getYAxisPosition(this.modelData.quartile.fourthQuartile) - 1],
             lineColor,
             lineWidth);
 
+        label = 'Median ' + this.modelData.quartile.median_KMB;
+        xPos = chart.getXAxisPosition(2) - (label.length * 7);
+        yPos = chart.getYAxisPosition(this.modelData.quartile.median) + 3;
+
+        if(hasClientLimit 
+            && yPos + labelHeight >= yCompanyPosition
+            && yPos <= yCompanyPosition + companyNameHeight) {
+            yPos = yCompanyPosition - 15;
+        }
         chart.addChartLabel(
-            'Median ' + this.modelData.quartile.median_KMB,
-            chart.getXAxisPosition(2) - (('Median ' + this.modelData.quartile.median_KMB).length * 7),
-            chart.getYAxisPosition(this.modelData.quartile.median) + 3,
+            label,
+            xPos,
+            yPos,
             null,
             labelHeight,
             'bold'
         );
+
+        chart.addLine([xPos + (label.length * 6.3), yPos - 3],
+            [xPos + (label.length * 6.3) + 10, yPos - 3, chart.getXAxisPosition(2.5) - 60, chart.getYAxisPosition(this.modelData.quartile.median)],
+            lineColor,
+            lineWidth);
 
         let xPosition = (hasClientLimit) ? chart.chart.chartHeight - 20 : chart.chart.chartHeight - 40;
         chart.addChartLabel(
