@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityIncidentBarModel, SeverityIncidentGroup } from "app/model/severity.model";
-import { SearchService, SessionService } from 'app/services/services';
+import { SearchService, SessionService, FrequencyService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-incident]'
@@ -15,7 +15,38 @@ export class SeverityIncidentBarDirective {
 
     @Input() chartComponent: BaseChart;
 
-    ngOnChanges(changes: SimpleChanges) {}
+    @Input() chartView: string;        
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes &&
+            changes.chartView &&
+            !changes.chartView.firstChange) {
+            let currentView = changes.chartView.currentValue;
+            let chart = this.chartComponent.chart;
+            let findCategory : any;
+            
+            if(currentView === 'main' &&
+                chart.drilldownLevels.length > 0) {
+                chart.drillUp();
+            }else if(currentView !== 'main' &&
+                !chart.options.chart.drilled){
+                if(chart.series[0].data){
+                    findCategory = chart.series[0].data.find(data => {
+                        if(data && data.name === currentView) {
+                            return data;
+                        }
+                    });
+
+                    if(findCategory){
+                        findCategory.doDrilldown();
+                    }
+                }
+                else{
+                    chart.drillUp();
+                }
+            }
+        }
+    }
 
     public static defaultLineColor: string = 'black';
     hasDetailAccess: boolean;
@@ -23,7 +54,7 @@ export class SeverityIncidentBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -318,11 +349,12 @@ export class SeverityIncidentBarDirective {
         });
 
         var defaultTitle = this.modelData.xAxis;
+        var frequencyService = this.frequencyService;   
 
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-
+            frequencyService.setIncidentChartView(e.point.name);            
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
@@ -335,6 +367,7 @@ export class SeverityIncidentBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
+            frequencyService.setIncidentChartView('main');
             chart.setTitle({ text: defaultTitle });
         }
 

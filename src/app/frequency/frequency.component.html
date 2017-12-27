@@ -19,7 +19,7 @@
 
     <div fxFlexFill [fxFlex]="showIncidentPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '3' : '2'">
         <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="isIncidentShowSplit" [isFlippable]="isIncidentShowFlip"
-            (onFlip)="showIncidentPie=false;getIncidentChartView()" (onSplit)="showIncidentPie=!showIncidentPie;getIncidentChartView()"  [isDisabled]="!isIncident">
+            (onFlip)="showIncidentPie=false;" (onSplit)="showIncidentPie=!showIncidentPie;"  [isDisabled]="!isIncident">
             <div front class="width-100" fxLayout="row">                
                 <frequency-incident-bar [componentData]="frequencyInput"  [incidentChartView]="this.frequencyService.getIncidentChartView()"  class="width-100" fxFlexFill></frequency-incident-bar>                
             </div>
@@ -31,7 +31,7 @@
 
     <div fxFlexFill [fxFlex]="showLossPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '2' : '3'">
         <app-tile [id]="'FREQ_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="isLossShowFlip" [isFlippable]="isLossShowSplit"
-            (onFlip)="showLossPie=false;getLossChartView()" (onSplit)="showLossPie=!showLossPie;getLossChartView()" [isDisabled]="!isLoss">
+            (onFlip)="showLossPie=false;" (onSplit)="showLossPie=!showLossPie;" [isDisabled]="!isLoss">
             <div front class="width-100" fxLayout="row">
                 <frequency-loss-bar [componentData]="frequencyInput" [lossChartView]="this.frequencyService.getLossChartView()" class="width-100" fxFlexFill></frequency-loss-bar>
             </div>

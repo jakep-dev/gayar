@@ -101,15 +101,4 @@ export class FrequencyComponent implements OnInit {
             this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
         }        
     }
-
-    getIncidentChartView() {
-        this.incidentChartView = this.frequencyService.getIncidentChartView();       
-    }
-
-    getLossChartView(){
-        this.lossChartView = this.frequencyService.getLossChartView();
-    }
-
-
-
 }

@@ -26,6 +26,8 @@ export class IncidentPieComponent implements OnInit {
       chartData: PieChartData;
   
       @Input() componentData: SeverityInput;
+
+      @Input() incidentChartView: string;            
   
       /**
        * Event handler to indicate the construction of the PieChart's required data is built 
