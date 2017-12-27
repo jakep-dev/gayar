@@ -2,6 +2,7 @@
     <bar-chart *ngIf='!modelData?.withBreak' 
         frequeny-bar-incident [modelData]="modelData" 
         [chartData]="chartData" 
+        [chartView]="incidentChartView"  
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)" 
         (onChartRedraw)="onChartReDraw($event)">
@@ -9,6 +10,7 @@
     <bar-chart-logarithm *ngIf='modelData?.withBreak' 
         frequeny-bar-incident [modelData]="modelData" 
         [chartData]="chartData" 
+        [chartView]="incidentChartView"  
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)" 
         (onChartRedraw)="onChartReDraw($event)">
