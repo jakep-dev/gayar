@@ -23,6 +23,8 @@ export class IncidentBarComponent implements OnInit {
     chartData: BarChartData;
 
     @Input() componentData: FrequencyInput;
+    @Input() incidentChartView: string;
+    
 
     @Input() printSettings: ComponentPrintSettings;
 

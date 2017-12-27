@@ -7,6 +7,9 @@ import { SeverityDataResponseModel, SeverityIndustryOverviewModel } from 'app/mo
 
 @Injectable()
 export class SeverityService extends BaseService {
+
+    private incidentChartView: string = 'main';   
+    private lossChartView: string = 'main';   
     constructor(http: Http) {
         super(http);
     }
@@ -98,4 +101,22 @@ export class SeverityService extends BaseService {
 
         }
     }
+
+    public getIncidentChartView(): string  {
+		return this.incidentChartView;
+	}
+
+	public setIncidentChartView(value: string ) {
+		this.incidentChartView = value;
+    }
+
+    public getLossChartView(): string  {
+		return this.lossChartView;
+	}
+
+	public setLossChartView(value: string ) {
+		this.lossChartView = value;
+	}
+    
+
 }

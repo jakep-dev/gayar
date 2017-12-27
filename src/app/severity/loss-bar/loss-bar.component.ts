@@ -25,6 +25,8 @@ export class LossBarComponent implements OnInit {
 
 	@Input() componentData: SeverityInput;
 
+	@Input() lossChartView: string;    	
+	
 	@Input() printSettings: ComponentPrintSettings;
 
     /**

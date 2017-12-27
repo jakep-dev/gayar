@@ -1,12 +1,13 @@
 <pie-chart 
-  *ngIf='modelData'
-  [ngClass]="{'width-100' : !printSettings}"
-  severity-incident-pie
-  [modelData]="modelData"
-  [chartData]="chartData"
-  [chartComponent]="chartComponent$ | async"
-  (onDataComplete)="onDataComplete($event)"
-  (onChartRedraw)="onChartReDraw($event)"
-  [printSettings]="printSettings"
-  >
+    *ngIf='modelData'
+    [ngClass]="{'width-100' : !printSettings}"
+    severity-incident-pie
+    [modelData]="modelData"
+    [chartData]="chartData"
+    [chartView]="incidentChartView"    
+    [chartComponent]="chartComponent$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    (onChartRedraw)="onChartReDraw($event)"
+    [printSettings]="printSettings"
+    >
 </pie-chart>

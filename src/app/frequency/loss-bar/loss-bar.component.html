@@ -2,8 +2,9 @@
     <bar-chart *ngIf='!modelData?.withBreak'
         [ngClass]="{'width-100' : !printSettings}"
         frequeny-bar-loss
-        [modelData]="modelData"
-        [chartData]="chartData"
+        [modelData]="modelData" 
+        [chartData]="chartData" 
+        [chartView]="lossChartView" 
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)"
         (onChartRedraw)="onChartReDraw($event)"
@@ -13,8 +14,9 @@
     <bar-chart-logarithm *ngIf='modelData?.withBreak'
         [ngClass]="{'width-100' : !printSettings}"
         frequeny-bar-loss
-        [modelData]="modelData"
-        [chartData]="chartData"
+        [modelData]="modelData" 
+        [chartData]="chartData" 
+        [chartView]="lossChartView" 
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)"
         (onChartRedraw)="onChartReDraw($event)"

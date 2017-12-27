@@ -40,7 +40,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   isActionEnabled:boolean;
   hasFrequencyData: boolean;
   hasSeverityData: boolean;
-  hasDashboardAccess: boolean;
   searchByList: Array<SearchByModel>;
   industryList: Array<IndustryModel>;
   revenueModellist: Array<RevenueModel>;
@@ -64,11 +63,18 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
      this.menuService.breadCrumb = 'Company Search';
+     this.checkPermission();
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
      this.loadSearchCriteria();
-     this.getDashboardPermission();
+  }
+
+  checkPermission() {
+    let permission = this.sessionService.getUserPermission();
+    if(permission && permission.companySearch && (!permission.companySearch.hasAccess)) {
+      this.router.navigate(['/noAccess']);
+    }
   }
 
 
@@ -384,13 +390,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
 
 
-   }
-
-   getDashboardPermission() {
-     let permission = this.sessionService.getUserPermission();
-     if(permission) {
-       this.hasDashboardAccess = permission.dashboard && permission.dashboard.hasAccess;
-     }
    }
 
   /**

@@ -26,6 +26,8 @@ export class IncidentPieComponent implements OnInit {
     chartData: PieChartData;
 
     @Input() componentData: FrequencyInput;
+    @Input() incidentChartView: string;
+    
 
     @Input() printSettings: ComponentPrintSettings;
 

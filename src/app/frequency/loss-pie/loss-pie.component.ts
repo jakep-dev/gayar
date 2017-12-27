@@ -24,9 +24,11 @@ export class LossPieComponent implements OnInit {
     chartData: PieChartData;
 
     @Input() componentData: FrequencyInput;
+
+    @Input() lossChartView: String;
     
     @Input() printSettings: ComponentPrintSettings;
-
+    
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 
      * @param newChartData PieChart's required data

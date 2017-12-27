@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService, SessionService } from 'app/services/services';
 import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-frequency',
@@ -27,6 +28,8 @@ export class FrequencyComponent implements OnInit {
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
+    public incidentChartView: string;    
+    public lossChartView: string;  
     public isTimePeriod: boolean;
     public isIncident: boolean;
     public isLoss: boolean;
@@ -38,15 +41,24 @@ export class FrequencyComponent implements OnInit {
     constructor(private frequencyService: FrequencyService,
         public menuService: MenuService,
         private sessionService: SessionService,
-        private searchService: SearchService) { }
+        private searchService: SearchService,
+        private router: Router) { }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Frequency';
+        this.checkPermission();
         this.setupTileButtons();
         this.setupTableDefinitions();
         this.loadFrequencyDataTable();
         this.setupChartPermission();
         this.buildCommonInput();
+    }    
+
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.frequency && (!permission.frequency.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
     
     setupTileButtons() {
@@ -54,6 +66,9 @@ export class FrequencyComponent implements OnInit {
         this.isIncidentShowSplit= true;
         this.isLossShowFlip = true;
         this.isLossShowSplit = true;
+        this.incidentChartView = 'main';     
+        this.lossChartView = 'main';
+        
     }
 
     setupTableDefinitions() {
@@ -96,5 +111,4 @@ export class FrequencyComponent implements OnInit {
             this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
         }        
     }
-
 }

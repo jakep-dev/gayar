@@ -15,11 +15,11 @@ export class PieChartComponent extends BaseChart implements OnInit {
   @Input() printSettings: ComponentPrintSettings;
 
   onDrilldown: any = null;
-
+  onDrillup: any = null;
     constructor() {
         super();
         this.setDefaultChartType('pie');
-        this.hasRedrawActions = false;
+        this.hasRedrawActions = false;  
     }
 
     ngOnInit() {
@@ -63,7 +63,12 @@ export class PieChartComponent extends BaseChart implements OnInit {
                     }
                 }
             }
+        }        
+        
+        if (this.chartData.onDrillUp) {
+            this.onDrillup = this.chartData.onDrillUp;
         }
+
     }
 
     /**

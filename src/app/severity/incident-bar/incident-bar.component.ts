@@ -25,8 +25,10 @@ export class IncidentBarComponent implements OnInit {
 
 	@Input() componentData: SeverityInput;
 
-	@Input() printSettings: ComponentPrintSettings;
+	@Input() incidentChartView: string;    	
 
+	@Input() printSettings: ComponentPrintSettings;
+	
 	/**
 	 * Event handler to indicate the construction of the BarChart's required data is built 
 	 * @param newChartData BarChart's required data

@@ -1,7 +1,7 @@
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PieChartData, SeverityIncidentPieFlipModel } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
-import { SessionService } from 'app/services/services';
+import { SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-incident-pie]'
@@ -14,9 +14,40 @@ export class SeverityIncidentPieDirective {
     
       @Input() chartComponent: BaseChart;
     
+      @Input() chartView: string;
       
     
-      ngOnChanges(changes: SimpleChanges) {}
+      ngOnChanges(changes: SimpleChanges) {
+        if(changes &&
+          changes.chartView &&
+          !changes.chartView.firstChange) {
+      
+            let currentView = changes.chartView.currentValue;
+            let chart = this.chartComponent.chart;
+            let findCategory : any;
+      
+            if(currentView === 'main' &&
+                chart.drilldownLevels.length > 0) {
+                chart.drillUp();
+            }else if(currentView !== 'main' &&
+                !chart.options.chart.drilled){
+              if(chart.series[0].data){
+                  findCategory = chart.series[0].data.find(data => {
+                    if(data && data.name === currentView) {
+                        return data;
+                    }
+                  });
+      
+                  if(findCategory){
+                    findCategory.doDrilldown();
+                  }
+              }
+              else{
+                chart.drillUp();
+              }
+            }
+          }
+      }
     
       public static defaultLineColor: string = 'black';
       public static BLUE: string = '#487AA1';
@@ -29,7 +60,7 @@ export class SeverityIncidentPieDirective {
       displayText: string = '';
       hasDetailAccess: boolean;
     
-      constructor(private sessionService: SessionService) {}
+      constructor(private sessionService: SessionService, private severityService: SeverityService) {}
     
       ngOnInit() {
         this.setDataInDescendingOrder();
@@ -168,10 +199,12 @@ export class SeverityIncidentPieDirective {
                   relativeTo: 'spacingBox',
                   height: 10,
                   position: {
-                    y: 50,
+                    y: 20,
                     x: 0
                   },
                   theme: {
+                      height: 27,
+                      width: 87,
                       fill: 'white',
                       'stroke-width': 1,
                       stroke: 'silver',
@@ -281,11 +314,14 @@ export class SeverityIncidentPieDirective {
               tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
             }
           });
-    
+          
+          var severityService = this.severityService;
+
           //Drilldown behavior
           tempChartData.onDrillDown = function(event, chart){
             var e = event.originalEvent;
             var drilldowns = this.chartData.customChartSettings.drilldown.series;
+            severityService.setIncidentChartView(e.point.name);     
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name) ) {
@@ -294,7 +330,11 @@ export class SeverityIncidentPieDirective {
             }); 
             chart.applyDrilldown();
           };
-    
+          
+          tempChartData.onDrillUp = function (event, chart) {
+            severityService.setIncidentChartView('main');
+          }
+
           this.onDataComplete.emit(tempChartData);
         }
       }
@@ -325,7 +365,7 @@ export class SeverityIncidentPieDirective {
       }
     
       setDrilldownUpText(){
-        return '< <span style="font-size:9px"> Back to all Types<br/>' +
+        return '<span style="font-size:9px"> Back to all Types<br/>' +
                '<span style="font-size:9px"> of Losses</span>';
       }
     

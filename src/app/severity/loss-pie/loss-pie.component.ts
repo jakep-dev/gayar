@@ -25,7 +25,10 @@ export class LossPieComponent implements OnInit {
 
     @Input() componentData: SeverityInput;
 
+    @Input() lossChartView: string;          
+
     @Input() printSettings: ComponentPrintSettings;
+
   
     /**
      * Event handler to indicate the construction of the PieChart's required data is built 
