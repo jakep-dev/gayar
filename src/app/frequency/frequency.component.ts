@@ -28,6 +28,8 @@ export class FrequencyComponent implements OnInit {
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
+    public incidentChartView: string;    
+    public lossChartView: string;  
     public isTimePeriod: boolean;
     public isIncident: boolean;
     public isLoss: boolean;
@@ -64,6 +66,9 @@ export class FrequencyComponent implements OnInit {
         this.isIncidentShowSplit= true;
         this.isLossShowFlip = true;
         this.isLossShowSplit = true;
+        this.incidentChartView = 'main';     
+        this.lossChartView = 'main';
+        
     }
 
     setupTableDefinitions() {
@@ -106,5 +111,4 @@ export class FrequencyComponent implements OnInit {
             this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
         }        
     }
-
 }

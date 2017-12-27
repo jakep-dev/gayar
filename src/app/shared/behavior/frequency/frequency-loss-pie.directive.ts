@@ -1,7 +1,7 @@
 import { Directive, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { PieChartData, FrequencyLossPieFlipModel } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
-import { SessionService } from 'app/services/services';
+import { SessionService, FrequencyService } from 'app/services/services';
 
 @Directive({
   selector: '[frequency-loss-pie]'
@@ -13,11 +13,34 @@ export class FrequencyLossPieDirective {
 
   @Output() onDataComplete = new EventEmitter<PieChartData>();
 
-  @Input() chartComponent: BaseChart;
+  @Input() chartComponent: BaseChart;  
 
-  
+  @Input() chartView: string;
 
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) {   
+    if(changes &&
+        changes.chartView &&
+        !changes.chartView.firstChange) {
+        let currentView = changes.chartView.currentValue;  
+        let chart : any;
+        let findCategory : any;            
+        chart = this.chartComponent.chart;              
+        if( currentView !== 'main'){ 
+            if(chart.series[0].data){
+                findCategory = chart.series[0].data.find(data => {                                              
+                if(data && data.name === currentView) { 
+                    return data; 
+                } 
+                }); 
+                if( findCategory){                 
+                    findCategory.doDrilldown();            
+                }      
+            } 
+        }else if(currentView === 'main' &&  chart.drilldownLevels.length > 0) {          
+            chart.drillUp(); 
+        }  
+    }
+ }
 
   public static defaultLineColor: string = 'black';
   public static BLUE: string = '#487AA1';
@@ -30,7 +53,7 @@ export class FrequencyLossPieDirective {
   displayText: string = '';
   hasDetailAccess: boolean;
 
-  constructor(private sessionService: SessionService) {}
+  constructor(private sessionService: SessionService, private frequencyService: FrequencyService) {}
 
   ngOnInit() {
     this.setDataInDescendingOrder();
@@ -276,10 +299,12 @@ export class FrequencyLossPieDirective {
       });
 
       //Drilldown behavior
+      var frequencyService = this.frequencyService; 
       tempChartData.onDrillDown = function(event, chart){
         var e = event.originalEvent;
         var drilldowns = this.chartData.customChartSettings.drilldown.series;
         e.preventDefault();
+        frequencyService.setLossChartView(e.point.name);  
         drilldowns.forEach(function (p, i) {
             if (p.id.includes(e.point.name) ) {
                 chart.addSingleSeriesAsDrilldown(e.point, p);
@@ -287,6 +312,11 @@ export class FrequencyLossPieDirective {
         }); 
         chart.applyDrilldown();
       };
+
+      
+      tempChartData.onDrillUp = function (event, chart) {       
+        frequencyService.setLossChartView('main'); 
+      }
 
       this.onDataComplete.emit(tempChartData);
     }

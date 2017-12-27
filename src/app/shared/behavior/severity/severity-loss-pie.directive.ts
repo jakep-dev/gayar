@@ -1,7 +1,7 @@
 import { Directive, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { PieChartData, SeverityLossPieFlipModel } from 'app/model/model';
-import { SessionService } from 'app/services/services';
+import { SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-loss-pie]'
@@ -14,9 +14,39 @@ export class SeverityLossPieDirective {
   
     @Input() chartComponent: BaseChart;
   
-    
+    @Input() chartView: string;    
   
-    ngOnChanges(changes: SimpleChanges) {}
+    ngOnChanges(changes: SimpleChanges) {
+      if(changes &&
+        changes.chartView &&
+        !changes.chartView.firstChange) {
+    
+        let currentView = changes.chartView.currentValue;
+        let chart = this.chartComponent.chart;
+        let findCategory : any;
+  
+        if(currentView === 'main' &&
+            chart.drilldownLevels.length > 0) {
+            chart.drillUp();
+        }else if(currentView !== 'main' &&
+            !chart.options.chart.drilled){
+          if(chart.series[0].data){
+              findCategory = chart.series[0].data.find(data => {
+                if(data && data.name === currentView) {
+                    return data;
+                }
+              });
+  
+              if(findCategory){
+                findCategory.doDrilldown();
+              }
+          }
+          else{
+            chart.drillUp();
+          }
+        }
+      }
+    }
   
     public static defaultLineColor: string = 'black';
     public static BLUE: string = '#487AA1';
@@ -29,7 +59,7 @@ export class SeverityLossPieDirective {
     displayText: string = '';
     hasDetailAccess: boolean;
   
-    constructor(private sessionService: SessionService) {}
+    constructor(private sessionService: SessionService, private severityService: SeverityService) {}
   
     ngOnInit() {
       this.setDataInDescendingOrder();
@@ -281,11 +311,14 @@ export class SeverityLossPieDirective {
             tempChartData.customChartSettings.drilldown.series.push(dataDrilldownSeries);
           }
         });
-  
+        
+        var severityService = this.severityService;
+
         //Drilldown behavior
         tempChartData.onDrillDown = function(event, chart){
           var e = event.originalEvent;
           var drilldowns = this.chartData.customChartSettings.drilldown.series;
+          severityService.setLossChartView(e.point.name);
           e.preventDefault();
           drilldowns.forEach(function (p, i) {
               if (p.id.includes(e.point.name) ) {
@@ -294,6 +327,10 @@ export class SeverityLossPieDirective {
           }); 
           chart.applyDrilldown();
         };
+
+        tempChartData.onDrillUp = function (event, chart) {
+          severityService.setLossChartView('main');
+        }
   
         this.onDataComplete.emit(tempChartData);
       }

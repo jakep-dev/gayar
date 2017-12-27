@@ -23,6 +23,7 @@ export class LossBarComponent implements OnInit {
     chartData: BarChartData;
 
     @Input() componentData: FrequencyInput;
+    @Input() lossChartView: String;
 
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 

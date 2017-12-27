@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { SeverityService, SearchService, MenuService, SessionService} from 'app/services/services';
+import { SeverityService, SearchService, MenuService, SessionService, FrequencyService} from 'app/services/services';
 import { SeverityInput } from '../model/model';
 import { SeverityDataModel, SeverityDataResponseModel } from 'app/model/model';
 import { Router } from '@angular/router';
@@ -25,6 +25,9 @@ export class SeverityComponent implements OnInit {
 
     public showLossPie: boolean;
     public showIncidentPie: boolean;
+    public incidentChartView: string;    
+    public lossChartView: string;    
+
 
     public isTimePeriod: boolean;
     public isIncident: boolean;
@@ -47,6 +50,8 @@ export class SeverityComponent implements OnInit {
         this.setupTableDefinitions();
         this.loadSeverityDataTable();
         this.setupChartPermission();
+        this.incidentChartView = 'main';                
+        this.lossChartView = 'main';                
     }
 
     checkPermission() {

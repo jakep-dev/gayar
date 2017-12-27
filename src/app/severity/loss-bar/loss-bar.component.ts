@@ -25,6 +25,8 @@ export class LossBarComponent implements OnInit {
 
 	@Input() componentData: SeverityInput;
 
+	@Input() lossChartView: string;    	
+
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 
      * @param newChartData BarChart's required data

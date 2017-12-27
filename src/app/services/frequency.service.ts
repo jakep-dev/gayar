@@ -7,6 +7,8 @@ import { FrequencyDataResponseModel, FrequencyIndustryOverviewModel } from 'app/
 
 @Injectable()
 export class FrequencyService extends BaseService {
+    private incidentChartView: string = 'main';   
+    private lossChartView: string = 'main';   
     constructor(http: Http) {
         super(http);
     }
@@ -99,4 +101,21 @@ export class FrequencyService extends BaseService {
 
         }
     }
+    
+    public getIncidentChartView() {
+        return this.incidentChartView;
+    }
+
+    public setIncidentChartView(chartView: string) {
+        this.incidentChartView = chartView;
+    }
+
+    public getLossChartView(): string  {
+		return this.lossChartView;
+	}
+
+	public setLossChartView(value: string ) {
+		this.lossChartView = value;
+	}
+
 }

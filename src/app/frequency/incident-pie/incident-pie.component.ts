@@ -26,6 +26,8 @@ export class IncidentPieComponent implements OnInit {
     chartData: PieChartData;
 
     @Input() componentData: FrequencyInput;
+    @Input() incidentChartView: string;
+    
 
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 

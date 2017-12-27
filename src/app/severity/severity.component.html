@@ -20,10 +20,10 @@
         <app-tile [id]="'SEV_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="true" [isFlippable]="true" [isDisabled]="!isIncident"
             (onFlip)="showIncidentPie=false" (onSplit)="showIncidentPie=!showIncidentPie">
             <div front class="width-100" fxLayout="row">
-                <severity-incident-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-bar>
+                <severity-incident-bar [componentData]="severityInput" [incidentChartView]="this.severityService.getIncidentChartView()" class="width-100" fxFlexFill></severity-incident-bar>
             </div>
             <div back class="width-100" fxLayout="row">
-                <severity-incident-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-incident-pie>
+                <severity-incident-pie [componentData]="severityInput" [incidentChartView]="this.severityService.getIncidentChartView()" class="width-100" fxFlexFill></severity-incident-pie>
             </div>
         </app-tile>
     </div>
@@ -32,10 +32,10 @@
         <app-tile [id]="'SEV_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="true" [isFlippable]="true" [isDisabled]="!isLoss"
             (onFlip)="showLossPie=false" (onSplit)="showLossPie=!showLossPie">
             <div front class="width-100" fxLayout="row">
-                <severity-loss-bar [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-bar>
+                <severity-loss-bar [componentData]="severityInput" [lossChartView]="this.severityService.getLossChartView()" class="width-100" fxFlexFill></severity-loss-bar>
             </div>
             <div back class="width-100" fxLayout="row">
-                <severity-loss-pie [componentData]="severityInput" class="width-100" fxFlexFill></severity-loss-pie>
+                <severity-loss-pie [componentData]="severityInput" [lossChartView]="this.severityService.getLossChartView()" class="width-100" fxFlexFill></severity-loss-pie>
             </div>
         </app-tile>
     </div>
