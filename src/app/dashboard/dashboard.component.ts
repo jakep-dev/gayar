@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION} from 'app/shared/animations/animations';
 import { SearchService, MenuService, SessionService } from 'app/services/services';
 import {DashboardScore} from 'app/model/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
@@ -24,17 +25,21 @@ export class DashboardComponent implements OnInit {
 
     constructor(private searchService: SearchService,
                 private menuService: MenuService,
-                private sessionService: SessionService) {
+                private sessionService: SessionService,
+                private router: Router) {
         this.menuService.breadCrumb = 'Dashboard';
     }
 
     ngOnInit() {
         this.setupDashboardScoreInput();
+        this.checkPermission();
     }
 
-    setDashboardPermission () {
-      //get the dashboard permission.
-      //
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.dashboard && (!permission.dashboard.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
 
     /**

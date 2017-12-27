@@ -4,6 +4,7 @@ import { SearchService, MenuService, SessionService } from '../services/services
 import { BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput } from '../model/benchmark.model';
 import {Subscription} from "rxjs/Subscription";
 import {MediaChange, ObservableMedia} from "@angular/flex-layout";
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-benchmark',
@@ -33,11 +34,13 @@ export class BenchmarkComponent implements OnInit {
     constructor(private searchService: SearchService,
                 public menuService: MenuService,
                 private media: ObservableMedia,
-                private sessionService: SessionService) {
+                private sessionService: SessionService,
+                private router: Router) {
                 this.watchForMedia(); }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Benchmark';
+        this.checkPermission();
         this.setupDistributionInput();
         this.setupLimitAdequacyInput();
         this.setupRateInput();
@@ -49,6 +52,13 @@ export class BenchmarkComponent implements OnInit {
       //this.activeMediaQuery = change ? `'${change.mqAlias}' = (${change.mediaQuery})` : "";
       console.log(change);
     });
+    }
+
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.benchmark && (!permission.benchmark.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
 
     /**

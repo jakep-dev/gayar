@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
 import { FrequencyService, SearchService, MenuService, SessionService } from 'app/services/services';
 import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-frequency',
@@ -38,15 +39,24 @@ export class FrequencyComponent implements OnInit {
     constructor(private frequencyService: FrequencyService,
         public menuService: MenuService,
         private sessionService: SessionService,
-        private searchService: SearchService) { }
+        private searchService: SearchService,
+        private router: Router) { }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Frequency';
+        this.checkPermission();
         this.setupTileButtons();
         this.setupTableDefinitions();
         this.loadFrequencyDataTable();
         this.setupChartPermission();
         this.buildCommonInput();
+    }    
+
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.frequency && (!permission.frequency.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
     
     setupTileButtons() {

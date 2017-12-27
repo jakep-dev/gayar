@@ -3,6 +3,7 @@ import { FADE_ANIMATION } from '../shared/animations/animations';
 import { SeverityService, SearchService, MenuService, SessionService} from 'app/services/services';
 import { SeverityInput } from '../model/model';
 import { SeverityDataModel, SeverityDataResponseModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-severity',
@@ -36,14 +37,23 @@ export class SeverityComponent implements OnInit {
     constructor(private severityService: SeverityService,
         public menuService: MenuService,
         private sessionService: SessionService,
-        private searchService: SearchService) { }
+        private searchService: SearchService,
+        private router: Router) { }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Severity';
+        this.checkPermission();
         this.buildCommonInput();
         this.setupTableDefinitions();
         this.loadSeverityDataTable();
         this.setupChartPermission();
+    }
+
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.severity && (!permission.severity.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
 
     buildCommonInput() {
