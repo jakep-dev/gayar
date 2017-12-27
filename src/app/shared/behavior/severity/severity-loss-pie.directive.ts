@@ -198,15 +198,16 @@ export class SeverityLossPieDirective {
                 relativeTo: 'spacingBox',
                 height: 10,
                 position: {
-                  y: 50,
+                  y: 20,
                   x: 0
                 },
                 theme: {
+                   height: 27,
+                   width: 87,
                     fill: 'white',
                     'stroke-width': 1,
                     stroke: 'silver',
                     r: 0,
-                    display: 'hidden',
                     states: {
                         hover: {
                             fill: '#F68C20'
@@ -362,7 +363,7 @@ export class SeverityLossPieDirective {
     }
   
     setDrilldownUpText(){
-      return '< <span style="font-size:9px"> Back to all Types<br/>' +
+      return '<span style="font-size:9px"> Back to all Types<br/>' +
              '<span style="font-size:9px"> of Losses</span>';
     }
   

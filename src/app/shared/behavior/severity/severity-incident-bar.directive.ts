@@ -271,6 +271,8 @@ export class SeverityIncidentBarDirective {
                             x: 0,
                         },
                         theme: {
+                            height: 27,
+                            width: 87,
                             fill: 'white',
                             'stroke-width': 1,
                             stroke: 'silver',

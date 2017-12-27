@@ -187,10 +187,12 @@ export class FrequencyIncidentPieDirective {
               relativeTo: 'spacingBox',
               height: 10,
               position: {
-                y: 50,
+                y: 20,
                 x: 0
               },
               theme: {
+                  height: 27,
+                  width: 87,
                   fill: 'white',
                   'stroke-width': 1,
                   stroke: 'silver',
@@ -350,7 +352,7 @@ export class FrequencyIncidentPieDirective {
   }
 
   setDrilldownUpText(){
-    return '< <span style="font-size:9px"> Back to all Types<br/>' +
+    return '<span style="font-size:9px"> Back to all Types<br/>' +
            '<span style="font-size:9px"> of Incidents</span>';
   }
 
