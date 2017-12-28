@@ -35,7 +35,7 @@ import {
     FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel,
     SeverityInput, SeverityDataModel, SeverityDataResponseModel,
     BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
-    IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget
+    IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget, IGlossaryTermModel
 } from 'app/model/model';
 
 import { 
@@ -52,7 +52,8 @@ import {
 
     BenchmarkPage, 
     FrequencyMostRecentPeerGroupLossesPage, FrequencyMostRecentCompanyLossesPage,
-    SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage
+    SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage,
+    GlossaryPage
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
@@ -95,7 +96,10 @@ export class ReportComponent implements OnInit {
 
     //list of high level report sections
     public reportTileModel: Array<IReportTileModel> = null;
-    
+
+    //list of high level report sections
+    public reportGlossaryModel: Array<IGlossaryTermModel> = null;
+
     //associate array that maps page type to page object
     private pageCollection: Array<BasePage> = [];
     
@@ -173,6 +177,8 @@ export class ReportComponent implements OnInit {
 
     //boolean to indicate report data is loaded
     private reportDataDone: boolean = false;
+    //boolean to indicate report glossary data is loaded
+    private reportGlossaryDataDone: boolean = false;
     //boolean to indicate frequency data is loaded
     private frequencyDataDone: boolean = false;
     //boolean to indicate severity data is loaded
@@ -256,6 +262,8 @@ export class ReportComponent implements OnInit {
         this.setupChartInput();
         //Call report service to get report structure
         this.getReportConfig();
+        //Call report glossart service to get glossart structure
+        this.getReportGlossaryConfig();
         //Call frequecy service to get frequency table data
         this.getFrequencyTables();
         //Call severity service to get severity table data
@@ -345,6 +353,21 @@ export class ReportComponent implements OnInit {
     }
 
     /**
+     * getReportConfig - Load the report configuration.
+     *
+     * @private
+     * @function getReportConfig
+     * @return {} - No return types.
+     */
+    private getReportGlossaryConfig () {
+        this.reportService.getReportGlossaryConfig().subscribe((data)=> {
+            this.reportGlossaryModel = data;
+            console.log('Report Glossary Data Done!');
+            this.reportGlossaryDataDone = true;
+        });
+    }
+
+    /**
      * Get frequency table data for 
      * Most Recent Peer Group Losses and Most Recent Company Losses sections
      * 
@@ -416,7 +439,8 @@ export class ReportComponent implements OnInit {
         //check if report data is loaded
         //check if frequency table data is loaded
         //check if severity table data is loaded
-        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.frequencyDataDone && this.severityDataDone) {
+        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.reportGlossaryDataDone 
+            && this.frequencyDataDone && this.severityDataDone) {
             this.startReportProcess();
         } else {
             console.log('Waiting for resources to load before starting report.');
@@ -925,20 +949,26 @@ export class ReportComponent implements OnInit {
      */
     private calculatePageCount(page: BasePage) {
         if(page.isPageCountingRequired()) {
-            console.log('Counting pages for ' + page.getPageType());
-            this.pdfBuilder.clearImages();
-            this.pdfBuilder.clearStyles();
-            this.pdfBuilder.clearPdfContent();
-            this.pdfBuilder.setDifferentFirstPage(true);
-            this.pdfBuilder.addPage(page);
-            const pdfDocGenerator = this.pdfMake.createPdf(this.pdfBuilder.getContent());
-            pdfDocGenerator.getBuffer((data) => {
+            if(this.pagesProcessedCount + 1 == this.pageOrder.length) {
+                console.log('No need to count the last page of page type = ' + page.getPageType());
                 this.pagesProcessedCount++;
-                //subtract one from the page count due to page break
-                page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
-                console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
-                this.processPageCounts();
-            });    
+                this.processPageCounts();    
+            } else {
+                console.log('Counting pages for ' + page.getPageType());
+                this.pdfBuilder.clearImages();
+                this.pdfBuilder.clearStyles();
+                this.pdfBuilder.clearPdfContent();
+                this.pdfBuilder.setDifferentFirstPage(true);
+                this.pdfBuilder.addPage(page);
+                const pdfDocGenerator = this.pdfMake.createPdf(this.pdfBuilder.getContent());
+                pdfDocGenerator.getBuffer((data) => {
+                    this.pagesProcessedCount++;
+                    //subtract one from the page count due to page break
+                    page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
+                    console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
+                    this.processPageCounts();
+                });
+            }
         } else {
             console.log('No need to count pages for ' + page.getPageType());
             this.pagesProcessedCount++;
@@ -1124,6 +1154,13 @@ export class ReportComponent implements OnInit {
                 this.pageOrder.push(pageType);
                 break;
 
+                case GlossaryPage.pageType:
+                let glossaryPage = new GlossaryPage();
+                glossaryPage.setGlossaryData(this.reportGlossaryModel);
+                this.pageCollection[pageType] = glossaryPage
+                this.pageOrder.push(pageType);
+                break;
+                
             default:
                 break;
         }

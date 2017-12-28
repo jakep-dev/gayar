@@ -58,7 +58,7 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         style: this.prefix + 'headerStyle'
     };
     
-    //json block for the table header style for use as sub header within this page
+    //json block for the table header style
     private tableHeaderStyle: any = {
         color: '#464646',
         fontSize: 12,

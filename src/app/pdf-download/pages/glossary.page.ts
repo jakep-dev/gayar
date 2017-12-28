@@ -1,13 +1,14 @@
 import { BasePage } from './base.page';
-import { SeverityDataModel } from 'app/model/model';
+import { IGlossaryTermModel, ISubGlossaryTermModel } from 'app/model/model';
 
-export class SeverityTopPeerGroupLossesPage extends BasePage  {
+export class GlossaryPage extends BasePage  {
 
+    static list_separator: string = '<list>';
     //page type name for this page
-    public static pageType:string = 'SeverityTopPeerGroupLossesPage';
+    public static pageType:string = 'GlossaryPage';
 
     //default page prefix of this page to prevent json object names from one page don't clash with other pages
-    private prefix: string = SeverityTopPeerGroupLossesPage.pageType + '_';
+    private prefix: string = GlossaryPage.pageType + '_';
 
     /**
      * get the page prefix for the current page of the assessment report
@@ -41,40 +42,58 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
      * @return {string} - page type for the current page of the assessment report.
      */
     public getPageType(): string {
-        return SeverityTopPeerGroupLossesPage.pageType;
+        return GlossaryPage.pageType;
     }
     
     //json block representing the style for header within this page
     private headerStyle: any = {
-        color: '#b1d23b',
-        fontSize: 14,
+        color: '#27a9bc',
+        fontSize: 16,
         bold: true,
-        margin: [ 60, 0, 40, 0]
+        margin: [60,0,40,0]
+
+
     };
 
     //json block representing the header within this page
     private header: any = {
-        text: 'Top Peer Group Losses',
+        text: 'Appendix',
         style: this.prefix + 'headerStyle'
     };
+
+    private subHeaderStyle: any = {
+        color: '#b1d23b',
+        fontSize: 14,
+        bold: true,
+        margin: [ 60, 20, 40, 0]
+    };
+
+    private subHeader: any = {
+        text: 'Glossary',
+        style: this.prefix + 'subHeaderStyle'
+    };
+    
     
     //json block for the table header style
     private tableHeaderStyle: any = {
-        color: '#464646',
-        fontSize: 12,
-        bold: true
+        bold: true,
+        color: "white",
+        fontSize: 11,
+        fillColor: 'black'
     };
 
-    //json block for the table row content style
-    private tableRowContentStyle: any = {
+    //json block for the glossary term style
+    private glossaryTerm: any = {
+        bold: true,
         color: '#464646',
-        fontSize: 12
+        fontSize: 11
     };
 
     //json block for the table row content description style
-    private tableRowContentDescriptionStyle: any = {
+    private glossaryDefinition: any = {
+        bold: false,
         color: '#464646',
-        fontSize: 10
+        fontSize: 11
     };
 
     //json block for the table structure to hold row headers
@@ -84,15 +103,13 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
         table: {
             headerRows: 1,
             //widths: ['18%','18%','13%','18%','18%'],
-            widths: ['24%', '23%', '13%', '17%', '23%'],
+            widths: ['2%', '33%', '50%'],
             body: [
-                [
-                    { text: 'Company Name', alignment: 'left', style: this.prefix + 'tableHeaderStyle', border: [true, true, false, true] },
-                    { text: 'Type of Incident', alignment: 'left', style: this.prefix + 'tableHeaderStyle', border: [false, true, false, true] },
-                    { text: 'Incident Date', alignment: 'left', style: this.prefix + 'tableHeaderStyle', border: [false, true, false, true] },
-                    { text: 'Records Affected', alignment: 'left', style: this.prefix + 'tableHeaderStyle', border: [false, true, false, true] },
-                    { text: 'Type of Loss', alignment: 'left', style: this.prefix + 'tableHeaderStyle', border: [false, true, true, true] }
-                ]
+                    [
+                        {text: 'Term', alignment: 'left', style: this.prefix + 'tableHeaderStyle', colSpan: 2}, 
+                        {text: ''}, 
+                        {text: 'Definition', alignment: 'left', style: this.prefix + 'tableHeaderStyle'}
+                    ]
             ]
         },
         pageBreak: 'after'
@@ -143,7 +160,7 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
     }
 
     //object used to hold the table data
-    private peerGroupData: Array<SeverityDataModel>
+    private glossaryData: Array<IGlossaryTermModel>
 
     constructor() {
         super();
@@ -160,36 +177,103 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';
+        this.subHeader.style = this.prefix + 'subHeaderStyle';
         this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
         this.table.table.body[0][2].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][3].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][4].style = this.prefix + 'tableHeaderStyle';
 
         let i: number;
         let n: number = this.table.table.body.length;
         let tableRow: any;
         for(i = 1; i < n; i++) {
             tableRow = this.table.table.body[i];
-            if(i % 2 == 0) {
-                tableRow[0].style = this.prefix + 'tableRowContentDescriptionStyle';
-            } else {
-                let j: number;
-                for(j = 0; j < tableRow.length; j++) {
-                    tableRow[j].style = this.prefix + 'tableRowContentStyle';
-                }
+            if(tableRow[0].text){
+                tableRow[0].style = this.prefix + 'glossaryTerm';
             }
+            if(tableRow[1].text){
+                tableRow[1].style = this.prefix + 'glossaryTerm';
+            }
+            tableRow[2].style = this.prefix + 'glossaryDefinition';
         }
 
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
+        this.styles[this.prefix + 'subHeaderStyle'] = this.subHeaderStyle;
         this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
-        this.styles[this.prefix + 'tableRowContentStyle'] = this.tableRowContentStyle;
-        this.styles[this.prefix + 'tableRowContentDescriptionStyle'] = this.tableRowContentDescriptionStyle;
+        this.styles[this.prefix + 'glossaryTerm'] = this.glossaryTerm;
+        this.styles[this.prefix + 'glossaryDefinition'] = this.glossaryDefinition;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);
+        this.pdfContent.push(this.subHeader);
         this.pdfContent.push(this.table);
+    }
+
+    /**
+     * Build json table cell for the based on definition text
+     * if text contains the <list\> marker, build unordered list into table cell
+     * 
+     * @private
+     * @function buildDefinitionBlock
+     * @param {string} definition - glossary definition
+     * @param {string[]} list - list of bulleted items
+     * @return {any} - json table cell
+     */
+    private buildDefinitionBlock(definition: string, list: string[]): any {
+
+        let pos: number = definition.indexOf(GlossaryPage.list_separator);
+        if(pos >= 0) {
+            let definitionParts: string[] = definition.split(GlossaryPage.list_separator);
+            let i: number;
+            let n: number = definitionParts.length;
+            let tableCell: any;    
+
+            tableCell = {
+                style: this.prefix + 'glossaryDefinition',
+                table: {
+                    widths: ['2%', '98%'],
+                    body: [
+                        [
+                            {
+                                text: definitionParts[0],
+                                colSpan: 2
+                            },
+                            {text: ''}
+                        ],
+                        [
+                            {text: ''},
+                            {
+                                ul: [
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                layout: 'noBorders',
+                border: [false, true, true, true]
+            };
+
+            for(i = 1; i < n; i++) {
+                tableCell.table.body.push(
+                    [
+                            {
+                                text: definitionParts[i],
+                                colSpan: 2
+                            },
+                            {text: ''}
+                    ]
+                );
+            }
+
+            if(list) {
+                n = list.length;
+                for(i = 0; i < n; i++) {
+                    tableCell.table.body[1][1].ul.push(list[i]);
+                }
+            }
+            return tableCell;
+        } else {
+            return { text: definition, alignment: 'left', style: this.prefix + 'glossaryDefinition', border: [false, true, true, true] };
+        }
     }
 
     /**
@@ -197,44 +281,43 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
      * into the current page object
      * 
      * @public
-     * @function setPeerGroupData
-     * @param {Array<FrequencyDataModel>string} peerGroupData - table data
+     * @function setGlossaryData
+     * @param {Array<IGlossaryTermModel>string} glossaryData - table data
      * @return {} - No return types.
      */
-    public setPeerGroupData(peerGroupData: Array<SeverityDataModel>) {
-        this.peerGroupData = peerGroupData;
+    public setGlossaryData(glossaryData: Array<IGlossaryTermModel>) {
+        this.glossaryData = glossaryData;
         this.table.table.body.length = 1;
         let i: number;
-        let n: number = this.peerGroupData.length;
+        let j: number;
+        let n1: number = this.glossaryData.length;
+        let n2: number;
+        let term: string;
+        let definition: string;
         let dataRow: any;
-        let dataDescription: any;
-        let companyName: string;
-        let typeOfIncident: string;
-        let incidentDate: string;
-        let recordsAffected: string;
-        let typeOfLoss: string;
-        let caseDescription: string;
 
-        for(i = 0; i < n; i++) {
-            companyName = (this.peerGroupData[i].company_name != null) ? this.peerGroupData[i].company_name : '';
-            typeOfIncident = (this.peerGroupData[i].type_of_incident != null) ? this.peerGroupData[i].type_of_incident : '';
-            incidentDate = (this.peerGroupData[i].incident_date != null) ? this.peerGroupData[i].incident_date : '';
-            incidentDate = incidentDate.substr(0,10).replace(/\-/g,'/');
-            recordsAffected = (this.peerGroupData[i].records_affected != null) ? this.peerGroupData[i].records_affected : '';
-            typeOfLoss = (this.peerGroupData[i].type_of_loss != null) ? this.peerGroupData[i].type_of_loss : '';
-            caseDescription = (this.peerGroupData[i].case_description != null) ? this.peerGroupData[i].case_description : '';
+        for(i = 0; i < n1; i++) {
+            term = (this.glossaryData[i].term != null) ? this.glossaryData[i].term : '';
+            definition = (this.glossaryData[i].term != null) ? this.glossaryData[i].definition : '';
             dataRow = [
-                { text: companyName, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [true, true, false, false] },
-                { text: typeOfIncident, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: incidentDate, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: recordsAffected, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: typeOfLoss, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, true, false] }
+                { text: term, alignment: 'left', style: this.prefix + 'glossaryTerm', border: [true, true, false, true], colSpan: 2 },
+                { text: ''},
+                this.buildDefinitionBlock(definition, this.glossaryData[i].list)
             ];
             this.table.table.body.push(dataRow);
-            dataDescription = [
-                { text: caseDescription, colSpan: 5, style: this.prefix + 'tableRowContentDescriptionStyle', border: [true, false, true, true] }
-            ];
-            this.table.table.body.push(dataDescription);
+            if(this.glossaryData[i].subComponents) {
+                n2 = this.glossaryData[i].subComponents.length;
+                for(j = 0; j < n2; j++) {
+                    term = (this.glossaryData[i].subComponents[j].term != null) ? this.glossaryData[i].subComponents[j].term : '';
+                    definition = (this.glossaryData[i].subComponents[j].term != null) ? this.glossaryData[i].subComponents[j].definition : '';
+                    dataRow = [
+                        { text: '', fillColor: 'black' }, 
+                        { text: term, alignment: 'left', style: this.prefix + 'glossaryTerm', border: [true, true, false, true] },
+                        this.buildDefinitionBlock(definition, this.glossaryData[i].subComponents[j].list)
+                    ];
+                    this.table.table.body.push(dataRow);
+                }
+            }
         }
     }
 

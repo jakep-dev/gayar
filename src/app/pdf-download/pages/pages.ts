@@ -32,3 +32,4 @@ export { SeverityTopPeerGroupLossesPage } from 'app/pdf-download/pages/severity-
 export { SeverityTopCompanyLossesPage } from 'app/pdf-download/pages/severity-top-company-losses.page';
 
 export { BenchmarkPage } from 'app/pdf-download/pages/benchmark.page';
+export { GlossaryPage } from 'app/pdf-download/pages/glossary.page';
