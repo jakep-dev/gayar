@@ -38,7 +38,7 @@ export class FrequencyComponent implements OnInit {
     public isPeerGroupTableHasDescriptionAccess: boolean = false;
     public isCompanyTableHasDescriptionAccess: boolean = false;
 
-    constructor(private frequencyService: FrequencyService,
+    constructor(public frequencyService: FrequencyService,
         public menuService: MenuService,
         private sessionService: SessionService,
         private searchService: SearchService,

@@ -3,23 +3,48 @@ import { FrequencyDataModel } from 'app/model/model';
 
 export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
 
+    //page type name for this page
     public static pageType:string = 'FrequencyMostRecentPeerGroupLossesPage';
 
+    //default page prefix of this page to prevent json object names from one page don't clash with other pages
     private prefix: string = FrequencyMostRecentPeerGroupLossesPage.pageType + '_';
 
+    /**
+     * get the page prefix for the current page of the assessment report
+     * 
+     * @public
+     * @function getPrefix
+     * @return {string} - page prefix for the current page of the assessment report.
+     */
     public getPrefix() {
         return this.prefix;
     }
 
+    /**
+     * Setter function to set the prefix for this page
+     * 
+     * @public
+     * @function setPrefix
+     * @param {string} prefix - prefix use for this page
+     * @return {} - No return types.
+     */
     public setPrefix(prefix: string) {
         this.prefix = prefix;
         this.updatePdfContent();
     }
 
+    /**
+     * get the page type for the current page of the assessment report
+     * 
+     * @public
+     * @function getPageType
+     * @return {string} - page type for the current page of the assessment report.
+     */
     public getPageType(): string {
         return FrequencyMostRecentPeerGroupLossesPage.pageType;
     }
     
+    //json block representing the style for header within this page
     private headerStyle: any = {
         color: '#b1d23b',
         fontSize: 14,
@@ -27,27 +52,33 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         margin: [ 60, 0, 40, 0]
     };
 
+    //json block representing the header within this page
     private header: any = {
         text: 'Most Recent Peer Group Losses',
         style: this.prefix + 'headerStyle'
     };
     
+    //json block for the table header style for use as sub header within this page
     private tableHeaderStyle: any = {
         color: '#464646',
         fontSize: 12,
         bold: true
     };
 
+    //json block for the table row content style
     private tableRowContentStyle: any = {
         color: '#464646',
         fontSize: 12
     };
 
+    //json block for the table row content description style
     private tableRowContentDescriptionStyle: any = {
         color: '#464646',
         fontSize: 10
     };
 
+    //json block for the table structure to hold row headers
+    //we will dynamically add row at the end of the table at table.table.body array
     private table: any = {
         margin: [ 60, 20, 60, 0 ],
         table: {
@@ -67,24 +98,51 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         pageBreak: 'after'
     };
 
+    //Array of json blocks for this page
     private pdfContent: Array<any> = [];
 
+    /**
+     * get the pdf content array for the assessment report
+     * 
+     * @public
+     * @function getPdfContent
+     * @return {Array<any>} - array of json objects for the assessment report.
+     */
     public getPdfContent(): Array<any> {
         return this.pdfContent;
     }
 
+    //Associative array of styles for this page
+    //Maps style name to style json object
     private styles: Array<any> = [];
 
+    /**
+     * get the style array for the assessment report
+     * 
+     * @public
+     * @function getStyles
+     * @return {Array<any>} - Associative array of styles for the assessment report.
+     */
     public getStyles(): Array<any> {
         return this.styles;
     }
 
+    //Associative array of images for this page
+    //Maps image name to dataUrl
     private images: Array<string> = [];
 
+    /**
+     * get the images array for the assessment report
+     * 
+     * @public
+     * @function getImages
+     * @return {Array<string>} - Associative array of images for the assessment report.
+     */
     public getImages(): Array<string> {
         return this.images;
     }
 
+    //object used to hold the table data
     private peerGroupData: Array<FrequencyDataModel>
 
     constructor() {
@@ -92,6 +150,13 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         this.updatePdfContent();
     }
 
+    /**
+     * Update style names, image names when the page prefix changes
+     * 
+     * @private
+     * @function updatePdfContent
+     * @return {} - No return types.
+     */
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';
@@ -127,6 +192,15 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         this.pdfContent.push(this.table);
     }
 
+    /**
+     * set the table data object and load it content 
+     * into the current page object
+     * 
+     * @public
+     * @function setPeerGroupData
+     * @param {Array<FrequencyDataModel>string} peerGroupData - table data
+     * @return {} - No return types.
+     */
     public setPeerGroupData(peerGroupData: Array<FrequencyDataModel>) {
         this.peerGroupData = peerGroupData;
         this.table.table.body.length = 1;
@@ -164,16 +238,45 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         }
     }
 
+    /**
+     * get boolean value to indicate if page counting 
+     * via pdf rendering is required.  
+     * Defaults to false, which means the page object renders 
+     * all in one page or have a way to keep track of the 
+     * number of pages without pdf rendering
+     * If true, only pdf rendering can determine the number of pages
+     * 
+     * @public
+     * @function isPageCountingRequired
+     * @return {boolean} - value to indicate if pdf rendering is needed to determine page count
+     */
     public isPageCountingRequired(): boolean {
         return true;
     }
 
+    //number of pages this page object will be render out to pdf
+    //value is only value if you add this page object to pdfMakeBuilder object
     private pageCount: number = 0;
 
+    /**
+     * get the number of pages that this page object will be render out to the final pdf
+     * 
+     * @public
+     * @function getPageCount
+     * @return {number} - the number of pages that this page object will be render out to the final pdf
+     */
     public getPageCount(): number {
         return this.pageCount;
     }
 
+    /**
+     * set the number of pages that this page object will be render out to the final pdf
+     * 
+     * @public
+     * @function setPageCount
+     * @param {number} pageCount - the number of pages that this page object will be render out to the final pdf
+     * @return {} - No return types.
+     */
     public setPageCount(pageCount: number) {
         this.pageCount = pageCount;
     }

@@ -391,7 +391,7 @@ export class ReportComponent implements OnInit {
      * 
      * @private
      * @function clearArray
-     * @param {Array<any} array - arbitrary array
+     * @param {Array<any>} array - arbitrary array
      * @return {} - No return types.
      */
     private clearArray(array: Array<any>) {
@@ -1128,4 +1128,5 @@ export class ReportComponent implements OnInit {
                 break;
         }
     }
+    
 }

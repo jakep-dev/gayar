@@ -216,7 +216,7 @@ export class CoverPage extends BasePage  {
         );
     }
 
-    //Array of json block for cover page
+    //Array of json blocks for cover page
     private pdfContent: Array<any> = [];
 
     /**
@@ -430,7 +430,7 @@ export class CoverPage extends BasePage  {
      * 
      * @private
      * @function updateAdvisenLogo
-     * @param {dataUrl} string - png image data in string format
+     * @param {string} dataUrl - png image data in string format
      * @return {} - No return types.
      */
     private updateAdvisenLogo(dataUrl: string) {

@@ -39,7 +39,3 @@ export interface IChartMetaData {
     tocDescription: string,
     imageData: string
 }
-
-export interface ITableWidget {
-    componentName: string
-}
