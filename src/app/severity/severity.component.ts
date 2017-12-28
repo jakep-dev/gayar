@@ -37,7 +37,7 @@ export class SeverityComponent implements OnInit {
     public isPeerGroupTableHasDescriptionAccess: boolean;
     public isCompanyTableHasDescriptionAccess: boolean;
 
-    constructor(private severityService: SeverityService,
+    constructor(public severityService: SeverityService,
         public menuService: MenuService,
         private sessionService: SessionService,
         private searchService: SearchService,

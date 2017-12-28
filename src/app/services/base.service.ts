@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Http, Response, Headers, RequestOptionsArgs } from '@angular/http';
+import { Http, Response, Headers, RequestOptionsArgs, ResponseContentType } from '@angular/http';
 import { SessionModel } from 'app/model/model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/catch';
@@ -41,12 +41,36 @@ export abstract class BaseService {
 
     //Perform the get request operation
     public Get<T>(endPoint: string, data: any): Observable<T>{
-        let dataString:string = JSON.stringify(data),
-             path = `${endPoint}?${JSON.stringify(data)}`;
+        let dataString: string;
+        let path: string;
+        if(data != null) {
+            dataString = JSON.stringify(data);
+            path = endPoint + '?' + dataString
+        } else {
+            path = endPoint;
+        }
         return this.http.get(path, this.requestOptions)
                  .map((res: Response)=>{
                      this.isHttpRequestInProgress.next(false);
                      return res.json() as T;
+                 })
+                 .catch(this.handleException)
+                 .finally(this.handleFinally);
+    }
+
+    public GetFile<T>(endPoint: string, data: any): Observable<Blob>{
+        let dataString: string;
+        let path: string;
+        if(data != null) {
+            dataString = JSON.stringify(data);
+            path = endPoint + '?' + dataString
+        } else {
+            path = endPoint;
+        }
+        return this.http.get(path, { responseType: ResponseContentType.Blob })
+                 .map((res: Response)=>{
+                     this.isHttpRequestInProgress.next(false);
+                     return res.blob();
                  })
                  .catch(this.handleException)
                  .finally(this.handleFinally);

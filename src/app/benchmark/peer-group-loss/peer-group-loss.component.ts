@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkLimitModel, BoxPlotChartData, BenchmarkLimitAdequacyInput } from 'app/model/model';
+import { BenchmarkLimitModel, BoxPlotChartData, BenchmarkLimitAdequacyInput, ComponentPrintSettings } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
@@ -24,6 +24,8 @@ export class PeerGroupLossComponent implements OnInit {
 
     @Input() componentData: BenchmarkLimitAdequacyInput;
 
+    @Input() printSettings: ComponentPrintSettings;
+
     /**
      * Event handler to indicate the construction of the BoxPlotChart's required data is built 
      * @param newChartData BoxPlotChart's required data
@@ -33,7 +35,9 @@ export class PeerGroupLossComponent implements OnInit {
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
-    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded 
@@ -43,12 +47,21 @@ export class PeerGroupLossComponent implements OnInit {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+        if(!this.isFirstRedrawComplete.getValue()) {
+            this.isFirstRedrawComplete.next(true);
+        }
     }
 
     addLabelAndImage(chart){
+        let xPos: number;
+        if(this.printSettings == null) {
+            xPos = 10;
+        } else {
+            xPos = 45;
+        }
         chart.addChartLabel(
             chart.chartData.displayText, 
-            10, 
+            xPos, 
             chart.chart.chartHeight - 70, 
             '#000000',
             10,
@@ -56,13 +69,15 @@ export class PeerGroupLossComponent implements OnInit {
             chart.chart.chartWidth - 73
         );
 
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png', 
-            chart.chart.chartWidth - 80, 
-            chart.chart.chartHeight - 20, 
-            69, 
-            17
-        );
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png', 
+                chart.chart.chartWidth - 80, 
+                chart.chart.chartHeight - 20, 
+                69, 
+                17
+            );
+        }
     }
 
     constructor(private benchmarkService: BenchmarkService) {

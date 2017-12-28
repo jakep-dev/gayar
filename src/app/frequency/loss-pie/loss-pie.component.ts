@@ -3,7 +3,7 @@ import { FrequencyService } from 'app/services/services';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { PieChartData, FrequencyInput, FrequencyLossPieFlipModel } from 'app/model/model';
+import { PieChartData, FrequencyInput, FrequencyLossPieFlipModel, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
   selector: 'frequency-loss-pie',
@@ -24,9 +24,11 @@ export class LossPieComponent implements OnInit {
     chartData: PieChartData;
 
     @Input() componentData: FrequencyInput;
+
     @Input() lossChartView: String;
     
-
+    @Input() printSettings: ComponentPrintSettings;
+    
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built 
      * @param newChartData PieChart's required data
@@ -36,8 +38,11 @@ export class LossPieComponent implements OnInit {
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
-    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
-    
+    public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
+    private isDrillDownComplete: boolean = true;
+
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
@@ -46,32 +51,56 @@ export class LossPieComponent implements OnInit {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+        if(this.isDrillDownComplete) {
+            if(!this.isFirstRedrawComplete.getValue()) {
+                this.isFirstRedrawComplete.next(true);
+            }    
+        } else {
+            for(let i = 0; i < chart.chart.series[0].data.length; i++) {
+                if(chart.chart.series[0].data[i].drilldown === this.printSettings.drillDown) {
+                    chart.chart.series[0].data[i].firePointEvent('click', null);
+                }
+            }
+            this.isDrillDownComplete = true;
+            if(!this.isFirstRedrawComplete.getValue()) {
+                this.isFirstRedrawComplete.next(true);
+            }              
+        }
     }
 
     addLabelAndImage(chart){
+        let xPos: number;
+        if(this.printSettings == null) {
+            xPos = 10;
+        } else {
+            xPos = 45;
+        }
         if(this.modelData.datasets && this.modelData.datasets.length > 0) {
             if(this.modelData.displayText && this.modelData.displayText.length > 0) {
                 let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
                 
                 chart.addChartLabel(
                     this.modelData.displayText,
-                    10,
+                    xPos,
                     chart.chart.chartHeight - labelHeight,
                     '#000000',
                     10,
                     null,
                     chart.chart.chartWidth - 85
                 );
+                
             }
         }
 
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png',
-            chart.chart.chartWidth - 80,
-            chart.chart.chartHeight - 20,
-            69,
-            17
-        );
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png',
+                chart.chart.chartWidth - 80,
+                chart.chart.chartHeight - 20,
+                69,
+                17
+            );
+        }
     }
     
     constructor(private frequencyService: FrequencyService) {
@@ -79,6 +108,9 @@ export class LossPieComponent implements OnInit {
 
     ngOnInit() {
         this.getFrequencyData();
+        if(this.printSettings && this.printSettings.drillDown) {
+            this.isDrillDownComplete = false;
+        }
     }
 
     /**

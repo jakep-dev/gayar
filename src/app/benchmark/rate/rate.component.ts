@@ -2,7 +2,7 @@ import {SearchService} from '../../services/search.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { BenchmarkRateModel, BoxPlotChartData, BenchmarkRateInput } from 'app/model/model';
+import { BenchmarkRateModel, BoxPlotChartData, BenchmarkRateInput, ComponentPrintSettings } from 'app/model/model';
 import { BenchmarkService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
@@ -26,6 +26,8 @@ export class RateComponent implements OnInit {
 
     @Input() componentData: BenchmarkRateInput;
 
+    @Input() printSettings: ComponentPrintSettings;
+
     /**
      * Event handler to indicate the construction of the BoxPlotChart's required data is built 
      * @param newChartData BoxPlotChart's required data
@@ -35,7 +37,9 @@ export class RateComponent implements OnInit {
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
-    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
     
     /**
      * Event handler to indicate the chart is loaded 
@@ -45,6 +49,9 @@ export class RateComponent implements OnInit {
         chart.removeRenderedObjects();
         this.chartComponent.next(chart);
         this.addLabelAndImage(chart);
+        if(!this.isFirstRedrawComplete.getValue()) {
+            this.isFirstRedrawComplete.next(true);
+        }
     }
 
     addLabelAndImage(chart: BaseChart){
@@ -188,9 +195,16 @@ export class RateComponent implements OnInit {
             lineWidth);
 
         let xPosition = (hasClientLimit) ? chart.chart.chartHeight - 20 : chart.chart.chartHeight - 40;
+
+        if(this.printSettings == null) {
+            xPos = 10;
+        } else {
+            xPos = 45;
+        }
+
         chart.addChartLabel(
             this.modelData.displayText,
-            10,
+            xPos,
             xPosition,
             '#000000',
             labelHeight,
@@ -198,13 +212,15 @@ export class RateComponent implements OnInit {
             chart.chart.chartWidth - 80
         );
 
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png',
-            chart.chart.chartWidth - 80,
-            chart.chart.chartHeight - 20,
-            69,
-            17
-        );
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png',
+                chart.chart.chartWidth - 80,
+                chart.chart.chartHeight - 20,
+                69,
+                17
+            );
+        }
     }
     constructor(private benchmarkService: BenchmarkService, 
                     private searchService: SearchService) {

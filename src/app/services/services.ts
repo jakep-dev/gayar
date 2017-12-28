@@ -8,6 +8,8 @@ export * from './frequency.service';
 export * from './severity.service'
 export * from './session-storage.service';
 export * from './report.service';
+export * from './font.service';
+export * from './getFile.service';
 export * from './application.service';
 
 
@@ -21,6 +23,8 @@ import { FrequencyService } from './frequency.service';
 import { SeverityService } from './severity.service';
 import { SessionStorageService } from './session-storage.service';
 import { ReportService } from './report.service';
+import { FontService } from './font.service';
+import { GetFileService } from './getFile.service';
 import { ApplicationService } from './application.service';
 
 export const BLOCK_SERVICES = [
@@ -34,5 +38,7 @@ export const BLOCK_SERVICES = [
     SeverityService,
     SessionStorageService,
     ReportService,
+    FontService,
+    GetFileService,
     ApplicationService
 ];

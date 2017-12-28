@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
+import { DashboardScoreModel, GaugeChartData, DashboardScore, ComponentPrintSettings } from 'app/model/model';
 import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 import { Router } from '@angular/router';
@@ -28,6 +28,8 @@ export class BenchmarkComponent implements OnInit {
 
     @Input() componentData: DashboardScore;
 
+    @Input() printSettings: ComponentPrintSettings;
+
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built
      * @param newChartData GaugeChart's required data
@@ -37,7 +39,9 @@ export class BenchmarkComponent implements OnInit {
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
-    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded
@@ -47,6 +51,9 @@ export class BenchmarkComponent implements OnInit {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+        if(!this.isFirstRedrawComplete.getValue()) {
+            this.isFirstRedrawComplete.next(true);
+        }
     }
 
     navigate () {
@@ -60,7 +67,7 @@ export class BenchmarkComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart){
+    addLabelAndImage(chart: BaseChart){
         chart.addChartLabel(
             this.modelData.displayText,
             (chart.chart.chartWidth * 0.1) - 2,
@@ -70,14 +77,15 @@ export class BenchmarkComponent implements OnInit {
             null,
             (chart.chart.chartWidth * 0.75) + 50
         );
-
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png',
-            chart.chart.chartWidth - 80,
-            chart.chart.chartHeight - 20,
-            69,
-            17
-        );
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png', 
+                chart.chart.chartWidth - 80, 
+                chart.chart.chartHeight - 20, 
+                69, 
+                17
+            ); 
+        }
     }
 
     constructor(private dashboardService: DashboardService,

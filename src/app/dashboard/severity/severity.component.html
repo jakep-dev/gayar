@@ -1,6 +1,6 @@
 <app-tile [id]="'Dashboard_Severity'" [title]="chartHeader" class="width-100" [isFullScreen]="false" [isAccordion]="false" [isDisabled]="isDisabled">
-  <div front class="width-100" fxLayout="row">
-      <gauge-chart 
+  <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
+      <gauge-chart
           fxFlexFill
           *ngIf='modelData'
           (click)="navigate()"
@@ -9,7 +9,9 @@
           [chartData]="chartData"
           [chartComponent]="chartComponent$ | async"
           (onDataComplete)="onDataComplete($event)"
-          (onChartRedraw)="onChartReDraw($event)">
+          (onChartRedraw)="onChartReDraw($event)"
+          [printSettings]="printSettings"
+          >
       </gauge-chart>
   </div>
 </app-tile>

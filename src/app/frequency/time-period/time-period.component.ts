@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { FrequencyTimePeriodModel, BarChartData, FrequencyInput } from 'app/model/model';
+import { FrequencyTimePeriodModel, BarChartData, FrequencyInput, ComponentPrintSettings } from 'app/model/model';
 import { FrequencyService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 
@@ -24,6 +24,8 @@ export class TimePeriodComponent implements OnInit {
 
     @Input() componentData: FrequencyInput;
 
+    @Input() printSettings: ComponentPrintSettings;
+
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 
      * @param newChartData BarChart's required data
@@ -33,7 +35,10 @@ export class TimePeriodComponent implements OnInit {
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
-    chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
+    private isDrillDownComplete: boolean = true;
 
     /**
      * Event handler to indicate the chart is loaded 
@@ -43,9 +48,30 @@ export class TimePeriodComponent implements OnInit {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+        if(this.isDrillDownComplete) {
+            if(!this.isFirstRedrawComplete.getValue()) {
+                this.isFirstRedrawComplete.next(true);
+            }    
+        } else {
+            for(let i = 0; i < chart.chart.series[0].data.length; i++) {
+                if(chart.chart.series[0].data[i].drilldown === this.printSettings.drillDown) {
+                    chart.chart.series[0].data[i].firePointEvent('click', null);
+                }
+            }
+            this.isDrillDownComplete = true;
+            if(!this.isFirstRedrawComplete.getValue()) {
+                this.isFirstRedrawComplete.next(true);
+            }              
+        }
     }
 
-    addLabelAndImage(chart){
+    addLabelAndImage(chart: BaseChart){
+        let xPos: number;
+        if(this.printSettings == null) {
+            xPos = 10;
+        } else {
+            xPos = 45;
+        }
         if (this.modelData.maxValue > 0) {
             if(this.modelData.datasets && this.modelData.datasets.length > 0) {
                 if(this.modelData.displayText && this.modelData.displayText.length > 0) {
@@ -53,7 +79,7 @@ export class TimePeriodComponent implements OnInit {
                     
                     chart.addChartLabel(
                         this.modelData.displayText,
-                        10,
+                        xPos,
                         chart.chart.chartHeight - labelHeight,
                         '#000000',
                         10,
@@ -62,14 +88,15 @@ export class TimePeriodComponent implements OnInit {
                     );
                 }
             }
-
-            chart.addChartImage(
-                '../assets/images/advisen-logo.png',
-                chart.chart.chartWidth - 80,
-                chart.chart.chartHeight - 20,
-                69,
-                17
-            );
+            if(this.printSettings == null) {
+                chart.addChartImage(
+                    '../assets/images/advisen-logo.png',
+                    chart.chart.chartWidth - 80,
+                    chart.chart.chartHeight - 20,
+                    69,
+                    17
+                );
+            }
         }
     }
 
@@ -78,6 +105,9 @@ export class TimePeriodComponent implements OnInit {
 
     ngOnInit() {
         this.getBenchmarkLimitData();
+        if(this.printSettings && this.printSettings.drillDown) {
+            this.isDrillDownComplete = false;
+        }
     }
 
     /**

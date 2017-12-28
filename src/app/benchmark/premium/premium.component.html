@@ -5,5 +5,7 @@
     [chartData]="chartData"
     [chartComponent]="chartComponent$ | async"
     (onDataComplete)="onDataComplete($event)"
-    (onChartRedraw)="onChartReDraw($event)">
+    (onChartRedraw)="onChartReDraw($event)"
+    [printSettings]="printSettings"
+    >
 </bar-chart>

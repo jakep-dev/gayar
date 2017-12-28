@@ -2,14 +2,22 @@
     [id]="id" [title]="header" class="width-100"
     [isFullScreen]="false" [isSelectable]="true"
     [isSelected]="isParentChecked" (onSelectable)="onParentChange($event)">
-    <div front class="width-100" fxLayout="column">
-      <btn-checkbox
-          *ngFor="let sub of subComponent"
-          class="width-100"
-          [id]="sub.id"
-          [name]="sub.description"
-          [isSelected]="sub.value"
-          (onSelectable)="onSubComponentChange($event, sub)">
-      </btn-checkbox>
-  </div>
+    <div front class="width-100" fxLayout="column" *ngFor="let sub of subComponent">
+        <btn-checkbox            
+            class="width-100"
+            [id]="sub.id"
+            [name]="sub.description"
+            [isSelected]="sub.value"
+            (onSelectable)="onSubComponentChange($event, sub)">
+        </btn-checkbox>
+        <btn-checkbox
+            *ngFor="let subSub of sub.subSubComponents"
+            class="width-100"
+            [id]="subSub.id"
+            [name]="subSub.description"
+            [isSelected]="subSub.value"
+            [isSubComponent]="true"
+            (onSelectable)="onSubSubComponentChange($event, subSub)">
+        </btn-checkbox>
+    </div>
 </app-tile>

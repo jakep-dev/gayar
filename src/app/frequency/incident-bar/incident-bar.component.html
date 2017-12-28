@@ -1,18 +1,26 @@
 <div *ngIf='modelData'>
     <bar-chart *ngIf='!modelData?.withBreak' 
-        frequeny-bar-incident [modelData]="modelData" 
+        [ngClass]="{'width-100' : !printSettings}"
+        frequeny-bar-incident 
+        [modelData]="modelData" 
         [chartData]="chartData" 
         [chartView]="incidentChartView"  
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)" 
-        (onChartRedraw)="onChartReDraw($event)">
+        (onChartRedraw)="onChartReDraw($event)"
+        [printSettings]="printSettings"
+        >
     </bar-chart>
     <bar-chart-logarithm *ngIf='modelData?.withBreak' 
-        frequeny-bar-incident [modelData]="modelData" 
+        [ngClass]="{'width-100' : !printSettings}"
+        frequeny-bar-incident 
+        [modelData]="modelData" 
         [chartData]="chartData" 
         [chartView]="incidentChartView"  
         [chartComponent]="chartComponent$ | async"
         (onDataComplete)="onDataComplete($event)" 
-        (onChartRedraw)="onChartReDraw($event)">
+        (onChartRedraw)="onChartReDraw($event)"
+        [printSettings]="printSettings"
+        >
     </bar-chart-logarithm>
 </div>
