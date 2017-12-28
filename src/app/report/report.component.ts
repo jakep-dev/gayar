@@ -949,26 +949,20 @@ export class ReportComponent implements OnInit {
      */
     private calculatePageCount(page: BasePage) {
         if(page.isPageCountingRequired()) {
-            if(this.pagesProcessedCount + 1 == this.pageOrder.length) {
-                console.log('No need to count the last page of page type = ' + page.getPageType());
+            console.log('Counting pages for ' + page.getPageType());
+            this.pdfBuilder.clearImages();
+            this.pdfBuilder.clearStyles();
+            this.pdfBuilder.clearPdfContent();
+            this.pdfBuilder.setDifferentFirstPage(true);
+            this.pdfBuilder.addPage(page);
+            const pdfDocGenerator = this.pdfMake.createPdf(this.pdfBuilder.getContent());
+            pdfDocGenerator.getBuffer((data) => {
                 this.pagesProcessedCount++;
-                this.processPageCounts();    
-            } else {
-                console.log('Counting pages for ' + page.getPageType());
-                this.pdfBuilder.clearImages();
-                this.pdfBuilder.clearStyles();
-                this.pdfBuilder.clearPdfContent();
-                this.pdfBuilder.setDifferentFirstPage(true);
-                this.pdfBuilder.addPage(page);
-                const pdfDocGenerator = this.pdfMake.createPdf(this.pdfBuilder.getContent());
-                pdfDocGenerator.getBuffer((data) => {
-                    this.pagesProcessedCount++;
-                    //subtract one from the page count due to page break
-                    page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
-                    console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
-                    this.processPageCounts();
-                });
-            }
+                //subtract one from the page count due to page break
+                page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
+                console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
+                this.processPageCounts();
+            });
         } else {
             console.log('No need to count pages for ' + page.getPageType());
             this.pagesProcessedCount++;
