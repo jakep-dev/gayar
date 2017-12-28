@@ -102,8 +102,8 @@ export class GlossaryPage extends BasePage  {
         margin: [ 60, 20, 60, 0 ],
         table: {
             headerRows: 1,
-            //widths: ['18%','18%','13%','18%','18%'],
-            widths: ['2%', '33%', '50%'],
+            //widths: ['2%', '33%', '50%'],
+            widths: ['2%', '38%', '60%'],
             body: [
                     [
                         {text: 'Term', alignment: 'left', style: this.prefix + 'tableHeaderStyle', colSpan: 2}, 
