@@ -27,10 +27,13 @@ export class SessionRouter extends BaseRoute {
                             SessionRouter.prototype.getUserPermissionForComponents(userInfo, req.body.productCode, callback);
                     } else {
                         res.send(userInfo);
-                    }                
+                    }
                 },
-                function (userInfo, componentPermissions, callback) {
-                    res.send(SessionRouter.prototype.performUserPermission(userInfo, componentPermissions));
+                function(userInfo, componentPermissions, callback) {
+                    SessionRouter.prototype.getProductPermission(userInfo, componentPermissions, callback);
+                },
+                function (userInfo, componentPermissions, productPermission, callback) {
+                    res.send(SessionRouter.prototype.performUserPermission(userInfo, componentPermissions, productPermission));
                 }
             ], function (err, result) {
                 res.send(err);
@@ -50,7 +53,7 @@ export class SessionRouter extends BaseRoute {
         });
     }
 
-    public getUserPermissionForComponents (arg: any, productCode: string, callback: any) {
+    private getUserPermissionForComponents (arg: any, productCode: string, callback: any) {
         super.PerformGetRequest("getPermissions", {
             'user_id': arg.userinfo.userId,
             'product_code': productCode,
@@ -60,7 +63,16 @@ export class SessionRouter extends BaseRoute {
         });
     }
 
-    private performUserPermission (userInfo, componentPermission) {
+    private getProductPermission(arg: any, componentPermission: any, callback: any){
+        super.PerformGetRequest("getProducts", {
+            'user_id': arg.userinfo.userId,
+            'ssnid': arg.userinfo.token
+        }, (data)=>{
+            callback(null, arg, componentPermission, data);
+        });
+    }
+
+    private performUserPermission (userInfo, componentPermission, productPermission) {
         if( componentPermission && componentPermission.list) {
             let permission = {
                 companySearch: SessionRouter.prototype.getCompanySearchPermission(componentPermission.list),
@@ -72,7 +84,10 @@ export class SessionRouter extends BaseRoute {
                 report: SessionRouter.prototype.getReportPermission(componentPermission.list)
             }
             userInfo.userinfo.permission = permission;
-        }        
+        }
+        if( productPermission && productPermission.products) {
+            userInfo.userinfo.permission.underWritingFramework = SessionRouter.prototype.getUFPermission(productPermission.products);
+        }
         return userInfo;
     }
 
@@ -186,9 +201,21 @@ export class SessionRouter extends BaseRoute {
         }
     }
 
+    private getUFPermission(productPermission) {
+        return {
+            hasAccess: SessionRouter.prototype.getProductAccess(ServerConstants.UNDERWRITING_FRAMEWORK.PRODUCT_CODE, productPermission)
+        }
+    }
+
     private getAccess(componentCode: any, componentPermission: any): boolean {
         
         let product = componentPermission.find( component => { return component.code === componentCode});
+        return (product && product.access && product.access === 'Y') || false;
+    }
+
+    private getProductAccess(productCode: any, productPermission: any): boolean {
+        
+        let product = productPermission.find( product => { return product.product_code === productCode});
         return (product && product.access && product.access === 'Y') || false;
     }
 

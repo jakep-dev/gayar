@@ -51,6 +51,8 @@ export const ServerConstants = {
         PRODUCT_CODE : 'CYB_GLOSSARY_PAGE'
     }, REPORT : {
         PRODUCT_CODE : 'CYB_REPORT_PAGE'
+    }, UNDERWRITING_FRAMEWORK: {
+        PRODUCT_CODE: 'P_UNDER_WRITING_FW'
     }
 
 }
