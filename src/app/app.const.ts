@@ -5,5 +5,37 @@ export const APPCONSTANTS = {
     SELECTED_SEARCH_CRITERIA:               'Selected_Search_Criteria',
     PEER_GROUP_LOSS:                          'Peer_Group_Loss'
   },
-  APPLICATION_ID: 'CYB_OVER_VUE' //will be the product id.
+  APPLICATION_ID: 'CYB_OVER_VUE', //will be the product id.
+  REPORTS_ID : {
+    dashboardPage:          'REPORT_TILE_DASHBOARD',
+    frequencyGauge:         'REPORT_DASHBOARD_FREQUENCY',
+    severityGauge:          'REPORT_DASHBOARD_SEVERITY',
+    benchmarkGauge:         'REPORT_DASHBOARD_BENCHMARK',
+    
+    frequencyPage:          'REPORT_TILE_FREQUENCY',
+    frequncyIndustry:       'REPORT_FREQUENCY_INDUSTRY_OVERVIEW',
+    frequencyTimePeriod:    'REPORT_FREQUENCY_TIME_PERIOD',
+    frequencyIncident:      'REPORT_FREQUENCY_TYPE_OF_INCIDENT',
+    frequencyLoss:          'REPORT_FREQUENCY_TYPE_OF_LOSS',
+    frequencyPeerLosses:    'REPORT_FREQUENCY_MOST_RECENT_PEER_GROUP_LOSSES',
+    frequencyCompanyLosses: 'REPORT_FREQUENCY_MOST_RECENT_COMPANY_LOSSES',
+    
+    severityPage:           'REPORT_TILE_SEVERITY',
+    severityIdustry:        'REPORT_SEVERITY_INDUSTRY_OVERVIEW',
+    severityTimePeriod:     'REPORT_SEVERITY_TIME_PERIOD',
+    severityIncident:       'REPORT_SEVERITY_TYPE_OF_INCIDENT',    
+    severityLoss:           'REPORT_SEVERITY_TYPE_OF_LOSS',
+    severityPeerLosses:     'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES',
+    severityCompanyLosses:  'REPORT_SEVERITY_TOP_COMPANY_LOSSES',
+    
+    benchmarkPage:          'REPORT_TILE_BENCHMARK',
+    benchmarkLimitAdequacy: 'REPORT_BENCHMARK_LIMIT_ADEQUACY',
+    benchmarkPremium:       'REPORT_BENCHMARK_PREMIUM',
+    benchmarkLimit:         'REPORT_BENCHMARK_LIMIT',
+    benchmarkRetention:     'REPORT_BENCHMARK_RETENTION',
+    benchmarkRate:          'REPORT_BENCHMARK_RATE_PER_MILLION',
+    
+    appendixPage:           'REPORT_TILE_APPENDIX',
+    glossary:               'REPORT_APPENDIX_GLOSSARY'
+  }
 }

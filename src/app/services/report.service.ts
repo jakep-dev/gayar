@@ -40,11 +40,13 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         id: 'REPORT_TILE_DASHBOARD',
         description: 'Dashboard',
         value: true,
+        hasAccess: false,
         subComponents: [
             {
                 description: 'Frequency',
                 id: 'REPORT_DASHBOARD_FREQUENCY',
                 value: true,
+                hasAccess: false,
                 pageType: 'DashboardPage',
                 chartComponents: [
                     {
@@ -60,6 +62,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Severity',
                 id: 'REPORT_DASHBOARD_SEVERITY',
                 value: true,
+                hasAccess: false,
                 pageType: 'DashboardPage',
                 chartComponents: [
                     {
@@ -75,6 +78,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Benchmark',
                 id: 'REPORT_DASHBOARD_BENCHMARK',
                 value: true,
+                hasAccess: false,
                 pageType: 'DashboardPage',
                 chartComponents: [
                     {
@@ -93,11 +97,13 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         id: 'REPORT_TILE_FREQUENCY',
         description: 'Frequency',
         value: true,
+        hasAccess: false,
         subComponents: [
             {
                 description: 'Industry Overview',
                 id: 'REPORT_FREQUENCY_INDUSTRY_OVERVIEW',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyIndustryOverviewPage',
                 chartComponents: [
                     {
@@ -113,6 +119,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Time Period',
                 id: 'REPORT_FREQUENCY_TIME_PERIOD',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyTimePeriodPage',
                 chartComponents: [
                     {
@@ -134,6 +141,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Type of Incident',
                 id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyTypeOfIncidentPage',
                 chartComponents: [
                     {
@@ -154,6 +162,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Data Privacy',
                         id: 'REPORT_FREQUENCY_INCIDENT_DATA_PRIVACY',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyDataPrivacyPage',
                         chartComponents: [
                             {
@@ -174,6 +183,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Network Security',
                         id: 'REPORT_FREQUENCY_INCIDENT_NETWORK_SECURITY',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyNetworkSecurityPage',
                         chartComponents: [
                             {
@@ -194,6 +204,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Tech E&O',
                         id: 'REPORT_FREQUENCY_INCIDENT_TECH_EO',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyTechEOPage',
                         chartComponents: [
                             {
@@ -214,6 +225,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Privacy Violations',
                         id: 'REPORT_FREQUENCY_INCIDENT_PRIVACY_VIOLATIONS',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyPrivacyViolationsPage',
                         chartComponents: [
                             {
@@ -236,6 +248,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Type of Loss',
                 id: 'REPORT_FREQUENCY_TYPE_OF_LOSS',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyTypeOfLossPage',
                 chartComponents: [
                     {
@@ -256,6 +269,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Personal Information',
                         id: 'REPORT_FREQUENCY_LOSS_PERSONAL_INFORMATION',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyPersonalInformationPage',
                         chartComponents: [
                             {
@@ -276,6 +290,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Corporate Losses',
                         id: 'REPORT_FREQUENCY_LOSS_CORPORATE_LOSSES',
                         value: true,
+                        hasAccess: false,
                         pageType: 'FrequencyCorporateLossesPage',
                         chartComponents: [
                             {
@@ -299,6 +314,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Most Recent Peer Group Losses',
                 id: 'REPORT_FREQUENCY_MOST_RECENT_PEER_GROUP_LOSSES',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyMostRecentPeerGroupLossesPage',
                 chartComponents: null,
                 subSubComponents: null
@@ -307,6 +323,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Most Recent Company Losses',
                 id: 'REPORT_FREQUENCY_MOST_RECENT_COMPANY_LOSSES',
                 value: true,
+                hasAccess: false,
                 pageType: 'FrequencyMostRecentCompanyLossesPage',
                 chartComponents: null,
                 subSubComponents: null
@@ -319,11 +336,13 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         id: 'REPORT_TILE_SEVERITY',
         description: 'Severity',
         value: true,
+        hasAccess: false,
         subComponents: [
             {
                 description: 'Industry Overview',
                 id: 'REPORT_SEVERITY_INDUSTRY_OVERVIEW',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityIndustryOverviewPage',
                 chartComponents: [
                     {
@@ -339,6 +358,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Time Period',
                 id: 'REPORT_SEVERITY_TIME_PERIOD',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityTimePeriodPage',
                 chartComponents: [
                     {
@@ -360,6 +380,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Type of Incident',
                 id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityTypeOfIncidentPage',
                 chartComponents: [
                     {
@@ -380,6 +401,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Data Privacy',
                         id: 'REPORT_SEVERITY_INCIDENT_DATA_PRIVACY',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityDataPrivacyPage',
                         chartComponents: [
                             {
@@ -400,6 +422,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Network Security',
                         id: 'REPORT_SEVERITY_INCIDENT_NETWORK_SECURITY',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityNetworkSecurityPage',
                         chartComponents: [
                             {
@@ -420,6 +443,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Tech E&O',
                         id: 'REPORT_SEVERITY_INCIDENT_TECH_EO',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityTechEOPage',
                         chartComponents: [
                             {
@@ -440,6 +464,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Privacy Violations',
                         id: 'REPORT_SEVERITY_INCIDENT_PRIVACY_VIOLATIONS',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityPrivacyViolationsPage',
                         chartComponents: [
                             {
@@ -462,6 +487,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Type of Loss',
                 id: 'REPORT_SEVERITY_TYPE_OF_LOSS',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityTypeOfLossPage',
                 chartComponents: [
                     {
@@ -482,6 +508,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Personal Information',
                         id: 'REPORT_SEVERITY_LOSS_PERSONAL_INFORMATION',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityPersonalInformationPage',
                         chartComponents: [
                             {
@@ -502,6 +529,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         description: 'Corporate Losses',
                         id: 'REPORT_SEVERITY_LOSS_CORPORATE_LOSSES',
                         value: true,
+                        hasAccess: false,
                         pageType: 'SeverityCorporateLossesPage',
                         chartComponents: [
                             {
@@ -525,6 +553,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Top Peer Group Losses',
                 id: 'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityTopPeerGroupLossesPage',
                 chartComponents: null,
                 subSubComponents: null
@@ -533,6 +562,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Top Company Losses',
                 id: 'REPORT_SEVERITY_TOP_COMPANY_LOSSES',
                 value: true,
+                hasAccess: false,
                 pageType: 'SeverityTopCompanyLossesPage',
                 chartComponents: null,
                 subSubComponents: null
@@ -545,11 +575,13 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         id: 'REPORT_TILE_BENCHMARK',
         description: 'Benchmark',
         value: true,
+        hasAccess: false,
         subComponents: [
             {
                 description: 'Limit Adequacy',
                 id: 'REPORT_BENCHMARK_LIMIT_ADEQUACY',
                 value: true,
+                hasAccess: false,
                 pageType: 'BenchmarkPage',
                 chartComponents: [
                     {
@@ -565,6 +597,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Premium Distribution by Counts',
                 id: 'REPORT_BENCHMARK_PREMIUM',
                 value: true,
+                hasAccess: false,
                 pageType: 'BenchmarkPage',
                 chartComponents: [
                     {
@@ -580,6 +613,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Limit Distribution by Counts',
                 id: 'REPORT_BENCHMARK_LIMIT',
                 value: true,
+                hasAccess: false,
                 pageType: 'BenchmarkPage',
                 chartComponents: [
                     {
@@ -595,6 +629,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Retention Distribution by Counts',
                 id: 'REPORT_BENCHMARK_RETENTION',
                 value: true,
+                hasAccess: false,
                 pageType: 'BenchmarkPage',
                 chartComponents: [
                     {
@@ -610,6 +645,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 description: 'Rate Per Million Distribution by Values',
                 id: 'REPORT_BENCHMARK_RATE_PER_MILLION',
                 value: true,
+                hasAccess: false,
                 pageType: 'BenchmarkPage',
                 chartComponents: [
                     {
@@ -628,11 +664,13 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
         id: 'REPORT_TILE_APPENDIX',
         description: 'Appendix',
         value: true,
+        hasAccess: false,
         subComponents: [
             {
                 description: 'Glossary',
                 id: 'REPORT_APPENDIX_GLOSSARY',
                 value: true,
+                hasAccess: false,
                 pageType: 'GlossaryPage',
                 chartComponents: null,
                 subSubComponents: null

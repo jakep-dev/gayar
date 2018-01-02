@@ -27,7 +27,8 @@ import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark
 
 import { MenuService, SearchService, 
     FrequencyService, SeverityService, 
-    ReportService, FontService, GetFileService 
+    ReportService, FontService, GetFileService  ,
+    SessionService
 } from 'app/services/services';
 
 import { 
@@ -61,6 +62,7 @@ import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
 import { BaseChart } from 'app/shared/charts/base-chart';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
+import { APPCONSTANTS } from 'app/app.const';
 
 @Component({
     selector: 'app-report',
@@ -193,7 +195,8 @@ export class ReportComponent implements OnInit {
         private searchService: SearchService,
         private frequencyService: FrequencyService,
         private severityService: SeverityService,
-        private reportService: ReportService) {
+        private reportService: ReportService,
+        private sessionService: SessionService) {
 
         //If font files are not loaded setup the call back function to catch the event when font files are loaded
         if(this.fontService.isLoadComplete()) {
@@ -347,9 +350,157 @@ export class ReportComponent implements OnInit {
     private getReportConfig () {
         this.reportService.getReportConfig().subscribe((data)=> {
             this.reportTileModel = data;
+            this.buildReportPermission();
             console.log('Report Data Done!');
             this.reportDataDone = true;
         });
+    }
+
+    /**
+     * buildReportPermission - build the report permission 
+     * 
+     * @private
+     * @function buildReportPermission
+     * return {} - No return types
+     */
+    private buildReportPermission() {
+        this.reportTileModel.forEach( reportComponent => {
+            reportComponent.hasAccess = this.getPageAccess(reportComponent.id);
+            if(reportComponent.subComponents && reportComponent.subComponents.length > 0) {
+                reportComponent.subComponents.forEach( reportSubComponent => {
+                    reportSubComponent.hasAccess = (reportComponent.hasAccess)? this.getComponentAccess(reportSubComponent.id) : false;
+                    if(reportSubComponent.subSubComponents && reportSubComponent.subSubComponents.length > 0) {
+                        reportSubComponent.subSubComponents.forEach ( chartDetails => {
+                            chartDetails.hasAccess = (reportSubComponent.hasAccess)? this.getChartDetailAccess(reportSubComponent.id): false;
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * getPageAccess - get the page access
+     * 
+     * @private
+     * @function getPageAccess
+     * @param id - id of the page
+     * @return {boolean} - true if the page has access, otherwise false
+     */
+    private getPageAccess(id:string) {
+        let permission = this.sessionService.getUserPermission();
+        switch(id) {
+            case APPCONSTANTS.REPORTS_ID.dashboardPage:
+                return permission && permission.dashboard && permission.dashboard.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyPage:
+                return permission && permission.frequency && permission.frequency.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityPage:
+                return permission && permission.severity && permission.severity.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkPage:
+                return permission && permission.benchmark && permission.benchmark.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.appendixPage:
+                return permission && permission.glossary && permission.glossary.hasAccess;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * getComponentAccess - get the component access
+     * 
+     * @private
+     * @function getComponentAccess
+     * @param id - id of the component
+     * @return {boolean} - true if the component has access, otherwise false
+     */
+    private getComponentAccess(id: string) {
+        let permission = this.sessionService.getUserPermission();
+        switch(id) {
+
+            //dashboard components
+            case APPCONSTANTS.REPORTS_ID.frequencyGauge:
+                return permission && permission.dashboard && permission.dashboard.frequencyGauge && permission.dashboard.frequencyGauge.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityGauge:
+                return permission && permission.dashboard && permission.dashboard.severityGauge && permission.dashboard.severityGauge.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkGauge:
+                return permission && permission.dashboard && permission.dashboard.benchmarkGauge && permission.dashboard.benchmarkGauge.hasAccess;
+
+            //frequency components
+            case APPCONSTANTS.REPORTS_ID.frequncyIndustry:
+                return permission && permission.frequency && permission.frequency.industry && permission.frequency.industry.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyTimePeriod:
+                return permission && permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyIncident:
+                return permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyLoss:
+                return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyPeerLosses:
+                return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses:
+                return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+            
+            //severity components
+            case APPCONSTANTS.REPORTS_ID.severityIdustry:
+                return permission && permission.severity && permission.severity.industry && permission.severity.industry.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityTimePeriod:
+                return permission && permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityIncident:
+                return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityLoss:
+                return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityPeerLosses:
+                return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityCompanyLosses:
+                return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+            
+            //benchmark components
+            case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacy:
+                return permission && permission.severity && permission.benchmark.limitAdequacy && permission.benchmark.limitAdequacy.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkPremium:
+                return permission && permission.severity && permission.benchmark.premium && permission.benchmark.premium.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkLimit:
+                return permission && permission.severity && permission.benchmark.limit && permission.benchmark.limit.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkRetention:
+                return permission && permission.severity && permission.benchmark.retention && permission.benchmark.retention.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkRate:
+                return permission && permission.severity && permission.benchmark.rate && permission.benchmark.rate.hasAccess;
+
+            //glossary
+            case APPCONSTANTS.REPORTS_ID.glossary:
+                return permission && permission.glossary && permission.glossary && permission.glossary.hasAccess;
+
+            default: 
+                return false;
+        }
+    }
+
+    /**
+     * getChartDetailAccess - get the chart detail access
+     * 
+     * @private
+     * @function getChartDetailAccess
+     * @param id - id of the chart detail
+     * @return {boolean} - true if the chart detail has access, otherwise false
+     */
+    private getChartDetailAccess(id: string) {
+        let permission = this.sessionService.getUserPermission();
+        switch(id) {
+
+            //frequency detailed charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncident:
+                return permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyLoss:
+                return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasDetailAccess;
+            
+            //severity detailed charts
+            case APPCONSTANTS.REPORTS_ID.severityIncident:
+                return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
+            case APPCONSTANTS.REPORTS_ID.severityLoss:
+                return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasDetailAccess;
+            
+            default: 
+                return false;
+        }
     }
 
     /**

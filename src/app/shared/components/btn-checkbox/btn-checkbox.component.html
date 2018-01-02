@@ -1,4 +1,4 @@
-<button md-button class="width-100" (click)="toggleSelected()">
+<button md-button class="width-100" [disabled]="isDisabled" (click)="toggleSelected()">
     <div fxLayout="row" fxLayoutAlign="space-between center" [ngClass]="{'sub-component-padding': isSubComponent}">
       <div [ngClass]="{'btn-checkbox-name' : !isSubComponent, 'btn-checkbox-sub-name' : isSubComponent}">
           {{name}}
