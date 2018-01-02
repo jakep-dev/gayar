@@ -145,6 +145,33 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
     //object used to hold the table data
     private peerGroupData: Array<FrequencyDataModel>
 
+    private hasDescriptionPermission: boolean;
+
+    /**
+     * Function to set the show detail description permission value for this page
+     * 
+     * @public
+     * @function setDesciptionPermission
+     * @param {boolean} value - true, the page will render description
+     *                          false, the page will not render description
+     * @return {} - No return types.
+     */
+    public setDesciptionPermission(value: boolean) {
+        this.hasDescriptionPermission = value;
+    }
+
+    /**
+     * get the page's show detailed description permission setting
+     * 
+     * @public
+     * @function getDescriptionPermission
+     * @return {boolean} - true, the page will render description
+     *                     false, the page will not render description
+     */
+    public getDescriptionPermission(): boolean {
+        return this.hasDescriptionPermission;
+    }
+
     constructor() {
         super();
         this.updatePdfContent();
@@ -171,7 +198,8 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         let tableRow: any;
         for(i = 1; i < n; i++) {
             tableRow = this.table.table.body[i];
-            if(i % 2 == 0) {
+            //Only description rows have colSpan attribute
+            if(tableRow[0].colSpan) {
                 tableRow[0].style = this.prefix + 'tableRowContentDescriptionStyle';
             } else {
                 let j: number;
@@ -215,6 +243,7 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
         let typeOfLoss: string;
         let caseDescription: string;
 
+        let showBottomBorder: boolean = !this.hasDescriptionPermission;
         for(i = 0; i < n; i++) {
             companyName = (this.peerGroupData[i].company_name != null) ? this.peerGroupData[i].company_name : '';
             typeOfIncident = (this.peerGroupData[i].type_of_incident != null) ? this.peerGroupData[i].type_of_incident : '';
@@ -224,17 +253,19 @@ export class FrequencyMostRecentPeerGroupLossesPage extends BasePage  {
             typeOfLoss = (this.peerGroupData[i].type_of_loss != null) ? this.peerGroupData[i].type_of_loss : '';
             caseDescription = (this.peerGroupData[i].case_description != null) ? this.peerGroupData[i].case_description : '';
             dataRow = [
-                { text: companyName, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [true, true, false, false] },
-                { text: typeOfIncident, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: incidentDate, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: recordsAffected, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, false] },
-                { text: typeOfLoss, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, true, false] }
+                { text: companyName, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [true, true, false, showBottomBorder] },
+                { text: typeOfIncident, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                { text: incidentDate, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                { text: recordsAffected, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                { text: typeOfLoss, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, true, showBottomBorder] }
             ];
             this.table.table.body.push(dataRow);
-            dataDescription = [
-                { text: caseDescription, colSpan: 5, style: this.prefix + 'tableRowContentDescriptionStyle', border: [true, false, true, true] }
-            ];
-            this.table.table.body.push(dataDescription);
+            if(this.hasDescriptionPermission) {
+                dataDescription = [
+                    { text: caseDescription, colSpan: 5, style: this.prefix + 'tableRowContentDescriptionStyle', border: [true, false, true, true] }
+                ];
+                this.table.table.body.push(dataDescription);
+            }
         }
     }
 

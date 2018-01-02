@@ -487,12 +487,16 @@ export class ReportComponent implements OnInit {
         switch(id) {
 
             //frequency detailed charts
+            case APPCONSTANTS.REPORTS_ID.frequencyTimePeriodDetails:
+                return permission && permission.frequency && permission.frequency.timePeriod.hasAccess && permission.frequency.timePeriod.hasDetailAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyIncident:
                 return permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyLoss:
                 return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasDetailAccess;
             
             //severity detailed charts
+            case APPCONSTANTS.REPORTS_ID.severityTimePeriodDetails:
+                return permission && permission.severity && permission.severity.timePeriod.hasAccess && permission.severity.timePeriod.hasDetailAccess;
             case APPCONSTANTS.REPORTS_ID.severityIncident:
                 return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
             case APPCONSTANTS.REPORTS_ID.severityLoss:
@@ -502,6 +506,36 @@ export class ReportComponent implements OnInit {
                 return false;
         }
     }
+
+    /**
+     * getTableDetailAccess - get the table row detail access
+     * 
+     * @private
+     * @function getTableDetailAccess
+     * @param id - id of the table detail
+     * @return {boolean} - true if the table row detail has access, otherwise false
+     */
+    private getTableDetailAccess(id: string) {
+        let permission = this.sessionService.getUserPermission();
+        switch(id) {
+
+            //frequency detailed tables
+            case APPCONSTANTS.REPORTS_ID.frequencyCompanyLossesDetails:
+                return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && permission.frequency.companyTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails:
+                return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess && permission.frequency.peerGroupTable.hasDescriptionAccess;
+            
+            //severity detailed tables
+            case APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails:
+                return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && permission.severity.companyTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails:
+                return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess && permission.severity.peerGroupTable.hasDescriptionAccess;
+            
+            default: 
+                return false;
+        }
+    }
+
 
     /**
      * getReportConfig - Load the report configuration.
@@ -1191,7 +1225,9 @@ export class ReportComponent implements OnInit {
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyTimePeriodPage.pageType:
-                this.pageCollection[pageType] = new FrequencyTimePeriodPage();
+                let frequencyTimePeriodPage = new FrequencyTimePeriodPage();
+                frequencyTimePeriodPage.setDetailChartPermission(this.getChartDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyTimePeriodDetails));
+                this.pageCollection[pageType] = frequencyTimePeriodPage;
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyTypeOfIncidentPage.pageType:
@@ -1232,7 +1268,9 @@ export class ReportComponent implements OnInit {
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTimePeriodPage.pageType:
-                this.pageCollection[pageType] = new SeverityTimePeriodPage();
+                let severityTimePeriodPage = new SeverityTimePeriodPage();
+                severityTimePeriodPage.setDetailChartPermission(this.getChartDetailAccess(APPCONSTANTS.REPORTS_ID.severityTimePeriodDetails));
+                this.pageCollection[pageType] = severityTimePeriodPage;
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTypeOfIncidentPage.pageType:
@@ -1275,12 +1313,14 @@ export class ReportComponent implements OnInit {
 
             case FrequencyMostRecentPeerGroupLossesPage.pageType:
                 let frequencyMostRecentPeerGroupLossesPage = new FrequencyMostRecentPeerGroupLossesPage();
+                frequencyMostRecentPeerGroupLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails));
                 frequencyMostRecentPeerGroupLossesPage.setPeerGroupData(this.frequencyPeerGroupTable);
                 this.pageCollection[pageType] = frequencyMostRecentPeerGroupLossesPage
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyMostRecentCompanyLossesPage.pageType:
                 let frequencyMostRecentCompanyLossesPage = new FrequencyMostRecentCompanyLossesPage();
+                frequencyMostRecentCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyCompanyLossesDetails));
                 frequencyMostRecentCompanyLossesPage.setPeerGroupData(this.frequencyCompanyLossesTable);
                 this.pageCollection[pageType] = frequencyMostRecentCompanyLossesPage
                 this.pageOrder.push(pageType);
@@ -1288,12 +1328,14 @@ export class ReportComponent implements OnInit {
 
             case SeverityTopPeerGroupLossesPage.pageType:
                 let severityTopPeerGroupLossesPage = new SeverityTopPeerGroupLossesPage();
+                severityTopPeerGroupLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails));
                 severityTopPeerGroupLossesPage.setPeerGroupData(this.severityPeerGroupTable);
                 this.pageCollection[pageType] = severityTopPeerGroupLossesPage
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTopCompanyLossesPage.pageType:
                 let severityTopCompanyLossesPage = new SeverityTopCompanyLossesPage();
+                severityTopCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails));
                 severityTopCompanyLossesPage.setPeerGroupData(this.severityCompanyLossesTable);
                 this.pageCollection[pageType] = severityTopCompanyLossesPage
                 this.pageOrder.push(pageType);
