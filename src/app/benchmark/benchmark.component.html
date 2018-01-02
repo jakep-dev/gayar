@@ -8,12 +8,18 @@
           <div front class="width-100" fxLayout="row">
               <app-peer-group-loss fxFlexFill *ngIf="benchmarkLimitAdequacyInput" class="width-100" [componentData]="benchmarkLimitAdequacyInput"></app-peer-group-loss>
           </div>
+          <div disable class="width-100" fxLayout="row">
+            <disabled-chart></disabled-chart>
+          </div>
       </app-tile>
     </div>
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100">
       <app-tile [id]="'BENCHMARK_PREMIUM'" [title]="'Premium Distribution by Counts'" class="width-100" [isDisabled]="!isPremiumDist">
           <div front class="width-100" fxLayout="row">
               <app-premium fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-premium>
+          </div>
+          <div disable class="width-100" fxLayout="row">
+            <disabled-chart></disabled-chart>
           </div>
       </app-tile>
     </div>
@@ -23,6 +29,9 @@
           <div front class="width-100" fxLayout="row">
               <app-limit fxFlexFill  *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-limit>
           </div>
+          <div disable class="width-100" fxLayout="row">
+            <disabled-chart></disabled-chart>
+          </div>
       </app-tile>
     </div>
 
@@ -31,6 +40,9 @@
           <div front class="width-100" fxLayout="row">
             <app-retention fxFlexFill *ngIf="benchmarkDistributionInput" class="width-100" [componentData]="benchmarkDistributionInput"></app-retention>
           </div>
+          <div disable class="width-100" fxLayout="row">
+            <disabled-chart></disabled-chart>
+          </div>
       </app-tile>
     </div>
 
@@ -38,6 +50,9 @@
       <app-tile [id]="'BENCHMARK_RATEPERMILLION'" [title]="'Rate Per Million Distribution by Values'" class="width-100" [isDisabled]="!isRatePerMillion">
           <div front class="width-100" fxLayout="row">
             <app-rate  fxFlexFill *ngIf="benchmarkRateInput" class="width-100" [componentData]="benchmarkRateInput"></app-rate>
+          </div>
+          <div disable class="width-100" fxLayout="row">
+            <disabled-chart></disabled-chart>
           </div>
       </app-tile>
     </div>

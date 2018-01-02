@@ -13,6 +13,9 @@
                 <severity-time-period [componentData]="severityInput" class="width-100" fxFlexFill>
                 </severity-time-period>
             </div>
+            <div disable class="width-100" fxLayout="row">
+                <disabled-chart></disabled-chart>
+            </div>
         </app-tile>
     </div>
 
@@ -24,6 +27,9 @@
             </div>
             <div back class="width-100" fxLayout="row">
                 <severity-incident-pie [componentData]="severityInput" [incidentChartView]="this.severityService.getIncidentChartView()" class="width-100" fxFlexFill></severity-incident-pie>
+            </div>
+            <div disable class="width-100" fxLayout="row">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>
@@ -37,6 +43,9 @@
             <div back class="width-100" fxLayout="row">
                 <severity-loss-pie [componentData]="severityInput" [lossChartView]="this.severityService.getLossChartView()" class="width-100" fxFlexFill></severity-loss-pie>
             </div>
+            <div disable class="width-100" fxLayout="row">
+                <disabled-chart></disabled-chart>
+            </div>
         </app-tile>
     </div>
 
@@ -47,6 +56,9 @@
                                   [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
+            <div disable class="width-100" fxLayout="row">
+                <disabled-chart></disabled-chart>
+            </div>
         </app-tile>
     </div>
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
@@ -55,6 +67,9 @@
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
                                   [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
+            </div>
+            <div disable class="width-100" fxLayout="row">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>

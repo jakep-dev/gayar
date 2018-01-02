@@ -4,6 +4,7 @@ import { BarChartLogarithmComponent } from './bar-chart/bar-chart-logarithm/bar-
 import { BoxPlotChartComponent } from './boxplot-chart/boxplot-chart.component';
 import { GaugeChartComponent } from './gauge-chart/gauge-chart.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { DisabledChartComponent } from './disabled-chart/disabled-chart.component'
 
 export const BLOCK_CHART_TYPES = [
     BarChartComponent,
@@ -11,5 +12,6 @@ export const BLOCK_CHART_TYPES = [
     BarChartLogarithmComponent,
     BoxPlotChartComponent,
     GaugeChartComponent,
-    PieChartComponent
+    PieChartComponent,
+    DisabledChartComponent
 ];
