@@ -12,7 +12,7 @@ export class ApplicationRouter extends BaseRoute {
     public getGlossary(req: Request, res: Response, next: NextFunction) {
         try {
             super.PerformGetRequest("getGlossary", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
             }, (data) => {
                 res.send(data);
             });

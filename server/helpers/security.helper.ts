@@ -97,7 +97,7 @@ export class Security{
         let isHttps: boolean = this.serverModel.useCertificate;
         let server: any;
         if(isHttps){
-            server = https.createServer(this.getHttpsOptions, this.express).listen(this.serverModel.port);
+            server = https.createServer(this.getHttpsOptions(), this.express).listen(this.serverModel.port);
         }
         else{
             server = http.createServer(this.express).listen(this.serverModel.port);

@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { BaseService } from './base.service';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 @Injectable()
-export class GetFileService extends BaseService{
-
-    //private fileData: string;
-
+export class GetFileService extends BaseServiceClient {
     private fileData = new BehaviorSubject<string>(null);
     public fileData$: Observable<string> = this.fileData.asObservable();
 
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http);
     }
 
     private setFileData(fileName: string, base64Blob: string) {
-        console.log(fileName + ' loaded.');
         this.fileData.next(base64Blob);
     }
 
@@ -45,7 +41,7 @@ export class GetFileService extends BaseService{
     public getAsDataUrl(filePath: string) {
         console.log('Loading file:' + filePath);
         var convertBlob = this.convertBlob.bind(this);
-        super.GetFile(filePath, null)
+        super.Get<Blob>(filePath, null)
             .subscribe(blob => convertBlob(filePath, blob));
     }
     

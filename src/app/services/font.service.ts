@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { BaseService } from './base.service';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 @Injectable()
-export class FontService extends BaseService{
+export class FontService extends BaseServiceClient {
 
     private fontNameMapping = {
         CenturyGothic: {
@@ -37,7 +37,7 @@ export class FontService extends BaseService{
         return this.fonts;
     }
 
-    constructor(http: Http) {
+    constructor(http: HttpClient) {
         super(http);
         this.loadFontFiles();
     }
@@ -76,7 +76,7 @@ export class FontService extends BaseService{
     private getAsDataUrl(baseUrl: string, fontFileName: string) {
         console.log('Loading font file:' + baseUrl + fontFileName);
         var convertBlob = this.convertBlob.bind(this);
-        super.GetFile(baseUrl + fontFileName, null)
+        super.Get<Blob>(baseUrl + fontFileName, null)
         .subscribe(blob => convertBlob(fontFileName, blob));
 
     }

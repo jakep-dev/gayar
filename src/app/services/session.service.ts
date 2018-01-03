@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { Http, Response } from '@angular/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/share'
 import 'rxjs/add/operator/do'
 import { SessionModel, SessionResponseModel } from 'app/model/model';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 
 @Injectable()

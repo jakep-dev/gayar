@@ -12,15 +12,7 @@ export abstract class BaseService {
     public currentIdentity: SessionModel;
     private isHttpRequestInProgress: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    constructor(private http: Http){
-    }
-
-
-    /**
-     *
-     */
-    public isHttpReqInProgress () : BehaviorSubject<boolean> {
-      return this.isHttpRequestInProgress;
+    constructor (private http: Http) {
     }
 
     //Perform the post request operation
