@@ -371,10 +371,24 @@ export class ReportComponent implements OnInit {
                 reportComponent.subComponents.forEach( reportSubComponent => {
                     reportSubComponent.hasAccess = (reportComponent.hasAccess)? this.getComponentAccess(reportSubComponent.id) : false;
                     reportSubComponent.value = reportSubComponent.hasAccess;
+                    if(reportSubComponent.chartComponents && reportSubComponent.chartComponents.length > 0) {
+                        reportSubComponent.chartComponents.forEach(chartMetdata => 
+                            {
+                                chartMetdata.hasAccess = this.getChartAccess(chartMetdata.id)
+                            }
+                        );
+                    }
                     if(reportSubComponent.subSubComponents && reportSubComponent.subSubComponents.length > 0) {
                         reportSubComponent.subSubComponents.forEach ( chartDetails => {
                             chartDetails.hasAccess = (reportSubComponent.hasAccess)? this.getChartDetailAccess(reportSubComponent.id): false;
                             chartDetails.value = chartDetails.hasAccess;
+                            if(chartDetails.chartComponents && chartDetails.chartComponents.length > 0) {
+                                chartDetails.chartComponents.forEach(chartMetadata =>
+                                    {
+                                        chartMetadata.hasAccess = this.getChartAccess(chartMetadata.id);
+                                    }
+                                );
+                            }
                         });
                     }
                 });
@@ -429,7 +443,7 @@ export class ReportComponent implements OnInit {
                 return permission && permission.dashboard && permission.dashboard.benchmarkGauge && permission.dashboard.benchmarkGauge.hasAccess;
 
             //frequency components
-            case APPCONSTANTS.REPORTS_ID.frequncyIndustry:
+            case APPCONSTANTS.REPORTS_ID.frequencyIndustry:
                 return permission && permission.frequency && permission.frequency.industry && permission.frequency.industry.hasAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyTimePeriod:
                 return permission && permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
@@ -539,6 +553,125 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    /**
+     * getChartAccess - get the chart access
+     * 
+     * @private
+     * @function getChartAccess
+     * @param id - id of the chart
+     * @return {boolean} - true if the chart is rendered, otherwise false
+     */
+    private getChartAccess(id: string) {
+        let permission = this.sessionService.getUserPermission();
+        switch(id) {
+            //dashboard page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyGaugeChart:
+                return permission && permission.dashboard && permission.dashboard.frequencyGauge && permission.dashboard.frequencyGauge.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityGaugeChart:
+                return permission && permission.dashboard && permission.dashboard.severityGauge && permission.dashboard.severityGauge.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkGaugeChart:
+                return permission && permission.dashboard && permission.dashboard.benchmarkGauge && permission.dashboard.benchmarkGauge.hasAccess;
+
+            //frequency industry overview page chart
+            case APPCONSTANTS.REPORTS_ID.frequencyIndustryChart:
+                return permission && permission.frequency && permission.frequency.industry && permission.frequency.industry.hasAccess;
+            
+            //frequency time period page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyTimePeriodChart:
+                return permission && permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyTimePeriodDetails:
+                return permission && permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasDetailAccess;
+            
+            //frequency type of incident overview page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentPieChart:
+                return permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasAccess;
+            
+            //frequency type of incident data privacy page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentDataBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentDataPieChart:
+            //frequency type of incident network security page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentNetworkDataBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentNetworkPieChart:
+            //frequency type of incident tech e&o page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentTechBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentTechPieChart:
+            //frequency type of incident privacy violations page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentPrivacyBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyIncidentPrivacyPieChart:
+                return permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
+
+            //frequency type of loss overview page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyLossBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyLossPieChart:
+                return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
+
+            //frequency type of loss personal information page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyLossPersonalBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyLossPersonalPieChart:
+            //frequency type of loss corporate losses page charts
+            case APPCONSTANTS.REPORTS_ID.frequencyLossCorporateBarChart:
+            case APPCONSTANTS.REPORTS_ID.frequencyLossCorporatePieChart:
+                return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasDetailAccess
+
+            //severity industry overview page chart
+            case APPCONSTANTS.REPORTS_ID.severityIdustryChart:
+                return permission && permission.severity && permission.severity.industry && permission.severity.industry.hasAccess;
+
+            //severity time period page charts
+            case APPCONSTANTS.REPORTS_ID.severityTimePeriodChart:
+                return permission && permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.severityTimePeriodDetails:
+                return permission && permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasDetailAccess;
+
+            //severity type of incident overview page charts
+            case APPCONSTANTS.REPORTS_ID.severityIncidentBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityIncidentPieChart:
+                return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasAccess;
+
+            //severity type of incident data privacy page charts
+            case APPCONSTANTS.REPORTS_ID.severityIncidentDataBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityIncidentDataPieChart:
+            //severity type of incident network security page charts
+            case APPCONSTANTS.REPORTS_ID.severityIncidentNetworkDataBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityIncidentNetworkPieChart:
+            //severity type of incident tech e&o page charts
+            case APPCONSTANTS.REPORTS_ID.severityIncidentTechBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityIncidentTechPieChart:
+            //severity type of incident privacy violations page charts
+            case APPCONSTANTS.REPORTS_ID.severityIncidentPrivacyBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityIncidentPrivacyPieChart:
+                return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
+
+            //severity type of loss overview page charts
+            case APPCONSTANTS.REPORTS_ID.severityLossBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityLossPieChart:
+                return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
+
+            //severity type of loss personal information page charts
+            case APPCONSTANTS.REPORTS_ID.severityLossPersonalBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityLossPersonalPieChart:
+            //severity type of loss corporate losses page charts
+            case APPCONSTANTS.REPORTS_ID.severityLossCorporateBarChart:
+            case APPCONSTANTS.REPORTS_ID.severityLossCorporatePieChart:
+                return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasDetailAccess;
+
+            //benchmark page charts
+            case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacyChart:
+                return permission && permission.severity && permission.benchmark.limitAdequacy && permission.benchmark.limitAdequacy.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkPremiumChart:
+                return permission && permission.severity && permission.benchmark.premium && permission.benchmark.premium.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkLimitChart:
+                return permission && permission.severity && permission.benchmark.limit && permission.benchmark.limit.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkRetentionChart:
+                return permission && permission.severity && permission.benchmark.retention && permission.benchmark.retention.hasAccess;
+            case APPCONSTANTS.REPORTS_ID.benchmarkRateChart:
+                return permission && permission.severity && permission.benchmark.rate && permission.benchmark.rate.hasAccess;
+            default: 
+                return false;
+        }
+    }
+
 
     /**
      * getReportConfig - Load the report configuration.
@@ -625,6 +758,7 @@ export class ReportComponent implements OnInit {
         //check if the pdf fonts are loaded
         //check if cover page image is loaded
         //check if report data is loaded
+        //check if report glossary data is loaded
         //check if frequency table data is loaded
         //check if severity table data is loaded
         if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportDataDone && this.reportGlossaryDataDone 
@@ -691,16 +825,18 @@ export class ReportComponent implements OnInit {
         if(chartComponents) {
             n = chartComponents.length;
             for(i = 0; i < n; i++) {
-                this.chartDataCollection.push(
-                    {
-                        chartSetting: chartComponents[i],
-                        imageData: '',
-                        imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
-                        pagePosition: chartComponents[i].pagePosition,
-                        tocDescription: tocDescription,
-                        targetPage: this.pageCollection[pageType]
-                    }
-                );
+                if(chartComponents[i].hasAccess) {
+                    this.chartDataCollection.push(
+                        {
+                            chartSetting: chartComponents[i],
+                            imageData: '',
+                            imageIndex: chartComponents[i].componentName + '_' + this.chartDataCollection.length,
+                            pagePosition: chartComponents[i].pagePosition,
+                            tocDescription: tocDescription,
+                            targetPage: this.pageCollection[pageType]
+                        }
+                    );
+                }
             }
         }
     }

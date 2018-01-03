@@ -30,7 +30,8 @@ export interface ISubSubComponentModel {
 export interface IChartWidget {
     componentName: string,
     pagePosition: number,
-    viewName: string,
+    id: string,
+    hasAccess: boolean,
     drillDownName: string
 }
 

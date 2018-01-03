@@ -53,7 +53,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-dashboard-frequency',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_DASHBOARD_FREQUENCY_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -69,7 +70,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-dashboard-severity',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_DASHBOARD_SEVERITY_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -85,7 +87,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'dashboard-benchmark-score',
                         pagePosition: 2,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_DASHBOARD_BENCHMARK_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -110,7 +113,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'frequency-industry-overview',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_INDUSTRY_OVERVIEW_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -126,13 +130,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'frequency-time-period',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TIME_PERIOD_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'frequency-time-period',
                         pagePosition: 1,
                         drillDownName: 'Past 10 years',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TIME_PERIOD_DETAILS',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -148,13 +154,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'frequency-incident-bar',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_BAR_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'frequency-incident-pie',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_PIE_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: [
@@ -169,13 +177,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Data Privacy',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_DATA_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Data Privacy',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_DATA_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -190,13 +200,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Network Security',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_NETWORK_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Network Security',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_NETWORK_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -211,13 +223,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Tech E&O',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_TECH_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Tech E&O',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_TECH_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -232,13 +246,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Privacy Violations',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_PRIVACY_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Privacy Violations',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_INCIDENT_PRIVACY_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     }
@@ -255,13 +271,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'frequency-loss-bar',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_BAR_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'frequency-loss-pie',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PIE_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: [
@@ -276,13 +294,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Personal Information',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Personal Information',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -297,13 +317,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'frequency-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Corporate Losses',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'frequency-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Corporate Losses',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
+                                hasAccess: false
                             }
                         ]
                     }
@@ -349,7 +371,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'severity-industry-overview',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_INDUSTRY_OVERVIEW_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -365,13 +388,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'severity-time-period',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TIME_PERIOD_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'severity-time-period',
                         pagePosition: 1,
                         drillDownName: 'Past 10 years',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TIME_PERIOD_DETAILS',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -387,13 +412,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'severity-incident-bar',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_BAR_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'severity-incident-pie',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_PIE_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: [
@@ -408,13 +435,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Data Privacy',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_DATA_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Data Privacy',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_DATA_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -429,13 +458,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Network Security',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_NETWORK_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Network Security',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_NETWORK_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -450,13 +481,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Tech E&O',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_TECH_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Tech E&O',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_TECH_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -471,13 +504,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-incident-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Privacy Violations',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_PRIVACY_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-incident-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Privacy Violations',
-                                viewName: ''
+                                id: 'REPORT_SEVERITY_TYPE_OF_INCIDENT_PRIVACY_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     }
@@ -494,13 +529,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'severity-loss-bar',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TYPE_OF_LOSS_BAR_CHART',
+                        hasAccess: false
                     },
                     {
                         componentName: 'severity-loss-pie',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_SEVERITY_TYPE_OF_LOSS_PIE_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: [
@@ -515,13 +552,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Personal Information',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Personal Information',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     },
@@ -536,13 +575,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Corporate Losses',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
+                                hasAccess: false
                             },
                             {
                                 componentName: 'severity-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Corporate Losses',
-                                viewName: ''
+                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_PIE_CHART',
+                                hasAccess: false
                             }
                         ]
                     }                    
@@ -588,7 +629,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-peer-group-loss',
                         pagePosition: 0,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_BENCHMARK_LIMIT_ADEQUACY_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -604,7 +646,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-premium',
                         pagePosition: 1,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_BENCHMARK_PREMIUM_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -620,7 +663,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-limit',
                         pagePosition: 2,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_BENCHMARK_LIMIT_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -636,7 +680,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-retention',
                         pagePosition: 3,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_BENCHMARK_RETENTION_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
@@ -652,7 +697,8 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                         componentName: 'app-rate',
                         pagePosition: 4,
                         drillDownName: '',
-                        viewName: ''
+                        id: 'REPORT_BENCHMARK_RATE_PER_MILLION_CHART',
+                        hasAccess: false
                     }
                 ],
                 subSubComponents: null
