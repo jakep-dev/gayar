@@ -366,12 +366,15 @@ export class ReportComponent implements OnInit {
     private buildReportPermission() {
         this.reportTileModel.forEach( reportComponent => {
             reportComponent.hasAccess = this.getPageAccess(reportComponent.id);
+            reportComponent.value = reportComponent.hasAccess;
             if(reportComponent.subComponents && reportComponent.subComponents.length > 0) {
                 reportComponent.subComponents.forEach( reportSubComponent => {
                     reportSubComponent.hasAccess = (reportComponent.hasAccess)? this.getComponentAccess(reportSubComponent.id) : false;
+                    reportSubComponent.value = reportSubComponent.hasAccess;
                     if(reportSubComponent.subSubComponents && reportSubComponent.subSubComponents.length > 0) {
                         reportSubComponent.subSubComponents.forEach ( chartDetails => {
                             chartDetails.hasAccess = (reportSubComponent.hasAccess)? this.getChartDetailAccess(reportSubComponent.id): false;
+                            chartDetails.value = chartDetails.hasAccess;
                         });
                     }
                 });

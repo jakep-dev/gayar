@@ -51,6 +51,10 @@
                 "contract": "/cybermetrix/permissions/user/getPermissions"
             },
             {
+                "name": "getProducts",
+                "contract": "/cybermetrix/permissions/user/getProducts"
+            },
+            {
                 "name": "checkForRevenueAndIndustry",
                 "contract": "/cybermetrix/util/peergroupValidation"
             },
