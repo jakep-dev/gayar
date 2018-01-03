@@ -14,7 +14,7 @@
                 <frequency-time-period [componentData]="frequencyInput" class="width-100" fxFlexFill>
                 </frequency-time-period>
             </div>
-            <div disable class="width-100" fxLayout="row">
+            <div disable class="width-100">
                 <disabled-chart></disabled-chart>
             </div>
         </app-tile>
@@ -29,7 +29,7 @@
             <div back class="width-100" fxLayout="row">
                 <frequency-incident-pie [componentData]="frequencyInput"  [incidentChartView]="this.frequencyService.getIncidentChartView()"  class="width-100" fxFlexFill></frequency-incident-pie>
             </div>
-            <div disable class="width-100" fxLayout="row">
+            <div disable class="width-100">
                 <disabled-chart></disabled-chart>
             </div>
         </app-tile>
@@ -44,7 +44,7 @@
             <div back class="width-100" fxLayout="row">
                 <frequency-loss-pie [componentData]="frequencyInput" [lossChartView]="this.frequencyService.getLossChartView()" class="width-100" fxFlexFill></frequency-loss-pie>
             </div>
-            <div disable class="width-100" fxLayout="row">
+            <div disable class="width-100">
                 <disabled-chart></disabled-chart>
             </div>
         </app-tile>
@@ -57,7 +57,7 @@
                                   [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
-            <div disable class="width-100" fxLayout="row">
+            <div disable class="width-100">
                 <disabled-chart></disabled-chart>
             </div>
         </app-tile>
@@ -70,7 +70,7 @@
                                   [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
             </div>
-            <div disable class="width-100" fxLayout="row">
+            <div disable class="width-100">
                 <disabled-chart></disabled-chart>
             </div>
         </app-tile>
