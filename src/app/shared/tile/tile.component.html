@@ -74,21 +74,10 @@
       </div>
     </div>
     <div
-      *ngIf="isDisabled"
-      fxLayout="row" fxLayout.lt-md="column"
-      fxLayoutAlign="center center">
-      <div class="container">
-        <img class="center-img" src="/assets/images/svg/chart-lock.svg"/>
-        <div class="alert-msg">
-            <p>
-                You do not have permission to access this content.
-                Please upgrade your subscription. You may contact 
-                <a target="_blank" href="mailto:support@advisen.com?subject=insite20twenty Website Inquiry">
-                    support@advisen.com
-                </a>
-            </p>
-        </div>
-      </div>
+      *ngIf="isDisabled">
+      <ng-content
+        select="[disable]">
+      </ng-content>
     </div>
   </div>
 </div>

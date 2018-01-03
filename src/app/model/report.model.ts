@@ -4,6 +4,7 @@ export interface IReportTileModel {
     id: string;
     description: string;
     value: boolean;
+    hasAccess: boolean;
     subComponents: Array<ISubComponentModel>;
 }
 
@@ -12,7 +13,8 @@ export interface ISubComponentModel {
     id: string;
     value: boolean;
     pageType: string,
-    chartComponents: Array<IChartWidget>,
+    hasAccess: boolean;
+    chartComponents: Array<IChartWidget>;
     subSubComponents: Array<ISubSubComponentModel>;
 }
 
@@ -21,13 +23,15 @@ export interface ISubSubComponentModel {
     id: string;
     value: boolean;
     pageType: string,
+    hasAccess: boolean;
     chartComponents: Array<IChartWidget>
 }
 
 export interface IChartWidget {
     componentName: string,
     pagePosition: number,
-    viewName: string,
+    id: string,
+    hasAccess: boolean,
     drillDownName: string
 }
 

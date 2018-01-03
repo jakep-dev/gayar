@@ -15,6 +15,7 @@ export class ReportTileComponent implements OnInit {
   @Input() isParentChecked: boolean;
   @Input() id: string;
   @Input() header: string;
+  @Input() isDisabled: boolean;
   @Input() subComponent: Array<ISubComponentModel> = null;
 
   /**
@@ -24,7 +25,9 @@ export class ReportTileComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.checkDisabled();
+  }
 
   onChildChange (child) {
 
@@ -45,19 +48,21 @@ export class ReportTileComponent implements OnInit {
         }
 
         this.subComponent.map((child)=>{
-
-            if(child.subSubComponents) {
-                child.subSubComponents.map((subSub)=>{
-                    return subSub.value = value;
-                });
+            if(child.hasAccess) {
+                if(child.subSubComponents) {
+                    child.subSubComponents.map((subSub)=>{
+                        return subSub.value = value;
+                    });
+                }
+                return child.value = value;
             }
-            return child.value = value;
         });
 
         this.onReportTileChange.emit({
             id: this.id,
             value: value,
             description: this.header,
+            hasAccess: !this.isDisabled,
             subComponents: null
         })
     }
@@ -81,7 +86,9 @@ export class ReportTileComponent implements OnInit {
 
     if(subComponent.subSubComponents) {
         subComponent.subSubComponents.map((child)=>{
-            return child.value = value;
+            if(child.hasAccess) {
+                return child.value = value;
+            }
         });
     }
     this.executeParentChildPolicy();
@@ -118,5 +125,11 @@ export class ReportTileComponent implements OnInit {
 
   executeParentChildPolicy () {
     this.isParentChecked = this.subComponent.every((sub)=> { return sub.value === true; });
+  }
+
+  checkDisabled() {
+    if(this.isDisabled) {
+        this.isParentChecked = false;
+    }
   }
 }

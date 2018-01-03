@@ -13,7 +13,8 @@ export interface SessionModel{
       severity: SeverityPermissionModel,
       benchmark: BenchmarkPermissionModel,
       glossary: PermissionModel,
-      report: PermissionModel
+      report: PermissionModel,
+      underWritingFramework: PermissionModel
     }
 }
 

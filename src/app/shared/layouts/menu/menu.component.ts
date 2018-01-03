@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from 'environments/environment';
 import 'rxjs/add/observable/of';
 import { ValidationPeerGroupLossModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 const NAV_MODE = 'side';
 
@@ -24,7 +25,8 @@ export class MenuComponent implements OnInit {
 
   constructor(public menuService: MenuService,
               private searchService: SearchService,
-              private sessionService: SessionService) {
+              private sessionService: SessionService,
+              private router: Router) {
         this.fullName = this.sessionService.UserFullName;
   }
 
@@ -145,14 +147,19 @@ export class MenuComponent implements OnInit {
    * @return {type} - No return type.
    */
   launchUnderWriting () {
-     const userId: number = this.sessionService.UserId;
-     const token: string = this.sessionService.Token;
-     const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
-     let winRef = window.open('', url, '', true);
-     if (winRef.location.href === 'about:blank'){
-        winRef.location.href = url;
+     let permission = this.sessionService.getUserPermission();
+     if(permission && permission.underWritingFramework && permission.underWritingFramework.hasAccess) {
+      const userId: number = this.sessionService.UserId;
+      const token: string = this.sessionService.Token;
+      const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
+      let winRef = window.open('', url, '', true);
+      if (winRef.location.href === 'about:blank'){
+          winRef.location.href = url;
+      }
+      winRef.location.href = url;
+     } else {
+       this.router.navigate(['noAccess']);
      }
-     winRef.location.href = url;
   }
 
   shortMenuMouseLeave () {

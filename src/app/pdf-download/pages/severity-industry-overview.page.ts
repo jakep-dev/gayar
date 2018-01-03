@@ -183,7 +183,7 @@ export class SeverityIndustryOverviewPage extends BasePage  {
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl
+                    this.imageLeftUrl = chartDataUrl;
                     break;
                 default:
                     break;

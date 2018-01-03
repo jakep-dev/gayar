@@ -9,15 +9,24 @@ export class BtnCheckboxComponent implements OnInit {
   @Input() name: string;
   @Input() isSelected: boolean = false;
   @Input() isSubComponent: boolean = false;
+  @Input() isDisabled: boolean = true;
 
   @Output() onSelectable: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() {  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.checkDisabled();
+  }
 
   toggleSelected () {
     this.isSelected = !this.isSelected;
     this.onSelectable.emit(this.isSelected);
+  }
+
+  checkDisabled () {
+    if (this.isDisabled) {
+      this.isSelected = false;
+    }
   }
 }

@@ -192,11 +192,11 @@ export class SeverityTypeOfLossPage extends BasePage  {
             switch(index) {
                 case 0:
                     this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl
+                    this.imageLeftUrl = chartDataUrl;
                     break;
                 case 1:
                     this.imageRight = chartName;
-                    this.imageRightUrl = chartDataUrl
+                    this.imageRightUrl = chartDataUrl;
                     break;
 
                 default:

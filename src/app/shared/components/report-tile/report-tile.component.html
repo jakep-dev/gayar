@@ -1,13 +1,14 @@
 <app-tile
     [id]="id" [title]="header" class="width-100"
-    [isFullScreen]="false" [isSelectable]="true"
+    [isFullScreen]="false" [isSelectable]="true" [isDisabled]="isDisabled"
     [isSelected]="isParentChecked" (onSelectable)="onParentChange($event)">
-    <div front class="width-100" fxLayout="column" *ngFor="let sub of subComponent">
+    <div front disable class="width-100" fxLayout="column" *ngFor="let sub of subComponent">
         <btn-checkbox            
             class="width-100"
             [id]="sub.id"
             [name]="sub.description"
             [isSelected]="sub.value"
+            [isDisabled]="!sub.hasAccess"
             (onSelectable)="onSubComponentChange($event, sub)">
         </btn-checkbox>
         <btn-checkbox
@@ -17,6 +18,27 @@
             [name]="subSub.description"
             [isSelected]="subSub.value"
             [isSubComponent]="true"
+            [isDisabled]="!subSub.hasAccess"
+            (onSelectable)="onSubSubComponentChange($event, subSub)">
+        </btn-checkbox>
+    </div>
+    <div disable class="width-100" fxLayout="column" *ngFor="let sub of subComponent">
+        <btn-checkbox            
+            class="width-100"
+            [id]="sub.id"
+            [name]="sub.description"
+            [isSelected]="sub.value"
+            [isDisabled]="!sub.hasAccess"
+            (onSelectable)="onSubComponentChange($event, sub)">
+        </btn-checkbox>
+        <btn-checkbox
+            *ngFor="let subSub of sub.subSubComponents"
+            class="width-100"
+            [id]="subSub.id"
+            [name]="subSub.description"
+            [isSelected]="subSub.value"
+            [isSubComponent]="true"
+            [isDisabled]="!subSub.hasAccess"
             (onSelectable)="onSubSubComponentChange($event, subSub)">
         </btn-checkbox>
     </div>

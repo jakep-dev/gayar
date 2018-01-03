@@ -83,8 +83,7 @@ export class SeverityTimePeriodPage extends BasePage  {
                         width: 375
                     },
                     {
-                        image: this.imageRight,
-                        width: 375
+                        text: ''
                     }
                 ]
             ]
@@ -137,6 +136,49 @@ export class SeverityTimePeriodPage extends BasePage  {
         return this.images;
     }
 
+    private hasDetailChartPermission: boolean;
+
+    /**
+     * set the show detail chart permission value for this page
+     * 
+     * @public
+     * @function setDetailChartPermission
+     * @param {boolean} value - true, the page will render detail chart
+     *                          false, the page will not render detail chart
+     * @return {} - No return types.
+     */
+    public setDetailChartPermission(value: boolean) {
+        this.hasDetailChartPermission = value;
+        let node: any = this.table.table.body[1][1];
+        if(this.hasDetailChartPermission) {
+            if(typeof node.text !== 'undefined') {
+                delete node.text;
+            }
+            node.image = this.imageRight;
+            node.width = 375;
+        } else {
+            if(node.image !== 'undefined') {
+                delete node.image;
+            }
+            if(node.width !== 'undefined') {
+                delete node.width;
+            }
+            node.text = '';
+        }
+    }
+
+    /**
+     * get the page's show detailed chart permission setting
+     * 
+     * @public
+     * @function getDetailChartPermission
+     * @return {boolean} - true, the page will render detail chart
+     *                     false, the page will not render detail chart
+     */
+    public getDetailChartPermission(): boolean {
+        return this.hasDetailChartPermission;
+    }
+
     constructor() {
         super();
         this.updatePdfContent();
@@ -179,15 +221,18 @@ export class SeverityTimePeriodPage extends BasePage  {
         if(index >= 0 && index <= 1) {
             chartName = chartName.replace(/\-/g,'_');
             let imageName = this.prefix + chartName;
-            this.table.table.body[1][index].image = imageName;
             switch(index) {
                 case 0:
+                    this.table.table.body[1][index].image = imageName;
                     this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl
+                    this.imageLeftUrl = chartDataUrl;
                     break;
                 case 1:
-                    this.imageRight = chartName;
-                    this.imageRightUrl = chartDataUrl
+                    if(this.hasDetailChartPermission) {
+                        this.table.table.body[1][index].image = imageName;
+                        this.imageRight = chartName;
+                        this.imageRightUrl = chartDataUrl;
+                    }
                     break;
 
                 default:
@@ -222,7 +267,9 @@ export class SeverityTimePeriodPage extends BasePage  {
         }
 
         this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[1][1].image = this.prefix + this.imageRight;
+        if(this.hasDetailChartPermission) {
+            this.table.table.body[1][1].image = this.prefix + this.imageRight;
+        }
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

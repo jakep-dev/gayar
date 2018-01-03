@@ -2,6 +2,7 @@
     *ngFor="let report of reportTileModel"
     [header]="report.description"
     [id]="report.id"
+    [isDisabled]="!report.hasAccess"
     [isParentChecked]="report.value"
     [subComponent]="report.subComponents">
 </report-tile>
