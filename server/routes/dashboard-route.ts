@@ -13,7 +13,7 @@ export class DashboardRouter extends BaseRoute {
     public getBenchmarkScore(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getBenchmarkScore", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange,
@@ -32,7 +32,7 @@ export class DashboardRouter extends BaseRoute {
     public getFrequencyScore(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getFrequencyScore", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange,
@@ -51,7 +51,7 @@ export class DashboardRouter extends BaseRoute {
      public getSeverityScore(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getSeverityScore", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange,

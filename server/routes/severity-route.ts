@@ -21,10 +21,9 @@ export class SeverityRouter extends BaseRoute {
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
-        console.log('===== FETCHING SEVERITY DATA TABLE START =====');
         try {
             super.PerformGetRequest("getSeverityData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'industry': req.body.industry,
                 'revenue_range': req.body.revenue_range
@@ -35,14 +34,12 @@ export class SeverityRouter extends BaseRoute {
         catch (e) {
             Logger.error(e);
         }
-        console.log('===== FETCHING SEVERITY DATA TABLE END =====');
     }
 
     public getSeverityTimePeriodData(req: Request, res: Response, next: NextFunction) {
-        console.log('===== FETCHING SEVERITY TIME PERIOD DATA START =====');
         try {
             super.PerformGetRequest("getSeverityTimePeriodData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -53,7 +50,6 @@ export class SeverityRouter extends BaseRoute {
         catch (e) {
             Logger.error(e);
         }
-        console.log('===== FETCHING SEVERITY TIME PERIOD DATA END =====');
     }
 
     public getSeverityIndustryOverview(req: Request, res: Response, next: NextFunction) {
@@ -61,7 +57,7 @@ export class SeverityRouter extends BaseRoute {
             super.PerformGetRequest("severity/getIndustryOverviewDisplayDataset", {
                 'companyId': req.body.companyId,
                 'naics': req.body.naics,
-                'ssnid': req.body.token
+                'ssnid': req.header('authorization')
             }, (data) => {
                 res.send(data);
             });
@@ -92,7 +88,7 @@ export class SeverityRouter extends BaseRoute {
     public getSeverityTypeOfIncidentFlipDetailDataset(req: Request, res: Response, next: NextFunction) {
         try {
             super.PerformGetRequest("getSeverityTypeOfIncidentFlipDetailDataset", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenue_range,
@@ -106,10 +102,9 @@ export class SeverityRouter extends BaseRoute {
     }
     //Get Type of Incident Bar
     public getSeverityTypeOfIncidentBarData(req: Request, res: Response, next: NextFunction) {
-        console.log('===== FETCHING SEVERITY INCIDENT BAR DATA START =====');
         try {
             super.PerformGetRequest("getSeverityTypeOfIncidentBarData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -120,14 +115,13 @@ export class SeverityRouter extends BaseRoute {
         catch (e) {
             Logger.error(e);
         }
-        console.log('===== FETCHING SEVERITY INCIDENT BAR DATA END =====');
     }
                      
     //Get Type of Loss Bar
     public getSeverityTypeOfLossBarData(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getSeverityTypeOfLossBarData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange

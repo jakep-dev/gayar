@@ -11,12 +11,8 @@ export class FrequencyRouter extends BaseRoute {
 
     public getFrequencyData(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('TOKEN: ' + req.body.token);
-            console.log('COMPANY ID: ' + req.body.company_id);
-            console.log('INDUSTRY: ' + req.body.industry);
-            console.log('REVENUE RANGE: ' + req.body.revenue_range);
             super.PerformGetRequest("getFrequencyData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'industry': req.body.industry,
                 'revenue_range': req.body.revenue_range
@@ -34,7 +30,7 @@ export class FrequencyRouter extends BaseRoute {
             super.PerformGetRequest("getIndustryOverviewDisplayDataset", {
                 'companyId': req.body.companyId,
                 'naics': req.body.naics,
-                 'ssnid': req.body.token
+                'ssnid': req.header('authorization')
                 }, (data)=>{
                     res.send(data);
             });
@@ -48,7 +44,7 @@ export class FrequencyRouter extends BaseRoute {
     public getTypeOfIncidentBarData(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getTypeOfIncidentBarData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -65,7 +61,7 @@ export class FrequencyRouter extends BaseRoute {
     public getTypeOfLossBarData(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getTypeOfLossBarData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -82,7 +78,7 @@ export class FrequencyRouter extends BaseRoute {
     public getTypeOfIncidentFlipDetailDataset(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getTypeOfIncidentFlipDetailDataset", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenue_range,
@@ -99,7 +95,7 @@ export class FrequencyRouter extends BaseRoute {
     public getTimePeriodData(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getTimePeriodData", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -116,7 +112,7 @@ export class FrequencyRouter extends BaseRoute {
     public getTypeOfLossFlipDetailDataset(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getTypeOfLossFlipDetailDataset", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenue_range,

@@ -109,9 +109,7 @@ export class MenuComponent implements OnInit {
    * @return {type}  description
    */
   watchForInprogress () {
-    this.searchService.isHttpReqInProgress().asObservable().subscribe(res=> {
-
-    });
+    
   }
 
   /**

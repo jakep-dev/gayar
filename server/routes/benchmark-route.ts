@@ -48,7 +48,7 @@ export class BenchmarkRouter extends BaseRoute {
         try{
             super.PerformGetRequest("ratePerMillion", {
                 'company_id': req.body.companyId,
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'limit': req.body.limit,
                 'premium': req.body.premium,
                 'naics': req.body.naics,
@@ -67,7 +67,7 @@ export class BenchmarkRouter extends BaseRoute {
         try{
             super.PerformGetRequest("getLimitAdequacy", {
                 'company_id': req.body.companyId,
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'limit': req.body.limit,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
@@ -86,7 +86,7 @@ export class BenchmarkRouter extends BaseRoute {
             super.PerformGetRequest("getDistributionDataset", {
                 'client_value': req.body.clientValue,
                 'chart_type': req.body.chartType,
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenueRange
