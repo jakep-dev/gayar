@@ -1,4 +1,8 @@
-<div fxLayout="column" class="error-msg" fxLayoutAlign="center center">
-     <p class="error-head">401</p>
-     <h4> Access is denied. User is unauthorized </h4>
+<div id="error-500" fxLayout="column" fxLayoutAlign="center center">
+    <div class="content" fxLayout="column" fxLayoutAlign="center center">
+        <div class="error-code">401</div>
+        <div class="message">Well, suspicious activity occurred!</div>
+        <div class="sub-message">Just kidding, looks like session expired. Please login again.</div>
+    </div>
+    <button md-button (click)="navigateToLogin()">Go back to account login</button>
 </div>
