@@ -77,8 +77,22 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                         marginRight: 25,
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.key}</b><br>',
-                        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
+                        shared: false,
+                        formatter: function () {
+                            let value =  (this.point.y.toString()).replace(
+                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
+                                var reverseString = function(string) { return string.split('').reverse().join(''); };
+                                var insertCommas  = function(string) { 
+                                    var reversed  = reverseString(string);
+                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
+                                    return reverseString(reversedWithCommas);
+                                };
+                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
+                                }
+                            );
+                            return '<b>'+ this.x +'</b><br>'+
+                                   '<span style="color:'+this.series.color+'">\u25CF</span>'+ this.series.name +':'+ value
+                        }
                     },
                     legend: {
                         itemStyle: {

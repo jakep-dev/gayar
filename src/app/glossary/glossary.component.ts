@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuService, ApplicationService, SessionService} from 'app/services/services';
+import { GroupByPipe } from 'app/shared/pipes/pipes';
 import { GlossaryDataModel } from 'app/model/model';
 import { Router } from '@angular/router';
 

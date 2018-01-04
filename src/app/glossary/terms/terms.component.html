@@ -1,4 +1,14 @@
 <div class="column-1">
-  <h3 class="firstTitle">{{term.title}}</h3>
-  <p [innerHTML]="term.text"></p>
+  <h3 class="firstTitle">{{term.term}}</h3>
+  <p>{{term.definition}}</p>
+
+  <div *ngFor="let child of childList">
+    <h5>{{child.term}}</h5>
+    <p>{{child.definition}}</p>
+  </div>
+  <div *ngFor="let list of bulletList">
+    <ul>
+      <li>{{list.definition}}</li>
+    </ul>
+  </div>
 </div>

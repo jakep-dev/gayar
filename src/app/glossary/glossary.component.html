@@ -1,8 +1,8 @@
 <app-tile [id]="'reportTileId'" [title]="header" class="width-100" [isFullScreen]="false" [isFullScreen]="false" [isAccordion]="false">
   <div front class="width-100" fxLayout="column">
     <div class="container">
-        <div *ngFor="let group of terms">
-          <glossary-group [letter]="group.letter" [terms]="group.terms"></glossary-group>
+        <div *ngFor="let group of terms | groupBy: 'letter'">
+          <glossary-group [letter]="group.key" [terms]="group.value"></glossary-group>
         </div>
     </div>
   </div>
