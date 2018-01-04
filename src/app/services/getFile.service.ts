@@ -40,7 +40,7 @@ export class GetFileService extends BaseServiceClient {
 
     public getAsDataUrl(filePath: string) {
         var convertBlob = this.convertBlob.bind(this);
-        super.Get<Blob>(filePath, null, 'text')
+        super.Get<Blob>(filePath, null, 'Blob')
             .subscribe(blob => convertBlob(filePath, blob));
     }
     

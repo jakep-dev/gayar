@@ -74,7 +74,7 @@ export class FontService extends BaseServiceClient {
 
     private getAsDataUrl(baseUrl: string, fontFileName: string) {
         var convertBlob = this.convertBlob.bind(this);
-        super.Get<Blob>(baseUrl + fontFileName, null, 'text')
+        super.Get<Blob>(baseUrl + fontFileName, null, 'Blob')
         .subscribe(blob => convertBlob(fontFileName, blob));
 
     }
