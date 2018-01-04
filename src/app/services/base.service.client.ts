@@ -15,8 +15,9 @@ export abstract class BaseServiceClient {
      * @param endPoint 
      * @param data 
      */
-    public Get<T>(endPoint: string, data: any): Observable<T> {
-      return this.http.get<T>(endPoint, {observe: 'response'})
+    public Get<T>(endPoint: string, data: any, respType: any = 'json'): Observable<T> {
+      return this.http.get<T>(endPoint, {observe: 'response', 
+                              responseType: respType})
                  .retry(2)
                  .map((res: HttpResponse<T>) => {
                    return res.body as T;
