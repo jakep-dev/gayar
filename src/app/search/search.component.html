@@ -35,8 +35,6 @@
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus  (ngModelChange)="onSearch($event)"
               (keypress)="onSearch($event)" type="text" *ngIf="searchRule === 'text'" maxlength="130" placeholder="{{searchValuePlaceHolder}}" />
 
-              <md-hint align="end" >{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</md-hint>
-
               <input mdInput [(ngModel)]="selectedSearchValue" autofocus (keypress)="onSearch($event)"
               type="text" *ngIf="searchRule === 'number'" restrictInputNumber placeholder="{{searchValuePlaceHolder}}" />
 
@@ -45,6 +43,7 @@
               <md-icon>close</md-icon>
             </button>
             <button md-icon-button *ngIf="!isManual" (click)="onSearch($event)"> <md-icon>search</md-icon></button>
+            <div class="input-hint">{{selectedSearchValue ? selectedSearchValue.length : 0}} / 130</div>
           </div>
         </div>
 

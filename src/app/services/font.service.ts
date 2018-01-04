@@ -43,7 +43,6 @@ export class FontService extends BaseServiceClient {
     }
 
     private setFontFile(fileName: string, base64Blob: string) {
-        console.log(fileName + ' loaded.');
         this.fonts[fileName] = base64Blob;
         this.fontFilesLoaded++;
         this.loadCompleted.next(this.isLoadComplete());
@@ -74,7 +73,6 @@ export class FontService extends BaseServiceClient {
     }
 
     private getAsDataUrl(baseUrl: string, fontFileName: string) {
-        console.log('Loading font file:' + baseUrl + fontFileName);
         var convertBlob = this.convertBlob.bind(this);
         super.Get<Blob>(baseUrl + fontFileName, null)
         .subscribe(blob => convertBlob(fontFileName, blob));

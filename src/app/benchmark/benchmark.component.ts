@@ -49,8 +49,8 @@ export class BenchmarkComponent implements OnInit {
 
     watchForMedia () {
       this.watcher = this.media.subscribe((change: MediaChange) => {
-      //this.activeMediaQuery = change ? `'${change.mqAlias}' = (${change.mediaQuery})` : "";
-      console.log(change);
+      
+      
     });
     }
 

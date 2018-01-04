@@ -39,7 +39,6 @@ export class GetFileService extends BaseServiceClient {
     }
 
     public getAsDataUrl(filePath: string) {
-        console.log('Loading file:' + filePath);
         var convertBlob = this.convertBlob.bind(this);
         super.Get<Blob>(filePath, null)
             .subscribe(blob => convertBlob(filePath, blob));

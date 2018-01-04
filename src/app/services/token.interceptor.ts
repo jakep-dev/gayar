@@ -22,7 +22,6 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(authReq).do(event => {
           if (event instanceof HttpResponse) {
               const resp:ResponseModel = event.body.resp as ResponseModel || null;
-              console.log(resp);
               if(resp && 
                  resp.code === 401) {
                   this.router.navigate(['/401']);

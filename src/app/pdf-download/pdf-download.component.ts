@@ -475,7 +475,6 @@ export class PdfDownloadComponent implements OnInit {
                 indexPosition = data.indexOf('</SVG>');
             }
             if(indexPosition > 0) {
-                //console.log("fragment = " + data.substr(indexPosition, 6));
                 data = data.substr(0, indexPosition + 6);
             }
             //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
