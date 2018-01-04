@@ -29,7 +29,7 @@ export class TokenInterceptor implements HttpInterceptor {
               }
           }
     }, err => {
-      this.router.navigate(['/401']);
+      this.router.navigate(['/error']);
     });
   }
 }

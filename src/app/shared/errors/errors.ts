@@ -1,8 +1,8 @@
 export * from './e-401/e-401.component';
-export * from './no-access/no-access.component';
+export * from './e-500/e-500.component';
 
 
 import { E401Component } from './e-401/e-401.component';
-import { NoAccessComponent } from './no-access/no-access.component';
+import { E500Component } from './e-500/e-500.component';
 
-export const BLOCK_ERRORS = [ E401Component, NoAccessComponent];
+export const BLOCK_ERRORS = [ E401Component, E500Component ];
