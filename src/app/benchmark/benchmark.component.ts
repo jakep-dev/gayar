@@ -57,7 +57,7 @@ export class BenchmarkComponent implements OnInit {
     checkPermission() {
         let permission = this.sessionService.getUserPermission();
         if(permission && permission.benchmark && (!permission.benchmark.hasAccess)) {
-            this.router.navigate(['/noAccess']);
+            this.router.navigate(['/403']);
         }
     }
 
