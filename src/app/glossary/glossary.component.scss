@@ -64,8 +64,13 @@ h3.firstTitle{
 }
 
 h5{
-    font-size: 1.08em;
     color: #484848;
+}
+
+span.childBtn{
+    font-size:12px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 @media only screen and (max-width:800px) {
