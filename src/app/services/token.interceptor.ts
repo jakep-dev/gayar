@@ -23,7 +23,7 @@ export class TokenInterceptor implements HttpInterceptor {
           if (event instanceof HttpResponse) {
               const resp:ResponseModel = event.body.resp as ResponseModel || null;
               if(resp &&
-                 resp.code !== 200) {
+                 resp.code === 401) {
                   this.router.navigate([`/${resp.code}`]);
               }
           }
