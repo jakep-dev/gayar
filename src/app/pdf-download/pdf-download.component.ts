@@ -1,538 +1,391 @@
-import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FADE_ANIMATION} from 'app/shared/animations/animations';
-import { SearchService, MenuService, FontService, GetFileService } from 'app/services/services';
-import { DashboardScore, ComponentPrintSettings } from 'app/model/model';
+
+import { BenchmarkComponent as Dashboard_BenchmarkComponent, BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
+import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
+import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
+
+import { IndustryOverviewComponent as Frequency_IndustryOverviewComponent } from 'app/frequency/industry-overview/industry-overview.component';
+import { TimePeriodComponent as Frequency_TimePeriodComponent } from 'app/frequency/time-period/time-period.component';
+import { IncidentBarComponent as Frequency_IncidentBarComponent } from 'app/frequency/incident-bar/incident-bar.component';
+import { IncidentPieComponent as Frequency_IncidentPieComponent } from 'app/frequency/incident-pie/incident-pie.component';
+import { LossBarComponent as Frequency_LossBarComponent } from 'app/frequency/loss-bar/loss-bar.component';
+import { LossPieComponent as Frequency_LossPieComponent } from 'app/frequency/loss-pie/loss-pie.component';
+
+import { IndustryOverviewComponent as Severity_IndustryOverviewComponent } from 'app/severity/industry-overview/industry-overview.component';
+import { TimePeriodComponent as Severity_TimePeriodComponent } from 'app/severity/time-period/time-period.component';
+import { IncidentBarComponent as Severity_IncidentBarComponent } from 'app/severity/incident-bar/incident-bar.component';
+import { IncidentPieComponent as Severity_IncidentPieComponent } from 'app/severity/incident-pie/incident-pie.component';
+import { LossBarComponent as Severity_LossBarComponent } from 'app/severity/loss-bar/loss-bar.component';
+import { LossPieComponent as Severity_LossPieComponent } from 'app/severity/loss-pie/loss-pie.component';
+
+import { LimitComponent as Benchmark_LimtComponent } from 'app/benchmark/limit/limit.component';
+import { PeerGroupLossComponent as Benchmark_PeerGroupLossComponent } from 'app/benchmark/peer-group-loss/peer-group-loss.component';
+import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/premium/premium.component';
+import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
+import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
+
+import { 
+    MenuService, SearchService, 
+    FrequencyService, SeverityService, ApplicationService,
+    ReportService, FontService, GetFileService,
+    SessionService
+} from 'app/services/services';
+
+import { 
+    DashboardScore, 
+    FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel,
+    SeverityInput, SeverityDataModel, SeverityDataResponseModel,
+    BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
+    IReportTileModel, IChartMetaData, IChartWidget, GlossaryDataModel, GlossaryTerm
+} from 'app/model/model';
+
+import { 
+    BasePage, CoverPage, TOCPage, DashboardPage,
+    FrequencyIndustryOverviewPage, FrequencyTimePeriodPage, FrequencyTypeOfIncidentPage, 
+    FrequencyDataPrivacyPage, FrequencyNetworkSecurityPage, FrequencyTechEOPage, 
+    FrequencyPrivacyViolationsPage, FrequencyTypeOfLossPage, FrequencyPersonalInformationPage, 
+    FrequencyCorporateLossesPage,
+    
+    SeverityIndustryOverviewPage, SeverityTimePeriodPage, SeverityTypeOfIncidentPage,
+    SeverityDataPrivacyPage, SeverityNetworkSecurityPage, SeverityTechEOPage,
+    SeverityPrivacyViolationsPage, SeverityTypeOfLossPage, SeverityPersonalInformationPage,
+    SeverityCorporateLossesPage,
+
+    BenchmarkPage, 
+    FrequencyMostRecentPeerGroupLossesPage, FrequencyMostRecentCompanyLossesPage,
+    SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage,
+    GlossaryPage
+} from 'app/pdf-download/pages/pages'
+
+import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
 import { BaseChart } from 'app/shared/charts/base-chart';
-import { FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
+import { APPCONSTANTS } from 'app/app.const';
 
 @Component({
     selector: 'pdf-download',
     templateUrl: 'pdf-download.component.html',
     styleUrls: ['./pdf-download.component.scss'],
-    entryComponents: [FrequencyComponent],
-    animations: [FADE_ANIMATION],
-    host: { '[@routerTransition]': '' }
+    entryComponents: [        
+        Dashboard_BenchmarkComponent, 
+        Dashboard_FrequencyComponent, 
+        Dashboard_SeverityComponent,
+
+        Frequency_IndustryOverviewComponent,
+        Frequency_TimePeriodComponent,
+        Frequency_IncidentBarComponent,
+        Frequency_IncidentPieComponent,
+        Frequency_LossBarComponent,
+        Frequency_LossPieComponent,
+
+        Severity_IndustryOverviewComponent,
+        Severity_TimePeriodComponent,
+        Severity_IncidentBarComponent,
+        Severity_IncidentPieComponent,
+        Severity_LossBarComponent,
+        Severity_LossPieComponent,
+
+        Benchmark_LimtComponent,
+        Benchmark_PeerGroupLossComponent,
+        Benchmark_PremiumComponent,
+        Benchmark_RateComponent,
+        Benchmark_RetentionComponent
+    ]
 })
 export class PdfDownloadComponent implements OnInit {
 
+    //Object used to generate PDF
     private pdfMake: any;
 
-    public searchType: string;
-    public companyId: number;
-    public naics: string;
-    public revenueRange: string;
+    //Object used to assemble the final json object for pdfmake library
+    private pdfBuilder: PDFMakeBuilder;
 
-    public getDashboardScoreByManualInput: DashboardScore;
+    private coverPage: CoverPage;
 
-    public printSettings: ComponentPrintSettings;
+    private tocPage: TOCPage;
 
-    private chart: BaseChart;
+    //input to dashboard charts
+    private getDashboardScoreByManualInput: DashboardScore;
 
-    @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
+    //input to frequency charts
+    private frequencyInput: FrequencyInput;
 
-    @ViewChild('canvas') canvas: ElementRef;
+    //input to severity charts
+    private severityInput: SeverityInput;
 
-    //@ViewChild('img') img: ElementRef;
+    //input for limit, premium and retention benchmark charts
+    private benchmarkDistributionInput: BenchmarkDistributionInput;
+    
+    //input for peer group loss benchmark chart
+    private benchmarkLimitAdequacyInput: BenchmarkLimitAdequacyInput;
 
-    companyNameTextObject = {
-        text: '<Company Name>',
-        style: 'coverPageStyle3',
-        border: [false, false, false, false]
-    };
+    //input for rate benchmark chart
+    private benchmarkRateInput: BenchmarkRateInput;
 
-    industryTextObject = {
-        text: '<Industry>',
-        style: 'coverPageStyle4',
-        border: [false, false, false, false]
-    };
+    //list of high level report sections
+    public reportSelections: Array<IReportTileModel> = null;
 
-    revenueRangeTextObject = {
-        text: '<Revenue Range>',
-        style: 'coverPageStyle4',
-        border: [false, false, false, false]
-    };
+    //list of report glossary terms
+    public reportGlossaryModel: Array<GlossaryTerm> = null;
 
-    userCompanyTextObject =  {
-        text: '<Company Name of the user>',
-    };
+    //boolean to indicate report glossary data is loaded
+    private reportGlossaryDataDone: boolean = false;
 
-    dateGeneratedTextObject = {
-        text: '<Date Generated>',
-        style: 'coverPageStyle5',
-        border: [false, false, false, false]
-    };
+    //input to frequency most recent peer group losses table
+    private frequencyPeerGroupTable: Array<FrequencyDataModel>;
+    
+    //input to frequency most recent company losses table
+    private frequencyCompanyLossesTable: Array<FrequencyDataModel>;
 
-    pdfContent = {
-        pageOrientation: 'landscape',
-        pageMargins: [ 8, 45, 8, 45 ],
-        content: [
-            {
-                style: 'coverPageTable1',
-                table: {
-                    widths: ['*'],
-                    body: [
-                        [
-                            {
-                                text: '\n\n\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: 'Cyber OverVue Report',
-                                style: 'coverPageStyle1',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: 'for',
-                                style: 'coverPageStyle2',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [ this. companyNameTextObject ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [ this.industryTextObject ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [ this.revenueRangeTextObject ],
-                        [
-                            {
-                                text: '\n\n\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: [
-                                    'Created for ',
-                                    this.userCompanyTextObject
-                                ],
-                                style: 'coverPageStyle5',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ],
-                        [ this.dateGeneratedTextObject ],
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                }
-            },	    
-            {
-                style: 'coverPageTable2',
-                table: {
-                    widths: ['*'],
-                    body: [
-                        [
-                            {
-                                image: 'logo',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                }
-            },
-            {
-                style: 'coverPageTable1',
-                table: {
-                    widths: ['*'],
-                    body: [
-                        [
-                            {
-                                text: '\n',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                },
-                pageBreak: 'after'
-            },
-            {
-                text: [
-                    {
-                        text: "TABLE",
-                        style: "TOCStyle1"
-                    },
-                    {
-                        text: " of ",
-                        style: "TOCStyle2"
-                    },
-                    {
-                        text: "CONTENTS",
-                        style: "TOCStyle1"
-                    }
-                ],
-                margin: [64,0,0,0]
-            },
-            {
-                margin: [64, 5, 70, 10],
-                table: {
-                    widths: ['94%', '6%'],
-                    body: [
-                        [
-                            {
-                                text: 'Chart ..........................................................................................................................................................................................................................................................................',
-                                noWrap: false,
-                                maxHeight: 20
-                            }, 
-                            '8888'
-                        ],
-                    ]
-                },
-                pageBreak: 'after'
-            },
-            {
-                text: 'Dashboard',
-                style: 'sectionHearderStyle1'
-            },
-            {
-                margin: [64, 20, 70, 0],
-                table: {
-                    widths: ['33.33%', '33.33%', '33.33%'],
-                    body: [
-                        [
-                            {
-                                image: 'frequencyGaugeComponent'
-                            },
-                            {
-                                image: 'frequencyGaugeComponent'
-                            },
-                            {
-                                image: 'frequencyGaugeComponent'
-                            }
-                        ],
-                    ]
-                },
-                pageBreak: 'after'
-            },            
-            'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines',        
-            {
-                image: 'frequencyGaugeComponent'
-            }
-        ],
-        defaultStyle: {
-            font: 'CenturyGothic'
-        },
-        styles: {
-            coverPageTable1: {
-                fillColor: '#464646',
-                margin: [0,-3,0,0],
-                alignment: 'center'
-            },
-            coverPageStyle1: {
-                color: 'white',
-                fontSize: 28,
-                bold: true
-            },
-            coverPageStyle2: {
-                color: '#b1d23b',
-                fontSize: 28,
-                italics: true
-            },
-            coverPageStyle3: {
-                color: 'white',
-                fontSize: 28
-            },
-            coverPageStyle4: {
-                color: 'white',
-                fontSize: 20
-            },
-            coverPageStyle5: {
-                color: 'white',
-                fontSize: 14
-            },
-            coverPageTable2: {
-                fillColor: 'white',
-                alignment: 'right'
-            },
-            sectionHearderStyle1: {
-                color: '#27a9bc',
-                fontSize: 16,
-                margin: [64,0,40,0]
-            },
-            sectionHearderStyle2: {
-                color: '#b1d23b',
-                fontSize: 14
-            },
-            sectionHearderStyle3: {
-                color: '#464646',
-                fontSize: 12
-            },
-            headerTable1: {
-                fillColor: '#464646',
-                alignment: 'center',
-                margin: [8,7,8,0]
-            },
-            footerTable1: {
-                fillColor: '#464646',
-                alignment: 'center',
-                margin: [8,-12,8,0]
-            },
-            footerTable2: {
-                fontSize: 8,
-                color: '#7f7f7f',
-                margin: [64,0,70,0]
-            },
-            TOCStyle1: {
-                color: '#7a9bc',
-                fontSize: 22,
-                bold: true
-            },
-            TOCStyle2: {
-                color: '#b1d23b',
-                fontSize: 22,
-                bold: true,
-                italics: true
-            }
-        },
-        images: {
-            frequencyGaugeComponent: '',
-            logo: ''
-        },
-        header: this.header,
-        footer: this.footer
-    };
+    //boolean to indicate frequency data is loaded
+    private frequencyDataDone: boolean = false;
 
-    private header(currentPage: number, pageCount: number): any {
-	    if(currentPage == 1) {
-            return {
-                style: 'headerTable1',
-                table: {
-                    widths: ['*'],
-                    body: [
-                        [
-                            {
-                                text: '\n\n',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                },                
-            };
-	    } else {
-	        return {
-                text: 'Cyber OverVue Report',
-                alignment: 'right',
-                fontSize: 11,
-                color: '#7f7f7f',
-                margin: [70,25,70,0]
-            };
-	    }
-    }
+    //input to severity top peer group losses table
+    private severityPeerGroupTable: Array<SeverityDataModel>;
 
-    private footer(currentPage: number, pageCount: number): any {
-	    if(currentPage == 1) {
-            return {
-                style: 'footerTable1',
-                table: {
-                    widths: ['*'],
-                    body: [
-                        [
-                            {
-                                text: '\n\n\n',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                }
-            };
-	    } else {
-	        return {
-                style: 'footerTable2',
-                table: {
-                    widths: ['*','10'],
-                    body: [
-                        [
-                            {
-                                text: 'For a detailed explanation of terms and analytics, please see the Appendix at the end of this report',
-                                alignment: 'center',
-                                border: [false, true, false, false]
-                            },
-                            {
-                                text: currentPage,
-                                alignment: 'right',
-                                border: [false, false, false, false]
-                            }
-                        ]
-                    ]
-                }
-            };
-	    }
-    }
+    //input to severity top company losses table
+    private severityCompanyLossesTable: Array<SeverityDataModel>;
 
-    constructor(private fontService: FontService,
-        private getFileService: GetFileService,
-        private rootElement: ElementRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
-        private searchService: SearchService, 
-        private menuService: MenuService) {
-
-        this.menuService.breadCrumb = 'Reports';
-        this.naics = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        this.revenueRange = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
-
-        this.companyNameTextObject.text = (this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value;
-        if(this.naics) {
-            this.industryTextObject.text = this.naics;
-        }
-        if(this.revenueRange) {
-            this.revenueRangeTextObject.text = this.revenueRange;
-        }
-        this.userCompanyTextObject.text = 'Advisen';
-        
-        this.getFileService.getAsDataUrl('/assets/images/advisen-logo.png');
-        this.getFileService.fileData$.subscribe(this.updateAdvisenLogo.bind(this));
-
-        if(this.fontService.isLoadComplete()) {
-            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
-        } else {
-            this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
-        }
-    }
-
-    private updateAdvisenLogo(dataUrl: string) {
-        this.pdfContent.images.logo = dataUrl;
-    }
+    //boolean to indicate severity data is loaded
+    private severityDataDone: boolean = false;
 
     /**
-     * create benchmark score chart input
+     * Callback function to indicate the font files for pdf generation is loaded
+     * 
+     * @private
+     * @function configurePDFMake
+     * @param {boolean} isReady - indicate where the font files are loaded
+     * @return {} - No return types.
      */
-    setupDashboardScoreInput() {
-        this.searchType = this.searchService.searchCriteria.type;
-        if (this.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
-            this.companyId = this.searchService.selectedCompany.companyId;
-        } else {
-            this.companyId = null;
-        }
-
-        this.getDashboardScoreByManualInput = {
-            searchType: this.searchType,
-            chartType: 'BENCHMARK',
-            companyId: this.companyId,
-            naics: this.naics,
-            revenueRange: this.revenueRange,
-            limit : this.searchService.searchCriteria.limit,
-            retention: this.searchService.searchCriteria.retention,
-        };
-    }
-
-    setWorkingChart(chart: BaseChart) {
-        this.chart = chart;
-    }
-
-    startImageConversion(start: boolean) {
-        if(start && this.chart != null) {
-            setTimeout(this.loadCurrentChartImage.bind(this), 500);
-        }
-    }
-
-    loadCurrentChartImage() {
-
-        let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
-        if(childImages.length > 0) {
-            //First child is th SVG image, calling chart.getSVG changes the underlying svg
-            let svgElement = childImages[0];
-            //IE doesn't support outerHTML for svg tag
-            let data = svgElement.parentNode.innerHTML;
-            //Filter out all child nodes except for the svg tag
-            let indexPosition = data.indexOf('</svg>');
-            if(indexPosition < 0) {
-                indexPosition = data.indexOf('</SVG>');
-            }
-            if(indexPosition > 0) {
-                data = data.substr(0, indexPosition + 6);
-            }
-            //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
-            //Firefox requires a specific xlink for external images
-            data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
-
-            canvasFactory(this.canvas.nativeElement, data,  
-                { 
-                    ignoreMouse: true, 
-                    ignoreAnimation: true, 
-                    useCORS: true,
-                    renderCallback: this.renderCompleteCallback.bind(this)
-                }
-            );
-        }
-    }
-
-    renderCompleteCallback() {
-        let buffer = this.canvas.nativeElement.toDataURL('image/png');
-        this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
-        this.entryPoint.clear();
-        //this.img.nativeElement.src = buffer;
-        //console.log(buffer);
-        //console.log(this.pdfMake);
-
-        console.log('image size = ' + buffer.length);
-
-        this.pdfContent.images.frequencyGaugeComponent = buffer;
-        let  dp = new DatePipe('en-US');
-        this.dateGeneratedTextObject.text = dp.transform(new Date(), 'MMMM d, yyyy');
-        this.pdfMake.createPdf(this.pdfContent).download('test.pdf');
-    }
-
     private configurePDFMake(isReady: boolean) {
         if(isReady) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+            console.log('Font files loaded!');
         }
     }
 
-    ngOnInit() {
-        this.setupDashboardScoreInput();
+    constructor(
+        private rootElement: ElementRef,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private fontService: FontService,
+        private getFileService: GetFileService,
+        private searchService: SearchService,
+        private frequencyService: FrequencyService,
+        private severityService: SeverityService,
+        private reportService: ReportService,
+        private  applicationService: ApplicationService,
+        private sessionService: SessionService
+    ) {
+        //If font files are not loaded setup the call back function to catch the event when font files are loaded
+        if(this.fontService.isLoadComplete()) {
+            this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
+            console.log('Font files already loaded!');
+        } else {
+            this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
+        }
 
-        this.printSettings = {
-            width: 600,
-            height: 400,
-            drillDown: ''
+        this.pdfBuilder = new PDFMakeBuilder();
+
+        //Create cover page
+        this.coverPage = new CoverPage();
+        this.coverPage.setFileService(this.getFileService);
+
+        //Create table of contents page
+        this.tocPage = new TOCPage();
+
+        //Get logged in user's company name
+        //this.coverPage.setUserCompanyName('Advisen');
+        this.searchService.checkForRevenueAndIndustry(0).subscribe((data)=>{
+            if(data && data.message){
+                this.coverPage.setUserCompanyName(data.companyName);
+            }
+        });
+
+        //Call report glossart service to get glossart structure
+        this.getReportGlossaryConfig();
+
+    }
+
+    /**
+     * get the pdf filename for the current report being constructed
+     * 
+     * @public
+     * @function getPdfFilename
+     * @return {string} - filename of the pdf output
+     */
+    private getPdfFilename(): string {
+        const dp = new DatePipe('en-US');
+        return 'Cyber OverVue Report_' + this.coverPage.getCompanyName() + '_' + dp.transform(new Date(), 'MMddyyyy') + '.pdf';
+    }
+
+    /**
+     * Setup chart component input objects used to instantiate chart components
+     * 
+     * @private
+     * @function setupChartInput
+     * @param {string} naics - naics code for the company selected in the search
+     * @param {string} revenueRange - revenue range for the company selected in the search
+     * @return {} - No return types.
+     */
+    private setupChartInput(naics: string, revenueRange: string) {
+        let searchType: string = this.searchService.searchCriteria.type;
+        
+        let companyId: number;
+        if (searchType !== 'SEARCH_BY_MANUAL_INPUT') {
+            companyId = this.searchService.selectedCompany.companyId;
+        } else {
+            companyId = null;
+        }
+
+        let limit: string = this.searchService.getLimit;
+        let retention: string = this.searchService.getRetention;
+        let premium: string = this.searchService.getPremium;
+        let revenueRangeId: string = this.searchService.getRevenueRangeId;
+
+        this.getDashboardScoreByManualInput = {
+            searchType: searchType,
+            chartType: 'BENCHMARK',
+            companyId: companyId,
+            naics: naics,
+            revenueRange: revenueRange,
+            limit : limit,
+            retention: retention,
         };
 
-        this.canvas.nativeElement.width = this.printSettings.width;
-        this.canvas.nativeElement.height = this.printSettings.height;
-  
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(FrequencyComponent);
-        this.entryPoint.clear();
-        const frequencyGaugeComponent = <FrequencyComponent>this.entryPoint.createComponent(componentFactory).instance;
-        frequencyGaugeComponent.componentData = this.getDashboardScoreByManualInput;
-        frequencyGaugeComponent.printSettings = this.printSettings;
-        frequencyGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
-        frequencyGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+        this.frequencyInput = {
+            searchType: searchType,
+            companyId: companyId,
+            naics: naics,
+            revenueRange: revenueRange
+        };
+
+        this.severityInput = {
+            searchType: searchType,
+            companyId: companyId,
+            naics: naics,
+            revenueRange: revenueRange
+        };
+
+        this.benchmarkDistributionInput = {
+            searchType: searchType,
+            companyId: companyId,
+            premiumValue: premium,
+            limitValue: limit,
+            retentionValue: retention,
+            naics: naics,
+            revenueRange: revenueRange
+        }
+
+        this.benchmarkLimitAdequacyInput = {
+            searchType: searchType,
+            companyId: companyId,
+            limits: limit,
+            naics: naics,
+            revenueRange: revenueRangeId
+        };
+
+        this.benchmarkRateInput = {
+            searchType: searchType,
+            companyId: companyId,
+            premiumValue: premium,
+            limitValue: limit,
+            naics: naics,
+            revenueRange: revenueRangeId
+        };
+    }
+
+    /**
+     * getReportGlossaryConfig - Load the report glossary configuration.
+     *
+     * @private
+     * @function getReportGlossaryConfig
+     * @return {} - No return types.
+     */
+    private getReportGlossaryConfig () {
+        this.applicationService.getGlossary()
+        .subscribe((res: GlossaryDataModel) => {
+          this.reportGlossaryModel = res.glossaries;
+          console.log('Report Glossary Data Done!');
+          this.reportGlossaryDataDone = true;
+        });
+    }
+
+    /**
+     * Get frequency table data for 
+     * Most Recent Peer Group Losses and Most Recent Company Losses sections
+     * 
+     * @private
+     * @function getFrequencyTables
+     * @return {} - No return types.
+     */
+    private getFrequencyTables() {
+        this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
+            this.searchService.getNaics,
+            this.searchService.getRevenueRange)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                this.frequencyPeerGroupTable = res.peerGroup;
+                if (res.company != null && res.company.length > 0) {
+                    this.frequencyCompanyLossesTable = res.company;
+                }
+                console.log('Frequency Data Done!');
+                this.frequencyDataDone = true;
+        });        
+    }
+
+    /**
+     * Get severity table data for 
+     * Top Peer Group Losses and Top Company Losses sections
+     * 
+     * @private
+     * @function getSeverityTables
+     * @return {} - No return types.
+     */
+    private getSeverityTables() {
+        this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
+            this.severityPeerGroupTable = res.peerGroup;
+            if (res.company != null && res.company.length > 0) {
+                this.severityCompanyLossesTable = res.company;
+            }
+            console.log('Severity Data Done!');
+            this.severityDataDone = true;
+        });
+    }
+
+
+    /**
+     * Starts the pdf generation process based on search input, report selections and user's permissions
+     * 
+     * @private
+     * @function buildPdf
+     * @param {Array<IReportTileModel} reportSelections - input user selections and permission settings based on user's login
+     * @return {} - No return types.
+     */
+    public buildPdf(reportSelections: Array<IReportTileModel>) {
+
+        this.reportSelections = reportSelections;
+        let naics: string = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+        let revenueRange: string = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
+
+        //set cover page's company name, industry name and revenue range labels
+        this.coverPage.setCompanyName((this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value);
+        if(naics) {
+            this.coverPage.setIndustryName(naics);
+        }
+        if(revenueRange) {
+            this.coverPage.setRevenueRangeText(revenueRange);
+        }
+        
+        //initialize chart input objects
+        this.setupChartInput(naics, revenueRange);
+        //Call frequecy service to get frequency table data
+        this.getFrequencyTables();
+        //Call severity service to get severity table data
+        this.getSeverityTables();
+    }
+
+    ngOnInit() {
     }
 
 }
