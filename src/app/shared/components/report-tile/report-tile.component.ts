@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { IReportTileModel, ISubComponentModel } from 'app/model/model';
+import { IReportTileModel, ISubComponentModel, ISubSubComponentModel } from 'app/model/model';
 
 
 /**
@@ -15,6 +15,7 @@ export class ReportTileComponent implements OnInit {
   @Input() isParentChecked: boolean;
   @Input() id: string;
   @Input() header: string;
+  @Input() isDisabled: boolean;
   @Input() subComponent: Array<ISubComponentModel> = null;
 
   /**
@@ -24,7 +25,9 @@ export class ReportTileComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.checkDisabled();
+  }
 
   onChildChange (child) {
 
@@ -39,22 +42,30 @@ export class ReportTileComponent implements OnInit {
    * @param  {boolean} value - True/false.
    * @return {void} - No return value.
    */
-  onParentChange (value: boolean) {
-    if (!this.subComponent) {
-      return;
+    onParentChange (value: boolean) {
+        if (!this.subComponent) {
+            return;
+        }
+
+        this.subComponent.map((child)=>{
+            if(child.hasAccess) {
+                if(child.subSubComponents) {
+                    child.subSubComponents.map((subSub)=>{
+                        return subSub.value = value;
+                    });
+                }
+                return child.value = value;
+            }
+        });
+
+        this.onReportTileChange.emit({
+            id: this.id,
+            value: value,
+            description: this.header,
+            hasAccess: !this.isDisabled,
+            subComponents: null
+        })
     }
-
-    this.subComponent.map((child)=>{
-      return child.value = value;
-    });
-
-    this.onReportTileChange.emit({
-      id: this.id,
-      value: value,
-      description: this.header,
-      subComponents: null
-    })
-  }
 
 
   /**
@@ -72,10 +83,53 @@ export class ReportTileComponent implements OnInit {
     if(!subComponent) { return;}
 
     subComponent.value = value;
+
+    if(subComponent.subSubComponents) {
+        subComponent.subSubComponents.map((child)=>{
+            if(child.hasAccess) {
+                return child.value = value;
+            }
+        });
+    }
     this.executeParentChildPolicy();
   }
 
+  /**
+   * onSubSubComponentChange - Capture the sub component change event,
+   * and update the subComponents and parent selection.
+   *
+   * @param  {boolean} value - True/False
+   * @param  {ISubComponentModel} subComp: - Current Subcomponent model
+   * @return {void} - No return type.
+   */
+  onSubSubComponentChange (value: boolean, subComp: ISubSubComponentModel) {
+    if(!this.subComponent) { return; }
+
+    let subSubComponent: ISubSubComponentModel;
+    let parent: ISubComponentModel;
+    
+    this.subComponent.forEach(subComponent => {
+        if(!subSubComponent && subComponent.subSubComponents) {
+            parent = subComponent;
+            subSubComponent = subComponent.subSubComponents.find(f=>f.id === subComp.id);
+        }
+    });
+
+    if(!subSubComponent) { return; }
+
+    subSubComponent.value = value;
+    parent.value = parent.subSubComponents.some((sub)=> { return sub.value === true; })
+    this.executeParentChildPolicy();
+  }
+
+
   executeParentChildPolicy () {
-    this.isParentChecked = this.subComponent.every((sub)=> { return sub.value === true; })
+    this.isParentChecked = this.subComponent.every((sub)=> { return sub.value === true; });
+  }
+
+  checkDisabled() {
+    if(this.isDisabled) {
+        this.isParentChecked = false;
+    }
   }
 }

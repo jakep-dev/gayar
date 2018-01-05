@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+import { BaseServiceClient } from './base.service.client';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { SessionStorageService } from 'app/services/session-storage.service';
@@ -8,8 +8,9 @@ import { APPCONSTANTS } from 'app/app.const';
 import { SearchModel, IndustryResponseModel, SearchByModel, CompanyModel,
          SearchCriteriaModel, RevenueModel, ValidationMessageModel, RevenueRangeResponseModel, ValidationPeerGroupLossModel } from 'app/model/model';
 
+
 @Injectable()
-export class SearchService extends BaseService {
+export class SearchService extends BaseServiceClient {
     private _sessionStorageService: SessionStorageService;
     private _searchCriteria: SearchCriteriaModel = null;
     private _selectedCompany: CompanyModel = null;
@@ -137,7 +138,7 @@ export class SearchService extends BaseService {
     }
 
 
-    constructor(http: Http, sessionStorageService: SessionStorageService) {
+    constructor(http: HttpClient, sessionStorageService: SessionStorageService) {
         super(http);
         this._sessionStorageService = sessionStorageService;
     }

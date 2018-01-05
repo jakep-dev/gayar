@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityTimePeriodModel, SeverityTimePeriodGroup } from "app/model/severity.model";
-import { SearchService } from 'app/services/services';
+import { SearchService, SessionService } from 'app/services/services';
 
 @Directive({
 	selector: '[severity-time-period]'
@@ -19,11 +19,12 @@ export class SeverityTimePeriodDirective {
 	ngOnChanges(changes: SimpleChanges) { }
 
 	public static defaultLineColor: string = 'black';
+	hasDetailAccess: boolean;
 	seriesColor: string[];
 	displayText: string = '';
 	companyName: string = '';
 
-	constructor(private searchService: SearchService) {
+	constructor(private searchService: SearchService, private sessionService: SessionService) {
 		this.seriesColor = [];
 		this.seriesColor["Company"] = '#F68C20';
 		this.seriesColor["Peer"] = '#487AA1';
@@ -80,8 +81,14 @@ export class SeverityTimePeriodDirective {
 	 * Use chart data from web service to build parts of Highchart chart options object
 	 */
 	buildHighChartObject() {
+		this.getDetailAccess();
 		this.buildNoBreakChart();
 	}
+
+	getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasDetailAccess;
+    }
 
 	buildNoBreakChart() {
 		let tempChartData: BarChartData = {
@@ -279,7 +286,7 @@ export class SeverityTimePeriodDirective {
 				series.data = mainGroup.map(eachGroup => {
 					return {
 						name: eachGroup.period,
-						drilldown: (eachGroup.compOrPeer === 'Company' || eachGroup.count <= 0) ? null : eachGroup.period,
+						drilldown: ( (!this.hasDetailAccess) || eachGroup.compOrPeer === 'Company' || eachGroup.count <= 0) ? null : eachGroup.period,
 						y: eachGroup.count
 					}
 				});

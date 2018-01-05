@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from 'environments/environment';
 import 'rxjs/add/observable/of';
 import { ValidationPeerGroupLossModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 const NAV_MODE = 'side';
 
@@ -21,9 +22,11 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
   fullName: string;
+
   constructor(public menuService: MenuService,
               private searchService: SearchService,
-              private sessionService: SessionService) {
+              private sessionService: SessionService,
+              private router: Router) {
         this.fullName = this.sessionService.UserFullName;
   }
 
@@ -35,7 +38,6 @@ export class MenuComponent implements OnInit {
   onMenu (name) {
     this.menuService.breadCrumb = name;
   }
-
 
   /**
    * toggleMenu - toggle the menu details.
@@ -60,6 +62,40 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  isDashboard(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.dashboard && permission.dashboard.hasAccess
+  }
+
+  isCompanySearch(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.companySearch && permission.companySearch.hasAccess
+  }
+
+  isFrequency(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.frequency && permission.frequency.hasAccess
+  }
+
+  isSeverity(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.severity && permission.severity.hasAccess
+  }
+
+  isBenchmark(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.benchmark && permission.benchmark.hasAccess
+  }
+
+  isReport(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.report && permission.report.hasAccess
+  }
+
+  isGlossary(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.glossary && permission.glossary.hasAccess
+  }
 
   /**
    * Validates whether there is a valid search criteria or not.
@@ -75,9 +111,7 @@ export class MenuComponent implements OnInit {
    * @return {type}  description
    */
   watchForInprogress () {
-    this.searchService.isHttpReqInProgress().asObservable().subscribe(res=> {
-
-    });
+    
   }
 
   /**
@@ -113,14 +147,19 @@ export class MenuComponent implements OnInit {
    * @return {type} - No return type.
    */
   launchUnderWriting () {
-     const userId: number = this.sessionService.UserId;
-     const token: string = this.sessionService.Token;
-     const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
-     let winRef = window.open('', url, '', true);
-     if (winRef.location.href === 'about:blank'){
-        winRef.location.href = url;
+     let permission = this.sessionService.getUserPermission();
+     if(permission && permission.underWritingFramework && permission.underWritingFramework.hasAccess) {
+      const userId: number = this.sessionService.UserId;
+      const token: string = this.sessionService.Token;
+      const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
+      let winRef = window.open('', url, '', true);
+      if (winRef.location.href === 'about:blank'){
+          winRef.location.href = url;
+      }
+      winRef.location.href = url;
+     } else {
+       this.router.navigate(['noAccess']);
      }
-     winRef.location.href = url;
   }
 
   shortMenuMouseLeave () {

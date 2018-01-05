@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FrequencyIncidentBarModel, FrequencyIncidentGroup } from "app/model/frequency.model";
-import { SearchService } from 'app/services/services';
+import { SearchService, SessionService , FrequencyService} from 'app/services/services';
 
 @Directive({
     selector: '[frequeny-bar-incident]'
@@ -15,14 +15,40 @@ export class FrequencyIncidentBarDirective {
 
     @Input() chartComponent: BaseChart;
 
-    ngOnChanges(changes: SimpleChanges) {}
-
+    @Input() chartView: string;
+  
+      ngOnChanges(changes: SimpleChanges) {   
+          if(changes &&
+              changes.chartView &&
+              !changes.chartView.firstChange) {
+                let currentView = changes.chartView.currentValue;  
+                let chart : any;
+                let findCategory : any;            
+                chart = this.chartComponent.chart;              
+              if( currentView !== 'main'){ 
+                  if(chart.series[0].data){
+                      findCategory = chart.series[0].data.find(data => {                                              
+                      if(data && data.name === currentView) { 
+                          return data; 
+                      } 
+                      }); 
+                      if( findCategory){                 
+                          findCategory.doDrilldown();            
+                      }      
+                  } 
+              }else if(currentView === 'main' &&  chart.drilldownLevels.length > 0) {          
+                  chart.drillUp(); 
+              }  
+          }
+        }
+  
     public static defaultLineColor: string = 'black';
+    hasDetailAccess: boolean;
     seriesColor: string[];
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {        
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -34,6 +60,7 @@ export class FrequencyIncidentBarDirective {
 
     ngOnInit() {        
         this.getCompanyName();
+        this.getDetailAccess();
         this.buildHighChartObject();
     }
 
@@ -43,6 +70,11 @@ export class FrequencyIncidentBarDirective {
         } else if (this.searchService.searchCriteria && this.searchService.searchCriteria.value) {
             this.companyName = this.searchService.searchCriteria.value;
         }
+    }
+
+    getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
     }
 
     getSeriesObject(groupName) {
@@ -227,6 +259,8 @@ export class FrequencyIncidentBarDirective {
                             x: 0,
                         },
                         theme: {
+                            height: 27,
+                            width: 87,
                             fill: 'white',
                             'stroke-width': 1,
                             stroke: 'silver',
@@ -275,7 +309,7 @@ export class FrequencyIncidentBarDirective {
                     return {
                         name: group.type,
                         y: this.getPlotValue(group.count),
-                        drilldown: (group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -306,12 +340,12 @@ export class FrequencyIncidentBarDirective {
 
 
         var defaultTitle = this.modelData.xAxis;
-
+        var frequencyService = this.frequencyService;        
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-
             e.preventDefault();
+            frequencyService.setIncidentChartView(e.point.name);             
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
@@ -323,6 +357,7 @@ export class FrequencyIncidentBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
+            frequencyService.setIncidentChartView('main');   
             chart.setTitle({ text: defaultTitle });
         }
 

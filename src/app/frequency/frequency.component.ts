@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FADE_ANIMATION } from '../shared/animations/animations';
-import { FrequencyService, SearchService, MenuService } from 'app/services/services';
+import { FrequencyService, SearchService, MenuService, SessionService } from 'app/services/services';
 import { FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel } from 'app/model/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-frequency',
@@ -27,16 +28,37 @@ export class FrequencyComponent implements OnInit {
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
-    constructor(private frequencyService: FrequencyService,
+    public incidentChartView: string;    
+    public lossChartView: string;  
+    public isTimePeriod: boolean;
+    public isIncident: boolean;
+    public isLoss: boolean;
+    public isPeerGroupTable: boolean;
+    public isCompanyTable: boolean;
+    public isPeerGroupTableHasDescriptionAccess: boolean = false;
+    public isCompanyTableHasDescriptionAccess: boolean = false;
+
+    constructor(public frequencyService: FrequencyService,
         public menuService: MenuService,
-        private searchService: SearchService) { }
+        private sessionService: SessionService,
+        private searchService: SearchService,
+        private router: Router) { }
 
     ngOnInit() {
         this.menuService.breadCrumb = 'Frequency';
+        this.checkPermission();
         this.setupTileButtons();
         this.setupTableDefinitions();
         this.loadFrequencyDataTable();
+        this.setupChartPermission();
         this.buildCommonInput();
+    }    
+
+    checkPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission && permission.frequency && (!permission.frequency.hasAccess)) {
+            this.router.navigate(['/noAccess']);
+        }
     }
     
     setupTileButtons() {
@@ -44,6 +66,9 @@ export class FrequencyComponent implements OnInit {
         this.isIncidentShowSplit= true;
         this.isLossShowFlip = true;
         this.isLossShowSplit = true;
+        this.incidentChartView = 'main';     
+        this.lossChartView = 'main';
+        
     }
 
     setupTableDefinitions() {
@@ -74,4 +99,16 @@ export class FrequencyComponent implements OnInit {
         };
     }
 
+    setupChartPermission() {
+        let permission = this.sessionService.getUserPermission();
+        if(permission) {
+            this.isTimePeriod = permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
+            this.isIncident = permission.frequency && permission.frequency.incident && permission.frequency.incident.hasAccess;
+            this.isLoss = permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
+            this.isPeerGroupTable = permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+            this.isCompanyTable = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+            this.isPeerGroupTableHasDescriptionAccess = permission.frequency.peerGroupTable.hasDescriptionAccess;
+            this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
+        }        
+    }
 }

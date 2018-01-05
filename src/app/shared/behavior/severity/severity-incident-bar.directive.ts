@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityIncidentBarModel, SeverityIncidentGroup } from "app/model/severity.model";
-import { SearchService } from 'app/services/services';
+import { SearchService, SessionService, SeverityService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-incident]'
@@ -15,14 +15,46 @@ export class SeverityIncidentBarDirective {
 
     @Input() chartComponent: BaseChart;
 
-    ngOnChanges(changes: SimpleChanges) {}
+    @Input() chartView: string;        
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes &&
+            changes.chartView &&
+            !changes.chartView.firstChange) {
+            let currentView = changes.chartView.currentValue;
+            let chart = this.chartComponent.chart;
+            let findCategory : any;
+            
+            if(currentView === 'main' &&
+                chart.drilldownLevels.length > 0) {
+                chart.drillUp();
+            }else if(currentView !== 'main' &&
+                !chart.options.chart.drilled){
+                if(chart.series[0].data){
+                    findCategory = chart.series[0].data.find(data => {
+                        if(data && data.name === currentView) {
+                            return data;
+                        }
+                    });
+
+                    if(findCategory){
+                        findCategory.doDrilldown();
+                    }
+                }
+                else{
+                    chart.drillUp();
+                }
+            }
+        }
+    }
 
     public static defaultLineColor: string = 'black';
+    hasDetailAccess: boolean;
     seriesColor: string[];
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private severityService: SeverityService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -34,6 +66,7 @@ export class SeverityIncidentBarDirective {
 
     ngOnInit() {        
         this.getCompanyName();
+        this.getDetailAccess();
         this.buildHighChartObject();
     }
 
@@ -76,6 +109,11 @@ export class SeverityIncidentBarDirective {
      */
     buildHighChartObject() {
         this.buildNoBreakChart();
+    }
+
+    getDetailAccess() {
+        let permission = this.sessionService.getUserPermission();
+        this.hasDetailAccess = permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
     }
 
     buildNoBreakChart() {
@@ -233,6 +271,8 @@ export class SeverityIncidentBarDirective {
                             x: 0,
                         },
                         theme: {
+                            height: 27,
+                            width: 87,
                             fill: 'white',
                             'stroke-width': 1,
                             stroke: 'silver',
@@ -281,7 +321,7 @@ export class SeverityIncidentBarDirective {
                     return {
                         name: group.type,
                         y: group.count,
-                        drilldown: (group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company' || group.count <= 0) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -311,11 +351,12 @@ export class SeverityIncidentBarDirective {
         });
 
         var defaultTitle = this.modelData.xAxis;
+        var severityService = this.severityService;   
 
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-
+            severityService.setIncidentChartView(e.point.name);            
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
@@ -328,6 +369,7 @@ export class SeverityIncidentBarDirective {
         };
 
         tempChartData.onDrillUp = function (event, chart) {
+            severityService.setIncidentChartView('main');
             chart.setTitle({ text: defaultTitle });
         }
 

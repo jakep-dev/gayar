@@ -1,8 +1,9 @@
-<div fxLayout="row" fxLayoutAlign="start start" class="chart-pie">
+<div fxLayout="row" fxLayoutAlign="start start" [ngClass]="{'chart-pie' : !printSettings}">
     <chart fxFlexFill
         [options]="chartOptions" 
         (load)="setChart($event.context)" 
         (drilldown)="onDrilldown($event, chart)" 
+        (drillup)="onDrillup($event, chart)"       
         (redraw)="onRedraw($event.context)">
     </chart>
 </div>

@@ -1,6 +1,6 @@
 import { BaseChart } from '../../base-chart';
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { BarChartData } from 'app/model/model';
+import { BarChartData, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
     selector: 'bar-chart-logarithm',
@@ -12,6 +12,9 @@ import { BarChartData } from 'app/model/model';
 export class BarChartLogarithmComponent extends BaseChart implements OnInit {
 
     @Input() chartData: BarChartData;
+
+    @Input() printSettings: ComponentPrintSettings;
+
     onDrilldown: any = null;
     onDrillup: any = null;
     breakLines: any = [];
@@ -27,8 +30,10 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
     }
     
     ngDoCheck() {  
-        if(this.chart) { 
-            this.chart.reflow(); 
+        if(!this.printSettings) {
+            if(this.chart) { 
+                this.chart.reflow(); 
+            }
         }
     }
 
@@ -51,6 +56,18 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
 
         if (this.chartData.customChartSettings.drilldown) {
             this.chartOptions.drilldown = this.chartData.customChartSettings.drilldown;
+            if(this.printSettings) {
+                if(this.chartOptions.drilldown) {
+                    if(this.chartOptions.drilldown.drillUpButton) {
+                        if(this.chartOptions.drilldown.drillUpButton.theme) {
+                            this.chartOptions.drilldown.drillUpButton.theme['stroke-width'] = 0;
+                            this.chartOptions.drilldown.drillUpButton.theme.style = { 
+                                color: 'white'
+                            };
+                        }
+                    }
+                }
+            }
         }
 
         if (this.chartData.customChartSettings &&
@@ -71,6 +88,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
      */
     loadBarChartData() {
         if (this.chartData) {
+            let isPrintMode: boolean = this.printSettings != null ? true : false;
             if(this.chartData.series.length > 0) {
                 let seriesIndex: number;
                 let seriesLength: number;
@@ -94,7 +112,9 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
                             pointPlacement: this.chartData.series[seriesIndex].pointPlacement,
                             showInLegend: this.chartData.series[seriesIndex].showInLegend,  
                             marker: this.chartData.series[seriesIndex].marker
-                        }
+                        },
+                        false,
+                        isPrintMode
                     );
                 }
             }
@@ -108,10 +128,38 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             }
             
             if(this.chartData.customChartSettings) {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartData.customChartSettings);
+                }
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartOptions);
+                }
                 this.chart.update(this.chartOptions, true);
             }
+        }
+    }
+
+    applyPrintSettings(chartOptions : any) {
+        chartOptions.chart.width = this.printSettings.width;
+        chartOptions.chart.height = this.printSettings.height;
+        chartOptions.chart.animation = false;
+
+        if(chartOptions.plotOptions) {
+            if(chartOptions.plotOptions.series) {
+                chartOptions.plotOptions.series.animation = false;
+            } else {
+                chartOptions.plotOptions.series = {
+                    animation : false
+                };
+            }
+        } else {
+            chartOptions.plotOptions = {
+                series: {
+                    animation: false
+                }
+            };
         }
     }
 

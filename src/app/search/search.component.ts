@@ -63,10 +63,18 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
      this.menuService.breadCrumb = 'Company Search';
+     this.checkPermission();
      this.loadSearchBy();
      this.loadIndustry();
      this.loadRevenueModel();
      this.loadSearchCriteria();
+  }
+
+  checkPermission() {
+    let permission = this.sessionService.getUserPermission();
+    if(permission && permission.companySearch && (!permission.companySearch.hasAccess)) {
+      this.router.navigate(['/noAccess']);
+    }
   }
 
 

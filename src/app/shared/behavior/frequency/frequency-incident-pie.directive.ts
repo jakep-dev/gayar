@@ -1,6 +1,8 @@
+
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BaseChart } from './../../charts/base-chart';
 import { FrequencyIncidentPieFlipModel, PieChartData } from 'app/model/model';
+import { SessionService, FrequencyService } from 'app/services/services';
 
 @Directive({
   selector: '[frequency-incident-pie]'
@@ -13,10 +15,34 @@ export class FrequencyIncidentPieDirective {
   @Output() onDataComplete = new EventEmitter<PieChartData>();
 
   @Input() chartComponent: BaseChart;
+  @Input() chartView: string;
+  @Input() showIncidentPie: boolean = false;
 
   
-
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) {   
+      if(changes &&
+        changes.chartView &&
+        !changes.chartView.firstChange) {
+          let currentView = changes.chartView.currentValue;  
+          let chart : any;
+          let findCategory : any;            
+          chart = this.chartComponent.chart;              
+        if( currentView !== 'main'){ 
+            if(chart.series[0].data){
+                findCategory = chart.series[0].data.find(data => {                                              
+                if(data && data.name === currentView) { 
+                    return data; 
+                } 
+                }); 
+                if( findCategory){                 
+                    findCategory.doDrilldown();            
+                }      
+            } 
+        }else if(currentView === 'main' &&  chart.drilldownLevels.length > 0) {          
+            chart.drillUp(); 
+        }  
+    }
+  }
 
   public static defaultLineColor: string = 'black';
   public static BLUE: string = '#487AA1';
@@ -27,17 +53,20 @@ export class FrequencyIncidentPieDirective {
   public static LGRAY: string = '#CCCCCC';
 
   displayText: string = '';
+  hasDetailAccess: boolean;
 
-  constructor() {}
+  constructor(private sessionService: SessionService, private frequencyService: FrequencyService) {}
+
 
   ngOnInit() {
     this.setDataInDescendingOrder();
+    this.getDetailAccess();
     this.buildHighChartObject();
   }
 
   /**
    * Use chart data from web service to build parts of Highchart chart options object
-   */
+   */ 
   buildHighChartObject() {
     if (this.modelData) {
       let tempChartData: PieChartData = {
@@ -158,10 +187,12 @@ export class FrequencyIncidentPieDirective {
               relativeTo: 'spacingBox',
               height: 10,
               position: {
-                y: 50,
+                y: 20,
                 x: 0
               },
               theme: {
+                  height: 27,
+                  width: 87,
                   fill: 'white',
                   'stroke-width': 1,
                   stroke: 'silver',
@@ -229,7 +260,7 @@ export class FrequencyIncidentPieDirective {
             return {  
               name: item.type,
               y: item.pct_count,
-              drilldown: item.type,
+              drilldown: !this.hasDetailAccess? null : item.type,
               dataLabels: this.setDataLabelsDistance(groupNameType, item.pct_count)
             }
           }).forEach(item => series.data.push(item));
@@ -273,10 +304,12 @@ export class FrequencyIncidentPieDirective {
       });
 
       //Drilldown behavior
+      var frequencyService = this.frequencyService;      
       tempChartData.onDrillDown = function(event, chart){
         var e = event.originalEvent;
         var drilldowns = this.chartData.customChartSettings.drilldown.series;
         e.preventDefault();
+        frequencyService.setIncidentChartView(e.point.name);   
         drilldowns.forEach(function (p, i) {
             if (p.id.includes(e.point.name) ) {
                 chart.addSingleSeriesAsDrilldown(e.point, p);
@@ -285,8 +318,17 @@ export class FrequencyIncidentPieDirective {
         chart.applyDrilldown();
       };
 
+      tempChartData.onDrillUp = function (event, chart) {       
+        frequencyService.setIncidentChartView('main'); 
+      }
+
       this.onDataComplete.emit(tempChartData);
     }
+  }
+
+  getDetailAccess() {
+    let permission = this.sessionService.getUserPermission();
+    this.hasDetailAccess = permission && permission.frequency && permission.frequency.incident && permission.frequency.incident.hasDetailAccess;
   }
 
   setDataInDescendingOrder(){
@@ -310,7 +352,7 @@ export class FrequencyIncidentPieDirective {
   }
 
   setDrilldownUpText(){
-    return '< <span style="font-size:9px"> Back to all Types<br/>' +
+    return '<span style="font-size:9px"> Back to all Types<br/>' +
            '<span style="font-size:9px"> of Incidents</span>';
   }
 

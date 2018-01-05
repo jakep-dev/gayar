@@ -1,9 +1,13 @@
-<pie-chart 
+<pie-chart
       *ngIf='modelData'
+      [ngClass]="{'width-100' : !printSettings}"
       frequency-loss-pie
       [modelData]="modelData"
       [chartData]="chartData"
+      [chartView]="lossChartView" 
       [chartComponent]="chartComponent$ | async"
       (onDataComplete)="onDataComplete($event)"
-      (onChartRedraw)="onChartReDraw($event)">
+      (onChartRedraw)="onChartReDraw($event)"
+      [printSettings]="printSettings"
+      >
   </pie-chart>

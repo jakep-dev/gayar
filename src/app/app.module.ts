@@ -6,6 +6,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -36,6 +37,7 @@ import { SsoComponent } from './sso/sso.component';
 import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
 import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
+import { TokenInterceptor } from 'app/services/token.interceptor';
 
 @NgModule({
 	declarations: [
@@ -63,6 +65,7 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
 		BrowserModule,
 		FormsModule,
 		HttpModule,
+		HttpClientModule,
 		CommonModule,
 		BrowserAnimationsModule,
 		FlexLayoutModule,
@@ -77,7 +80,12 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
 	providers: [
 		HighchartsProvider,
 		BLOCK_SERVICES,
-		BLOCK_SHARED_SERVICE
+		BLOCK_SHARED_SERVICE,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true
+		}
 	],
 	bootstrap: [AppComponent]
 })

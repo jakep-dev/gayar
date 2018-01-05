@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="start start" class="chart-boxplot">
+<div fxLayout="row" fxLayoutAlign="start start" [ngClass]="{'chart-boxplot' : !printSettings}">
     <chart fxFlexFill
       [options]="chartOptions"
       (load)="setChart($event.context)"

@@ -47,6 +47,14 @@
                 "contract": "/cybermetrix/getActiveSession"
             },
             {
+                "name": "getPermissions",
+                "contract": "/cybermetrix/permissions/user/getPermissions"
+            },
+            {
+                "name": "getProducts",
+                "contract": "/cybermetrix/permissions/user/getProducts"
+            },
+            {
                 "name": "checkForRevenueAndIndustry",
                 "contract": "/cybermetrix/util/peergroupValidation"
             },
@@ -151,11 +159,6 @@
                 "name": "X-Powered-By",
                 "value": "X-Powered-By",
                 "type": "remove"
-            },
-            {
-                "name": "Content-Security-Policy",
-                "value": "script-src 'self' *.advisen.com 'unsafe-eval' 'unsafe-inline'; object-src 'self'",
-                "type": "add"
             },
             {
                 "name": "Strict-Transport-Security",

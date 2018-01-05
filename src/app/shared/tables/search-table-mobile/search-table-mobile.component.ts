@@ -34,9 +34,8 @@ export class SearchTableMobileComponent implements OnInit {
   }
 
   transformData () {
-    console.log('DataSource', this.dataSource)
     this.dataSource.asObservable().subscribe(()=> {
-      console.log('Hey')
+      
     });
   }
 }

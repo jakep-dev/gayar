@@ -9,7 +9,7 @@ import { GlossaryComponent } from 'app/glossary/glossary.component';
 import { PdfDownloadComponent } from 'app/pdf-download/pdf-download.component';
 import { SsoComponent } from 'app/sso/sso.component';
 import { AuthRouteActivatorService } from './services/services';
-import { E401Component } from './shared/shared';
+import { E401Component, E500Component } from './shared/shared';
 
 export const APP_ROUTES: Routes = [
     { path: 'dashboard',    component:  DashboardComponent, canActivate: [ AuthRouteActivatorService ]},
@@ -18,8 +18,9 @@ export const APP_ROUTES: Routes = [
     { path: 'severity',     component:  SeverityComponent,  canActivate: [ AuthRouteActivatorService ]},
     { path: 'search',       component:  SearchComponent,    canActivate: [ AuthRouteActivatorService ]},
     { path: 'report',       component:  ReportComponent},
-    { path: 'glossary',  component:  GlossaryComponent},
+    { path: 'glossary',     component:  GlossaryComponent},
     { path: 'pdfdownload',  component:  PdfDownloadComponent},
     { path: 'sso/:userId',  component:  SsoComponent },
+    { path: 'error',        component:  E500Component },
     { path: '401',          component:  E401Component }
 ];

@@ -61,6 +61,7 @@ export interface RevenueModel {
 }
 
 export interface ValidationMessageModel {
+    companyName: string,
     resp: ResponseModel,
     message: string
 }

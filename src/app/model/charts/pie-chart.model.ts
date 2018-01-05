@@ -15,4 +15,6 @@ export interface PieChartData {
 
     drilldownUpText?: any;
     onDrillDown?: any;
+    onDrillUp?: any;
+    
 }

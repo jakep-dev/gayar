@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SeverityDataResponseModel, SeverityIndustryOverviewModel } from 'app/model/model';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 
 @Injectable()
-export class SeverityService extends BaseService {
-    constructor(http: Http) {
+export class SeverityService extends BaseServiceClient {
+
+    private incidentChartView: string = 'main';   
+    private lossChartView: string = 'main';   
+    constructor(http: HttpClient) {
         super(http);
     }
 
@@ -98,4 +102,22 @@ export class SeverityService extends BaseService {
 
         }
     }
+
+    public getIncidentChartView(): string  {
+		return this.incidentChartView;
+	}
+
+	public setIncidentChartView(value: string ) {
+		this.incidentChartView = value;
+    }
+
+    public getLossChartView(): string  {
+		return this.lossChartView;
+	}
+
+	public setLossChartView(value: string ) {
+		this.lossChartView = value;
+	}
+    
+
 }

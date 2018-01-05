@@ -146,7 +146,7 @@ export class DashboardScoreDirective implements OnInit, OnChanges {
             }
             
             this.displayText = this.modelData.displayText;
-            this.onDataComplete.emit(tempChartData);
+            this.onDataComplete.emit(tempChartData)
         }
     }
 

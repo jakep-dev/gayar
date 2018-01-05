@@ -1,10 +1,12 @@
-import { DashboardScoreModel, GaugeChartData, DashboardScore } from 'app/model/model';
-import { DashboardService } from '../../services/services';
+import { DashboardScoreModel, GaugeChartData, DashboardScore, ComponentPrintSettings } from 'app/model/model';
+import { DashboardService, SessionService } from '../../services/services';
 import { BaseChart } from './../../shared/charts/base-chart';
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { SearchService } from 'app/services/search.service';
+import { Router } from '@angular/router';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
   selector: 'app-dashboard-severity',
@@ -13,25 +15,27 @@ import { SearchService } from 'app/services/search.service';
 })
 export class SeverityComponent implements OnInit {
 
-  
   chartHeader:string = '';
   modelData: DashboardScoreModel;
+  permission: any;
+  isDisabled: boolean = true;
 
-  setModelData(modelData: DashboardScoreModel) {
-      this.modelData = modelData;
-      this.chartHeader = this.modelData.chartTitle;
-      if(this.searchService.checkValidationPeerGroup()){
-        if(!this.searchService.checkValidationPeerGroup().hasSeverityData){
-            this.modelData.score.finalScore = null;
-            this.modelData.displayText = null;
+    setModelData(modelData: DashboardScoreModel) {
+        this.modelData = modelData;
+        this.chartHeader = this.modelData.chartTitle;
+        if(this.searchService.checkValidationPeerGroup()){
+            if(!this.searchService.checkValidationPeerGroup().hasSeverityData){
+                this.modelData.score.finalScore = null;
+                this.modelData.displayText = null;
+            }
         }
-
-  }
-  }
+    }
 
   chartData: GaugeChartData;
 
   @Input() componentData: DashboardScore;
+
+  @Input() printSettings: ComponentPrintSettings;
 
   /**
    * Event handler to indicate the construction of the GaugeChart's required data is built 
@@ -42,19 +46,37 @@ export class SeverityComponent implements OnInit {
   }
 
   private chartComponent = new BehaviorSubject<BaseChart>(null);
-  chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
-  
-  /**
-   * Event handler to indicate the chart is loaded 
-   * @param chart The chart commponent
-   */
-  onChartReDraw(chart: BaseChart) {     
+  public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+  private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+  public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
+
+    /**
+     * Event handler to indicate the chart is loaded 
+     * @param chart The chart commponent
+     */
+    onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
+        if(!this.isFirstRedrawComplete.getValue()) {
+            this.isFirstRedrawComplete.next(true);
+        }
     }
 
-    addLabelAndImage(chart){
+  navigate () {
+    if (this.searchService.checkValidationPeerGroup() && 
+        this.searchService.checkValidationPeerGroup().hasSeverityData &&
+        this.permission && this.permission.severity && 
+        this.permission.severity.hasAccess) {
+        this.router.navigate(['/severity']);
+    } else {
+        this.snackBarService.Simple('No Access');
+    }
+  }
+
+
+
+    addLabelAndImage(chart: BaseChart){
         chart.addChartLabel(
             this.modelData.displayText,
             (chart.chart.chartWidth * 0.1) - 2,
@@ -64,22 +86,27 @@ export class SeverityComponent implements OnInit {
             null,
             (chart.chart.chartWidth * 0.75) + 35
         );
-
-        chart.addChartImage(
-            '../assets/images/advisen-logo.png', 
-            chart.chart.chartWidth - 80, 
-            chart.chart.chartHeight - 20, 
-            69, 
-            17
-        ); 
+        if(this.printSettings == null) {
+            chart.addChartImage(
+                '../assets/images/advisen-logo.png', 
+                chart.chart.chartWidth - 80, 
+                chart.chart.chartHeight - 20, 
+                69, 
+                17
+            );     
+        }
     }
   
-  constructor(private dashboardService: DashboardService, private searchService : SearchService) {
+  constructor(private dashboardService: DashboardService,
+             private searchService : SearchService,
+             private sessionService: SessionService,
+             private snackBarService: SnackBarService,
+             private router: Router) {
   }
 
   ngOnInit() {
       this.getSeverityData();
-     
+      this.getPermission();
   }
 
   /**
@@ -89,5 +116,12 @@ export class SeverityComponent implements OnInit {
     this.dashboardService.getSeverityScore(this.componentData.companyId, this.componentData.naics, 
                                             this.componentData.revenueRange, this.componentData.limit, this.componentData.retention).
                                             subscribe(chartData => this.setModelData(chartData));;
-  }        
+  }
+  
+  getPermission() {
+    this.permission = this.sessionService.getUserPermission();
+    if (this.permission && this.permission.dashboard && this.permission.dashboard.severityGauge) {
+        this.isDisabled = !this.permission.dashboard.severityGauge.hasAccess;
+    }
+   }
 }

@@ -1,16 +1,20 @@
-<app-tile [id]="'Dashboard_Severity'" [title]="chartHeader" class="width-100" [isFullScreen]="false" [isAccordion]="false">
-  <div front class="width-100" fxLayout="row">
-      <gauge-chart 
+<app-tile [id]="'Dashboard_Severity'" [title]="chartHeader" class="width-100" [isFullScreen]="false" [isAccordion]="false" [isDisabled]="isDisabled">
+  <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
+      <gauge-chart
           fxFlexFill
-          *ngIf='modelData' 
-          [routerLink]=" (this.searchService?.checkValidationPeerGroup()?.hasSeverityData) ? ['/severity'] : []"
-          routerLinkActive="active"
+          *ngIf='modelData'
+          (click)="navigate()"
           dashboard-score
           [modelData]="modelData"
           [chartData]="chartData"
           [chartComponent]="chartComponent$ | async"
           (onDataComplete)="onDataComplete($event)"
-          (onChartRedraw)="onChartReDraw($event)">
+          (onChartRedraw)="onChartReDraw($event)"
+          [printSettings]="printSettings"
+          >
       </gauge-chart>
   </div>
+  <div disable class="width-100">
+    <disabled-chart></disabled-chart>
+</div>
 </app-tile>

@@ -1,5 +1,5 @@
-<app-tile [id]="'FREQ_IND_OVERVIEW'" [title]="chartHeader" [isSplittable]="false" [isFlippable]="false">
-  <div front class="width-100" fxLayout="row">
+<app-tile [id]="'FREQ_IND_OVERVIEW'" [title]="chartHeader" [isSplittable]="false" [isFlippable]="false" [isDisabled]="!hasAccess">
+    <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
         <bar-chart fxFlexFill
             *ngIf='modelData'
             frequency-industry-overview-behavior
@@ -7,7 +7,12 @@
             [chartData]="chartData"
             [chartComponent]="chartComponent$ | async"
             (onDataComplete)="onDataComplete($event)"
-            (onChartRedraw)="onChartReDraw($event)">
+            (onChartRedraw)="onChartReDraw($event)"
+            [printSettings]="printSettings"
+            >
         </bar-chart>
+  </div>
+  <div disable class="width-100">
+    <disabled-chart></disabled-chart>
   </div>
 </app-tile>

@@ -1,6 +1,6 @@
 import {BaseChart} from '../base-chart';
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { PieChartData } from 'app/model/model';
+import { PieChartData, ComponentPrintSettings } from 'app/model/model';
 
 @Component({
   selector: 'pie-chart',
@@ -11,12 +11,15 @@ import { PieChartData } from 'app/model/model';
 export class PieChartComponent extends BaseChart implements OnInit {
 
   @Input() chartData: PieChartData;
-  onDrilldown: any = null;
 
+  @Input() printSettings: ComponentPrintSettings;
+
+  onDrilldown: any = null;
+  onDrillup: any = null;
     constructor() {
         super();
         this.setDefaultChartType('pie');
-        this.hasRedrawActions = false;
+        this.hasRedrawActions = false;  
     }
 
     ngOnInit() {
@@ -24,9 +27,11 @@ export class PieChartComponent extends BaseChart implements OnInit {
     }plot
 
     ngDoCheck() { 
-        if(this.chart) { 
-            this.chart.reflow(); 
-        } 
+        if(!this.printSettings) {
+            if(this.chart) { 
+                this.chart.reflow(); 
+            }
+        }
     }
 
     /**
@@ -46,7 +51,24 @@ export class PieChartComponent extends BaseChart implements OnInit {
         
         if (this.chartData.customChartSettings.drilldown) { 
             this.chartOptions.drilldown = this.chartData.customChartSettings.drilldown; 
-        }         
+            if(this.printSettings) {
+                if(this.chartOptions.drilldown) {
+                    if(this.chartOptions.drilldown.drillUpButton) {
+                        if(this.chartOptions.drilldown.drillUpButton.theme) {
+                            this.chartOptions.drilldown.drillUpButton.theme['stroke-width'] = 0;
+                            this.chartOptions.drilldown.drillUpButton.theme.style = { 
+                                color: 'white'
+                            };
+                        }
+                    }
+                }
+            }
+        }        
+        
+        if (this.chartData.onDrillUp) {
+            this.onDrillup = this.chartData.onDrillUp;
+        }
+
     }
 
     /**
@@ -57,6 +79,7 @@ export class PieChartComponent extends BaseChart implements OnInit {
         let seriesLength: number;
 
         if (this.chartData) {
+            let isPrintMode: boolean = this.printSettings != null ? true : false;
 
             //clear out old series before adding new series data
             seriesLength = this.chart.series.length;
@@ -73,7 +96,9 @@ export class PieChartComponent extends BaseChart implements OnInit {
                         name: this.chartData.series[seriesIndex].name,
                         type: 'pie',
                         data: this.chartData.series[seriesIndex].data
-                    }
+                    },
+                    false,
+                    isPrintMode
                 );
             }
 
@@ -82,10 +107,38 @@ export class PieChartComponent extends BaseChart implements OnInit {
             }
 
             if (this.chartData.customChartSettings) {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartData.customChartSettings);
+                }                
                 this.chart.update(this.chartData.customChartSettings, true);
             } else {
+                if(isPrintMode) {
+                    this.applyPrintSettings(this.chartOptions);
+                }                
                 this.chart.update(this.chartOptions, true);
             }
+        }
+    }
+
+    applyPrintSettings(chartOptions : any) {
+        chartOptions.chart.width = this.printSettings.width;
+        chartOptions.chart.height = this.printSettings.height;
+        chartOptions.chart.animation = false;
+
+        if(chartOptions.plotOptions) {
+            if(chartOptions.plotOptions.series) {
+                chartOptions.plotOptions.series.animation = false;
+            } else {
+                chartOptions.plotOptions.series = {
+                    animation : false
+                };
+            }
+        } else {
+            chartOptions.plotOptions = {
+                series: {
+                    animation: false
+                }
+            };
         }
     }
 

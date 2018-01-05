@@ -9,54 +9,69 @@
     </div>
 
     <div fxFlexFill fxFlex="50" fxFlex.lt-md="100" fxFlexOrder="1">
-        <app-tile [id]="'FREQ_TIME_PERIOD'" [title]="'Time Period'" class="width-100">
+        <app-tile [id]="'FREQ_TIME_PERIOD'" [title]="'Time Period'" class="width-100" [isDisabled]="!isTimePeriod">
             <div front class="width-100" fxLayout="row">
                 <frequency-time-period [componentData]="frequencyInput" class="width-100" fxFlexFill>
                 </frequency-time-period>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>
 
     <div fxFlexFill [fxFlex]="showIncidentPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '3' : '2'">
-        <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="isIncidentShowFlip" [isFlippable]="isIncidentShowSplit"
-            (onFlip)="showIncidentPie=false" (onSplit)="showIncidentPie=!showIncidentPie">
-            <div front class="width-100" fxLayout="row">
-                <frequency-incident-bar [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-incident-bar>
+        <app-tile [id]="'FREQ_INCIDENT'" [title]="'Type of Incident'" class="width-100" [isSplittable]="isIncidentShowSplit" [isFlippable]="isIncidentShowFlip"
+            (onFlip)="showIncidentPie=false;" (onSplit)="showIncidentPie=!showIncidentPie;"  [isDisabled]="!isIncident">
+            <div front class="width-100" fxLayout="row">                
+                <frequency-incident-bar [componentData]="frequencyInput"  [incidentChartView]="this.frequencyService.getIncidentChartView()"  class="width-100" fxFlexFill></frequency-incident-bar>                
             </div>
             <div back class="width-100" fxLayout="row">
-                <frequency-incident-pie [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-incident-pie>
+                <frequency-incident-pie [componentData]="frequencyInput"  [incidentChartView]="this.frequencyService.getIncidentChartView()"  class="width-100" fxFlexFill></frequency-incident-pie>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>
 
     <div fxFlexFill [fxFlex]="showLossPie ? '100' : '50'" fxFlex.lt-md="100" [fxFlexOrder]="showLossPie ? '2' : '3'">
         <app-tile [id]="'FREQ_LOSS'" [title]="'Type of Loss'" class="width-100" [isSplittable]="isLossShowFlip" [isFlippable]="isLossShowSplit"
-            (onFlip)="showLossPie=false" (onSplit)="showLossPie=!showLossPie">
+            (onFlip)="showLossPie=false;" (onSplit)="showLossPie=!showLossPie;" [isDisabled]="!isLoss">
             <div front class="width-100" fxLayout="row">
-                <frequency-loss-bar [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-loss-bar>
+                <frequency-loss-bar [componentData]="frequencyInput" [lossChartView]="this.frequencyService.getLossChartView()" class="width-100" fxFlexFill></frequency-loss-bar>
             </div>
             <div back class="width-100" fxLayout="row">
-                <frequency-loss-pie [componentData]="frequencyInput" class="width-100" fxFlexFill></frequency-loss-pie>
+                <frequency-loss-pie [componentData]="frequencyInput" [lossChartView]="this.frequencyService.getLossChartView()" class="width-100" fxFlexFill></frequency-loss-pie>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>
 
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="4">
-        <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'Most Recent Peer Group Losses'" class="width-100">
+        <app-tile [id]="'FREQ_PEER_TABLE'" [title]="'Most Recent Peer Group Losses'" class="width-100" [isDisabled]="!isPeerGroupTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
                 </app-simple-table>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>
 
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
-        <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable">
+        <app-tile [id]="'FREQ_COMPANY_TABLE'" [title]="'Most Recent Company Losses'" class="width-100" *ngIf="companyLossesTable" [isDisabled]="!isCompanyTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                    [columnsWidth]="columnsWidth">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
                 </app-simple-table>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
             </div>
         </app-tile>
     </div>

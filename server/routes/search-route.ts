@@ -19,7 +19,7 @@ export class SearchRouter extends BaseRoute {
     public doCompanySearch(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("companySearch", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'search_type': req.body.searchType,
                 'search_value': req.body.searchValue
             }, (data)=>{
@@ -40,7 +40,7 @@ export class SearchRouter extends BaseRoute {
     public getIndustries(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("getIndustries", {
-                'ssnid': req.body.token
+                'ssnid': req.header('authorization')
             }, (data)=>{
                 res.send(data);
             });
@@ -59,7 +59,7 @@ export class SearchRouter extends BaseRoute {
     public checkForRevenueAndIndustry(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("checkForRevenueAndIndustry", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.companyId
             }, (data)=>{
                 res.send(data);
@@ -79,7 +79,7 @@ export class SearchRouter extends BaseRoute {
     public getRangeList(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("revenueRangeList", {
-                'ssnid': req.body.token
+                'ssnid': req.header('authorization')
             }, (data)=>{
                 res.send(data);
             });
@@ -98,7 +98,7 @@ export class SearchRouter extends BaseRoute {
     public checkValidationPeerGroupLoss(req: Request, res: Response, next: NextFunction){
         try{
             super.PerformGetRequest("checkValidationPeerGroupLoss", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'revenue_range': req.body.revenue_range,
                 'naics': req.body.naics,
                 'company_id': req.body.company_id

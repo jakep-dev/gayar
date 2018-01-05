@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { Http, Response } from '@angular/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/share'
 import 'rxjs/add/operator/do'
 import { SessionModel, SessionResponseModel } from 'app/model/model';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 
 @Injectable()
 export class SessionService extends BaseService {
     private isLogin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasToken());
-
     constructor(http: Http) {
         super(http);
     }
 
-    public getCurrentIdentity(userId: string): Observable<SessionModel> {
+    public getCurrentIdentity(userId: string, applicationId: string): Observable<SessionModel> {
         try{
            return super.Post<SessionResponseModel>('/api/getCurrentIdentity', {
-               'userId': userId
+               'userId': userId,
+               'productCode': applicationId
            }).map((res: SessionResponseModel)=>{
                this.currentIdentity = res.userinfo;
                if(this.currentIdentity && this.currentIdentity.token){
@@ -61,7 +62,7 @@ export class SessionService extends BaseService {
      * @return {type} string - FullName
      */
     public get UserFullName () : string {
-      return this.currentIdentity ? this.currentIdentity.fullName : ''; 
+      return this.currentIdentity ? this.currentIdentity.fullName : '';
     }
 
     public getUserFullName(): string {
@@ -83,6 +84,17 @@ export class SessionService extends BaseService {
 
     public isLoggedIn(): boolean {
         return this.isLogin.value;
+    }
+
+    public getUserPermission () {
+      if( this.currentIdentity && this.currentIdentity.permission) {
+          return this.currentIdentity.permission
+      }
+      return null;
+    }
+
+    public getDashboardPermission () {
+      return this.currentIdentity.permission.dashboard;
     }
 
     private setAuth(){
