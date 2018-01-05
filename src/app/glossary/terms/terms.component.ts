@@ -23,7 +23,8 @@ export class TermsComponent implements OnInit {
   getTypeOfTerms(){
     if(this.term.subComponents){
       this.term.subComponents.forEach(list => {
-        if(list.type && list.type == "C"){
+        if(list.type && list.type == "C" &&
+          this.term.link && this.term.link !== null){
           this.hasLink = true;
         }
 
