@@ -22,9 +22,9 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(authReq).do(event => {
           if (event instanceof HttpResponse) {
               const resp:ResponseModel = event.body.resp as ResponseModel || null;
-              if(resp && 
-                 resp.code === 401) {
-                  this.router.navigate(['/401']);
+              if(resp &&
+                 resp.code !== 200) {
+                  this.router.navigate([`/${resp.code}`]);
               }
           }
     }, err => {
