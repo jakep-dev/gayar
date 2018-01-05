@@ -31,6 +31,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedPremium: string;
   selectedRetention: string;
   selectedLimit: string;
+  pageId: string;
   selectedRevenue: RevenueModel;
   selectedCompanyModel: CompanyModel = null;
   loadedCompanyModel: CompanyModel = null;
@@ -277,7 +278,14 @@ export class SearchComponent implements OnInit, OnDestroy {
    * Navigate to report page
    */
   onReport(){
-    this.router.navigate(['/report']);
+    this.pageId = "report_page";
+    if(this.isManual){
+      this.setSelectedSearchCriteria();
+      this.checkValidationPeerGroupLoss();
+      this.router.navigate(['/report']);
+      return;
+    }
+    this.validatePeerGroupAndRevenueIndustry();
   }
 
   /**
@@ -327,6 +335,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * Build SearchCriteria and Navigate to dashboard
    */
   onAssessment(){
+    this.pageId = "dashboard_page";
     if(this.isManual){
       this.setSelectedSearchCriteria();
       this.checkValidationPeerGroupLoss();
@@ -358,7 +367,19 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.selectedIndustry = data[1].industry;
               this.selectedRevenue = data[1].revenueRange;
               this.setSelectedSearchCriteria();
-              this.router.navigate(['/dashboard']);
+
+              switch (this.pageId) {
+                case "dashboard_page":
+                  this.router.navigate(['/dashboard']);    
+                  break;
+                case "report_page":
+                  this.router.navigate(['/report']);
+                  break;
+
+                default:
+                  break;
+              }
+              
             }
           },
           err => console.error(err)

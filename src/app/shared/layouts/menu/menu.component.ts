@@ -158,7 +158,7 @@ export class MenuComponent implements OnInit {
       }
       winRef.location.href = url;
      } else {
-       this.router.navigate(['noAccess']);
+       this.router.navigate(['/noAccess']);
      }
   }
 
