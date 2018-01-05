@@ -25,9 +25,10 @@ import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/pr
 import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
-import { MenuService, SearchService, 
-    FrequencyService, SeverityService, 
-    ReportService, FontService, GetFileService  ,
+import { 
+    MenuService, SearchService, 
+    FrequencyService, SeverityService, ApplicationService,
+    ReportService, FontService, GetFileService,
     SessionService
 } from 'app/services/services';
 
@@ -36,7 +37,7 @@ import {
     FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel,
     SeverityInput, SeverityDataModel, SeverityDataResponseModel,
     BenchmarkDistributionInput, BenchmarkLimitAdequacyInput, BenchmarkRateInput, ComponentPrintSettings,
-    IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget, IGlossaryTermModel
+    IReportTileModel, ISubComponentModel, IChartMetaData, IChartWidget, GlossaryDataModel, GlossaryTerm
 } from 'app/model/model';
 
 import { 
@@ -99,8 +100,8 @@ export class ReportComponent implements OnInit {
     //list of high level report sections
     public reportTileModel: Array<IReportTileModel> = null;
 
-    //list of high level report sections
-    public reportGlossaryModel: Array<IGlossaryTermModel> = null;
+    //list of glossary sections
+    public reportGlossaryModel: Array<GlossaryTerm> = null;
 
     //associate array that maps page type to page object
     private pageCollection: Array<BasePage> = [];
@@ -196,6 +197,7 @@ export class ReportComponent implements OnInit {
         private frequencyService: FrequencyService,
         private severityService: SeverityService,
         private reportService: ReportService,
+        private applicationService: ApplicationService,
         private sessionService: SessionService) {
 
         //If font files are not loaded setup the call back function to catch the event when font files are loaded
@@ -672,19 +674,19 @@ export class ReportComponent implements OnInit {
         }
     }
 
-
     /**
-     * getReportConfig - Load the report configuration.
+     * getReportGlossaryConfig - Load the report glossary configuration.
      *
      * @private
-     * @function getReportConfig
+     * @function getReportGlossaryConfig
      * @return {} - No return types.
      */
     private getReportGlossaryConfig () {
-        this.reportService.getReportGlossaryConfig().subscribe((data)=> {
-            this.reportGlossaryModel = data;
-            console.log('Report Glossary Data Done!');
-            this.reportGlossaryDataDone = true;
+        this.applicationService.getGlossary()
+        .subscribe((res: GlossaryDataModel) => {
+          this.reportGlossaryModel = res.glossaries;
+          console.log('Report Glossary Data Done!');
+          this.reportGlossaryDataDone = true;
         });
     }
 

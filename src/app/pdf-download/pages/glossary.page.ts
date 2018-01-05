@@ -1,5 +1,5 @@
 import { BasePage } from './base.page';
-import { IGlossaryTermModel, ISubGlossaryTermModel } from 'app/model/model';
+import { GlossaryTerm, GlossarySubTerm } from 'app/model/model';
 
 export class GlossaryPage extends BasePage  {
 
@@ -74,23 +74,30 @@ export class GlossaryPage extends BasePage  {
     };
     
     
-    //json block for the table header style
-    private tableHeaderStyle: any = {
+    //json block for the glossary letter style
+    private glossaryLetterStyle: any = {
         bold: true,
         color: "white",
-        fontSize: 11,
-        fillColor: 'black'
+        fontSize: 50,
+        fillColor: '#464646'
     };
 
     //json block for the glossary term style
-    private glossaryTerm: any = {
+    private glossaryTermStyle: any = {
+        bold: true,
+        color: '#b1d23b',
+        fontSize: 11
+    };
+
+    //json block for the glossary child term style
+    private glossarySubTermStyle: any = {
         bold: true,
         color: '#464646',
         fontSize: 11
     };
 
     //json block for the table row content description style
-    private glossaryDefinition: any = {
+    private glossaryDefinitionStyle: any = {
         bold: false,
         color: '#464646',
         fontSize: 11
@@ -101,17 +108,11 @@ export class GlossaryPage extends BasePage  {
     private table: any = {
         margin: [ 60, 20, 60, 0 ],
         table: {
-            headerRows: 1,
-            //widths: ['2%', '33%', '50%'],
-            widths: ['2%', '38%', '60%'],
+            widths: ['10%', '90%'],
             body: [
-                    [
-                        {text: 'Term', alignment: 'left', style: this.prefix + 'tableHeaderStyle', colSpan: 2}, 
-                        {text: ''}, 
-                        {text: 'Definition', alignment: 'left', style: this.prefix + 'tableHeaderStyle'}
-                    ]
             ]
         },
+        layout: 'noBorders',
         pageBreak: 'after'
     };
 
@@ -160,7 +161,7 @@ export class GlossaryPage extends BasePage  {
     }
 
     //object used to hold the table data
-    private glossaryData: Array<IGlossaryTermModel>
+    private glossaryData: Array<GlossaryTerm>
 
     constructor() {
         super();
@@ -178,29 +179,45 @@ export class GlossaryPage extends BasePage  {
 
         this.header.style = this.prefix + 'headerStyle';
         this.subHeader.style = this.prefix + 'subHeaderStyle';
-        this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
-        this.table.table.body[0][2].style = this.prefix + 'tableHeaderStyle';
 
         let i: number;
         let n: number = this.table.table.body.length;
         let tableRow: any;
+        let letterColumn: any;
+        let definitionTable: any;
+        let style: string;
+
         for(i = 1; i < n; i++) {
             tableRow = this.table.table.body[i];
-            if(tableRow[0].text){
-                tableRow[0].style = this.prefix + 'glossaryTerm';
+            letterColumn = tableRow[0];
+            if(letterColumn.table) {
+                letterColumn.table.body[0][0].style = this.prefix + 'glossaryLetterStyle';
             }
-            if(tableRow[1].text){
-                tableRow[1].style = this.prefix + 'glossaryTerm';
+            definitionTable = tableRow[1];
+            if(definitionTable.style) {
+                //change style name for unordered list
+                definitionTable.style = this.prefix + 'glossaryDefinitionStyle';
+            } else {
+                style = definitionTable.table.body[0][0].style;
+                if(style.match(/glossarySubTermStyle$/)) {
+                    //change style name for child term
+                    definitionTable.table.body[0][0].style = this.prefix + 'glossarySubTermStyle';
+                } else if(style.match(/glossaryTermStyle$/)) {
+                    //change style name for top level term
+                    definitionTable.table.body[0][0].style = this.prefix + 'glossaryTermStyle';
+                }
+                //change style name for definition text
+                definitionTable.table.body[1][0].style = this.prefix + 'glossaryDefinitionStyle';
             }
-            tableRow[2].style = this.prefix + 'glossaryDefinition';
         }
 
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'subHeaderStyle'] = this.subHeaderStyle;
-        this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
-        this.styles[this.prefix + 'glossaryTerm'] = this.glossaryTerm;
-        this.styles[this.prefix + 'glossaryDefinition'] = this.glossaryDefinition;
+        this.styles[this.prefix + 'glossaryLetterStyle'] = this.glossaryLetterStyle;
+        this.styles[this.prefix + 'glossaryTermStyle'] = this.glossaryTermStyle;
+        this.styles[this.prefix + 'glossarySubTermStyle'] = this.glossarySubTermStyle;
+        this.styles[this.prefix + 'glossaryDefinitionStyle'] = this.glossaryDefinitionStyle;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);
@@ -209,71 +226,35 @@ export class GlossaryPage extends BasePage  {
     }
 
     /**
-     * Build json table cell for the based on definition text
-     * if text contains the <list\> marker, build unordered list into table cell
+     * Build json table cell for the unordered lists
      * 
      * @private
-     * @function buildDefinitionBlock
-     * @param {string} definition - glossary definition
+     * @function buildListEntry
      * @param {string[]} list - list of bulleted items
      * @return {any} - json table cell
      */
-    private buildDefinitionBlock(definition: string, list: string[]): any {
+    private buildListEntry(list: string[]): any {
 
-        let pos: number = definition.indexOf(GlossaryPage.list_separator);
-        if(pos >= 0) {
-            let definitionParts: string[] = definition.split(GlossaryPage.list_separator);
-            let i: number;
-            let n: number = definitionParts.length;
-            let tableCell: any;    
-
-            tableCell = {
-                style: this.prefix + 'glossaryDefinition',
+        let tableCell: any = [
+            {text: ''},
+            {
+                margin: [20, 0, 0, 0],
+                style: this.prefix + 'glossaryDefinitionStyle',
                 table: {
                     widths: ['2%', '98%'],
                     body: [
                         [
-                            {
-                                text: definitionParts[0],
-                                colSpan: 2
-                            },
-                            {text: ''}
-                        ],
-                        [
                             {text: ''},
                             {
-                                ul: [
-                                ]
+                                ul: list
                             }
                         ]
                     ]
                 },
-                layout: 'noBorders',
-                border: [false, true, true, true]
-            };
-
-            for(i = 1; i < n; i++) {
-                tableCell.table.body.push(
-                    [
-                            {
-                                text: definitionParts[i],
-                                colSpan: 2
-                            },
-                            {text: ''}
-                    ]
-                );
+                layout: 'noBorders'
             }
-
-            if(list) {
-                n = list.length;
-                for(i = 0; i < n; i++) {
-                    tableCell.table.body[1][1].ul.push(list[i]);
-                }
-            }
-            return tableCell;
-        } else {
-            return { text: definition, alignment: 'left', style: this.prefix + 'glossaryDefinition', border: [false, true, true, true] };
-        }
+        ];
+        return tableCell;
     }
 
     /**
@@ -282,40 +263,98 @@ export class GlossaryPage extends BasePage  {
      * 
      * @public
      * @function setGlossaryData
-     * @param {Array<IGlossaryTermModel>string} glossaryData - table data
+     * @param {Array<GlossaryTerm>string} glossaryData - table data
      * @return {} - No return types.
      */
-    public setGlossaryData(glossaryData: Array<IGlossaryTermModel>) {
+    public setGlossaryData(glossaryData: Array<GlossaryTerm>) {
         this.glossaryData = glossaryData;
-        this.table.table.body.length = 1;
         let i: number;
         let j: number;
         let n1: number = this.glossaryData.length;
         let n2: number;
-        let term: string;
-        let definition: string;
         let dataRow: any;
+        let currentLetter: string = '';
+        let glossaryTerm: GlossaryTerm;
+        let firstColumn: any;
+        let topMargin: number;
+        let glossarySubTerm: GlossarySubTerm;
+        let buttonList: Array<string> = [];
 
         for(i = 0; i < n1; i++) {
-            term = (this.glossaryData[i].term != null) ? this.glossaryData[i].term : '';
-            definition = (this.glossaryData[i].term != null) ? this.glossaryData[i].definition : '';
+            glossaryTerm = glossaryData[i];
+            buttonList.length = 0;
+            if(currentLetter !== glossaryTerm.letter) {
+                firstColumn = {
+                    table: {
+                        widths: [58],
+                        body: [
+                            [
+                                { text: glossaryTerm.letter, alignment: 'center', style: this.prefix + 'glossaryLetterStyle' }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                };
+                topMargin = 10;
+            } else {
+                firstColumn = { text: '' };
+                topMargin = 0;
+            }
+            currentLetter = glossaryTerm.letter;
             dataRow = [
-                { text: term, alignment: 'left', style: this.prefix + 'glossaryTerm', border: [true, true, false, true], colSpan: 2 },
-                { text: ''},
-                this.buildDefinitionBlock(definition, this.glossaryData[i].list)
+                firstColumn,
+                {
+                    margin: [20, topMargin, 0, 0],
+                    table: {
+                        body: [
+                            [
+                                { text: glossaryTerm.term, alignment: 'left', style: this.prefix + 'glossaryTermStyle' }
+                            ],
+                            [
+                                { text: glossaryTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders'
+                }
             ];
             this.table.table.body.push(dataRow);
-            if(this.glossaryData[i].subComponents) {
-                n2 = this.glossaryData[i].subComponents.length;
+            if(glossaryTerm.subComponents) {
+                n2 = glossaryTerm.subComponents.length;
                 for(j = 0; j < n2; j++) {
-                    term = (this.glossaryData[i].subComponents[j].term != null) ? this.glossaryData[i].subComponents[j].term : '';
-                    definition = (this.glossaryData[i].subComponents[j].term != null) ? this.glossaryData[i].subComponents[j].definition : '';
-                    dataRow = [
-                        { text: '', fillColor: 'black' }, 
-                        { text: term, alignment: 'left', style: this.prefix + 'glossaryTerm', border: [true, true, false, true] },
-                        this.buildDefinitionBlock(definition, this.glossaryData[i].subComponents[j].list)
-                    ];
+                    glossarySubTerm = glossaryTerm.subComponents[j];
+                    if(glossarySubTerm.type == 'C') {
+                        if(buttonList.length > 0) {
+                            dataRow = this.buildListEntry(buttonList);
+                            this.table.table.body.push(dataRow);
+                            buttonList = [];
+                        }
+                        dataRow = [
+                            { text: '' },
+                            {
+                                margin: [20, 0, 0, 0],
+                                table: {
+                                    body: [
+                                        [
+                                            { text: glossarySubTerm.term, alignment: 'left', style: this.prefix + 'glossarySubTermStyle' }
+                                        ],
+                                        [
+                                            { text: glossarySubTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
+                                        ]
+                                    ]
+                                },
+                                layout: 'noBorders'
+                            }
+                        ];
+                        this.table.table.body.push(dataRow);
+                    } else if(glossarySubTerm.type == 'B') {
+                        buttonList.push(glossarySubTerm.definition);
+                    }
+                }
+                if(buttonList.length > 0) {
+                    dataRow = this.buildListEntry(buttonList);
                     this.table.table.body.push(dataRow);
+                    buttonList = [];
                 }
             }
         }

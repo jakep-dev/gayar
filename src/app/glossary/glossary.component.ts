@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuService, ApplicationService, SessionService} from 'app/services/services';
 import { GroupByPipe } from 'app/shared/pipes/pipes';
-import { GlossaryDataModel } from 'app/model/model';
+import { GlossaryDataModel, GlossaryTerm } from 'app/model/model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class GlossaryComponent implements OnInit {
 
   header: string = 'Glossary';
-  terms: any;
+  terms: Array<GlossaryTerm>;
 
   constructor(private menuService: MenuService,
     private applicationService: ApplicationService,

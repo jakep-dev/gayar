@@ -1,19 +1,19 @@
 import { ResponseModel } from "./response.model";
 
-export interface GlossaryModel{
+export interface GlossaryTerm{
     letter: string;
     definition: string;
     term: string;
     link: string;
-    subComponents: Array<SubComponentData>;
+    subComponents: Array<GlossarySubTerm>;
 }
 
 export interface GlossaryDataModel {
-    glossaries: GlossaryModel;
+    glossaries: Array<GlossaryTerm>;
     response : ResponseModel;
 }
 
-export interface SubComponentData{
+export interface GlossarySubTerm{
     term: string;
     definition: string;
     type: string;
