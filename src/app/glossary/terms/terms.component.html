@@ -1,11 +1,19 @@
 <div class="column-1">
   <h3 class="firstTitle">{{term.term}}</h3>
   <p>{{term.definition}}</p>
-
-  <div *ngFor="let child of childList">
-    <h5>{{child.term}}</h5>
-    <p>{{child.definition}}</p>
+  <div *ngIf="hasLink" (click)="term.hidden = !term.hidden">
+    <span class="childBtn"><u>{{term.link}}</u></span>
+    <span class="childBtn">
+      <md-icon *ngIf="!term.hidden" class="icon-menu-right fa-2x"></md-icon>
+      <md-icon *ngIf="term.hidden" class="icon-menu-down fa-2x"></md-icon>
+    </span>
   </div>
+  <div [hidden]="term.hidden">
+      <div *ngFor="let child of childList">
+          <h5>{{child.term}}</h5>
+          <p>{{child.definition}}</p>
+        </div>
+  </div>  
   <div *ngFor="let list of bulletList">
     <ul>
       <li>{{list.definition}}</li>
