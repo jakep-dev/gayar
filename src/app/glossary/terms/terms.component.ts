@@ -11,6 +11,7 @@ export class TermsComponent implements OnInit {
   @Input() term: any;
   childList : any;
   bulletList : any;
+  hasLink: boolean = false;
 
   ngOnInit() {
     this.getTypeOfTerms();
@@ -22,6 +23,10 @@ export class TermsComponent implements OnInit {
   getTypeOfTerms(){
     if(this.term.subComponents){
       this.term.subComponents.forEach(list => {
+        if(list.type && list.type == "C"){
+          this.hasLink = true;
+        }
+
         switch (list.type) {
           case "B":
             list.term = null;
