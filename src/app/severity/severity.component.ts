@@ -57,7 +57,7 @@ export class SeverityComponent implements OnInit {
     checkPermission() {
         let permission = this.sessionService.getUserPermission();
         if(permission && permission.severity && (!permission.severity.hasAccess)) {
-            this.router.navigate(['/403']);
+            this.router.navigate(['/noAccess403']);
         }
     }
 

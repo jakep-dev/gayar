@@ -73,7 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   checkPermission() {
     let permission = this.sessionService.getUserPermission();
     if(permission && permission.companySearch && (!permission.companySearch.hasAccess)) {
-      this.router.navigate(['/403']);
+      this.router.navigate(['/noAccess']);
     }
   }
 

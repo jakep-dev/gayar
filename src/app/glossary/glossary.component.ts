@@ -30,7 +30,7 @@ export class GlossaryComponent implements OnInit {
   checkPermission() {
     let permission = this.sessionService.getUserPermission();
     if(permission && permission.glossary && (!permission.glossary.hasAccess)) {
-      this.router.navigate(['/403']);
+      this.router.navigate(['/noAccess']);
     }
   }
 
