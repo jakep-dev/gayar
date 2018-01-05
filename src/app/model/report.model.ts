@@ -43,18 +43,3 @@ export interface IChartMetaData {
     tocDescription: string,
     imageData: string
 }
-
-export interface IGlossaryTermModel {
-    term: string
-    definition: string;
-    id: string;
-    subComponents: Array<ISubGlossaryTermModel>
-    list: Array<string>
-}
-
-export interface ISubGlossaryTermModel {
-    term: string
-    definition: string;
-    id: string;
-    list: Array<string>
-}
