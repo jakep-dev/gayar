@@ -99,7 +99,7 @@
         Assessment
       </button>
 
-      <button md-raised-button (click)="onReport()"  [disabled]="true">
+      <button md-raised-button (click)="onReport()"  [disabled]="!isActionEnabled">
         <md-icon>pie_chart</md-icon>
         Report
       </button>
