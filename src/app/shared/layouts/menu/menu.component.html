@@ -93,6 +93,7 @@
           <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
              <div style="font-size: 13px;">{{getSearchCompanyName()}}</div>
+             <pdf-download *ngIf="isSearchCriteriaValid()"></pdf-download>
              <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home" (onClick)="navigateToHome()"></icon-img>
              <icon-img imgSrc="../assets/images/Icon_Glossary.png" imgAlt="Glossary" routerLink="/glossary" (click)="onMenu('Glossary');"></icon-img>
              <icon-img imgSrc="../assets/images/Icon_UnderwritingFramework.png" imgAlt="UnderWriting" (onClick)="launchUnderWriting()"></icon-img>

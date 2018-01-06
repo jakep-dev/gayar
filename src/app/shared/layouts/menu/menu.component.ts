@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuService, SessionService, SearchService } from 'app/services/services';
 import { DOCUMENT } from "@angular/platform-browser";
 import { Observable } from 'rxjs/Observable';
@@ -6,6 +6,7 @@ import { environment } from 'environments/environment';
 import 'rxjs/add/observable/of';
 import { ValidationPeerGroupLossModel } from 'app/model/model';
 import { Router } from '@angular/router';
+import { PdfDownloadComponent } from 'app/pdf-download/pdf-download.component';
 
 const NAV_MODE = 'side';
 
@@ -22,6 +23,10 @@ export class MenuComponent implements OnInit {
   isMenuLock: boolean = false;
   sideNavMode: string = NAV_MODE;
   fullName: string;
+
+  @ViewChild(PdfDownloadComponent) 
+  private pdfDownloader: PdfDownloadComponent;
+  private pdfComponentLoaded: boolean = false;
 
   constructor(public menuService: MenuService,
               private searchService: SearchService,
@@ -101,8 +106,17 @@ export class MenuComponent implements OnInit {
    * Validates whether there is a valid search criteria or not.
    * @return {boolean} - Is a valid search criteria or not.
    */
-  isSearchCriteriaValid () : boolean {
-    return this.searchService.hasValidSearchCriteria();
+  public isSearchCriteriaValid () : boolean {
+    if(this.pdfComponentLoaded) {
+      return true;
+    } else {
+      let searchValid = this.searchService.hasValidSearchCriteria();
+      if(searchValid && this.pdfDownloader) {
+        this.pdfComponentLoaded = true;
+        this.menuService.setPdfDownloader(this.pdfDownloader);
+      }
+      return searchValid;
+    }
   }
 
   /**
