@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuService, ReportService, SessionService } from 'app/services/services';
 import { IReportTileModel } from 'app/model/model';
 import { APPCONSTANTS } from 'app/app.const';
