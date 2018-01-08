@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
+import { Component, OnInit, AfterViewInit,  ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
@@ -94,7 +94,7 @@ import { APPCONSTANTS } from 'app/app.const';
         Benchmark_RetentionComponent
     ]
 })
-export class PdfDownloadComponent implements OnInit {
+export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //Object used to generate PDF
     private pdfMake: any;
@@ -189,7 +189,7 @@ export class PdfDownloadComponent implements OnInit {
     private configurePDFMake(isReady: boolean) {
         if(isReady) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
-            console.log('Font files loaded!');
+            //console.log('Font files loaded!');
         }
     }
 
@@ -208,7 +208,7 @@ export class PdfDownloadComponent implements OnInit {
         //If font files are not loaded setup the call back function to catch the event when font files are loaded
         if(this.fontService.isLoadComplete()) {
             this.pdfMake = getPdfMake(this.fontService.getFontFiles(), this.fontService.getFontNames());
-            console.log('Font files already loaded!');
+            //console.log('Font files already loaded!');
         } else {
             this.fontService.loadCompleted$.subscribe(this.configurePDFMake.bind(this));
         }
@@ -217,21 +217,9 @@ export class PdfDownloadComponent implements OnInit {
 
         //Create cover page
         this.coverPage = new CoverPage();
-        this.coverPage.setFileService(this.getFileService);
 
         //Create table of contents page
         this.tocPage = new TOCPage();
-
-        //Get logged in user's company name
-        //this.coverPage.setUserCompanyName('Advisen');
-        this.searchService.checkForRevenueAndIndustry(0).subscribe((data)=>{
-            if(data && data.message){
-                this.coverPage.setUserCompanyName(data.companyName);
-            }
-        });
-
-        //Call report glossart service to get glossart structure
-        this.getReportGlossaryConfig();
     }
 
     /**
@@ -333,7 +321,7 @@ export class PdfDownloadComponent implements OnInit {
         this.applicationService.getGlossary()
         .subscribe((res: GlossaryDataModel) => {
           this.reportGlossaryModel = res.glossaries;
-          console.log('Report Glossary Data Done!');
+          //console.log('Report Glossary Data Done!');
           this.reportGlossaryDataDone = true;
         });
     }
@@ -355,7 +343,7 @@ export class PdfDownloadComponent implements OnInit {
                 if (res.company != null && res.company.length > 0) {
                     this.frequencyCompanyLossesTable = res.company;
                 }
-                console.log('Frequency Data Done!');
+                //console.log('Frequency Data Done!');
                 this.frequencyDataDone = true;
         });        
     }
@@ -374,7 +362,7 @@ export class PdfDownloadComponent implements OnInit {
             if (res.company != null && res.company.length > 0) {
                 this.severityCompanyLossesTable = res.company;
             }
-            console.log('Severity Data Done!');
+            //console.log('Severity Data Done!');
             this.severityDataDone = true;
         });
     }
@@ -479,7 +467,7 @@ export class PdfDownloadComponent implements OnInit {
     private clearArray(array: Array<any>) {
         array.length = 0;
         for(let item in array) {
-            console.log('Deleting key ' + item);
+            //console.log('Deleting key ' + item);
             delete array[item];
         }
     }
@@ -503,11 +491,11 @@ export class PdfDownloadComponent implements OnInit {
         section.subComponents.forEach(subComponentItem => {
             if(subComponentItem.value) {
                 if(!sectionHeaderAdded) {
-                    console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
+                    //console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
                     this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
                     sectionHeaderAdded = true;
                 }
-                console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
+                //console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                 this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
                 subEntryAdded = true;
                 this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
@@ -518,17 +506,17 @@ export class PdfDownloadComponent implements OnInit {
                 subComponentItem.subSubComponents.forEach(subSubComponentItem => {
                     if(subSubComponentItem.value) {
                         if(!sectionHeaderAdded) {
-                            console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
+                            //console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
                             this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
                             sectionHeaderAdded = true;
                         }
                         if(!subEntryAdded) {
-                            console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
+                            //console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                             this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
                             this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
                             subEntryAdded = true;
                         }
-                        console.log('Sub Sub Component = ' + subSubComponentItem.description + ' pageType = ' + subSubComponentItem.pageType);
+                        //console.log('Sub Sub Component = ' + subSubComponentItem.description + ' pageType = ' + subSubComponentItem.pageType);
                         this.tocPage.addTocEntry(subSubComponentItem.description, 3, subSubComponentItem.pageType);
                         this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType, subSubComponentItem.description);
                     }
@@ -556,7 +544,7 @@ export class PdfDownloadComponent implements OnInit {
 
         if(!this.hasPageType(pageType)) {
             this.addPageType(pageType);
-            console.log('Loaded Page type ' + pageType);
+            //console.log('Loaded Page type ' + pageType);
         }
         if(chartComponents) {
             n = chartComponents.length;
@@ -1129,7 +1117,7 @@ export class PdfDownloadComponent implements OnInit {
             this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
         }
         this.chartLoadCount++;
-        console.log('image size = ' + buffer.length);
+        //console.log('image size = ' + buffer.length);
         if(this.chartLoadCount < this.chartDataCollection.length) {
             this.loadChartImage();
         } else {
@@ -1179,7 +1167,7 @@ export class PdfDownloadComponent implements OnInit {
      */
     private calculatePageCount(page: BasePage) {
         if(page.isPageCountingRequired()) {
-            console.log('Counting pages for ' + page.getPageType());
+            //console.log('Counting pages for ' + page.getPageType());
             this.pdfBuilder.clearImages();
             this.pdfBuilder.clearStyles();
             this.pdfBuilder.clearPdfContent();
@@ -1190,11 +1178,11 @@ export class PdfDownloadComponent implements OnInit {
                 this.pagesProcessedCount++;
                 //subtract one from the page count due to page break
                 page.setPageCount(this.pdfBuilder.getPageCount() - 1 );
-                console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
+                //console.log(page.getPageType() + ' has ' + page.getPageCount() + ' page(s).');
                 this.processPageCounts();
             });
         } else {
-            console.log('No need to count pages for ' + page.getPageType());
+            //console.log('No need to count pages for ' + page.getPageType());
             this.pagesProcessedCount++;
             this.processPageCounts();
         }
@@ -1237,4 +1225,30 @@ export class PdfDownloadComponent implements OnInit {
 
     ngOnInit() {}
 
+    ngAfterViewInit() {
+        let token = null;
+        if(this.sessionService) {
+            try {
+                token = this.sessionService.Token;
+            } catch {
+                this.sessionService.restoreIdentity();
+            }
+        }
+        if(token) {
+            this.fontService.loadFontFiles();
+            this.coverPage.setFileService(this.getFileService);
+            //Get logged in user's company name
+            //this.coverPage.setUserCompanyName('Advisen');
+            this.searchService.checkForRevenueAndIndustry(0).subscribe((data)=>{
+                if(data && data.message){
+                    this.coverPage.setUserCompanyName(data.companyName);
+                }
+            });
+            //Call report glossart service to get glossart structure
+            this.getReportGlossaryConfig();    
+        } else {
+            //for refresh of page allow the main content area to load before this loads
+            setTimeout(this.ngAfterViewInit.bind(this), 500);
+        }
+    }
 }

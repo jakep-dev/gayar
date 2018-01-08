@@ -29,6 +29,13 @@ export class ReportComponent implements OnInit {
      */
     ngOnInit() {
         this.menuService.breadCrumb = 'Report';
+        if(this.sessionService) {
+            try {
+                let token: string = this.sessionService.Token;
+            } catch {
+                this.sessionService.restoreIdentity();
+            }
+        }
         //Call report service to get report structure
         this.getReportConfig();
     }
@@ -44,7 +51,7 @@ export class ReportComponent implements OnInit {
         this.reportService.getReportConfig().subscribe((data)=> {
             this.reportTileModel = data;
             this.buildReportPermission();
-            console.log('Report Data Done!');
+            //console.log('Report Data Done!');
             this.reportDataDone = true;
         });
     }
@@ -211,35 +218,6 @@ export class ReportComponent implements OnInit {
                 return permission && permission.severity && permission.severity.incident && permission.severity.incident.hasDetailAccess;
             case APPCONSTANTS.REPORTS_ID.severityLoss:
                 return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasDetailAccess;
-            
-            default: 
-                return false;
-        }
-    }
-
-    /**
-     * getTableDetailAccess - get the table row detail access
-     * 
-     * @private
-     * @function getTableDetailAccess
-     * @param id - id of the table detail
-     * @return {boolean} - true if the table row detail has access, otherwise false
-     */
-    private getTableDetailAccess(id: string) {
-        let permission = this.sessionService.getUserPermission();
-        switch(id) {
-
-            //frequency detailed tables
-            case APPCONSTANTS.REPORTS_ID.frequencyCompanyLossesDetails:
-                return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && permission.frequency.companyTable.hasDescriptionAccess;
-            case APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails:
-                return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess && permission.frequency.peerGroupTable.hasDescriptionAccess;
-            
-            //severity detailed tables
-            case APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails:
-                return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && permission.severity.companyTable.hasDescriptionAccess;
-            case APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails:
-                return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess && permission.severity.peerGroupTable.hasDescriptionAccess;
             
             default: 
                 return false;

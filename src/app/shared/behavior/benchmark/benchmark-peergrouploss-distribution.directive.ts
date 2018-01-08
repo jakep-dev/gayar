@@ -180,7 +180,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     && (this.modelData.medianLimit !== 0
                     && (this.modelData.clientLimit > this.modelData.medianLimit ||
                         this.modelData.clientLimit < this.modelData.medianLimit))))){ 
-                    console.log('scenario1');
+                    //console.log('scenario1');
                     tempChartData.series = this.seriesData(this.modelData.lossAmountAboveLabel,
                                             this.modelData.lossAmountBelowLabel,
                                             false,
@@ -194,7 +194,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 }
                 // scenario 2 
                 if(this.modelData.clientLimit === this.modelData.medianLimit){
-                    console.log('scenario2');
+                    //console.log('scenario2');
                     tempChartData.series = this.seriesData(this.modelData.lossAmountAboveLabel,
                                             this.modelData.lossAmountBelowLabel,
                                             false,
@@ -210,7 +210,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 3
                 if(this.modelData.medianLimit <= this.modelData.maxLoss
                     &&  this.modelData.clientLimit === null){
-                    console.log('scenario3');
+                    //console.log('scenario3');
                     tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -226,7 +226,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if(this.modelData.clientLimit !== null && this.modelData.medianLimit !== 0 
                     && this.modelData.medianLimit <= this.modelData.maxLoss
                     && this.modelData.clientLimit > this.modelData.maxLoss){
-                            console.log('scenario4');
+                            //console.log('scenario4');
                             tempChartData.series = this.seriesData(
                                             this.modelData.lossAmountAboveLabel,
                                             this.modelData.lossAmountBelowLabel,
@@ -242,7 +242,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 5
                 if(this.modelData.clientLimit && this.modelData.clientLimit < this.modelData.maxLoss
                     && (this.modelData.clientLimit === 0 || this.modelData.clientLimit === null)){
-                            console.log('scenario5');
+                            //console.log('scenario5');
                             tempChartData.series = this.seriesData(false,
                                             false,
                                             this.modelData.lossAmountAboveLabel,
@@ -256,7 +256,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 6
                 if(this.modelData.clientLimit > this.modelData.maxLoss
                     && (this.modelData.clientLimit === 0 || this.modelData.clientLimit === null)){
-                            console.log('scenario6');
+                            //console.log('scenario6');
                             tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -271,7 +271,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if(this.modelData.clientLimit && this.modelData.maxLoss && (this.modelData.medianLimit !== this.modelData.clientLimit
                      && this.modelData.clientLimit > this.modelData.maxLoss
                         && this.modelData.medianLimit > this.modelData.maxLoss)){ 
-                            console.log('scenario7');
+                            //console.log('scenario7');
                             tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -287,7 +287,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if(this.modelData.clientLimit && this.modelData.clientLimit > this.modelData.maxLoss
                         && this.modelData.medianLimit > this.modelData.maxLoss
                         && this.modelData.medianLimit === this.modelData.clientLimit){
-                        console.log('scenario8');
+                        //console.log('scenario8');
                         tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -302,7 +302,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 9
                 if(this.modelData.maxLoss !== null && this.modelData.clientLimit === null 
                         && this.modelData.medianLimit > this.modelData.maxLoss){
-                    console.log('scenario9');
+                    //console.log('scenario9');
                     tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -318,7 +318,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if(this.modelData.clientLimit === null 
                         && (this.modelData.medianLimit === 0 || this.modelData.medianLimit === null)
                          && this.modelData.maxLoss !== null && this.modelData.minLoss !== null){
-                    console.log('scenario10');
+                    //console.log('scenario10');
                     tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -333,7 +333,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 11
                 if((this.modelData.clientLimit !== null && this.modelData.medianLimit !== null) 
                     && (this.modelData.maxLoss === null && this.modelData.maxLoss === null)){
-                        console.log('scenario11');
+                        //console.log('scenario11');
                         tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -349,7 +349,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 if((this.modelData.clientLimit !== null && this.modelData.medianLimit!== null) 
                     && (this.modelData.clientLimit === this.modelData.medianLimit)
                     && (this.modelData.losses === null)){
-                        console.log('scenario12');
+                        //console.log('scenario12');
                         tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
@@ -364,7 +364,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                 // scenario 13
                 if((this.modelData.clientLimit === null || this.modelData.medianLimit === 0)
                      && this.modelData.maxLoss === null && this.modelData.minLoss === null){
-                        console.log('scenario13');
+                        //console.log('scenario13');
                         tempChartData.series = this.seriesData(false,
                                             false,
                                             false,
