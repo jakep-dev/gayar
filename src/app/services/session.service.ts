@@ -17,10 +17,10 @@ export class SessionService extends BaseService {
         super(http);
     }
 
-    public getCurrentIdentity(userId: string, applicationId: string): Observable<SessionModel> {
-        try{
+    public getCurrentIdentity(token: string, applicationId: string): Observable<SessionModel> {
+        try {
            return super.Post<SessionResponseModel>('/api/getCurrentIdentity', {
-               'userId': userId,
+               'token': token,
                'productCode': applicationId
            }).map((res: SessionResponseModel)=>{
                this.currentIdentity = res.userinfo;

@@ -17,11 +17,6 @@ export abstract class BaseService {
 
     //Perform the post request operation
     public Post<T>(endPoint: string, data: any): Observable<T>{
-        if(!this.currentIdentity){
-            this.getToken();
-        }
-       this.handleRequestProgress();
-       data.token = this.currentIdentity ? this.currentIdentity.token || null : null;
        return this.http.post(endPoint, data, this.requestOptions)
                  .map((res: Response)=>{
                      this.isHttpRequestInProgress.next(false);

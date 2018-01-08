@@ -47,6 +47,10 @@
                 "contract": "/cybermetrix/getActiveSession"
             },
             {
+                "name": "getActiveSessionByToken",
+                "contract": "/advwebservice/templateManager/getUserInfo"
+            },
+            {
                 "name": "getPermissions",
                 "contract": "/cybermetrix/permissions/user/getPermissions"
             },

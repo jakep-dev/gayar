@@ -14,11 +14,11 @@ export class SessionRouter extends BaseRoute {
 
     //Get active session
     public getCurrentIdentity(req: Request, res: Response, next: NextFunction){
-
+        console.log('Request Token ', req.body.token);
         try {
             async.waterfall([
                 function(callback) {
-                    SessionRouter.prototype.getUserDetails(req.body.userId, callback);
+                    SessionRouter.prototype.getUserDetails(req.body.token, callback);
                 },
                 function (userInfo, callback) {
                     if( userInfo && 
@@ -27,6 +27,7 @@ export class SessionRouter extends BaseRoute {
                             SessionRouter.prototype.getUserPermissionForComponents(userInfo, req.body.productCode, callback);
                     } else {
                         res.send(userInfo);
+                        return;
                     }
                 },
                 function(userInfo, componentPermissions, callback) {
@@ -44,11 +45,20 @@ export class SessionRouter extends BaseRoute {
         
     }
 
-    private getUserDetails (userId: number, callback: any) {
-        
-        super.PerformGetRequest("getActiveSession", {
-            'user_id': userId
+    private getUserDetails (token: string, callback: any) {
+        super.PerformGetRequest("getActiveSessionByToken", {
+            'ssnid': token
         }, (data)=>{
+            if(data && data.userId) {
+                data.userinfo = {
+                    userId: data.userId,
+                    loginName: data.loginName,
+                    fullName: data.fullName,
+                    token: token
+                }
+                data.token = token;
+            }
+            console.log(data);
             callback(null, data);
         });
     }
