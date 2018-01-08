@@ -40,6 +40,11 @@ export class MenuComponent implements OnInit {
     this.watchForInprogress();
   }
 
+  setupPdfDownloader() {
+        this.pdfComponentLoaded = true;
+        this.menuService.setPdfDownloader(this.pdfDownloader);
+  }
+
   onMenu (name) {
     this.menuService.breadCrumb = name;
   }
@@ -53,7 +58,6 @@ export class MenuComponent implements OnInit {
     this.showShortMenu = !this.showShortMenu;
     this.isMenuLock = !this.isMenuLock;
   }
-
 
   /**
    * shortMenuMouseOver - shows the shorter menu over main menu
@@ -115,12 +119,10 @@ export class MenuComponent implements OnInit {
     if(this.pdfComponentLoaded) {
       return true;
     } else {
-      let searchValid = this.searchService.hasValidSearchCriteria();
-      if(searchValid && this.pdfDownloader) {
-        this.pdfComponentLoaded = true;
-        this.menuService.setPdfDownloader(this.pdfDownloader);
+      if(this.searchService && this.sessionService && this.searchService.hasValidSearchCriteria() && this.sessionService.isLoggedIn()) {
+        setTimeout(this.setupPdfDownloader.bind(this), 0);
       }
-      return searchValid;
+      return false;
     }
   }
 
@@ -130,7 +132,6 @@ export class MenuComponent implements OnInit {
    * @return {type}  description
    */
   watchForInprogress () {
-    
   }
 
   /**

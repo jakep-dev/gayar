@@ -39,7 +39,6 @@ export class FontService extends BaseServiceClient {
 
     constructor(http: HttpClient) {
         super(http);
-        this.loadFontFiles();
     }
 
     private setFontFile(fileName: string, base64Blob: string) {
@@ -79,7 +78,7 @@ export class FontService extends BaseServiceClient {
 
     }
 
-    private loadFontFiles() {
+    public loadFontFiles() {
         for (let fontFamily in this.fontNameMapping) {
             for (let font in this.fontNameMapping[fontFamily]) {
                 let file = this.fontNameMapping[fontFamily][font];
@@ -89,5 +88,5 @@ export class FontService extends BaseServiceClient {
             }
         }
     }
-    
+
 }
