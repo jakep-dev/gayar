@@ -71,7 +71,7 @@ export class SeverityRouter extends BaseRoute {
     public getSeverityTypeOfLossFlipDetailDataset(req: Request, res: Response, next: NextFunction) {
         try {
             super.PerformGetRequest("getSeverityTypeOfLossFlipDetailDataset", {
-                'ssnid': req.body.token,
+                'ssnid': req.header('authorization'),
                 'company_id': req.body.company_id,
                 'naics': req.body.naics,
                 'revenue_range': req.body.revenue_range,

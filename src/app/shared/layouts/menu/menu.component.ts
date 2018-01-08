@@ -105,6 +105,11 @@ export class MenuComponent implements OnInit {
     let permission = this.sessionService.getUserPermission();
     return permission && permission.glossary && permission.glossary.hasAccess
   }
+  
+  isUnderwritingFramework(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.underWritingFramework && permission.underWritingFramework.hasAccess;
+  }
 
   /**
    * Validates whether there is a valid search criteria or not.
@@ -157,13 +162,24 @@ export class MenuComponent implements OnInit {
   }
 
   /**
+   * navigateGlossary - Navigate to the glossary page.
+   *
+   * @return {type} - No return type.
+   */
+  navigateGlossary (){
+    if(this.isGlossary()) {
+      this.onMenu('Glossary');
+      this.router.navigate(['/glossary']);
+    }
+  }
+
+  /**
    * launchUnderWriting - Launch the underwriting application.
    *
    * @return {type} - No return type.
    */
   launchUnderWriting () {
-     let permission = this.sessionService.getUserPermission();
-     if(permission && permission.underWritingFramework && permission.underWritingFramework.hasAccess) {
+    if( this.isUnderwritingFramework() ) {
       const userId: number = this.sessionService.UserId;
       const token: string = this.sessionService.Token;
       const url = `${environment.underwritingUrl}/${userId}/${token}/true`;
@@ -172,8 +188,6 @@ export class MenuComponent implements OnInit {
           winRef.location.href = url;
       }
       winRef.location.href = url;
-     } else {
-       this.router.navigate(['/noAccess']);
      }
   }
 
