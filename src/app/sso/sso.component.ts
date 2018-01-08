@@ -27,9 +27,9 @@ export class SsoComponent implements OnInit {
    * Get current identity from the server.
    */
   private getCurrentIdentity(){
-      let userId: string  = this.route.snapshot.params['userId'];
-      if(userId){
-          this.sessionService.getCurrentIdentity(userId, APPCONSTANTS.APPLICATION_ID).subscribe((res: SessionModel)=>{
+      let token: string  = this.route.snapshot.params['token'];
+      if(token){
+          this.sessionService.getCurrentIdentity(token, APPCONSTANTS.APPLICATION_ID).subscribe((res: SessionModel)=>{
             if(this.sessionService.isLoggedIn()){
               this.router.navigate(['/search']);
               }
@@ -37,6 +37,9 @@ export class SsoComponent implements OnInit {
                 this.router.navigate(['/401']);
               }
           });
+      }
+      else{
+        this.router.navigate(['/401']);
       }
   }
 }

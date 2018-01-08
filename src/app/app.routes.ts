@@ -20,7 +20,7 @@ export const APP_ROUTES: Routes = [
     { path: 'report',       component:  ReportComponent},
     { path: 'glossary',     component:  GlossaryComponent},
     { path: 'pdfdownload',  component:  PdfDownloadComponent},
-    { path: 'sso/:userId',  component:  SsoComponent },
+    { path: 'sso/:token',   component:  SsoComponent },
     { path: 'noAccess',     component:  NoAccessComponent },
     { path: 'error',        component:  E500Component },
     { path: '401',          component:  E401Component },
