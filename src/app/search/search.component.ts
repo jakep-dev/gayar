@@ -435,4 +435,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnDestroy () {
 
   }
+
+  isReport(): boolean {
+    let permission = this.sessionService.getUserPermission();
+    return permission && permission.report && permission.report.hasAccess
+  }
 }
