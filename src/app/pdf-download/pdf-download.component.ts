@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit,  ViewChild, ViewContainerRef, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
+import { Component, OnInit, AfterViewInit,  ViewChild, ViewContainerRef, ViewEncapsulation, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
@@ -69,6 +69,7 @@ import { SnackBarService } from 'app/shared/shared';
     selector: 'pdf-download',
     templateUrl: 'pdf-download.component.html',
     styleUrls: ['./pdf-download.component.scss'],
+    encapsulation: ViewEncapsulation.None,
     entryComponents: [        
         Dashboard_BenchmarkComponent, 
         Dashboard_FrequencyComponent, 
@@ -1157,29 +1158,49 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(childImages.length > 0) {
                 //First child is th SVG image, calling chart.getSVG changes the underlying svg
                 let svgElement = childImages[0];
-                //IE doesn't support outerHTML for svg tag
-                let data = svgElement.parentNode.innerHTML;
-                //Filter out all child nodes except for the svg tag
-                let indexPosition = data.indexOf('</svg>');
-                if(indexPosition < 0) {
-                    indexPosition = data.indexOf('</SVG>');
-                }
-                if(indexPosition > 0) {
-                    //console.log("fragment = " + data.substr(indexPosition, 6));
-                    data = data.substr(0, indexPosition + 6);
-                }
-                //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
-                //Firefox requires a specific xlink for external images
-                data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
-
-                canvasFactory(this.canvas.nativeElement, data,  
-                    { 
-                        ignoreMouse: true, 
-                        ignoreAnimation: true, 
-                        useCORS: true,
-                        renderCallback: this.renderCompleteCallback.bind(this)
+                let tspan: Array<any> = svgElement.getElementsByTagName('tspan');
+                if(tspan.length == 1) {
+                    let isNoData = false;
+                    if(tspan[0].innerHTML === 'No Data Available') {
+                        isNoData = true;
+                    } else if(tspan[0].childNodes && (tspan[0].childNodes.length == 1) && (tspan[0].childNodes[0].textContent === 'No Data Available') ) {
+                        isNoData = true;
                     }
-                );
+                    if(isNoData) {
+                        this.chartLoadCount++;
+                        //if svg is showing a chart with no data, loaded the next chart
+                        if(this.chartLoadCount < this.chartDataCollection.length) {
+                            this.loadChartImage();
+                        } else {
+                            //Start off the page count process if no more chart images to load
+                            this.processPageCounts();
+                        }
+                    }
+                } else {
+                    //IE doesn't support outerHTML for svg tag
+                    let data = svgElement.parentNode.innerHTML;
+                    //Filter out all child nodes except for the svg tag
+                    let indexPosition = data.indexOf('</svg>');
+                    if(indexPosition < 0) {
+                        indexPosition = data.indexOf('</SVG>');
+                    }
+                    if(indexPosition > 0) {
+                        //console.log("fragment = " + data.substr(indexPosition, 6));
+                        data = data.substr(0, indexPosition + 6);
+                    }
+                    //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
+                    //Firefox requires a specific xlink for external images
+                    data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
+
+                    canvasFactory(this.canvas.nativeElement, data,  
+                        { 
+                            ignoreMouse: true, 
+                            ignoreAnimation: true, 
+                            useCORS: true,
+                            renderCallback: this.renderCompleteCallback.bind(this)
+                        }
+                    );
+                }
             } else {
                 //if svg is not loaded, loaded the next chart
                 if(this.chartLoadCount < this.chartDataCollection.length) {

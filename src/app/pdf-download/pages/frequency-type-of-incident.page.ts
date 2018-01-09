@@ -86,13 +86,15 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
                 ],
                 [
                     {
-                        image: this.imageLeft,
-                        width: 375,
-                        margin: [ -30, 0, 0, 0 ]
+                        text: ''
+                        //image: this.imageLeft,
+                        //width: 375,
+                        //margin: [ -30, 0, 0, 0 ]
                     },
                     {
-                        image: this.imageRight,
-                        width: 375
+                        text: ''
+                        //image: this.imageRight,
+                        //width: 375
                         
                     }
                 ]
@@ -186,23 +188,46 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
      */
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
-            chartName = chartName.replace(/\-/g,'_');
-            let imageName = this.prefix + chartName;
-            this.table.table.body[1][index].image = imageName;
-            switch(index) {
-                case 0:
-                    this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl;
-                    break;
-                case 1:
-                    this.imageRight = chartName;
-                    this.imageRightUrl = chartDataUrl;
-                    break;
+            if(chartName && chartDataUrl) {
+                chartName = chartName.replace(/\-/g,'_');
+                let imageName = this.prefix + chartName;
+                //replace text attribute with image, margin and width attributes
+                if(typeof this.table.table.body[1][index].text !== 'undefined') {
+                    delete this.table.table.body[1][index].text;
+                }
+                this.table.table.body[1][index].image = imageName;
+                this.table.table.body[1][index].width = 375;
+                switch(index) {
+                    case 0:
+                        this.imageLeft = chartName;
+                        this.imageLeftUrl = chartDataUrl;
+                        this.table.table.body[1][index].margin = [ -30, 0, 0, 0 ];
+                        break;
+                    case 1:
+                        this.imageRight = chartName;
+                        this.imageRightUrl = chartDataUrl;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                this.images[imageName] = chartDataUrl;
+            } else {
+                //replace image, margin and width attributes with text attribute
+                if(typeof this.table.table.body[1][index].image !== 'undefined') {
+                    delete this.table.table.body[1][index].image;
+                }
+                if(typeof this.table.table.body[1][index].width !== 'undefined') {
+                    delete this.table.table.body[1][index].width;
+                }
+                if(typeof this.table.table.body[1][index].margin !== 'undefined') {
+                    if(this.table.table.body[1][index].margin && this.table.table.body[1][index].margin.length > 0) {
+                        this.table.table.body[1][index].margin.length = 0;
+                    }
+                    delete this.table.table.body[1][index].margin;
+                }
+                this.table.table.body[1][index].text = '';
             }
-            this.images[imageName] = chartDataUrl;
         }
         //all content added are on first page
         return 1;
@@ -227,13 +252,12 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
             this.images[this.prefix + this.imageLeft] = this.imageLeftUrl;
+            this.table.table.body[1][0].image = this.prefix + this.imageLeft;
         }
         if(this.imageRightUrl) {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;
+            this.table.table.body[1][1].image = this.prefix + this.imageRight;
         }
-
-        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[1][1].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

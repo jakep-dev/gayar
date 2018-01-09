@@ -1,14 +1,16 @@
 <md-toolbar color="primary" [ngClass]="{'withPercentage' : percentageText}">
     
     <button md-icon-button [mdMenuTriggerFor]="menu">
-        <icon-img imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <icon-img imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
+            <div class="percentageText">{{percentageText}}</div>
+        </div>
     </button>
-    <span class="percentageText">{{percentageText}}</span>
 
-    <md-menu #menu="mdMenu">
+    <md-menu class="pdfMenu" #menu="mdMenu" >
         <button md-menu-item *ngFor="let menu of menuItems" (click)="menuClicked(menu.id)" [disabled]="menu.disabled" >
             <md-icon class="material-icons md-light md-48">{{menu.iconName}}</md-icon>
-            <span>{{menu.menuName}}</span>                    
+            <span class="pdfMenuText">{{menu.menuName}}</span>                    
         </button>
     </md-menu>
 </md-toolbar>
