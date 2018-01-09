@@ -63,6 +63,7 @@ import { BaseChart } from 'app/shared/charts/base-chart';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
 import { APPCONSTANTS } from 'app/app.const';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
     selector: 'pdf-download',
@@ -175,6 +176,39 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //The insertion point for the dynamic loading of chart components
     @ViewChild('entryPoint', { read: ViewContainerRef }) entryPoint: ViewContainerRef;
 
+    public isProcessing: boolean = false;
+    
+    private pdfDocument: any = null;
+    
+    private filename: string;
+
+    private fileData: any = null;
+
+    private static generateButtonId: number = 1;
+    private static cancelButtonId: number = 2;
+
+    private static INITIAL_MESSAGE = 'No Assessment Report!';
+
+    public percentageText: string = '';
+
+    private generateMenu: any = {
+        id: PdfDownloadComponent.generateButtonId,
+        menuName: PdfDownloadComponent.INITIAL_MESSAGE,
+        iconName: 'party_mode',
+        disabled: true
+    };
+    
+    private cancelMenu: any = {
+        id: PdfDownloadComponent.cancelButtonId,
+        menuName: 'Cancel PDF',
+        iconName: 'cancel',
+        disabled: false
+    };
+
+    public menuItems: Array<any> = [
+        this.generateMenu
+    ];
+
     //Reference to the HighChart object
     private chart: BaseChart;
 
@@ -196,6 +230,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     constructor(
         private searchService: SearchService,
         private sessionService: SessionService,
+        private snackBarService: SnackBarService,
         private fontService: FontService,
         private getFileService: GetFileService,
         private rootElement: ElementRef,
@@ -367,6 +402,51 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         });
     }
 
+    private resetDownloadMenu() {
+        this.fileData = null;
+        this.filename = null;
+        this.pdfDocument = null;
+        this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
+        this.generateMenu.disabled = true;
+        this.resetDataStructures();
+        this.percentageText = '';
+    }
+
+    private resetDataStructures() {
+        this.chartLoadCount = 0;
+        this.pagesProcessedCount = 0;
+        this.chartDataCollection.length = 0;
+        this.pageOrder.length = 0;
+        this.clearArray(this.pageCollection);
+        this.tocPage.clearTOC();
+        this.entryPoint.clear();
+    }
+
+    private setDownloadMenuMessage(message: string, percentageText: string) {
+        this.generateMenu.menuName = message;
+        this.percentageText = percentageText;
+    }
+
+    private addCancelMenu() {
+        this.menuItems = [this.generateMenu, this.cancelMenu];
+    }
+
+    private removeCancelMenu() {
+        this.menuItems = [this.generateMenu];
+    }
+
+    private menuClicked(buttonId: number) {
+        console.log(buttonId);
+        if(buttonId == PdfDownloadComponent.generateButtonId) {
+            if(this.pdfDocument && this.fileData) {
+                this.pdfDocument.download(this.filename || 'Assessment_Report.pdf');
+                this.percentageText = '';
+            }
+        } else if(buttonId == PdfDownloadComponent.cancelButtonId) {
+            this.isProcessing = false;
+            this.removeCancelMenu();
+        }
+    }
 
     /**
      * Starts the pdf generation process based on search input, report selections and user's permissions
@@ -378,49 +458,63 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      */
     public buildPdf(reportSelections: Array<IReportTileModel>) {
 
-        this.reportSelections = reportSelections;
-        let naics: string = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
-        let revenueRange: string = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
-
-        //set cover page's company name, industry name and revenue range labels
-        this.coverPage.setCompanyName((this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value);
-        if(naics) {
-            this.coverPage.setIndustryName(naics);
+        if(!this.isProcessing) {
+            this.isProcessing = true;
+            this.resetDownloadMenu();
+            this.addCancelMenu();
+    
+            this.reportSelections = reportSelections;
+            let naics: string = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
+            let revenueRange: string = (this.searchService.searchCriteria.revenue && this.searchService.searchCriteria.revenue.rangeDisplay)? this.searchService.searchCriteria.revenue.rangeDisplay : null; 
+    
+            //set cover page's company name, industry name and revenue range labels
+            this.coverPage.setCompanyName((this.searchService.selectedCompany && this.searchService.selectedCompany.companyName) ? this.searchService.selectedCompany.companyName : this.searchService.searchCriteria.value);
+            if(naics) {
+                this.coverPage.setIndustryName(naics);
+            }
+            if(revenueRange) {
+                this.coverPage.setRevenueRangeText(revenueRange);
+            }
+            
+            //initialize chart input objects
+            this.setupChartInput(naics, revenueRange);
+            //Call frequecy service to get frequency table data
+            this.getFrequencyTables();
+            //Call severity service to get severity table data
+            this.getSeverityTables();
+    
+            //Start the pdf generation process
+            this.onReport();
+        } else {
+            this.snackBarService.Simple('PDF Generation in progress.  Please cancel current process and try again.');
         }
-        if(revenueRange) {
-            this.coverPage.setRevenueRangeText(revenueRange);
-        }
-        
-        //initialize chart input objects
-        this.setupChartInput(naics, revenueRange);
-        //Call frequecy service to get frequency table data
-        this.getFrequencyTables();
-        //Call severity service to get severity table data
-        this.getSeverityTables();
-
-        //Start the pdf generation process
-        this.onReport();
     }
 
     /**
      * Continuosly wait for all resources and data are loaded before starting the pdf generation process
      * 
-     * @public
+     * @private
      * @function onReport
      * @return {} - No return types.
      */
-    public onReport () {
-        //check if the pdf fonts are loaded
-        //check if cover page image is loaded
-        //check if report glossary data is loaded
-        //check if frequency table data is loaded
-        //check if severity table data is loaded
-        if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportGlossaryDataDone 
-            && this.frequencyDataDone && this.severityDataDone) {
-            this.startReportProcess();
+    private onReport () {
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
         } else {
-            console.log('Waiting for resources to load before starting report.');
-            setTimeout(this.onReport.bind(this), 1000);
+            //check if the pdf fonts are loaded
+            //check if cover page image is loaded
+            //check if report glossary data is loaded
+            //check if frequency table data is loaded
+            //check if severity table data is loaded
+            if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportGlossaryDataDone 
+                && this.frequencyDataDone && this.severityDataDone) {
+                this.setDownloadMenuMessage('5% done.', '5%');
+                this.startReportProcess();
+            } else {
+                console.log('Waiting for resources to load before starting report.');
+                this.setDownloadMenuMessage('0% done.', '0%');
+                setTimeout(this.onReport.bind(this), 1000);
+            }
         }
     }
 
@@ -434,24 +528,24 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private startReportProcess() {
-        this.chartLoadCount = 0;
-        this.pagesProcessedCount = 0;
-        this.chartDataCollection.length = 0;
-        this.pageOrder.length = 0;
-        this.clearArray(this.pageCollection);
-        this.tocPage.clearTOC();
+        this.resetDataStructures();
         this.reportSelections.forEach(reportSection => {
             if(reportSection.value) {
                 this.processReportSection(reportSection);
             }
         });
+        this.setDownloadMenuMessage('10% done.', '10%');
         //console.log(this.chartDataCollection);
-        //Start processing of chart images
-        if(this.chartDataCollection.length > 0) {
-            this.loadChartImage();
-        } else if(this.pageOrder.length > 0) {
-            //if no chart images the start the page count processing
-            this.processPageCounts();
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
+        } else {
+            //Start processing of chart images
+            if(this.chartDataCollection.length > 0) {
+                this.loadChartImage();
+            } else if(this.pageOrder.length > 0) {
+                //if no chart images the start the page count processing
+                this.processPageCounts();
+            }
         }
     }
 
@@ -1034,8 +1128,12 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private startImageConversion(start: boolean) {
-        if(start && this.chart != null) {
-            setTimeout(this.loadCurrentChartImage.bind(this), 1000);
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
+        } else {
+            if(start && this.chart != null) {
+                setTimeout(this.loadCurrentChartImage.bind(this), 1000);
+            }    
         }
     }
 
@@ -1050,42 +1148,46 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private loadCurrentChartImage() {
-        //check if svg image is loaded.  If it is loaded then use the canvasFactory to 
-        //convert svg to png as a data URL
-        let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
-        if(childImages.length > 0) {
-            //First child is th SVG image, calling chart.getSVG changes the underlying svg
-            let svgElement = childImages[0];
-            //IE doesn't support outerHTML for svg tag
-            let data = svgElement.parentNode.innerHTML;
-            //Filter out all child nodes except for the svg tag
-            let indexPosition = data.indexOf('</svg>');
-            if(indexPosition < 0) {
-                indexPosition = data.indexOf('</SVG>');
-            }
-            if(indexPosition > 0) {
-                //console.log("fragment = " + data.substr(indexPosition, 6));
-                data = data.substr(0, indexPosition + 6);
-            }
-            //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
-            //Firefox requires a specific xlink for external images
-            data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
-
-            canvasFactory(this.canvas.nativeElement, data,  
-                { 
-                    ignoreMouse: true, 
-                    ignoreAnimation: true, 
-                    useCORS: true,
-                    renderCallback: this.renderCompleteCallback.bind(this)
-                }
-            );
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
         } else {
-            //if svg is not loaded, loaded the next chart
-            if(this.chartLoadCount < this.chartDataCollection.length) {
-                this.loadChartImage();
+            //check if svg image is loaded.  If it is loaded then use the canvasFactory to 
+            //convert svg to png as a data URL
+            let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
+            if(childImages.length > 0) {
+                //First child is th SVG image, calling chart.getSVG changes the underlying svg
+                let svgElement = childImages[0];
+                //IE doesn't support outerHTML for svg tag
+                let data = svgElement.parentNode.innerHTML;
+                //Filter out all child nodes except for the svg tag
+                let indexPosition = data.indexOf('</svg>');
+                if(indexPosition < 0) {
+                    indexPosition = data.indexOf('</SVG>');
+                }
+                if(indexPosition > 0) {
+                    //console.log("fragment = " + data.substr(indexPosition, 6));
+                    data = data.substr(0, indexPosition + 6);
+                }
+                //don't add attribute to svgElement via setAttribute, in IE it mangles the namespace
+                //Firefox requires a specific xlink for external images
+                data = data.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ');
+
+                canvasFactory(this.canvas.nativeElement, data,  
+                    { 
+                        ignoreMouse: true, 
+                        ignoreAnimation: true, 
+                        useCORS: true,
+                        renderCallback: this.renderCompleteCallback.bind(this)
+                    }
+                );
             } else {
-                //Start off the page count process if no more chart images to load
-                this.processPageCounts();
+                //if svg is not loaded, loaded the next chart
+                if(this.chartLoadCount < this.chartDataCollection.length) {
+                    this.loadChartImage();
+                } else {
+                    //Start off the page count process if no more chart images to load
+                    this.processPageCounts();
+                }
             }
         }
     }
@@ -1118,10 +1220,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
         this.chartLoadCount++;
         //console.log('image size = ' + buffer.length);
-        if(this.chartLoadCount < this.chartDataCollection.length) {
-            this.loadChartImage();
+        let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
+        this.setDownloadMenuMessage(value + '% done.', value + '%');
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
         } else {
-            this.processPageCounts();
+            if(this.chartLoadCount < this.chartDataCollection.length) {
+                this.loadChartImage();
+            } else {
+                this.processPageCounts();
+            }    
         }
     }
 
@@ -1135,17 +1243,21 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private processPageCounts() {
-        if(this.pagesProcessedCount < this.pageOrder.length) {
-            let pageType: string = this.pageOrder[this.pagesProcessedCount];
-            let page: BasePage = this.pageCollection[pageType];
-            if(page) {
-                this.calculatePageCount(page);
-            } else {
-                this.pagesProcessedCount++;
-                this.processPageCounts();                    
-            }
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
         } else {
-            this.generatePDF();
+            if(this.pagesProcessedCount < this.pageOrder.length) {
+                let pageType: string = this.pageOrder[this.pagesProcessedCount];
+                let page: BasePage = this.pageCollection[pageType];
+                if(page) {
+                    this.calculatePageCount(page);
+                } else {
+                    this.pagesProcessedCount++;
+                    this.processPageCounts();                    
+                }
+            } else {
+                this.generatePDF();
+            }    
         }
     }
 
@@ -1216,11 +1328,27 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 this.pdfBuilder.addPage(this.pageCollection[pageType]);
             }
         );
-
-        //console.log(pg.getContent());
-        this.pdfBuilder.trimLastPageBreak();
-        this.pdfMake.createPdf(this.pdfBuilder.getContent()).download(this.getPdfFilename());
-        //console.log(pg.getContent());
+        if(!this.isProcessing) {
+            this.resetDownloadMenu();
+        } else {
+            //console.log(pg.getContent());
+            this.pdfBuilder.trimLastPageBreak();
+            this.filename = this.getPdfFilename();
+            //this.pdfMake.createPdf(this.pdfBuilder.getContent()).download(this.getPdfFilename());
+            this.setDownloadMenuMessage('100% done', '100%');
+            this.pdfDocument = this.pdfMake.createPdf(this.pdfBuilder.getContent());
+            this.pdfDocument.getBuffer((data) => 
+                {
+                    this.generateMenu.menuName = 'Download ' + this.filename;
+                    this.generateMenu.disabled = false;
+                    this.fileData = data;
+                    this.isProcessing = false;
+                    this.snackBarService.Simple('PDF is ready for download.');
+                }
+            );
+            //console.log(pg.getContent());
+            this.removeCancelMenu();
+        }
     }
 
     ngOnInit() {}
