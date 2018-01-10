@@ -89,6 +89,13 @@ export class GlossaryPage extends BasePage  {
         fontSize: 11
     };
 
+    //json block for the glossary link style
+    private glossaryLinkStyle: any = {
+        bold: false,
+        color: '#464646',
+        fontSize: 11
+    };
+
     //json block for the glossary child term style
     private glossarySubTermStyle: any = {
         bold: true,
@@ -205,6 +212,9 @@ export class GlossaryPage extends BasePage  {
                 } else if(style.match(/glossaryTermStyle$/)) {
                     //change style name for top level term
                     definitionTable.table.body[0][0].style = this.prefix + 'glossaryTermStyle';
+                } else if(style.match(/glossaryLinkStyle$/)) {
+                    //change style name for top level term
+                    definitionTable.table.body[0][0].style = this.prefix + 'glossaryLinkStyle';
                 }
                 //change style name for definition text
                 definitionTable.table.body[1][0].style = this.prefix + 'glossaryDefinitionStyle';
@@ -216,6 +226,7 @@ export class GlossaryPage extends BasePage  {
         this.styles[this.prefix + 'subHeaderStyle'] = this.subHeaderStyle;
         this.styles[this.prefix + 'glossaryLetterStyle'] = this.glossaryLetterStyle;
         this.styles[this.prefix + 'glossaryTermStyle'] = this.glossaryTermStyle;
+        this.styles[this.prefix + 'glossaryLinkStyle'] = this.glossaryLinkStyle;
         this.styles[this.prefix + 'glossarySubTermStyle'] = this.glossarySubTermStyle;
         this.styles[this.prefix + 'glossaryDefinitionStyle'] = this.glossaryDefinitionStyle;
 
@@ -312,7 +323,10 @@ export class GlossaryPage extends BasePage  {
                             ],
                             [
                                 { text: glossaryTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
-                            ]
+                            ],
+                            [
+                                { text: (glossaryTerm.link) ? glossaryTerm.link : '' , alignment: 'left', style: this.prefix + 'glossaryLinkStyle' }
+                            ],
                         ]
                     },
                     layout: 'noBorders'

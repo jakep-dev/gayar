@@ -136,19 +136,19 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     private reportGlossaryDataDone: boolean = false;
 
     //input to frequency most recent peer group losses table
-    private frequencyPeerGroupTable: Array<FrequencyDataModel>;
+    private frequencyPeerGroupTable: Array<FrequencyDataModel> = null;
     
     //input to frequency most recent company losses table
-    private frequencyCompanyLossesTable: Array<FrequencyDataModel>;
+    private frequencyCompanyLossesTable: Array<FrequencyDataModel> = null;
 
     //boolean to indicate frequency data is loaded
     private frequencyDataDone: boolean = false;
 
     //input to severity top peer group losses table
-    private severityPeerGroupTable: Array<SeverityDataModel>;
+    private severityPeerGroupTable: Array<SeverityDataModel> = null;
 
     //input to severity top company losses table
-    private severityCompanyLossesTable: Array<SeverityDataModel>;
+    private severityCompanyLossesTable: Array<SeverityDataModel> = null;
 
     //boolean to indicate severity data is loaded
     private severityDataDone: boolean = false;
@@ -414,6 +414,12 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
 
     private resetDataStructures() {
+        this.frequencyPeerGroupTable = null;
+        this.frequencyCompanyLossesTable = null;
+        this.frequencyDataDone = false;
+        this.severityPeerGroupTable = null;
+        this.severityCompanyLossesTable = null;
+        this.severityDataDone = false;
         this.chartLoadCount = 0;
         this.pagesProcessedCount = 0;
         this.chartDataCollection.length = 0;
@@ -463,6 +469,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.isProcessing = true;
             this.resetDownloadMenu();
             this.addCancelMenu();
+
+            if(!this.reportGlossaryDataDone) {
+                this.getReportGlossaryConfig();
+            }
     
             this.reportSelections = reportSelections;
             let naics: string = (this.searchService.searchCriteria.industry && this.searchService.searchCriteria.industry.naicsDescription)? this.searchService.searchCriteria.industry.naicsDescription: null;
@@ -529,7 +539,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private startReportProcess() {
-        this.resetDataStructures();
         this.reportSelections.forEach(reportSection => {
             if(reportSection.value) {
                 this.processReportSection(reportSection);
@@ -1394,7 +1403,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 }
             });
             //Call report glossart service to get glossart structure
-            this.getReportGlossaryConfig();    
+            this.getReportGlossaryConfig();
         } else {
             //for refresh of page allow the main content area to load before this loads
             setTimeout(this.ngAfterViewInit.bind(this), 500);
