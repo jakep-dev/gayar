@@ -79,12 +79,14 @@ export class FrequencyTechEOPage extends BasePage  {
                 ],
                 [
                     {
-                        image: this.imageLeft,
-                        width: 375
+                        text: ''
+                        //image: this.imageLeft,
+                        //width: 375
                     },
                     {
-                        image: this.imageRight,
-                        width: 375
+                        text: ''
+                        //image: this.imageRight,
+                        //width: 375
                     }
                 ]
             ]
@@ -177,23 +179,39 @@ export class FrequencyTechEOPage extends BasePage  {
      */
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
-            chartName = chartName.replace(/\-/g,'_');
-            let imageName = this.prefix + chartName;
-            this.table.table.body[1][index].image = imageName;
-            switch(index) {
-                case 0:
-                    this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl;
-                    break;
-                case 1:
-                    this.imageRight = chartName;
-                    this.imageRightUrl = chartDataUrl;
-                    break;
+            if(chartName && chartDataUrl) {
+                chartName = chartName.replace(/\-/g,'_');
+                let imageName = this.prefix + chartName;
+                //replace text attribute with image and width attributes
+                if(typeof this.table.table.body[1][index].text !== 'undefined') {
+                    delete this.table.table.body[1][index].text;
+                }
+                this.table.table.body[1][index].image = imageName;
+                this.table.table.body[1][index].width = 375;
+                switch(index) {
+                    case 0:
+                        this.imageLeft = chartName;
+                        this.imageLeftUrl = chartDataUrl;
+                        break;
+                    case 1:
+                        this.imageRight = chartName;
+                        this.imageRightUrl = chartDataUrl;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                this.images[imageName] = chartDataUrl;
+            } else {
+                //replace image and width attributes with text attribute
+                if(typeof this.table.table.body[1][index].image !== 'undefined') {
+                    delete this.table.table.body[1][index].image;
+                }
+                if(typeof this.table.table.body[1][index].width !== 'undefined') {
+                    delete this.table.table.body[1][index].width;
+                }
+                this.table.table.body[1][index].text = '';
             }
-            this.images[imageName] = chartDataUrl;
         }
         //all content added are on first page
         return 1;
@@ -216,13 +234,12 @@ export class FrequencyTechEOPage extends BasePage  {
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
             this.images[this.prefix + this.imageLeft] = this.imageLeftUrl;
+            this.table.table.body[1][0].image = this.prefix + this.imageLeft;
         }
         if(this.imageRightUrl) {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;
+            this.table.table.body[1][1].image = this.prefix + this.imageRight;
         }
-
-        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        this.table.table.body[1][1].image = this.prefix + this.imageRight;
 
         this.clearArray(this.pdfContent);
         this.pdfContent.push(this.header);

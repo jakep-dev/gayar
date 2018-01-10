@@ -79,8 +79,9 @@ export class FrequencyTimePeriodPage extends BasePage  {
                 ],
                 [
                     {
-                        image: this.imageLeft,
-                        width: 375
+                        text: ''
+                        //image: this.imageLeft,
+                        //width: 375
                     },
                     {
                         text: ''
@@ -150,17 +151,17 @@ export class FrequencyTimePeriodPage extends BasePage  {
     public setDetailChartPermission(value: boolean) {
         this.hasDetailChartPermission = value;
         let node: any = this.table.table.body[1][1];
-        if(this.hasDetailChartPermission) {
+        if(this.hasDetailChartPermission && this.imageLeft && this.imageLeftUrl) {
             if(typeof node.text !== 'undefined') {
                 delete node.text;
             }
             node.image = this.imageRight;
             node.width = 375;
         } else {
-            if(node.image !== 'undefined') {
+            if(typeof node.image !== 'undefined') {
                 delete node.image;
             }
-            if(node.width !== 'undefined') {
+            if(typeof node.width !== 'undefined') {
                 delete node.width;
             }
             node.text = '';
@@ -219,26 +220,45 @@ export class FrequencyTimePeriodPage extends BasePage  {
      */
     public addChartLabel(index: number, chartName: string, chartDataUrl: string): number {
         if(index >= 0 && index <= 1) {
-            chartName = chartName.replace(/\-/g,'_');
-            let imageName = this.prefix + chartName;
-            switch(index) {
-                case 0:
-                    this.table.table.body[1][index].image = imageName;
-                    this.imageLeft = chartName;
-                    this.imageLeftUrl = chartDataUrl;
-                    break;
-                case 1:
-                    if(this.hasDetailChartPermission) {
+            if(chartName && chartDataUrl) {
+                chartName = chartName.replace(/\-/g,'_');
+                let imageName = this.prefix + chartName;
+                //replace text attribute with image and width attributes
+                if(typeof this.table.table.body[1][index].text !== 'undefined') {
+                    delete this.table.table.body[1][index].text;
+                }
+                switch(index) {
+                    case 0:
                         this.table.table.body[1][index].image = imageName;
-                        this.imageRight = chartName;
-                        this.imageRightUrl = chartDataUrl;
-                    }
-                    break;
+                        this.table.table.body[1][index].width = 375;
+                        this.imageLeft = chartName;
+                        this.imageLeftUrl = chartDataUrl;
+                        break;
+                    case 1:
+                        if(this.hasDetailChartPermission) {
+                            this.table.table.body[1][index].image = imageName;
+                            this.table.table.body[1][index].width = 375;
+                            this.imageRight = chartName;
+                            this.imageRightUrl = chartDataUrl;
+                        } else {
+                            this.table.table.body[1][index].text = '';
+                        }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                this.images[imageName] = chartDataUrl;
+            } else {
+                //replace image and width attributes with text attribute
+                if(typeof this.table.table.body[1][index].image !== 'undefined') {
+                    delete this.table.table.body[1][index].image;
+                }
+                if(typeof this.table.table.body[1][index].width !== 'undefined') {
+                    delete this.table.table.body[1][index].width;
+                }
+                this.table.table.body[1][index].text = '';
             }
-            this.images[imageName] = chartDataUrl;
         }
         //all content added are on first page
         return 1;
@@ -261,13 +281,10 @@ export class FrequencyTimePeriodPage extends BasePage  {
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
             this.images[this.prefix + this.imageLeft] = this.imageLeftUrl;
+            this.table.table.body[1][0].image = this.prefix + this.imageLeft;
         }
-        if(this.imageRightUrl) {
+        if(this.imageRightUrl && this.hasDetailChartPermission) {
             this.images[this.prefix + this.imageRight] = this.imageRightUrl;
-        }
-
-        this.table.table.body[1][0].image = this.prefix + this.imageLeft;
-        if(this.hasDetailChartPermission) {
             this.table.table.body[1][1].image = this.prefix + this.imageRight;
         }
 
