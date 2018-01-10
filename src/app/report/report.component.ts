@@ -457,7 +457,7 @@ export class ReportComponent implements OnInit {
                 let mergedString = [selectedDescription.slice(0, -1).join(', '), selectedDescription.slice(-1)[0]].join(selectedDescription.length < 2 ? '' : ' and ');
                 message = 'Report will have the Dashboard page with ' + mergedString + ' scores.';
             }
-        } else {
+        } else if(!selectedComponents || selectedComponents.length === 0){
             message = 'Report cannot be generated as there are no components selected.';
         }
 
