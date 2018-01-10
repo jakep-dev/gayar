@@ -230,41 +230,44 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
      * @return {} - No return types.
      */
     public setPeerGroupData(peerGroupData: Array<FrequencyDataModel>) {
-        this.peerGroupData = peerGroupData;
-        this.table.table.body.length = 1;
-        let i: number;
-        let n: number = this.peerGroupData.length;
-        let dataRow: any;
-        let dataDescription: any;
-        let companyName: string;
-        let typeOfIncident: string;
-        let incidentDate: string;
-        let recordsAffected: string;
-        let typeOfLoss: string;
-        let caseDescription: string;
 
-        let showBottomBorder: boolean = !this.hasDescriptionPermission;
-        for(i = 0; i < n; i++) {
-            companyName = (this.peerGroupData[i].company_name != null) ? this.peerGroupData[i].company_name : '';
-            typeOfIncident = (this.peerGroupData[i].type_of_incident != null) ? this.peerGroupData[i].type_of_incident : '';
-            incidentDate = (this.peerGroupData[i].incident_date != null) ? this.peerGroupData[i].incident_date : '';
-            incidentDate = incidentDate.substr(0,10).replace(/\-/g,'/');
-            recordsAffected = (this.peerGroupData[i].records_affected != null) ? this.peerGroupData[i].records_affected : '';
-            typeOfLoss = (this.peerGroupData[i].type_of_loss != null) ? this.peerGroupData[i].type_of_loss : '';
-            caseDescription = (this.peerGroupData[i].case_description != null) ? this.peerGroupData[i].case_description : '';
-            dataRow = [
-                { text: companyName, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [true, true, false, showBottomBorder] },
-                { text: typeOfIncident, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
-                { text: incidentDate, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
-                { text: recordsAffected, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
-                { text: typeOfLoss, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, true, showBottomBorder] }
-            ];
-            this.table.table.body.push(dataRow);
-            if(this.hasDescriptionPermission) {
-                dataDescription = [
-                    { text: caseDescription, colSpan: 5, style: this.prefix + 'tableRowContentDescriptionStyle', border: [true, false, true, true] }
+        if(peerGroupData && peerGroupData.length > 0) {
+            this.peerGroupData = peerGroupData;
+            this.table.table.body.length = 1;
+            let i: number;
+            let n: number = this.peerGroupData.length;
+            let dataRow: any;
+            let dataDescription: any;
+            let companyName: string;
+            let typeOfIncident: string;
+            let incidentDate: string;
+            let recordsAffected: string;
+            let typeOfLoss: string;
+            let caseDescription: string;
+
+            let showBottomBorder: boolean = !this.hasDescriptionPermission;
+            for(i = 0; i < n; i++) {
+                companyName = (this.peerGroupData[i].company_name != null) ? this.peerGroupData[i].company_name : '';
+                typeOfIncident = (this.peerGroupData[i].type_of_incident != null) ? this.peerGroupData[i].type_of_incident : '';
+                incidentDate = (this.peerGroupData[i].incident_date != null) ? this.peerGroupData[i].incident_date : '';
+                incidentDate = incidentDate.substr(0,10).replace(/\-/g,'/');
+                recordsAffected = (this.peerGroupData[i].records_affected != null) ? this.peerGroupData[i].records_affected : '';
+                typeOfLoss = (this.peerGroupData[i].type_of_loss != null) ? this.peerGroupData[i].type_of_loss : '';
+                caseDescription = (this.peerGroupData[i].case_description != null) ? this.peerGroupData[i].case_description : '';
+                dataRow = [
+                    { text: companyName, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [true, true, false, showBottomBorder] },
+                    { text: typeOfIncident, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                    { text: incidentDate, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                    { text: recordsAffected, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, false, showBottomBorder] },
+                    { text: typeOfLoss, alignment: 'left', style: this.prefix + 'tableRowContentStyle', border: [false, true, true, showBottomBorder] }
                 ];
-                this.table.table.body.push(dataDescription);
+                this.table.table.body.push(dataRow);
+                if(this.hasDescriptionPermission) {
+                    dataDescription = [
+                        { text: caseDescription, colSpan: 5, style: this.prefix + 'tableRowContentDescriptionStyle', border: [true, false, true, true] }
+                    ];
+                    this.table.table.body.push(dataDescription);
+                }
             }
         }
     }
