@@ -15,18 +15,10 @@ export class BtnCheckboxComponent implements OnInit {
 
   constructor() {  }
 
-  ngOnInit() {
-    this.checkDisabled();
-  }
+  ngOnInit() { }
 
   toggleSelected () {
     this.isSelected = !this.isSelected;
     this.onSelectable.emit(this.isSelected);
-  }
-
-  checkDisabled () {
-    if (this.isDisabled) {
-      this.isSelected = false;
-    }
   }
 }
