@@ -25,9 +25,7 @@ export class ReportTileComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    this.checkDisabled();
-  }
+  ngOnInit() { }
 
   onChildChange (child) {
 
@@ -125,11 +123,5 @@ export class ReportTileComponent implements OnInit {
 
   executeParentChildPolicy () {
     this.isParentChecked = this.subComponent.every((sub)=> { return sub.value === true; });
-  }
-
-  checkDisabled() {
-    if(this.isDisabled) {
-        this.isParentChecked = false;
-    }
   }
 }

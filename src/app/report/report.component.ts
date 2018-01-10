@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuService, ReportService, SessionService } from 'app/services/services';
+import { MenuService, ReportService, SessionService, SearchService } from 'app/services/services';
 import { IReportTileModel } from 'app/model/model';
 import { APPCONSTANTS } from 'app/app.const';
+import { SnackBarService } from 'app/shared/shared';
 
 @Component({
     selector: 'app-report',
@@ -16,10 +17,24 @@ export class ReportComponent implements OnInit {
     //boolean to indicate report data is loaded
     private reportDataDone: boolean = false;
 
+    //boolean to indicate frequency is enabled
+    private enableFrequency: boolean = false;
+
+    //boolean to indicate severity is enabled
+    private enableSeverity: boolean = false;
+
+    //boolean to indicate benchmark gauge is enabled
+    private enableBenchmarkGauge: boolean = false;
+
+    //boolean to indicate company loss table for severity & frequency is enabled
+    private enableCompanyLossTable: boolean = false;
+
     constructor(
         private menuService: MenuService,
         private reportService: ReportService,
-        private sessionService: SessionService) {
+        private sessionService: SessionService,
+        private searchService: SearchService,
+        private snackBarService: SnackBarService) {
     }
 
     /**
@@ -36,8 +51,33 @@ export class ReportComponent implements OnInit {
                 this.sessionService.restoreIdentity();
             }
         }
+
+        this.buildRules();
+
         //Call report service to get report structure
         this.getReportConfig();
+    }
+
+    /**
+     * buildRules - build variables for report rules
+     *
+     * @private
+     * @function buildRules
+     * @return {} - No return types.
+     */
+    private buildRules() {
+        let peerGroupValidation = this.searchService.checkValidationPeerGroup();
+        this.enableCompanyLossTable = this.searchService.getSearchType !== 'SEARCH_BY_MANUAL_INPUT';
+
+        if( peerGroupValidation ) {
+            this.enableFrequency = peerGroupValidation.hasFrequencyData;
+            this.enableSeverity = peerGroupValidation.hasSeverityData;
+        }
+
+        if( this.searchService.getLimit && this.searchService.getRetention ) {
+            this.enableBenchmarkGauge = true;
+        }
+
     }
 
     /**
@@ -51,6 +91,7 @@ export class ReportComponent implements OnInit {
         this.reportService.getReportConfig().subscribe((data)=> {
             this.reportTileModel = data;
             this.buildReportPermission();
+            this.setupDashboardRules();
             //console.log('Report Data Done!');
             this.reportDataDone = true;
         });
@@ -110,9 +151,9 @@ export class ReportComponent implements OnInit {
             case APPCONSTANTS.REPORTS_ID.dashboardPage:
                 return permission && permission.dashboard && permission.dashboard.hasAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyPage:
-                return permission && permission.frequency && permission.frequency.hasAccess;
+            return permission && permission.frequency && permission.frequency.hasAccess && this.enableFrequency;
             case APPCONSTANTS.REPORTS_ID.severityPage:
-                return permission && permission.severity && permission.severity.hasAccess;
+                return permission && permission.severity && permission.severity.hasAccess && this.enableSeverity;
             case APPCONSTANTS.REPORTS_ID.benchmarkPage:
                 return permission && permission.benchmark && permission.benchmark.hasAccess;
             case APPCONSTANTS.REPORTS_ID.appendixPage:
@@ -136,11 +177,11 @@ export class ReportComponent implements OnInit {
 
             //dashboard components
             case APPCONSTANTS.REPORTS_ID.frequencyGauge:
-                return permission && permission.dashboard && permission.dashboard.frequencyGauge && permission.dashboard.frequencyGauge.hasAccess;
+            return permission && permission.dashboard && permission.dashboard.frequencyGauge && permission.dashboard.frequencyGauge.hasAccess && this.enableFrequency;
             case APPCONSTANTS.REPORTS_ID.severityGauge:
-                return permission && permission.dashboard && permission.dashboard.severityGauge && permission.dashboard.severityGauge.hasAccess;
+                return permission && permission.dashboard && permission.dashboard.severityGauge && permission.dashboard.severityGauge.hasAccess && this.enableSeverity;
             case APPCONSTANTS.REPORTS_ID.benchmarkGauge:
-                return permission && permission.dashboard && permission.dashboard.benchmarkGauge && permission.dashboard.benchmarkGauge.hasAccess;
+                return permission && permission.dashboard && permission.dashboard.benchmarkGauge && permission.dashboard.benchmarkGauge.hasAccess && this.enableBenchmarkGauge;
 
             //frequency components
             case APPCONSTANTS.REPORTS_ID.frequencyIndustry:
@@ -154,7 +195,7 @@ export class ReportComponent implements OnInit {
             case APPCONSTANTS.REPORTS_ID.frequencyPeerLosses:
                 return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses:
-                return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+            return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && this.enableCompanyLossTable;
             
             //severity components
             case APPCONSTANTS.REPORTS_ID.severityIdustry:
@@ -168,7 +209,7 @@ export class ReportComponent implements OnInit {
             case APPCONSTANTS.REPORTS_ID.severityPeerLosses:
                 return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
             case APPCONSTANTS.REPORTS_ID.severityCompanyLosses:
-                return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+            return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && this.enableCompanyLossTable;
             
             //benchmark components
             case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacy:
@@ -344,6 +385,35 @@ export class ReportComponent implements OnInit {
     }
 
     /**
+     * setup special rule for dashboard
+     * disable all components but checked
+     * 
+     * @private
+     * @function setupDashboardRules
+     * @return {} - No return types.
+     */
+    private setupDashboardRules() {
+        let dashboardComponents = this.reportTileModel.find( dashboard => {
+            return dashboard.id === APPCONSTANTS.REPORTS_ID.dashboardPage;
+        });
+
+        if(dashboardComponents && dashboardComponents.hasAccess) {
+            dashboardComponents.hasAccess = false;
+            dashboardComponents.value = true;
+
+            if(dashboardComponents.subComponents && dashboardComponents.subComponents.length > 0) {
+                dashboardComponents.subComponents.forEach( subComponents => {
+                    if( subComponents.hasAccess) {
+                        subComponents.hasAccess = false;
+                        subComponents.value = true;
+                    }
+                });
+                dashboardComponents.value = dashboardComponents.subComponents.some( subComponents => subComponents.value);
+            }
+        }
+    }
+
+    /**
      * Response to the download report button
      * Continuosly wait for all resources and data are loaded before starting the pdf generation process
      * 
@@ -352,7 +422,63 @@ export class ReportComponent implements OnInit {
      * @return {} - No return types.
      */
     public onReport () {
-        this.menuService.startPdfDownload(this.reportTileModel);
+        this.getReportMessage();
+        if(this.hasSelectedComponent()) {
+            this.menuService.startPdfDownload(this.reportTileModel);
+        }
+    }
+
+    /**
+     * Generate message for different rules upon click the report button
+     * 
+     * @private
+     * @function getReportMessage
+     * @return {} - No return types.
+     */
+    private getReportMessage() {
+        let message: string = null;
+
+        let selectedComponents = this.reportTileModel.filter( components => {
+            return components.subComponents.some( subComponents => subComponents.value);
+        });
+
+        if(selectedComponents && selectedComponents.length === 1) {
+            if( (!this.enableBenchmarkGauge) && 
+                (!this.enableFrequency) && 
+                (!this.enableSeverity) && 
+                selectedComponents[0].id === APPCONSTANTS.REPORTS_ID.benchmarkPage) {
+                    message = 'Report will have Benchmark charts only as the selected peer group has no associated losses.';
+            } else if (selectedComponents[0].id === APPCONSTANTS.REPORTS_ID.dashboardPage) {
+                let selectedDescription = selectedComponents[0].subComponents.filter( gauge => {
+                    if( gauge.value) {
+                        return gauge;
+                    }
+                }).map( gauge => gauge.description);
+                let mergedString = [selectedDescription.slice(0, -1).join(', '), selectedDescription.slice(-1)[0]].join(selectedDescription.length < 2 ? '' : ' and ');
+                message = 'Report will have the Dashboard page with ' + mergedString + ' scores.';
+            }
+        } else if(!selectedComponents || selectedComponents.length === 0){
+            message = 'Report cannot be generated as there are no components selected.';
+        }
+
+        if(message) {
+            this.snackBarService.Simple(message);
+        }
+    }
+
+    /**
+     * Checks if has a report to download
+     * 
+     * @private
+     * @function hasSelectedComponent
+     * @return {boolean} - true if it has selected component, otherwise false
+     */
+    private hasSelectedComponent(): boolean {
+        let selectedComponents = this.reportTileModel.filter( components => {
+            return components.subComponents.some( subComponents => subComponents.value);
+        });
+
+        return (selectedComponents && selectedComponents.length > 0);
     }
 
 }
