@@ -282,7 +282,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(this.isManual){
       this.setSelectedSearchCriteria();
       this.checkValidationPeerGroupLoss();
-      this.router.navigate(['/report']);
       return;
     }
     this.validatePeerGroupAndRevenueIndustry();
@@ -339,7 +338,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     if(this.isManual){
       this.setSelectedSearchCriteria();
       this.checkValidationPeerGroupLoss();
-      this.router.navigate(['/dashboard']);
       return;
     }
     this.validatePeerGroupAndRevenueIndustry();
@@ -367,23 +365,28 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.selectedIndustry = data[1].industry;
               this.selectedRevenue = data[1].revenueRange;
               this.setSelectedSearchCriteria();
-
-              switch (this.pageId) {
-                case "dashboard_page":
-                  this.router.navigate(['/dashboard']);    
-                  break;
-                case "report_page":
-                  this.router.navigate(['/report']);
-                  break;
-
-                default:
-                  break;
-              }
-              
+              this.navigatePage();
             }
           },
           err => console.error(err)
         );
+  }
+
+  /**
+   * navigatePage - navigate to pageId
+   */
+  navigatePage(){
+    switch (this.pageId) {
+      case "dashboard_page":
+        this.router.navigate(['/dashboard']);    
+        break;
+      case "report_page":
+        this.router.navigate(['/report']);
+        break;
+
+      default:
+        break;
+    }
   }
 
   /**
@@ -408,6 +411,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchService.checkValidationPeerGroupLoss(companyId, revenue_range, naics).subscribe(
       (res : ValidationPeerGroupLossModel) => {
       this.searchService.validationPeerGroup = res;
+      this.navigatePage();
     });
 
 
