@@ -38,6 +38,8 @@ import { BLOCK_PIPES } from './shared/pipes/pipes';
 import { SearchTableComponent } from './shared/tables/search-table/search-table.component';
 import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/search-table-mobile.component';
 import { TokenInterceptor } from 'app/services/token.interceptor';
+import { OverlayContainer, FullscreenOverlayContainer } from '@angular/material';
+import { BusyOverlayComponent } from 'app/shared/components/components';
 
 @NgModule({
 	declarations: [
@@ -85,8 +87,10 @@ import { TokenInterceptor } from 'app/services/token.interceptor';
 			provide: HTTP_INTERCEPTORS,
 			useClass: TokenInterceptor,
 			multi: true
-		}
+		},
+		{provide: OverlayContainer, useClass: FullscreenOverlayContainer}
 	],
+	entryComponents: [BusyOverlayComponent],
 	bootstrap: [AppComponent]
 })
 
