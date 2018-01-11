@@ -221,7 +221,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         ]).attr({
             stroke: '#ccd6eb',
             'stroke-width': 2,
-            zIndex: 2
+            zIndex: 999
         })
         upperBreakLine.add();
         this.breakLines.push(upperBreakLine);
@@ -232,7 +232,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         ]).attr({
             stroke: '#FFFFFF',
             'stroke-width': 5.5,
-            zIndex: 2
+            zIndex: 999
         })
         betweenBreakLine.add();
         this.breakLines.push(betweenBreakLine);
@@ -243,7 +243,7 @@ export class BarChartBreakComponent extends BaseChart implements OnInit {
         ]).attr({
             stroke: '#ccd6eb',
             'stroke-width': 2,
-            zIndex: 2
+            zIndex: 999
         })
         lowerBreakLine.add();
         this.breakLines.push(lowerBreakLine);

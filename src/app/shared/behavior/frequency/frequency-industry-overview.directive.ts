@@ -87,10 +87,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>',
-                        positioner: function(boxWidth, boxHeight, point) {         
-                            return {x:point.plotX + 20,y:point.plotY};         
-                        }
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
                     },
                     plotOptions: {
                         column: {
