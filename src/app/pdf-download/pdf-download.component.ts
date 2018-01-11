@@ -66,7 +66,7 @@ import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
 import { APPCONSTANTS } from 'app/app.const';
 import { SnackBarService } from 'app/shared/shared';
-import { setTimeout } from 'timers';
+//import { setTimeout } from 'timers';
 
 @Component({
     selector: 'pdf-download',
@@ -217,6 +217,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //Reference to the HighChart object
     private chart: BaseChart;
+
+    //maximum amount of time a part of a long running process should take
+    //if this amount of time has past, trigger cancellation of pdf processing
+    private static MAX_TIMEOUT: number = 240000;
+    private timeElapse: number = 0;
+    private currentWaitPeriod: number = 0;
+    private timeoutMessage: string = '';
 
     /**
      * Callback function to indicate the font files for pdf generation is loaded
@@ -424,6 +431,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
         this.generateMenu.disabled = true;
         this.resetDataStructures();
+        this.resetTimer();
         this.percentageText = '';
     }
 
@@ -448,6 +456,62 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.clearArray(this.pageCollection);
         this.tocPage.clearTOC();
         this.entryPoint.clear();
+    }
+
+    /**
+     * Clear out timer counts
+     * 
+     * @private
+     * @function resetTimer
+     * @return {} - No return types.
+     */
+    private resetTimer() {
+        //console.log(this.getDateTimeString() + '[resetTimer] timeElapsed = ' + this.timeElapse);
+        this.timeElapse = 0;
+        this.currentWaitPeriod = 0;
+    }
+
+    /**
+     * Set the polling interval to check if a long running process is done
+     * call this function with value = 0 means will notify to backgroundTimeChecker that process is finish
+     * 
+     * @private
+     * @function resetTimer
+     * @param {number} value - number of milliseconds for the polling period
+     * @return {} - No return types.
+     */
+    private setPollingInterval(value: number) {
+        //console.log(this.getDateTimeString() + '[setPollingInterval] timeElapsed = ' + this.timeElapse);
+        this.currentWaitPeriod = value;
+    }
+
+    private startBackgroundTimer(pollingInterval: number) {
+        this.currentWaitPeriod = pollingInterval;
+        //console.log(this.getDateTimeString() + '[startBackgroundTimer] currentWaitPeriod = ' + this.currentWaitPeriod);
+        setTimeout(this.backgroundTimeChecker.bind(this), this.currentWaitPeriod);
+    }
+
+    private backgroundTimeChecker() {
+        if(this.currentWaitPeriod > 0) {
+            //console.log(this.getDateTimeString() + '[backgroundTimeChecker] timeElapsed = ' + this.timeElapse);
+            this.timeElapse += this.currentWaitPeriod;
+            if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
+
+                this.isProcessing = false;
+                this.percentageText = '';
+                this.removeCancelMenu();
+                                
+                this.resetDownloadMenu();
+                this.snackBarService.Simple(this.timeoutMessage);
+            } else {
+                setTimeout(this.backgroundTimeChecker.bind(this), this.currentWaitPeriod);
+            }    
+        }
+    }
+
+    private getDateTimeString(): string {
+        let currentDateTime = new Date();
+        return currentDateTime.toISOString();
     }
 
     /**
@@ -487,7 +551,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
 
     private menuClicked(buttonId: number) {
-        console.log(buttonId);
+        //console.log(buttonId);
         if(buttonId == PdfDownloadComponent.generateButtonId) {
             if(this.pdfDocument && this.fileData) {
                 FileSaver.saveAs(this.fileData, this.filename || 'Assessment_Report.pdf');
@@ -541,6 +605,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.getSeverityTables();
     
             //Start the pdf generation process
+            this.resetTimer();
             this.onReport();
         } else {
             this.snackBarService.Simple('PDF Generation in progress.  Please cancel current process and try again.');
@@ -566,11 +631,27 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportGlossaryDataDone 
                 && this.frequencyDataDone && this.severityDataDone) {
                 this.setDownloadMenuMessage('5% done.', '5%');
+                this.resetTimer();
                 this.startReportProcess();
             } else {
-                console.log('Waiting for resources to load before starting report.');
-                this.setDownloadMenuMessage('0% done.', '0%');
-                setTimeout(this.onReport.bind(this), 1000);
+                if(this.currentWaitPeriod == 0) {
+                    this.setPollingInterval(1000);
+                } else {
+                    this.timeElapse += this.currentWaitPeriod;
+                }
+                if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
+                    this.resetDownloadMenu();
+
+                    this.isProcessing = false;
+                    this.percentageText = '';
+                    this.removeCancelMenu();
+                    
+                    this.snackBarService.Simple('Unable to get required assessment report data');
+                } else {
+                    console.log('Waiting for resources to load before starting report.');
+                    this.setDownloadMenuMessage('0% done.', '0%');
+                    setTimeout(this.onReport.bind(this), this.currentWaitPeriod);
+                }
             }
         }
     }
@@ -597,6 +678,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         } else {
             //Start processing of chart images
             if(this.chartDataCollection.length > 0) {
+                this.resetTimer();
                 this.loadChartImage();
             } else if(this.pageOrder.length > 0) {
                 //if no chart images the start the page count processing
@@ -950,7 +1032,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private loadChartImage() {
-        let componentFactory: ComponentFactory<any>;
+        let componentFactory: ComponentFactory<any> = null;
         
         let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
         let dashboardFrequencyGaugeComponent: Dashboard_FrequencyComponent;
@@ -1158,6 +1240,11 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             default:
                 break;
         }
+        if(componentFactory) {
+            //console.log('Starting timer for ' + chartData.chartSetting.componentName);
+            this.timeoutMessage = 'Unable to load chart ' + chartData.chartSetting.componentName;
+            this.startBackgroundTimer(1000);
+        }
     }
 
     /**
@@ -1189,7 +1276,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         } else {
             if(start && this.chart != null) {
                 setTimeout(this.loadCurrentChartImage.bind(this), 1000);
-            }    
+            }
         }
     }
 
@@ -1222,9 +1309,11 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                         isNoData = true;
                     }
                     if(isNoData) {
+                        this.setPollingInterval(0);
                         this.chartLoadCount++;
                         //if svg is showing a chart with no data, loaded the next chart
                         if(this.chartLoadCount < this.chartDataCollection.length) {
+                            this.resetTimer();
                             this.loadChartImage();
                         } else {
                             //Start off the page count process if no more chart images to load
@@ -1257,8 +1346,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                     );
                 }
             } else {
+                this.setPollingInterval(0);
                 //if svg is not loaded, loaded the next chart
                 if(this.chartLoadCount < this.chartDataCollection.length) {
+                    this.resetTimer();
                     this.loadChartImage();
                 } else {
                     //Start off the page count process if no more chart images to load
@@ -1295,6 +1386,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
         }
         this.chartLoadCount++;
+        this.setPollingInterval(0);
         //console.log('image size = ' + buffer.length);
         let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
         this.setDownloadMenuMessage(value + '% done.', value + '%');
@@ -1302,6 +1394,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.resetDownloadMenu();
         } else {
             if(this.chartLoadCount < this.chartDataCollection.length) {
+                this.resetTimer();
                 this.loadChartImage();
             } else {
                 this.processPageCounts();
