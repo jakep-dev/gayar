@@ -147,9 +147,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     ],
                     tooltip: {
                         shared: true,
-                        positioner: function(boxWidth, boxHeight, point) {         
-                            return {x:point.plotX,y:point.plotY};         
-                        },
+                        useHTML: true,
                         formatter: function () {
                             let entityMap = {
                                 "&": "&amp;",
