@@ -45,6 +45,7 @@ export class ReportTileComponent implements OnInit {
             return;
         }
 
+        this.isParentChecked = value;
         this.subComponent.map((child)=>{
             if(child.hasAccess) {
                 if(child.subSubComponents) {
@@ -122,6 +123,6 @@ export class ReportTileComponent implements OnInit {
 
 
   executeParentChildPolicy () {
-    this.isParentChecked = this.subComponent.every((sub)=> { return sub.value === true; });
+    this.isParentChecked = this.subComponent.some((sub)=> { return sub.value === true; });
   }
 }
