@@ -139,7 +139,7 @@ export class DashboardScoreDirective implements OnInit, OnChanges {
             if (this.modelData && this.modelData.score !== null && this.modelData.score.finalScore !== null) {
                 tempChartData.series[0].data.push(this.modelData.score.finalScore);
                 tempChartData.customChartSettings.series[0].data.push(this.modelData.score.finalScore);
-                tempChartData.customChartSettings.yAxis.title.text = this.modelData.score.finalScore;
+                tempChartData.customChartSettings.yAxis.title.text = `${this.modelData.score.finalScore}`;
                 tempChartData.customChartSettings.yAxis.min = 0;
                 tempChartData.customChartSettings.yAxis.max = 100;
 
