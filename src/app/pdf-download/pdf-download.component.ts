@@ -25,11 +25,13 @@ import { PremiumComponent as Benchmark_PremiumComponent } from 'app/benchmark/pr
 import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate.component';
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
+import { BusyOverlayRef, BusyOverlayComponent } from 'app/shared/components/components';
+import * as FileSaver from 'file-saver';
+
 import { 
     MenuService, SearchService, 
-    FrequencyService, SeverityService, ApplicationService,
-    ReportService, FontService, GetFileService,
-    SessionService
+    FrequencyService, SeverityService, ApplicationService, SessionService,
+    ReportService, FontService, GetFileService, OverlayService
 } from 'app/services/services';
 
 import { 
@@ -64,6 +66,7 @@ import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
 import { APPCONSTANTS } from 'app/app.const';
 import { SnackBarService } from 'app/shared/shared';
+import { setTimeout } from 'timers';
 
 @Component({
     selector: 'pdf-download',
@@ -170,6 +173,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //print settings for the current chart being processed
     private printSettings: ComponentPrintSettings;
+
+    private busyOverlayRef:BusyOverlayRef = null;
     
     //The html canvas object used to convert svg to png data url
     @ViewChild('canvas') canvas: ElementRef;
@@ -239,7 +244,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         private frequencyService: FrequencyService,
         private severityService: SeverityService,
         private reportService: ReportService,
-        private  applicationService: ApplicationService
+        private applicationService: ApplicationService,
+        private overlayDialog: OverlayService
     ) {
         //If font files are not loaded setup the call back function to catch the event when font files are loaded
         if(this.fontService.isLoadComplete()) {
@@ -403,6 +409,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+     * Reset menu settings and pdf file related data
+     * Calls resetDataStructures() to clear out data structures
+     * 
+     * @private
+     * @function resetDownloadMenu
+     * @return {} - No return types.
+     */
     private resetDownloadMenu() {
         this.fileData = null;
         this.filename = null;
@@ -413,6 +427,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.percentageText = '';
     }
 
+    /**
+     * Clear out data structures like images page objects
+     * 
+     * @private
+     * @function resetDataStructures
+     * @return {} - No return types.
+     */
     private resetDataStructures() {
         this.frequencyPeerGroupTable = null;
         this.frequencyCompanyLossesTable = null;
@@ -429,15 +450,38 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.entryPoint.clear();
     }
 
+    /**
+     * Set the text of the menu button and the download menu item
+     * 
+     * @private
+     * @function setDownloadMenuMessage
+     * @param {string} message - menu item text
+     * @param {string} percentageText - the percentage text next to the menu button
+     * @return {} - No return types.
+     */
     private setDownloadMenuMessage(message: string, percentageText: string) {
         this.generateMenu.menuName = message;
         this.percentageText = percentageText;
     }
 
+    /**
+     * Ensure we have the the download and cancel menu items
+     * 
+     * @private
+     * @function addCancelMenu
+     * @return {} - No return types.
+     */
     private addCancelMenu() {
         this.menuItems = [this.generateMenu, this.cancelMenu];
     }
 
+    /**
+     * Ensure we have only the the download menu item
+     * 
+     * @private
+     * @function removeCancelMenu
+     * @return {} - No return types.
+     */
     private removeCancelMenu() {
         this.menuItems = [this.generateMenu];
     }
@@ -446,11 +490,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         console.log(buttonId);
         if(buttonId == PdfDownloadComponent.generateButtonId) {
             if(this.pdfDocument && this.fileData) {
-                this.pdfDocument.download(this.filename || 'Assessment_Report.pdf');
+                FileSaver.saveAs(this.fileData, this.filename || 'Assessment_Report.pdf');
                 this.percentageText = '';
             }
         } else if(buttonId == PdfDownloadComponent.cancelButtonId) {
+            //this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.isProcessing = false;
+            this.percentageText = '';
             this.removeCancelMenu();
         }
     }
@@ -1367,20 +1413,26 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             //this.pdfMake.createPdf(this.pdfBuilder.getContent()).download(this.getPdfFilename());
             this.setDownloadMenuMessage('100% done', '100%');
             this.pdfDocument = this.pdfMake.createPdf(this.pdfBuilder.getContent());
-            this.pdfDocument.getBuffer((data) => 
-                {
-                    this.generateMenu.menuName = 'Download ' + this.filename;
-                    this.generateMenu.disabled = false;
-                    this.fileData = data;
-                    this.isProcessing = false;
-                    this.snackBarService.Simple('PDF is ready for download.');
-                }
-            );
+            //Setup overlay dialog
+            this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
+            setTimeout(this.delayedPdfGetBuffer.bind(this), 500);
             //console.log(pg.getContent());
             this.removeCancelMenu();
         }
     }
 
+    private delayedPdfGetBuffer() {
+        this.pdfDocument.getBlob(this.processPdfData.bind(this));
+    }
+
+    private processPdfData(data: any) {
+        this.generateMenu.menuName = 'Download ' + this.filename;
+        this.generateMenu.disabled = false;
+        this.fileData = data;
+        this.isProcessing = false;
+        this.busyOverlayRef.close();
+        this.snackBarService.Simple('PDF is ready for download.');
+    }
     ngOnInit() {}
 
     ngAfterViewInit() {
@@ -1409,4 +1461,5 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             setTimeout(this.ngAfterViewInit.bind(this), 500);
         }
     }
+
 }

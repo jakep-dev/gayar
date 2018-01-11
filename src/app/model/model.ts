@@ -11,3 +11,4 @@ export * from './charts/pie-chart.model';
 export * from './report.model';
 export * from './glossary.model';
 export * from './pdf.model';
+export * from './overlay.model';

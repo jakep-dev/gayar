@@ -10,6 +10,7 @@ export * from './session-storage.service';
 export * from './report.service';
 export * from './font.service';
 export * from './getFile.service';
+export * from './overlay.service';
 export * from './application.service';
 
 
@@ -25,6 +26,7 @@ import { SessionStorageService } from './session-storage.service';
 import { ReportService } from './report.service';
 import { FontService } from './font.service';
 import { GetFileService } from './getFile.service';
+import { OverlayService } from './overlay.service';
 import { ApplicationService } from './application.service';
 
 export const BLOCK_SERVICES = [
@@ -40,5 +42,6 @@ export const BLOCK_SERVICES = [
     ReportService,
     FontService,
     GetFileService,
+    OverlayService,
     ApplicationService
 ];
