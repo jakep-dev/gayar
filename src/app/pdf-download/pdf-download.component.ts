@@ -1,6 +1,9 @@
 import { Component, OnInit, AfterViewInit,  ViewChild, ViewContainerRef, ViewEncapsulation, ElementRef, ComponentFactoryResolver, ComponentFactory } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
+import { APPCONSTANTS } from 'app/app.const';
+
+import { BaseChart } from 'app/shared/charts/base-chart';
 import { BenchmarkComponent as Dashboard_BenchmarkComponent } from 'app/dashboard/benchmark/benchmark.component';
 import { FrequencyComponent as Dashboard_FrequencyComponent } from 'app/dashboard/frequency/frequency.component';
 import { SeverityComponent as Dashboard_SeverityComponent } from 'app/dashboard/severity/severity.component';
@@ -26,13 +29,13 @@ import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
 import { BusyOverlayRef, BusyOverlayComponent } from 'app/shared/components/components';
-import * as FileSaver from 'file-saver';
 
 import { 
     MenuService, SearchService, 
     FrequencyService, SeverityService, ApplicationService, SessionService,
     ReportService, FontService, GetFileService, OverlayService
 } from 'app/services/services';
+import { SnackBarService } from 'app/shared/shared';
 
 import { 
     DashboardScore, 
@@ -61,12 +64,10 @@ import {
 } from 'app/pdf-download/pages/pages'
 
 import { PDFMakeBuilder } from 'app/pdf-download/pdfMakeBuilder';
-import { BaseChart } from 'app/shared/charts/base-chart';
+import * as FileSaver from 'file-saver';
 import { canvasFactory } from 'app/shared/pdf/pdfExport';
 import { getPdfMake } from 'app/shared/pdf/pdfExport';
-import { APPCONSTANTS } from 'app/app.const';
-import { SnackBarService } from 'app/shared/shared';
-//import { setTimeout } from 'timers';
+import { clearTimeout, setTimeout } from 'timers';
 
 @Component({
     selector: 'pdf-download',
@@ -218,9 +219,11 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //Reference to the HighChart object
     private chart: BaseChart;
 
-    //maximum amount of time a part of a long running process should take
+    //maximum amount of time in milliseconds that a part of a long running process should take
+    //this is used to wait for chart image to finish or to wait for all chart data to be complete
     //if this amount of time has past, trigger cancellation of pdf processing
-    private static MAX_TIMEOUT: number = 240000;
+    private static MAX_TIMEOUT: number = 30 * 1000;
+    private startTime: Date = null;
     private timeElapse: number = 0;
     private currentWaitPeriod: number = 0;
     private timeoutMessage: string = '';
@@ -432,6 +435,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.generateMenu.disabled = true;
         this.resetDataStructures();
         this.resetTimer();
+        this.resetTimeoutObjects();
         this.percentageText = '';
     }
 
@@ -458,6 +462,25 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.entryPoint.clear();
     }
 
+
+    private resetTimeoutObjects() {
+        if(this.backgroundProcessTimeout == null) {
+            clearTimeout(this.backgroundProcessTimeout);
+        }
+        if(this.startReportTimeout == null) {
+            clearTimeout(this.startReportTimeout);
+        }
+        if(this.startImageTimeout == null) {
+            clearTimeout(this.startImageTimeout);
+        }
+        if(this.pdfGenerateTimeout == null) {
+            clearTimeout(this.pdfGenerateTimeout);
+        }
+        if(this.startupTimeout == null) {
+            clearTimeout(this.startupTimeout);
+        }
+    }
+
     /**
      * Clear out timer counts
      * 
@@ -471,6 +494,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.currentWaitPeriod = 0;
     }
 
+    private backgroundProcessTimeout: any = null;
     /**
      * Set the polling interval to check if a long running process is done
      * call this function with value = 0 means will notify to backgroundTimeChecker that process is finish
@@ -485,35 +509,50 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.currentWaitPeriod = value;
     }
 
+    private startTimer() {
+        this.startTime = new Date();
+    }
+
     private startBackgroundTimer(pollingInterval: number) {
+        this.startTimer();
         this.currentWaitPeriod = pollingInterval;
         //console.log(this.getDateTimeString() + '[startBackgroundTimer] currentWaitPeriod = ' + this.currentWaitPeriod);
-        setTimeout(this.backgroundTimeChecker.bind(this), this.currentWaitPeriod);
+        this.backgroundProcessTimeout = setTimeout(() => this.backgroundTimeChecker(), this.currentWaitPeriod);
+    }
+
+    private updateElapsedTime() {
+        let currentTime: Date = new Date();
+        //console.log(this.getDateTimeString(currentTime) + '[' + currentTime.getTime()  + ']' + this.getDateTimeString(this.startTime) + '[' + this.startTime.getTime() + ']');
+        var timeDifference: number = (currentTime.getTime() - this.startTime.getTime());
+        this.timeElapse = timeDifference;
     }
 
     private backgroundTimeChecker() {
+        clearTimeout(this.backgroundProcessTimeout);
+        this.backgroundProcessTimeout = null;
         if(this.currentWaitPeriod > 0) {
+            this.updateElapsedTime();
             //console.log(this.getDateTimeString() + '[backgroundTimeChecker] timeElapsed = ' + this.timeElapse);
-            this.timeElapse += this.currentWaitPeriod;
             if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
-
                 this.isProcessing = false;
                 this.percentageText = '';
-                this.removeCancelMenu();
-                                
+                this.removeCancelMenu();                                
                 this.resetDownloadMenu();
                 this.snackBarService.Simple(this.timeoutMessage);
             } else {
-                setTimeout(this.backgroundTimeChecker.bind(this), this.currentWaitPeriod);
+                if(this.isProcessing) {
+                    this.backgroundProcessTimeout = setTimeout(() => this.backgroundTimeChecker(), this.currentWaitPeriod);
+                }
             }    
         }
     }
 
-    private getDateTimeString(): string {
-        let currentDateTime = new Date();
-        return currentDateTime.toISOString();
+    private getDateTimeString(inputDate?: Date): string {
+        let currentDateTime = inputDate || (new Date());
+        let value: string = '[' + currentDateTime.getFullYear() + '-' + currentDateTime.getMonth() + '-' + currentDateTime.getDate() + ' ' + currentDateTime.getHours() + ':' + currentDateTime.getMinutes() + ':' + currentDateTime.getSeconds() + '.' + currentDateTime.getMilliseconds() + ']';
+        return value;
     }
-
+    
     /**
      * Set the text of the menu button and the download menu item
      * 
@@ -612,6 +651,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    private startReportTimeout: any = null;
     /**
      * Continuosly wait for all resources and data are loaded before starting the pdf generation process
      * 
@@ -620,6 +660,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private onReport () {
+        if(this.startReportTimeout) {
+            clearTimeout(this.startReportTimeout);
+            this.startReportTimeout = null;
+        }
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
@@ -636,8 +680,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             } else {
                 if(this.currentWaitPeriod == 0) {
                     this.setPollingInterval(1000);
+                    this.startTimer();
                 } else {
-                    this.timeElapse += this.currentWaitPeriod;
+                    this.updateElapsedTime();
                 }
                 if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
                     this.resetDownloadMenu();
@@ -650,7 +695,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 } else {
                     console.log('Waiting for resources to load before starting report.');
                     this.setDownloadMenuMessage('0% done.', '0%');
-                    setTimeout(this.onReport.bind(this), this.currentWaitPeriod);
+                    this.startReportTimeout = setTimeout(() => this.onReport(), this.currentWaitPeriod);
                 }
             }
         }
@@ -1260,6 +1305,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.chart = chart;
     }
 
+    private startImageTimeout: any = null;
     /**
      * Call back function that is triggered when the chart component if first rendered.
      * It will trigger image conversion one second later to allow the browser to finished
@@ -1275,7 +1321,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.resetDownloadMenu();
         } else {
             if(start && this.chart != null) {
-                setTimeout(this.loadCurrentChartImage.bind(this), 1000);
+                this.startImageTimeout = setTimeout(() => this.loadCurrentChartImage(), 1000);
             }
         }
     }
@@ -1291,6 +1337,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private loadCurrentChartImage() {
+        clearTimeout(this.startImageTimeout);
+        this.startImageTimeout = null;
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
@@ -1469,6 +1517,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    private pdfGenerateTimeout: any = null;
     /**
      * Generate the pdf file based on the pages 
      * with the chart images and tables loaded within
@@ -1508,13 +1557,15 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.pdfDocument = this.pdfMake.createPdf(this.pdfBuilder.getContent());
             //Setup overlay dialog
             this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
-            setTimeout(this.delayedPdfGetBuffer.bind(this), 500);
+            this.pdfGenerateTimeout = setTimeout(() => this.delayedPdfGetBuffer(), 500);
             //console.log(pg.getContent());
             this.removeCancelMenu();
         }
     }
 
     private delayedPdfGetBuffer() {
+        clearTimeout(this.pdfGenerateTimeout);
+        this.pdfGenerateTimeout = null;
         this.pdfDocument.getBlob(this.processPdfData.bind(this));
     }
 
@@ -1528,6 +1579,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
     ngOnInit() {}
 
+    private startupTimeout: any = null;
     ngAfterViewInit() {
         let token = null;
         if(this.sessionService) {
@@ -1538,6 +1590,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             }
         }
         if(token) {
+            if(this.startupTimeout) {
+                clearTimeout(this.startupTimeout);
+                this.startupTimeout = null;
+            }
             this.fontService.loadFontFiles();
             this.coverPage.setFileService(this.getFileService);
             //Get logged in user's company name
@@ -1551,7 +1607,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.getReportGlossaryConfig();
         } else {
             //for refresh of page allow the main content area to load before this loads
-            setTimeout(this.ngAfterViewInit.bind(this), 500);
+            this.startupTimeout = setTimeout(() => this.ngAfterViewInit(), 500);
         }
     }
 
