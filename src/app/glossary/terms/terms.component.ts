@@ -9,8 +9,6 @@ import { Component, OnInit, Input, ViewEncapsulation, ElementRef } from '@angula
 
 export class TermsComponent implements OnInit {
   @Input() term: any;
-  childList : any;
-  bulletList : any;
   hasLink: boolean = false;
 
   ngOnInit() {
@@ -26,19 +24,6 @@ export class TermsComponent implements OnInit {
         if(list.type && list.type == "C" &&
           this.term.link && this.term.link !== null){
           this.hasLink = true;
-        }
-
-        switch (list.type) {
-          case "B":
-            list.term = null;
-            this.bulletList = this.term.subComponents;
-          break;
-          case "C":
-            this.childList = this.term.subComponents;
-            break;
-
-          default:
-            break;
         }
       });
     }
