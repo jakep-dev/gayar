@@ -7,17 +7,18 @@
       <md-icon *ngIf="!term.hidden" class="icon-menu-right fa-2x"></md-icon>
       <md-icon *ngIf="term.hidden" class="icon-menu-down fa-2x"></md-icon>
     </span>
-  
-    <div [hidden]="term.hidden">
-        <div *ngFor="let child of childList">
-            <h5>{{child.term}}</h5>
-            <p>{{child.definition}}</p>
-          </div>
-    </div>  
   </div>
-  <div *ngFor="let list of bulletList">
-    <ul>
-      <li>{{list.definition}}</li>
-    </ul>
+  <div *ngFor="let child of term.subComponents">
+    <div [hidden]="term.hidden">
+      <div *ngIf="child.type == 'C'">
+        <h5>{{child.term}}</h5>
+        <p>{{child.definition}}</p>
+      </div>  
+      <div *ngIf="child.type == 'B'">
+        <ul>
+          <li>{{child.definition}}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
