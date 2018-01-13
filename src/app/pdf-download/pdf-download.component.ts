@@ -201,16 +201,17 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     private generateMenu: any = {
         id: PdfDownloadComponent.generateButtonId,
         menuName: PdfDownloadComponent.INITIAL_MESSAGE,
-        iconName: 'party_mode',
-        disabled: true
+        iconName: 'party_mode'
+        //,
+        //disabled: true
     };
     
-    private cancelMenu: any = {
-        id: PdfDownloadComponent.cancelButtonId,
-        menuName: 'Cancel PDF',
-        iconName: 'cancel',
-        disabled: false
-    };
+    // private cancelMenu: any = {
+    //     id: PdfDownloadComponent.cancelButtonId,
+    //     menuName: 'Cancel PDF',
+    //     iconName: 'cancel',
+    //     disabled: false
+    // };
 
     public menuItems: Array<any> = [
         this.generateMenu
@@ -432,7 +433,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.filename = null;
         this.pdfDocument = null;
         this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
-        this.generateMenu.disabled = true;
+        //this.generateMenu.disabled = true;
         this.resetDataStructures();
         this.resetTimer();
         this.resetTimeoutObjects();
@@ -536,7 +537,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
                 this.isProcessing = false;
                 this.percentageText = '';
-                this.removeCancelMenu();                                
+                //this.removeCancelMenu();                                
                 this.resetDownloadMenu();
                 this.snackBarService.Simple(this.timeoutMessage);
             } else {
@@ -575,7 +576,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private addCancelMenu() {
-        this.menuItems = [this.generateMenu, this.cancelMenu];
+        //this.menuItems = [this.generateMenu, this.cancelMenu];
+        this.menuItems = [this.generateMenu];
     }
 
     /**
@@ -585,9 +587,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @function removeCancelMenu
      * @return {} - No return types.
      */
-    private removeCancelMenu() {
-        this.menuItems = [this.generateMenu];
-    }
+    // private removeCancelMenu() {
+    //     this.menuItems = [this.generateMenu];
+    // }
 
     private menuClicked(buttonId: number) {
         //console.log(buttonId);
@@ -595,12 +597,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(this.pdfDocument && this.fileData) {
                 FileSaver.saveAs(this.fileData, this.filename || 'Assessment_Report.pdf');
                 this.percentageText = '';
+            } else if(this.isProcessing) {
+                this.snackBarService.Simple('Please wait for the pdf process to complete.');
             }
         } else if(buttonId == PdfDownloadComponent.cancelButtonId) {
             //this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.isProcessing = false;
             this.percentageText = '';
-            this.removeCancelMenu();
+            //this.removeCancelMenu();
         }
     }
 
@@ -689,7 +693,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
                     this.isProcessing = false;
                     this.percentageText = '';
-                    this.removeCancelMenu();
+                    //this.removeCancelMenu();
                     
                     this.snackBarService.Simple('Unable to get required assessment report data');
                 } else {
@@ -1559,7 +1563,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.pdfGenerateTimeout = setTimeout(() => this.delayedPdfGetBuffer(), 500);
             //console.log(pg.getContent());
-            this.removeCancelMenu();
+            //this.removeCancelMenu();
         }
     }
 
@@ -1571,7 +1575,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     private processPdfData(data: any) {
         this.generateMenu.menuName = 'Download ' + this.filename;
-        this.generateMenu.disabled = false;
+        //this.generateMenu.disabled = false;
         this.fileData = data;
         this.isProcessing = false;
         this.busyOverlayRef.close();

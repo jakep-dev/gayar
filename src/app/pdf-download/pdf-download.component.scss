@@ -23,3 +23,12 @@
     border-bottom: 1px solid lightgray;
     padding: 0 0;
 }
+
+button.mat-menu-item.cancelButton {
+    width: 30px;
+    padding: 0 0;
+}
+
+.mat-menu-item .mat-icon.cancelIcon {
+    margin-right: 0px;
+}
