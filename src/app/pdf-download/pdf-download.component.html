@@ -6,10 +6,15 @@
         <span class="percentageText">{{percentageText}}</span>
     </button>
     <md-menu class="pdfMenu" #menu="mdMenu" md-offset="0 100">
-        <button md-menu-item *ngFor="let menu of menuItems" (click)="menuClicked(menu.id)" [disabled]="menu.disabled" >
-            <md-icon class="material-icons md-light md-48">{{menu.iconName}}</md-icon>
-            <span class="pdfMenuText">{{menu.menuName}}</span>
-        </button>
+        <div *ngFor="let menu of menuItems" fxLayout="row" fxLayoutAlign="start center">
+            <button md-menu-item (click)="menuClicked(menu.id)">
+                <md-icon class="material-icons md-light md-48">{{menu.iconName}}</md-icon>
+                <span class="pdfMenuText">{{menu.menuName}}</span>
+            </button>
+            <button md-menu-item (click)="menuClicked(2)" class="cancelButton">
+                <md-icon class="material-icons md-light md-48 cancelIcon">clear</md-icon>
+            </button>
+        </div>
     </md-menu>
 </md-toolbar>
 <div style="display: none;">
