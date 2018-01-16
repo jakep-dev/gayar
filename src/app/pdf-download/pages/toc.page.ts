@@ -63,7 +63,7 @@ export class TOCPage extends BasePage  {
 
     //table of contents item style json objects
     private tocStyle1: any = {
-        color: '#7a9bc',
+        color: '#27a9bc',
         fontSize: 22,
         bold: true
     };
