@@ -45,7 +45,7 @@ export class SeverityTopCompanyLossesPage extends BasePage  {
     }
     
     private headerStyle: any = {
-        color: '#b1d23b',
+        color: '#464646',
         fontSize: 14,
         bold: true,
         margin: [ 60, 0, 40, 0]
