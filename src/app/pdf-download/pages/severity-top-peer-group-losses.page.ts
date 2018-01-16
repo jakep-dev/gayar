@@ -46,7 +46,7 @@ export class SeverityTopPeerGroupLossesPage extends BasePage  {
     
     //json block representing the style for header within this page
     private headerStyle: any = {
-        color: '#b1d23b',
+        color: '#464646',
         fontSize: 14,
         bold: true,
         margin: [ 60, 0, 40, 0]
