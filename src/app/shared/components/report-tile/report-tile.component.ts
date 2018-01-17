@@ -50,7 +50,9 @@ export class ReportTileComponent implements OnInit {
             if(child.hasAccess) {
                 if(child.subSubComponents) {
                     child.subSubComponents.map((subSub)=>{
-                        return subSub.value = value;
+                        if(subSub.hasAccess) {
+                            return subSub.value = value;
+                        }
                     });
                 }
                 return child.value = value;
