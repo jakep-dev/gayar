@@ -146,7 +146,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     private frequencyCompanyLossesTable: Array<FrequencyDataModel> = null;
 
     //boolean to indicate frequency data is loaded
-    private frequencyDataDone: boolean = false;
+    //private frequencyDataDone: boolean = false;
 
     //input to severity top peer group losses table
     private severityPeerGroupTable: Array<SeverityDataModel> = null;
@@ -155,7 +155,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     private severityCompanyLossesTable: Array<SeverityDataModel> = null;
 
     //boolean to indicate severity data is loaded
-    private severityDataDone: boolean = false;
+    //private severityDataDone: boolean = false;
 
     //indicate the number of chart objects processed
     private chartLoadCount: number;
@@ -387,19 +387,19 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @function getFrequencyTables
      * @return {} - No return types.
      */
-    private getFrequencyTables() {
-        this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
-            this.searchService.getNaics,
-            this.searchService.getRevenueRange)
-            .subscribe((res: FrequencyDataResponseModel) => {
-                this.frequencyPeerGroupTable = res.peerGroup;
-                if (res.company != null && res.company.length > 0) {
-                    this.frequencyCompanyLossesTable = res.company;
-                }
-                //console.log('Frequency Data Done!');
-                this.frequencyDataDone = true;
-        });        
-    }
+    // private getFrequencyTables() {
+    //     this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
+    //         this.searchService.getNaics,
+    //         this.searchService.getRevenueRange)
+    //         .subscribe((res: FrequencyDataResponseModel) => {
+    //             this.frequencyPeerGroupTable = res.peerGroup;
+    //             if (res.company != null && res.company.length > 0) {
+    //                 this.frequencyCompanyLossesTable = res.company;
+    //             }
+    //             //console.log('Frequency Data Done!');
+    //             this.frequencyDataDone = true;
+    //     });        
+    // }
 
     /**
      * Get severity table data for 
@@ -409,16 +409,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @function getSeverityTables
      * @return {} - No return types.
      */
-    private getSeverityTables() {
-        this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
-            this.severityPeerGroupTable = res.peerGroup;
-            if (res.company != null && res.company.length > 0) {
-                this.severityCompanyLossesTable = res.company;
-            }
-            //console.log('Severity Data Done!');
-            this.severityDataDone = true;
-        });
-    }
+    // private getSeverityTables() {
+    //     this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
+    //         this.severityPeerGroupTable = res.peerGroup;
+    //         if (res.company != null && res.company.length > 0) {
+    //             this.severityCompanyLossesTable = res.company;
+    //         }
+    //         //console.log('Severity Data Done!');
+    //         this.severityDataDone = true;
+    //     });
+    // }
 
     /**
      * Reset menu settings and pdf file related data
@@ -448,12 +448,12 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private resetDataStructures() {
-        this.frequencyPeerGroupTable = null;
-        this.frequencyCompanyLossesTable = null;
-        this.frequencyDataDone = false;
-        this.severityPeerGroupTable = null;
-        this.severityCompanyLossesTable = null;
-        this.severityDataDone = false;
+        //this.frequencyPeerGroupTable = null;
+        //this.frequencyCompanyLossesTable = null;
+        //this.frequencyDataDone = false;
+        //this.severityPeerGroupTable = null;
+        //this.severityCompanyLossesTable = null;
+        //this.severityDataDone = false;
         this.chartLoadCount = 0;
         this.pagesProcessedCount = 0;
         this.chartDataCollection.length = 0;
@@ -603,6 +603,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         } else if(buttonId == PdfDownloadComponent.cancelButtonId) {
             //this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.isProcessing = false;
+            this.fileData = null;
+            this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
             this.percentageText = '';
             //this.removeCancelMenu();
         }
@@ -616,10 +618,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @param {Array<IReportTileModel} reportSelections - input user selections and permission settings based on user's login
      * @return {} - No return types.
      */
-    public buildPdf(reportSelections: Array<IReportTileModel>) {
+    public buildPdf(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[]) {
 
         if(!this.isProcessing) {
             this.isProcessing = true;
+            this.frequencyPeerGroupTable = frequencyPeerGroupTable;
+            this.frequencyCompanyLossesTable = frequencyCompanyLossesTable;
+            this.severityPeerGroupTable = severityPeerGroupTable;
+            this.severityCompanyLossesTable =severityCompanyLossesTable;
             this.resetDownloadMenu();
             this.addCancelMenu();
 
@@ -643,9 +649,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             //initialize chart input objects
             this.setupChartInput(naics, revenueRange);
             //Call frequecy service to get frequency table data
-            this.getFrequencyTables();
+            //this.getFrequencyTables();
             //Call severity service to get severity table data
-            this.getSeverityTables();
+            //this.getSeverityTables();
     
             //Start the pdf generation process
             this.resetTimer();
@@ -677,7 +683,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             //check if frequency table data is loaded
             //check if severity table data is loaded
             if(this.pdfMake && this.coverPage.isCoverPageLoaded() && this.reportGlossaryDataDone 
-                && this.frequencyDataDone && this.severityDataDone) {
+//                && this.frequencyDataDone && this.severityDataDone
+            ) {
                 this.setDownloadMenuMessage('5% done.', '5%');
                 this.resetTimer();
                 this.startReportProcess();
@@ -1352,25 +1359,29 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(childImages.length > 0) {
                 //First child is th SVG image, calling chart.getSVG changes the underlying svg
                 let svgElement = childImages[0];
-                let tspan: Array<any> = svgElement.getElementsByTagName('tspan');
-                if(tspan.length == 1) {
-                    let isNoData = false;
-                    if(tspan[0].innerHTML === 'No Data Available') {
-                        isNoData = true;
-                    } else if(tspan[0].childNodes && (tspan[0].childNodes.length == 1) && (tspan[0].childNodes[0].textContent === 'No Data Available') ) {
-                        isNoData = true;
+                let tspanList: Array<any> = svgElement.getElementsByTagName('tspan');
+                let isNoData = false;
+                if(tspanList.length > 0) {
+                    let i: number;
+                    let n: number = tspanList.length;
+                    for(i = 0; i < n; i++) {
+                        if(tspanList[i].innerHTML === 'No Data Available') {
+                            isNoData = true;
+                        } else if(tspanList[i].childNodes && (tspanList[i].childNodes.length == 1) && (tspanList[i].childNodes[0].textContent === 'No Data Available') ) {
+                            isNoData = true;
+                        }    
                     }
-                    if(isNoData) {
-                        this.setPollingInterval(0);
-                        this.chartLoadCount++;
-                        //if svg is showing a chart with no data, loaded the next chart
-                        if(this.chartLoadCount < this.chartDataCollection.length) {
-                            this.resetTimer();
-                            this.loadChartImage();
-                        } else {
-                            //Start off the page count process if no more chart images to load
-                            this.processPageCounts();
-                        }
+                }
+                if(isNoData) {
+                    this.setPollingInterval(0);
+                    this.chartLoadCount++;
+                    //if svg is showing a chart with no data, loaded the next chart
+                    if(this.chartLoadCount < this.chartDataCollection.length) {
+                        this.resetTimer();
+                        this.loadChartImage();
+                    } else {
+                        //Start off the page count process if no more chart images to load
+                        this.processPageCounts();
                     }
                 } else {
                     //IE doesn't support outerHTML for svg tag

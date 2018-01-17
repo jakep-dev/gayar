@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PdfDownloadComponent } from 'app/pdf-download/pdf-download.component';
-import { IReportTileModel } from 'app/model/model';
+import { IReportTileModel, FrequencyDataModel, SeverityDataModel } from 'app/model/model';
 
 @Injectable()
 export class MenuService {
@@ -15,9 +15,9 @@ export class MenuService {
       this.pdfDownloader = pdfDownloader;
     }
 
-    public startPdfDownload(reportSelections: Array<IReportTileModel>) {
+    public startPdfDownload(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[]) {
       if(this.pdfDownloader) {
-        this.pdfDownloader.buildPdf(reportSelections);
+        this.pdfDownloader.buildPdf(reportSelections, frequencyPeerGroupTable, frequencyCompanyLossesTable, severityPeerGroupTable, severityCompanyLossesTable);
       }
     }
     constructor() {
