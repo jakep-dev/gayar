@@ -78,10 +78,10 @@ export const APPCONSTANTS = {
     severityLossBarChart:                 'REPORT_SEVERITY_TYPE_OF_LOSS_BAR_CHART',
     severityLossPieChart:                 'REPORT_SEVERITY_TYPE_OF_LOSS_PIE_CHART',
 
-    severityLossPersonalBarChart:         'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
-    severityLossPersonalPieChart:         'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
-    severityLossCorporateBarChart:        'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
-    severityLossCorporatePieChart:        'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_PIE_CHART',
+    severityLossPersonalBarChart:         'REPORT_SEVERITY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
+    severityLossPersonalPieChart:         'REPORT_SEVERITY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
+    severityLossCorporateBarChart:        'REPORT_SEVERITY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
+    severityLossCorporatePieChart:        'REPORT_SEVERITY_TYPE_OF_LOSS_CORPORATE_PIE_CHART',
 
     severityPeerLosses:                   'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES',
     severityPeerLossesDetails:            'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES_DETAILS',

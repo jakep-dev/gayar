@@ -539,14 +539,14 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Personal Information',
-                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
+                                id: 'REPORT_SEVERITY_TYPE_OF_LOSS_PERSONAL_BAR_CHART',
                                 hasAccess: false
                             },
                             {
                                 componentName: 'severity-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Personal Information',
-                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
+                                id: 'REPORT_SEVERITY_TYPE_OF_LOSS_PERSONAL_PIE_CHART',
                                 hasAccess: false
                             }
                         ]
@@ -562,14 +562,14 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                                 componentName: 'severity-loss-bar',
                                 pagePosition: 0,
                                 drillDownName: 'Corporate Losses',
-                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
+                                id: 'REPORT_SEVERITY_TYPE_OF_LOSS_CORPORATE_BAR_CHART',
                                 hasAccess: false
                             },
                             {
                                 componentName: 'severity-loss-pie',
                                 pagePosition: 1,
                                 drillDownName: 'Corporate Losses',
-                                id: 'REPORT_FREQUENCY_TYPE_OF_LOSS_CORPORATE_PIE_CHART',
+                                id: 'REPORT_SEVERITY_TYPE_OF_LOSS_CORPORATE_PIE_CHART',
                                 hasAccess: false
                             }
                         ]
