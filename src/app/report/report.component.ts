@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuService, ReportService, SessionService, SearchService } from 'app/services/services';
-import { IReportTileModel } from 'app/model/model';
+import { MenuService, ReportService, SessionService, SearchService, FrequencyService, SeverityService } from 'app/services/services';
+import { IReportTileModel, FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel, SeverityDataModel, SeverityDataResponseModel, ISubComponentModel, ISubSubComponentModel } from 'app/model/model';
 import { APPCONSTANTS } from 'app/app.const';
 import { SnackBarService } from 'app/shared/shared';
 
@@ -17,6 +17,24 @@ export class ReportComponent implements OnInit {
     //boolean to indicate report data is loaded
     private reportDataDone: boolean = false;
 
+    //input to frequency most recent peer group losses table
+    private frequencyPeerGroupTable: Array<FrequencyDataModel> = null;
+
+    //input to frequency most recent company losses table
+    private frequencyCompanyLossesTable: Array<FrequencyDataModel> = null;
+
+    //boolean to indicate frequency data is loaded
+    private frequencyDataDone: boolean = false;
+
+    //input to severity top peer group losses table
+    private severityPeerGroupTable: Array<SeverityDataModel> = null;
+
+    //input to severity top company losses table
+    private severityCompanyLossesTable: Array<SeverityDataModel> = null;
+
+    //boolean to indicate severity data is loaded
+    private severityDataDone: boolean = false;
+    
     //boolean to indicate frequency is enabled
     private enableFrequency: boolean = false;
 
@@ -32,6 +50,8 @@ export class ReportComponent implements OnInit {
     constructor(
         private menuService: MenuService,
         private reportService: ReportService,
+        private frequencyService: FrequencyService,
+        private severityService: SeverityService,
         private sessionService: SessionService,
         private searchService: SearchService,
         private snackBarService: SnackBarService) {
@@ -73,11 +93,153 @@ export class ReportComponent implements OnInit {
             this.enableFrequency = peerGroupValidation.hasFrequencyData;
             this.enableSeverity = peerGroupValidation.hasSeverityData;
         }
+        //if frequency is disabled, signal frequency data as done because we don't need to get the data
+        if(!this.enableFrequency) {
+            this.frequencyDataDone = true;
+        } else {
+            this.frequencyDataDone = false;
+            this.getFrequencyTables();
+        }
+        //if severity is disabled, signal severity data as done because we don't need to get the data
+        if(!this.enableSeverity) {
+            this.severityDataDone = true;
+        } else {
+            this.severityDataDone = false;
+            this.getSeverityTables();
+        }
 
         if( this.searchService.getLimit && this.searchService.getRetention ) {
             this.enableBenchmarkGauge = true;
         }
 
+    }
+
+    private setAllSubSubComponentsToValue(value: boolean, subSubComponents: ISubSubComponentModel[]) {
+        let i;
+        if(subSubComponents){
+            let n = subSubComponents.length;
+            for(i = 0; i < n; i++) {
+                subSubComponents[i].hasAccess = value;
+                subSubComponents[i].value = value;
+            }
+        }
+    }
+
+    private setAllSubComponentsToValue(value: boolean, subComponents: ISubComponentModel[]) {
+        let i;
+        if(subComponents) {
+            let n = subComponents.length;
+            for(i = 0; i < n; i++) {
+                subComponents[i].hasAccess = value;
+                subComponents[i].value = value;
+                this.setAllSubSubComponentsToValue(value, subComponents[i].subSubComponents);
+            }
+        }
+    }
+
+    private setSubSubComponentAccessPermissionById(id: string, value: boolean, subSubComponents: ISubSubComponentModel[]) {
+        let i;
+        if(subSubComponents) {
+            let n = subSubComponents.length;
+            for(i = 0; i < n; i++) {
+                if(subSubComponents[i].id == id) {
+                    subSubComponents[i].hasAccess = value;
+                    subSubComponents[i].value = value;
+                    break;
+                }
+            }
+        }
+    }
+
+    private setSubComponentAccessPermissionById(id: string, value: boolean, subComponents: ISubComponentModel[]) {
+        let i;
+        if(subComponents) {
+            let n = subComponents.length;
+            for(i = 0; i < n; i++) {
+                if(subComponents[i].id == id) {
+                    subComponents[i].hasAccess = value;
+                    subComponents[i].value = value;
+                    this.setAllSubSubComponentsToValue(value, subComponents[i].subSubComponents);
+                    break;
+                } else {
+                    this.setSubSubComponentAccessPermissionById(id, value, subComponents[i].subSubComponents);
+                }
+            }
+        }
+    }
+
+    private setReportSectionAccessPermissionById(id: string, value: boolean, reportSections: IReportTileModel[]) {
+        let i;
+        if(reportSections) {
+            let n = reportSections.length;
+            for(i = 0; i < n; i++) {
+                if(reportSections[i].id == id) {
+                    reportSections[i].hasAccess = value;
+                    reportSections[i].value = value;
+                    this.setAllSubComponentsToValue(value, reportSections[i].subComponents);
+                    break;
+                } else {
+                    this.setSubComponentAccessPermissionById(id, value, reportSections[i].subComponents);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get frequency table data for 
+     * Most Recent Peer Group Losses and Most Recent Company Losses sections
+     * 
+     * @private
+     * @function getFrequencyTables
+     * @return {} - No return types.
+     */
+    private getFrequencyTables() {
+        this.frequencyService.getFrequencyDataTable(this.searchService.getCompanyId,
+            this.searchService.getNaics,
+            this.searchService.getRevenueRange)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                this.frequencyPeerGroupTable = res.peerGroup;
+                let permission = this.sessionService.getUserPermission();
+                let finalValue: boolean;
+                finalValue = permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+                finalValue = finalValue && (this.frequencyPeerGroupTable.length > 0);
+                this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyPeerLosses, finalValue, this.reportTileModel);
+                if (res.company != null && res.company.length > 0) {
+                    this.frequencyCompanyLossesTable = res.company;
+                    finalValue = permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+                    finalValue = finalValue && (this.frequencyCompanyLossesTable.length > 0);
+                    this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses, finalValue, this.reportTileModel);
+                }
+                //console.log('Frequency Data Done!');
+                this.frequencyDataDone = true;
+        });
+    }
+
+    /**
+     * Get severity table data for 
+     * Top Peer Group Losses and Top Company Losses sections
+     * 
+     * @private
+     * @function getSeverityTables
+     * @return {} - No return types.
+     */
+    private getSeverityTables() {
+        this.severityService.getSeverityDataTable(this.searchService.getCompanyId, this.searchService.getNaics, this.searchService.getRevenueRange).subscribe((res: SeverityDataResponseModel) => {
+            this.severityPeerGroupTable = res.peerGroup;
+            let permission = this.sessionService.getUserPermission();
+            let finalValue: boolean;
+            finalValue = permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+            finalValue = finalValue && (this.severityPeerGroupTable.length > 0);
+            this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityPeerLosses, finalValue, this.reportTileModel);
+            if (res.company != null && res.company.length > 0) {
+                this.severityCompanyLossesTable = res.company;
+                finalValue = permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+                finalValue = finalValue && (this.severityCompanyLossesTable.length > 0);
+                this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityCompanyLosses, finalValue, this.reportTileModel);
+            }
+            //console.log('Severity Data Done!');
+            this.severityDataDone = true;
+        });
     }
 
     /**
@@ -173,6 +335,7 @@ export class ReportComponent implements OnInit {
      */
     private getComponentAccess(id: string) {
         let permission = this.sessionService.getUserPermission();
+        let hasData: boolean;
         switch(id) {
 
             //dashboard components
@@ -193,9 +356,19 @@ export class ReportComponent implements OnInit {
             case APPCONSTANTS.REPORTS_ID.frequencyLoss:
                 return permission && permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyPeerLosses:
-                return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+                if(this.frequencyDataDone && this.frequencyPeerGroupTable && this.frequencyPeerGroupTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess && hasData;
             case APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses:
-            return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && this.enableCompanyLossTable;
+                if(this.frequencyDataDone && this.frequencyCompanyLossesTable && this.frequencyCompanyLossesTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
             
             //severity components
             case APPCONSTANTS.REPORTS_ID.severityIdustry:
@@ -207,9 +380,19 @@ export class ReportComponent implements OnInit {
             case APPCONSTANTS.REPORTS_ID.severityLoss:
                 return permission && permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
             case APPCONSTANTS.REPORTS_ID.severityPeerLosses:
-                return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+                if(this.severityDataDone && this.severityPeerGroupTable && this.severityPeerGroupTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess && hasData;
             case APPCONSTANTS.REPORTS_ID.severityCompanyLosses:
-            return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && this.enableCompanyLossTable;
+                if(this.severityDataDone && this.severityCompanyLossesTable && this.severityCompanyLossesTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
             
             //benchmark components
             case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacy:
@@ -424,7 +607,7 @@ export class ReportComponent implements OnInit {
     public onReport () {
         this.getReportMessage();
         if(this.hasSelectedComponent()) {
-            this.menuService.startPdfDownload(this.reportTileModel);
+            this.menuService.startPdfDownload(this.reportTileModel, this.frequencyPeerGroupTable, this.frequencyCompanyLossesTable, this.severityPeerGroupTable, this.severityCompanyLossesTable);
         }
     }
 
