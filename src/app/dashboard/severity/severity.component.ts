@@ -64,13 +64,18 @@ export class SeverityComponent implements OnInit {
     }
 
   navigate () {
-    if (this.searchService.checkValidationPeerGroup() && 
-        this.searchService.checkValidationPeerGroup().hasSeverityData &&
-        this.permission && this.permission.severity && 
-        this.permission.severity.hasAccess) {
-        this.router.navigate(['/severity']);
-    } else {
-        this.snackBarService.Simple('No Access');
+
+    if (this.modelData && this.modelData.score && 
+        this.modelData.score.finalScore) {
+
+        if (this.searchService.checkValidationPeerGroup() && 
+            this.searchService.checkValidationPeerGroup().hasSeverityData &&
+            this.permission && this.permission.severity && 
+            this.permission.severity.hasAccess) {
+            this.router.navigate(['/severity']);
+        } else {
+            this.snackBarService.Simple('No Access');
+        }
     }
   }
 
