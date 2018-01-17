@@ -223,7 +223,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //maximum amount of time in milliseconds that a part of a long running process should take
     //this is used to wait for chart image to finish or to wait for all chart data to be complete
     //if this amount of time has past, trigger cancellation of pdf processing
-    private static MAX_TIMEOUT: number = 300 * 1000;
+    private static MAX_TIMEOUT: number = 30 * 1000;
     private startTime: Date = null;
     private timeElapse: number = 0;
     private currentWaitPeriod: number = 0;
