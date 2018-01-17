@@ -67,12 +67,16 @@ export class FrequencyComponent implements OnInit {
     }
 
   navigate () {
-    if (this.searchService.checkValidationPeerGroup() && 
-        this.searchService.checkValidationPeerGroup().hasFrequencyData &&
-        this.permission && this.permission.frequency && this.permission.frequency.hasAccess) {
-        this.router.navigate(['/frequency']);
-    } else {
-        this.snackBarService.Simple('No Access');
+    if (this.modelData && this.modelData.score && 
+        this.modelData.score.finalScore) {
+        
+        if (this.searchService.checkValidationPeerGroup() && 
+            this.searchService.checkValidationPeerGroup().hasFrequencyData &&
+            this.permission && this.permission.frequency && this.permission.frequency.hasAccess) {
+            this.router.navigate(['/frequency']);
+        } else {
+            this.snackBarService.Simple('No Access');
+        }
     }
   }
 

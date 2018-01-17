@@ -57,14 +57,18 @@ export class BenchmarkComponent implements OnInit {
     }
 
     navigate () {
-
-        if (this.permission && this.permission.dashboard && 
-            this.permission.benchmark && 
-            this.permission.benchmark.hasAccess) {
-            this.router.navigate(['/benchmark']);
-        } else {
-            this.snackBarService.Simple('No Access');
+        if (this.modelData && this.modelData.score && 
+            this.modelData.score.finalScore) {
+            
+            if (this.permission && this.permission.dashboard && 
+                this.permission.benchmark && 
+                this.permission.benchmark.hasAccess) {
+                this.router.navigate(['/benchmark']);
+            } else {
+                this.snackBarService.Simple('No Access');
+            }
         }
+        
     }
 
     addLabelAndImage(chart: BaseChart){
