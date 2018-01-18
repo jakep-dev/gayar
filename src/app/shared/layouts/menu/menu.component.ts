@@ -116,7 +116,7 @@ export class MenuComponent implements OnInit {
    * @return {boolean} - Is a valid search criteria or not.
    */
   public isSearchCriteriaValid () : boolean {
-    if(this.pdfComponentLoaded) {
+    if(this.pdfComponentLoaded && this.searchService.hasValidSearchCriteria()) { 
       return true;
     } else {
       if(this.searchService && this.sessionService && this.searchService.hasValidSearchCriteria() && this.sessionService.isLoggedIn()) {
