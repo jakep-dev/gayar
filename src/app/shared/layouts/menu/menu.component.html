@@ -96,8 +96,8 @@
              <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home" (onClick)="navigateToHome()"></icon-img>
              <icon-img [imgSrc]="( isGlossary() )? '../assets/images/Icon_Glossary.png': '../assets/images/Icon_Glossary_Disabled.png'" imgAlt="Glossary" (click)="navigateGlossary();"></icon-img>
              <icon-img [imgSrc]="( isUnderwritingFramework() )? '../assets/images/Icon_UnderwritingFramework.png' : '../assets/images/Icon_UnderwritingFramework_Disabled.png'" imgAlt="UnderWriting" (onClick)="launchUnderWriting()"></icon-img>
-             <icon-img *ngIf="!isSearchCriteriaValid()" imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
-             <pdf-download *ngIf="isSearchCriteriaValid()"></pdf-download>
+             <icon-img *ngIf="!pdfComponentLoaded" imgSrc="../assets/images/Icon_Report.png" imgAlt="Report"></icon-img>
+             <pdf-download *ngIf="pdfComponentLoaded"></pdf-download>
           </div>
         </div>
     </div>
