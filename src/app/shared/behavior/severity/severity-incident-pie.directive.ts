@@ -365,8 +365,8 @@ export class SeverityIncidentPieDirective {
       }
     
       setDrilldownUpText(){
-        return '<span style="font-size:9px">  Back to All Types <br/>' +
-               '<span style="font-size:9px"> of Incidents</span>';
+        return '<span style="font-size:9px">  Back to All Types </span><br/>' +
+                '<span style="font-size:9px"> of Incidents</span>';
       }
     
   
