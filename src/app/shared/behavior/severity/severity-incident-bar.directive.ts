@@ -316,7 +316,9 @@ export class SeverityIncidentBarDirective {
                 let series = this.getSeriesObject(name);
                 series.data = groups.map(group => {
                     if (!groupDrilldownNames.join(',').includes(group.type)) {
-                        groupDrilldownNames.push(group.type);
+                        if(group.count > 0) {
+                            groupDrilldownNames.push(group.type);
+                        }
                     }
                     return {
                         name: group.type,
@@ -356,14 +358,13 @@ export class SeverityIncidentBarDirective {
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
-            severityService.setIncidentChartView(e.point.name);            
+            severityService.setIncidentChartView(e.point.name);
             e.preventDefault();
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     chart.setTitle({ text: 'Types of ' + e.point.name.replace('Violations', 'Violation') + ' Incidents' });
                 }
-
             });
             chart.applyDrilldown();
         };

@@ -40,6 +40,8 @@ import { SearchTableMobileComponent } from './shared/tables/search-table-mobile/
 import { TokenInterceptor } from 'app/services/token.interceptor';
 import { OverlayContainer, FullscreenOverlayContainer } from '@angular/material';
 import { BusyOverlayComponent } from 'app/shared/components/components';
+import { PdfStartComponent } from 'app/pdf-download/pdf-start.component';
+import { PdfCompleteComponent } from 'app/pdf-download/pdf-complete.component';
 
 @NgModule({
 	declarations: [
@@ -55,6 +57,8 @@ import { BusyOverlayComponent } from 'app/shared/components/components';
 		SearchComponent,
 		ReportComponent,
 		PdfDownloadComponent,
+		PdfStartComponent,
+		PdfCompleteComponent,
 		SsoComponent,
 		BLOCK_CHART_TYPES,
 		BLOCK_CHART_BEHAVIORS,
@@ -90,7 +94,7 @@ import { BusyOverlayComponent } from 'app/shared/components/components';
 		},
 		{provide: OverlayContainer, useClass: FullscreenOverlayContainer}
 	],
-	entryComponents: [BusyOverlayComponent],
+	entryComponents: [BusyOverlayComponent, PdfStartComponent, PdfCompleteComponent],
 	bootstrap: [AppComponent]
 })
 
