@@ -1,7 +1,7 @@
 import { Injectable, Inject, OnInit, Injector, ComponentRef } from '@angular/core';
 import { Overlay, OverlayState, OverlayRef, ComponentPortal } from '@angular/material';
 
-import { OverlayConfig, DEFAULT_CONFIG } from 'app/model/model';
+import { OverlayConfig, DEFAULT_OVERLAY_CONFIG } from 'app/model/model';
 import { BusyOverlayComponent, BusyOverlayRef, COMPONENT_DATA } from 'app/shared/components/components';
 
 /**
@@ -35,7 +35,7 @@ export class OverlayService {
 
     open(config: OverlayConfig = {}) {
         // Override default configuration
-        const dialogConfig = { ...DEFAULT_CONFIG, ...config };
+        const dialogConfig = { ...DEFAULT_OVERLAY_CONFIG, ...config };
     
         // Returns an OverlayRef which is a PortalHost
         const overlayRef = this.createOverlay(dialogConfig);

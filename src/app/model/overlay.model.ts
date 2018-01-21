@@ -6,9 +6,9 @@ export interface OverlayConfig {
     componentData?: any;
 }
 
-export const DEFAULT_CONFIG: OverlayConfig = {
+export const DEFAULT_OVERLAY_CONFIG: OverlayConfig = {
     hasBackdrop: true,
     backdropClass: 'dark-backdrop',
-    panelClass: 'tm-file-preview-dialog-panel',
+    panelClass: '',
     componentData: null
 }

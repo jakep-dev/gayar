@@ -304,12 +304,14 @@ export class FrequencyIncidentBarDirective {
                 let series = this.getSeriesObject(name);
                 series.data = groups.map(group => {
                     if (!groupDrilldownNames.join(',').includes(group.type)) {
-                        groupDrilldownNames.push(group.type);
+                        if(group.count > 0) {
+                            groupDrilldownNames.push(group.type);
+                        }
                     }
                     return {
                         name: group.type,
                         y: this.getPlotValue(group.count),
-                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company' || group.count < 1) ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || (group.comp_or_peer === 'Company') || (group.count <= 0) ) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -351,7 +353,6 @@ export class FrequencyIncidentBarDirective {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     chart.setTitle({ text: 'Types of ' + e.point.name.replace('Violations', 'Violation') + ' Incidents' });
                 }
-
             });
             chart.applyDrilldown();
         };

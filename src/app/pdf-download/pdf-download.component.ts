@@ -29,6 +29,9 @@ import { RateComponent as Benchmark_RateComponent} from 'app/benchmark/rate/rate
 import { RetentionComponent as Benchmark_RetentionComponent} from 'app/benchmark/retention/retention.component';
 
 import { BusyOverlayRef, BusyOverlayComponent } from 'app/shared/components/components';
+import { PdfCompleteComponent } from './pdf-complete.component';
+import { PdfStartComponent } from './pdf-start.component';
+import { DialogService } from 'app/shared/blocks/blocks';
 
 import { 
     MenuService, SearchService, 
@@ -256,7 +259,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         private severityService: SeverityService,
         private reportService: ReportService,
         private applicationService: ApplicationService,
-        private overlayDialog: OverlayService
+        private overlayDialog: OverlayService,
+        private dialogService: DialogService
     ) {
         //If font files are not loaded setup the call back function to catch the event when font files are loaded
         if(this.fontService.isLoadComplete()) {
@@ -625,9 +629,12 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.frequencyPeerGroupTable = frequencyPeerGroupTable;
             this.frequencyCompanyLossesTable = frequencyCompanyLossesTable;
             this.severityPeerGroupTable = severityPeerGroupTable;
-            this.severityCompanyLossesTable =severityCompanyLossesTable;
+            this.severityCompanyLossesTable = severityCompanyLossesTable;
             this.resetDownloadMenu();
             this.addCancelMenu();
+
+            let componentFactory: ComponentFactory<PdfStartComponent> = this.componentFactoryResolver.resolveComponentFactory(PdfStartComponent);
+            this.dialogService.SimpleComponent(componentFactory.componentType, { width: '300px' }, null);
 
             if(!this.reportGlossaryDataDone) {
                 this.getReportGlossaryConfig();
@@ -1364,26 +1371,34 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 if(tspanList.length > 0) {
                     let i: number;
                     let n: number = tspanList.length;
+                    let chartSize: ComponentPrintSettings = this.chartDataCollection[this.chartLoadCount].targetPage.getPrintSettings(0);
+                    let x: number = (chartSize.width - 132.0) / 2.0;
+                    let y: number = (chartSize.height - 12.0) / 2.0;
+                    let translateValue = 'translate(' + x + ',' + y + ')';
+                    //console.log('width = ' + chartSize.width + ' height = ' + chartSize.height);
+                    //console.log('x = ' + x + ', y = ' + y);
                     for(i = 0; i < n; i++) {
                         if(tspanList[i].innerHTML === 'No Data Available') {
                             isNoData = true;
+                            tspanList[i].parentElement.parentElement.attributes['transform'].value = translateValue;
                         } else if(tspanList[i].childNodes && (tspanList[i].childNodes.length == 1) && (tspanList[i].childNodes[0].textContent === 'No Data Available') ) {
                             isNoData = true;
-                        }    
+                            tspanList[i].parentNode.parentNode.attributes["transform"].value = translateValue;
+                        }
                     }
                 }
-                if(isNoData) {
-                    this.setPollingInterval(0);
-                    this.chartLoadCount++;
-                    //if svg is showing a chart with no data, loaded the next chart
-                    if(this.chartLoadCount < this.chartDataCollection.length) {
-                        this.resetTimer();
-                        this.loadChartImage();
-                    } else {
-                        //Start off the page count process if no more chart images to load
-                        this.processPageCounts();
-                    }
-                } else {
+                // if(isNoData) {
+                //     this.setPollingInterval(0);
+                //     this.chartLoadCount++;
+                //     //if svg is showing a chart with no data, loaded the next chart
+                //     if(this.chartLoadCount < this.chartDataCollection.length) {
+                //         this.resetTimer();
+                //         this.loadChartImage();
+                //     } else {
+                //         //Start off the page count process if no more chart images to load
+                //         this.processPageCounts();
+                //     }
+                // } else {
                     //IE doesn't support outerHTML for svg tag
                     let data = svgElement.parentNode.innerHTML;
                     //Filter out all child nodes except for the svg tag
@@ -1407,7 +1422,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                             renderCallback: this.renderCompleteCallback.bind(this)
                         }
                     );
-                }
+                // }
             } else {
                 this.setPollingInterval(0);
                 //if svg is not loaded, loaded the next chart
@@ -1570,6 +1585,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             //this.pdfMake.createPdf(this.pdfBuilder.getContent()).download(this.getPdfFilename());
             this.setDownloadMenuMessage('100% done', '100%');
             this.pdfDocument = this.pdfMake.createPdf(this.pdfBuilder.getContent());
+            this.dialogService.Dismiss();
             //Setup overlay dialog
             this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.pdfGenerateTimeout = setTimeout(() => this.delayedPdfGetBuffer(), 500);
@@ -1590,7 +1606,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.fileData = data;
         this.isProcessing = false;
         this.busyOverlayRef.close();
-        this.snackBarService.Simple('PDF is ready for download.');
+        let componentFactory: ComponentFactory<PdfCompleteComponent> = this.componentFactoryResolver.resolveComponentFactory(PdfCompleteComponent);
+        this.snackBarService.Custom(componentFactory.componentType);
+        //this.snackBarService.Simple('Report generation is complete.<br>Please click on the <i class="fa fa-bell" style="font-size:20px"></i> to download.');
     }
     ngOnInit() {}
 

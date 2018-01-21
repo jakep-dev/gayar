@@ -304,12 +304,14 @@ export class FrequencyLossBarDirective {
                 let series = this.getSeriesObject(name);
                 series.data = groups.map(group => {
                     if (!groupDrilldownNames.join(',').includes(group.type)) {
-                        groupDrilldownNames.push(group.type);
+                        if(group.count > 0) {
+                            groupDrilldownNames.push(group.type);
+                        }
                     }
                     return {
                         name: group.type,
                         y: this.getPlotValue(group.count),
-                        drilldown: ( (!this.hasDetailAccess) || group.comp_or_peer === 'Company') ? null : group.type
+                        drilldown: ( (!this.hasDetailAccess) || (group.comp_or_peer === 'Company') || (group.count <= 0) ) ? null : group.type
                     };
                 });
                 tempChartData.series.push(series);
@@ -338,20 +340,18 @@ export class FrequencyLossBarDirective {
 
         });
 
-
         var defaultTitle = this.modelData.xAxis;
-        var frequencyService = this.frequencyService;    
+        var frequencyService = this.frequencyService;
         tempChartData.onDrillDown = function (event, chart) {
             var e = event.originalEvent;
             var drilldowns = tempChartData.drilldown;
             e.preventDefault();
-            frequencyService.setLossChartView(e.point.name); 
+            frequencyService.setLossChartView(e.point.name);
             drilldowns.forEach(function (p, i) {
                 if (p.id.includes(e.point.name)) {
                     chart.addSingleSeriesAsDrilldown(e.point, p);
                     chart.setTitle({ text: 'Types of ' + e.point.name + (e.point.name && e.point.name.includes('Losses')? '' : ' Losses') });
                 }
-
             });
             chart.applyDrilldown();
         };
