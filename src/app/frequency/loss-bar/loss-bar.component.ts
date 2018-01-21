@@ -46,24 +46,40 @@ export class LossBarComponent implements OnInit {
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {        
+    onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
-        this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
         if(this.isDrillDownComplete) {
+            this.addLabelAndImage(chart);
             if(!this.isFirstRedrawComplete.getValue()) {
                 this.isFirstRedrawComplete.next(true);
             }    
         } else {
-            for(let i = 0; i < chart.chart.series[0].data.length; i++) {
+            let drillDownFound = false;
+            let i: number;
+            for(i = 0; i < chart.chart.series[0].data.length; i++) {
                 if(chart.chart.series[0].data[i].drilldown === this.printSettings.drillDown) {
+                    this.addLabelAndImage(chart);
+                    drillDownFound = true;
+                    this.isDrillDownComplete = true;
                     chart.chart.series[0].data[i].firePointEvent('click', null);
+                    break;
                 }
             }
-            this.isDrillDownComplete = true;
-            if(!this.isFirstRedrawComplete.getValue()) {
-                this.isFirstRedrawComplete.next(true);
-            }              
+            if(!drillDownFound) {
+                this.isDrillDownComplete = true;
+                let n = chart.chart.axes.length - 1;
+                for(i = n; i >= 0; i--) {
+                    chart.chart.axes[i].remove(false);
+                }
+                n = chart.chart.series.length - 1;
+                for(i = n; i >= 0; i--) {
+                    chart.chart.series[i].remove(false);
+                }
+                chart.chart.setTitle({ text: '' }, { text: '' });
+                this.modelData.displayText = null;
+                chart.chart.redraw();
+            }
         }
     }
 

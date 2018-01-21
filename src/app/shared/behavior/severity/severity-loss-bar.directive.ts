@@ -319,7 +319,9 @@ export class SeverityLossBarDirective {
                 let series = this.getSeriesObject(name);
                 series.data = groups.map(group => {
                     if (!groupDrilldownNames.join(',').includes(group.type)) {
-                        groupDrilldownNames.push(group.type);
+                        if(group.count > 0) {
+                            groupDrilldownNames.push(group.type);
+                        }
                     }
                     return {
                         name: group.type,
