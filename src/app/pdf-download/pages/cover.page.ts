@@ -103,7 +103,7 @@ export class CoverPage extends BasePage  {
                     body: [
                         [
                             {
-                                text: '\n\n\n',
+                                text: '\n\n',
                                 border: [false, false, false, false]
                             }
                         ],
@@ -190,6 +190,7 @@ export class CoverPage extends BasePage  {
                         [
                             {
                                 image: this.prefix + 'logo',
+                                width: 195,
                                 border: [false, false, false, false]
                             }
                         ]
@@ -420,7 +421,7 @@ export class CoverPage extends BasePage  {
      */
     public setFileService(fileService: GetFileService) {
         this.fileService = fileService;
-        this.fileService.getAsDataUrl('/assets/images/advisen-logo.png');
+        this.fileService.getAsDataUrl('/assets/images/advisen-report-logo.png');
         this.fileService.fileData$.subscribe(this.updateAdvisenLogo.bind(this));
     }
 

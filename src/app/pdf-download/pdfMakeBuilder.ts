@@ -456,7 +456,12 @@ export class PDFMakeBuilder {
      * @return {any} - json object representing the the final pdf
      */
     public getContent(): any {
+        //console.log('Begin Styles');
         //console.log(JSON.stringify(this.pdfContent.styles));
+        //console.log('End Styles');
+        //console.log('Begin Images');
+        //console.log(JSON.stringify(this.pdfContent.images));
+        //console.log('End Images');
         return this.pdfContent;
     }
 
@@ -471,7 +476,9 @@ export class PDFMakeBuilder {
      */
     private addPdfContent(pdfTextBlocks: Array<any>) {
         pdfTextBlocks.forEach(pdfTextBlock => {
+            //console.log('Begin Block');
             //console.log(JSON.stringify(pdfTextBlock));
+            //console.log('End Block');
             this.pdfContent.content.push(pdfTextBlock);
         });
     }

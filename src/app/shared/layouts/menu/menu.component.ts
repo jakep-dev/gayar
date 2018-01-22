@@ -26,7 +26,6 @@ export class MenuComponent implements OnInit {
 
   @ViewChild(PdfDownloadComponent) 
   private pdfDownloader: PdfDownloadComponent;
-  private pdfComponentLoaded: boolean = false;
 
   constructor(public menuService: MenuService,
               private searchService: SearchService,
@@ -38,10 +37,10 @@ export class MenuComponent implements OnInit {
   ngOnInit () {
     this.sideNavMode = NAV_MODE;
     this.watchForInprogress();
+    setTimeout(this.setupPdfDownloader.bind(this), 0);
   }
 
   setupPdfDownloader() {
-        this.pdfComponentLoaded = true;
         this.menuService.setPdfDownloader(this.pdfDownloader);
   }
 
@@ -116,7 +115,7 @@ export class MenuComponent implements OnInit {
    * @return {boolean} - Is a valid search criteria or not.
    */
   public isSearchCriteriaValid () : boolean {
-    if(this.pdfComponentLoaded && this.searchService.hasValidSearchCriteria()) { 
+    if(this.searchService.hasValidSearchCriteria()) { 
       return true;
     } else {
       if(this.searchService && this.sessionService && this.searchService.hasValidSearchCriteria() && this.sessionService.isLoggedIn()) {
