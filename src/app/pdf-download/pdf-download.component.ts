@@ -205,16 +205,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         id: PdfDownloadComponent.generateButtonId,
         menuName: PdfDownloadComponent.INITIAL_MESSAGE,
         iconName: 'party_mode'
-        //,
-        //disabled: true
     };
-    
-    // private cancelMenu: any = {
-    //     id: PdfDownloadComponent.cancelButtonId,
-    //     menuName: 'Cancel PDF',
-    //     iconName: 'cancel',
-    //     disabled: false
-    // };
 
     public menuItems: Array<any> = [
         this.generateMenu
@@ -437,7 +428,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.filename = null;
         this.pdfDocument = null;
         this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
-        //this.generateMenu.disabled = true;
         this.resetDataStructures();
         this.resetTimer();
         this.resetTimeoutObjects();
@@ -500,6 +490,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
 
     private backgroundProcessTimeout: any = null;
+
     /**
      * Set the polling interval to check if a long running process is done
      * call this function with value = 0 means will notify to backgroundTimeChecker that process is finish
@@ -541,7 +532,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             if(this.timeElapse >= PdfDownloadComponent.MAX_TIMEOUT) {
                 this.isProcessing = false;
                 this.percentageText = '';
-                //this.removeCancelMenu();                                
                 this.resetDownloadMenu();
                 this.snackBarService.Simple(this.timeoutMessage);
             } else {
@@ -576,26 +566,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * Ensure we have the the download and cancel menu items
      * 
      * @private
-     * @function addCancelMenu
+     * @function addMenu
      * @return {} - No return types.
      */
-    private addCancelMenu() {
-        //this.menuItems = [this.generateMenu, this.cancelMenu];
+    private addMenu() {
         this.menuItems = [this.generateMenu];
     }
 
-    /**
-     * Ensure we have only the the download menu item
-     * 
-     * @private
-     * @function removeCancelMenu
-     * @return {} - No return types.
-     */
-    // private removeCancelMenu() {
-    //     this.menuItems = [this.generateMenu];
-    // }
-
-    private menuClicked(buttonId: number) {
+    public menuClicked(buttonId: number) {
         //console.log(buttonId);
         if(buttonId == PdfDownloadComponent.generateButtonId) {
             if(this.pdfDocument && this.fileData) {
@@ -631,7 +609,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.severityPeerGroupTable = severityPeerGroupTable;
             this.severityCompanyLossesTable = severityCompanyLossesTable;
             this.resetDownloadMenu();
-            this.addCancelMenu();
+            this.addMenu();
 
             let componentFactory: ComponentFactory<PdfStartComponent> = this.componentFactoryResolver.resolveComponentFactory(PdfStartComponent);
             this.dialogService.SimpleComponent(componentFactory.componentType, { width: '300px' }, null);
@@ -1338,6 +1316,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
+            //console.log('Inside startImageConversion');
             if(start && this.chart != null) {
                 this.startImageTimeout = setTimeout(() => this.loadCurrentChartImage(), 1000);
             }
@@ -1360,6 +1339,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
+            //console.log('Inside loadCurrentChartImage');
             //check if svg image is loaded.  If it is loaded then use the canvasFactory to 
             //convert svg to png as a data URL
             let childImages = this.rootElement.nativeElement.getElementsByTagName('svg');
