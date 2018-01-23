@@ -166,4 +166,16 @@ export abstract class BasePage {
      */
     public setPageCount(pageCount: number) {
     }
+
+    /**
+     * Tell the underlying page to shoe or hide the header
+     * 
+     * @public
+     * @function showHeader
+     * @param {boolean} isShowHeader - true to show header, false to hide header
+     * @return {} - No return types.
+     */
+    public showHeader(isShowHeader: boolean) {
+    }
+
 }

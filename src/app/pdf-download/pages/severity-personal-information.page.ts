@@ -44,6 +44,24 @@ export class SeverityPersonalInformationPage extends BasePage  {
         return SeverityPersonalInformationPage.pageType;
     }
 
+    //Indicate if we are showing the section header
+    //This happens when this is the first page selected in the section by the user
+    private showTopHeader: boolean = false;
+
+    //json block representing the style for section header within this page
+    private topHeaderStyle: any = {
+        color: '#27a9bc',
+        fontSize: 16,
+        bold: true,
+        margin: [60,0,40,0]
+    };
+
+    //json block representing the section header within this page
+    private topHeader: any = {
+        text: 'Severity\n\n',
+        style: this.prefix + 'topHeaderStyle'
+    };
+
     //json block representing the style for header within this page
     private headerStyle: any = {
         color: '#464646',
@@ -227,9 +245,11 @@ export class SeverityPersonalInformationPage extends BasePage  {
     private updatePdfContent() {
 
         this.header.style = this.prefix + 'headerStyle';
-        
+        this.topHeader.style = this.prefix + 'topHeaderStyle';
+
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
+        this.styles[this.prefix + 'topHeaderStyle'] = this.topHeaderStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
@@ -242,7 +262,29 @@ export class SeverityPersonalInformationPage extends BasePage  {
         }
 
         this.clearArray(this.pdfContent);
+        if(this.showTopHeader) {
+            this.pdfContent.push(this.topHeader);
+        }
         this.pdfContent.push(this.header);
         this.pdfContent.push(this.table);
     }
+
+    /**
+     * Tell the page to shoe or hide the header
+     * 
+     * @public
+     * @function showHeader
+     * @param {boolean} isShowHeader - true to show header, false to hide header
+     * @return {} - No return types.
+     */
+    public showHeader(showHeader: boolean) {
+        this.showTopHeader = showHeader;
+        this.clearArray(this.pdfContent);
+        if(this.showTopHeader) {
+            this.pdfContent.push(this.topHeader);
+        }
+        this.pdfContent.push(this.header);
+        this.pdfContent.push(this.table);
+    }
+
 };
