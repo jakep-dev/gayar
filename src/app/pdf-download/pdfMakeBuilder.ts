@@ -412,6 +412,7 @@ export class PDFMakeBuilder {
      */
     private addImages(images: Array<string>) {
         for(let imageLabel in images) {
+            //console.log('"' + imageLabel + '":"' + images[imageLabel] + '"');
             this.pdfContent.images[imageLabel] = images[imageLabel];
         }
     }
@@ -459,9 +460,6 @@ export class PDFMakeBuilder {
         //console.log('Begin Styles');
         //console.log(JSON.stringify(this.pdfContent.styles));
         //console.log('End Styles');
-        //console.log('Begin Images');
-        //console.log(JSON.stringify(this.pdfContent.images));
-        //console.log('End Images');
         return this.pdfContent;
     }
 

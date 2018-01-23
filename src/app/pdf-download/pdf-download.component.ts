@@ -588,7 +588,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.fileData = null;
             this.generateMenu.menuName = PdfDownloadComponent.INITIAL_MESSAGE;
             this.percentageText = '';
-            //this.removeCancelMenu();
         }
     }
 
@@ -685,7 +684,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
                     this.isProcessing = false;
                     this.percentageText = '';
-                    //this.removeCancelMenu();
                     
                     this.snackBarService.Simple('Unable to get required assessment report data');
                 } else {
@@ -759,6 +757,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      */
     private processReportSection(section: IReportTileModel) {
         let sectionHeaderAdded = false;
+        let topHeaderEnabled: boolean = false;
         let subEntryAdded;
 
         section.subComponents.forEach(subComponentItem => {
@@ -767,11 +766,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                     //console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
                     this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
                     sectionHeaderAdded = true;
+                    topHeaderEnabled = true;
                 }
                 //console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                 this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
                 subEntryAdded = true;
-                this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
+                this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description, topHeaderEnabled);
+                topHeaderEnabled = false;
             } else {
                 subEntryAdded = false;
             }
@@ -782,16 +783,19 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                             //console.log('Section = ' + section.description + ' pageType = ' + subComponentItem.pageType);
                             this.tocPage.addTocEntry(section.description, 1, subComponentItem.pageType);
                             sectionHeaderAdded = true;
+                            topHeaderEnabled = true;
                         }
                         if(!subEntryAdded) {
                             //console.log('Sub Component = ' + subComponentItem.description + ' pageType = ' + subComponentItem.pageType);
                             this.tocPage.addTocEntry(subComponentItem.description, 2, subComponentItem.pageType);
-                            this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description);
+                            this.loadChartCollection(subComponentItem.chartComponents, subComponentItem.pageType, subComponentItem.description, topHeaderEnabled);
+                            topHeaderEnabled = false;
                             subEntryAdded = true;
                         }
                         //console.log('Sub Sub Component = ' + subSubComponentItem.description + ' pageType = ' + subSubComponentItem.pageType);
                         this.tocPage.addTocEntry(subSubComponentItem.description, 3, subSubComponentItem.pageType);
-                        this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType, subSubComponentItem.description);
+                        this.loadChartCollection(subSubComponentItem.chartComponents, subSubComponentItem.pageType, subSubComponentItem.description, topHeaderEnabled);
+                        topHeaderEnabled = false;
                     }
                 });
             }
@@ -809,14 +813,15 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @param {IChartWidget[]} chartComponents - List of chart objects within report section or sub sectio or sub sub section
      * @param {string} pageType - The page type where the chart component resides in
      * @param {string} tocDescription - The table of contents entry for which the chart objects that is being mapped to
+     * @param {boolean} showHeader - Tell to underlying page if the top level section header needs to be shown
      * @return {} - No return types.
      */
-    private loadChartCollection(chartComponents:IChartWidget[], pageType: string, tocDescription: string) {
+    private loadChartCollection(chartComponents:IChartWidget[], pageType: string, tocDescription: string, showHeader: boolean) {
         let n: number;
         let i: number;
 
         if(!this.hasPageType(pageType)) {
-            this.addPageType(pageType);
+            this.addPageType(pageType, showHeader);
             //console.log('Loaded Page type ' + pageType);
         }
         if(chartComponents) {
@@ -859,9 +864,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @private
      * @function addPageType
      * @param {string} pageType - name of the page type
+     * @param {boolean} showHeader - Tell to underlying page if the top level section header needs to be shown
      * @return {} - No return types.
      */
-    private addPageType(pageType: string) {
+    private addPageType(pageType: string, showHeader: boolean) {
         switch(pageType) {
             case DashboardPage.pageType:
                 this.pageCollection[pageType] = new DashboardPage();
@@ -876,81 +882,100 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 let frequencyTimePeriodPage = new FrequencyTimePeriodPage();
                 frequencyTimePeriodPage.setDetailChartPermission(this.getChartDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyTimePeriodDetails));
                 this.pageCollection[pageType] = frequencyTimePeriodPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyTypeOfIncidentPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTypeOfIncidentPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyDataPrivacyPage.pageType:
                 this.pageCollection[pageType] = new FrequencyDataPrivacyPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyNetworkSecurityPage.pageType:
                 this.pageCollection[pageType] = new FrequencyNetworkSecurityPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyTechEOPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTechEOPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyPrivacyViolationsPage.pageType:
                 this.pageCollection[pageType] = new FrequencyPrivacyViolationsPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyTypeOfLossPage.pageType:
                 this.pageCollection[pageType] = new FrequencyTypeOfLossPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyPersonalInformationPage.pageType:
                 this.pageCollection[pageType] = new FrequencyPersonalInformationPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyCorporateLossesPage.pageType:
                 this.pageCollection[pageType] = new FrequencyCorporateLossesPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
 
             case SeverityIndustryOverviewPage.pageType:
                 this.pageCollection[pageType] = new SeverityIndustryOverviewPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTimePeriodPage.pageType:
                 let severityTimePeriodPage = new SeverityTimePeriodPage();
                 severityTimePeriodPage.setDetailChartPermission(this.getChartDetailAccess(APPCONSTANTS.REPORTS_ID.severityTimePeriodDetails));
                 this.pageCollection[pageType] = severityTimePeriodPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTypeOfIncidentPage.pageType:
                 this.pageCollection[pageType] = new SeverityTypeOfIncidentPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityDataPrivacyPage.pageType:
                 this.pageCollection[pageType] = new SeverityDataPrivacyPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityNetworkSecurityPage.pageType:
                 this.pageCollection[pageType] = new SeverityNetworkSecurityPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTechEOPage.pageType:
                 this.pageCollection[pageType] = new SeverityTechEOPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityPrivacyViolationsPage.pageType:
                 this.pageCollection[pageType] = new SeverityPrivacyViolationsPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTypeOfLossPage.pageType:
                 this.pageCollection[pageType] = new SeverityTypeOfLossPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityPersonalInformationPage.pageType:
                 this.pageCollection[pageType] = new SeverityPersonalInformationPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityCorporateLossesPage.pageType:
                 this.pageCollection[pageType] = new SeverityCorporateLossesPage();
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
 
@@ -963,14 +988,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 let frequencyMostRecentPeerGroupLossesPage = new FrequencyMostRecentPeerGroupLossesPage();
                 frequencyMostRecentPeerGroupLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails));
                 frequencyMostRecentPeerGroupLossesPage.setPeerGroupData(this.frequencyPeerGroupTable);
-                this.pageCollection[pageType] = frequencyMostRecentPeerGroupLossesPage
+                this.pageCollection[pageType] = frequencyMostRecentPeerGroupLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case FrequencyMostRecentCompanyLossesPage.pageType:
                 let frequencyMostRecentCompanyLossesPage = new FrequencyMostRecentCompanyLossesPage();
                 frequencyMostRecentCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyCompanyLossesDetails));
                 frequencyMostRecentCompanyLossesPage.setPeerGroupData(this.frequencyCompanyLossesTable);
-                this.pageCollection[pageType] = frequencyMostRecentCompanyLossesPage
+                this.pageCollection[pageType] = frequencyMostRecentCompanyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
 
@@ -978,14 +1005,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 let severityTopPeerGroupLossesPage = new SeverityTopPeerGroupLossesPage();
                 severityTopPeerGroupLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails));
                 severityTopPeerGroupLossesPage.setPeerGroupData(this.severityPeerGroupTable);
-                this.pageCollection[pageType] = severityTopPeerGroupLossesPage
+                this.pageCollection[pageType] = severityTopPeerGroupLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
             case SeverityTopCompanyLossesPage.pageType:
                 let severityTopCompanyLossesPage = new SeverityTopCompanyLossesPage();
                 severityTopCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails));
                 severityTopCompanyLossesPage.setPeerGroupData(this.severityCompanyLossesTable);
-                this.pageCollection[pageType] = severityTopCompanyLossesPage
+                this.pageCollection[pageType] = severityTopCompanyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
 
@@ -1570,7 +1599,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.busyOverlayRef = this.overlayDialog.open({componentData: 'Please wait while we are finalizing the pdf data!'});
             this.pdfGenerateTimeout = setTimeout(() => this.delayedPdfGetBuffer(), 500);
             //console.log(pg.getContent());
-            //this.removeCancelMenu();
         }
     }
 

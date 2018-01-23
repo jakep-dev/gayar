@@ -3,6 +3,7 @@ import { MenuService, ReportService, SessionService, SearchService, FrequencySer
 import { IReportTileModel, FrequencyInput, FrequencyDataModel, FrequencyDataResponseModel, SeverityDataModel, SeverityDataResponseModel, ISubComponentModel, ISubSubComponentModel } from 'app/model/model';
 import { APPCONSTANTS } from 'app/app.const';
 import { SnackBarService } from 'app/shared/shared';
+import { clearTimeout, setTimeout } from 'timers';
 
 @Component({
     selector: 'app-report',
@@ -596,6 +597,8 @@ export class ReportComponent implements OnInit {
         }
     }
 
+    private waitTimeout: any = null;
+
     /**
      * Response to the download report button
      * Continuosly wait for all resources and data are loaded before starting the pdf generation process
@@ -605,9 +608,17 @@ export class ReportComponent implements OnInit {
      * @return {} - No return types.
      */
     public onReport () {
-        this.getReportMessage();
-        if(this.hasSelectedComponent()) {
-            this.menuService.startPdfDownload(this.reportTileModel, this.frequencyPeerGroupTable, this.frequencyCompanyLossesTable, this.severityPeerGroupTable, this.severityCompanyLossesTable);
+        if(this.waitTimeout) {
+            clearTimeout(this.waitTimeout);
+            this.waitTimeout = null;
+        }
+        if(this.frequencyDataDone && this.severityDataDone) {
+            this.getReportMessage();
+            if(this.hasSelectedComponent()) {
+                this.menuService.startPdfDownload(this.reportTileModel, this.frequencyPeerGroupTable, this.frequencyCompanyLossesTable, this.severityPeerGroupTable, this.severityCompanyLossesTable);
+            }
+        } else {
+            this.waitTimeout = setTimeout(() => this.onReport(), 100);
         }
     }
 
