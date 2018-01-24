@@ -217,7 +217,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //maximum amount of time in milliseconds that a part of a long running process should take
     //this is used to wait for chart image to finish or to wait for all chart data to be complete
     //if this amount of time has past, trigger cancellation of pdf processing
-    private static MAX_TIMEOUT: number = 30 * 1000;
+    //set timeout for approximately 100 seconds
+    private static MAX_TIMEOUT: number = 100 * 1000;
     private startTime: Date = null;
     private timeElapse: number = 0;
     private currentWaitPeriod: number = 0;
@@ -457,7 +458,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.entryPoint.clear();
     }
 
-
+    /**
+     * Clears all set timeout objects used in the assessment report process
+     * 
+     * @private
+     * @function resetTimeoutObjects
+     * @return {} - No return types.
+     */
     private resetTimeoutObjects() {
         if(this.backgroundProcessTimeout == null) {
             clearTimeout(this.backgroundProcessTimeout);
@@ -496,7 +503,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * call this function with value = 0 means will notify to backgroundTimeChecker that process is finish
      * 
      * @private
-     * @function resetTimer
+     * @function setPollingInterval
      * @param {number} value - number of milliseconds for the polling period
      * @return {} - No return types.
      */
@@ -505,10 +512,26 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.currentWaitPeriod = value;
     }
 
+    /**
+     * Set the starting time for the timer used
+     * 
+     * @private
+     * @function startTimer
+     * @return {} - No return types.
+     */
     private startTimer() {
         this.startTime = new Date();
     }
 
+    /**
+     * Start the background timer
+     * Trigger timeout and cancel the current pdf generation when timeout is hit
+     * 
+     * @private
+     * @function startBackgroundTimer
+     * @param {number} pollingInterval - number of milliseconds for the polling period
+     * @return {} - No return types.
+     */
     private startBackgroundTimer(pollingInterval: number) {
         this.startTimer();
         this.currentWaitPeriod = pollingInterval;
@@ -516,6 +539,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.backgroundProcessTimeout = setTimeout(() => this.backgroundTimeChecker(), this.currentWaitPeriod);
     }
 
+    /**
+     * When the polling interval is hit update timers
+     * 
+     * @private
+     * @function updateElapsedTime
+     * @return {} - No return types.
+     */    
     private updateElapsedTime() {
         let currentTime: Date = new Date();
         //console.log(this.getDateTimeString(currentTime) + '[' + currentTime.getTime()  + ']' + this.getDateTimeString(this.startTime) + '[' + this.startTime.getTime() + ']');
@@ -523,6 +553,13 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.timeElapse = timeDifference;
     }
 
+    /**
+     * Background timer trigger timeout and cancel the current pdf generation when timeout is hit
+     * 
+     * @private
+     * @function backgroundTimeChecker
+     * @return {} - No return types.
+     */
     private backgroundTimeChecker() {
         clearTimeout(this.backgroundProcessTimeout);
         this.backgroundProcessTimeout = null;
@@ -573,6 +610,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.menuItems = [this.generateMenu];
     }
 
+    /**
+     * Callback that is called after menu button is clicked
+     * Handles report download and cancel report
+     * 
+     * @private
+     * @function menuClicked
+     * @return {} - No return types.
+     */
     public menuClicked(buttonId: number) {
         //console.log(buttonId);
         if(buttonId == PdfDownloadComponent.generateButtonId) {
@@ -1557,6 +1602,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
 
     private pdfGenerateTimeout: any = null;
+
     /**
      * Generate the pdf file based on the pages 
      * with the chart images and tables loaded within
@@ -1602,27 +1648,46 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * Callback that is called after the overlay screen is finished rendering
+     * 
+     * @private
+     * @function delayedPdfGetBuffer
+     * @return {} - No return types.
+     */
     private delayedPdfGetBuffer() {
         clearTimeout(this.pdfGenerateTimeout);
         this.pdfGenerateTimeout = null;
         this.pdfDocument.getBlob(this.processPdfData.bind(this));
     }
 
+    /**
+     * Callback when Assessment Report's data blob is finished
+     * 
+     * @private
+     * @function processPdfData
+     * @return {} - No return types.
+     */
     private processPdfData(data: any) {
         this.generateMenu.menuName = 'Download ' + this.filename;
-        //this.generateMenu.disabled = false;
         this.fileData = data;
         this.isProcessing = false;
         this.busyOverlayRef.close();
         let componentFactory: ComponentFactory<PdfCompleteComponent> = this.componentFactoryResolver.resolveComponentFactory(PdfCompleteComponent);
         this.snackBarService.Custom(componentFactory.componentType);
-        //this.snackBarService.Simple('Report generation is complete.<br>Please click on the <i class="fa fa-bell" style="font-size:20px"></i> to download.');
     }
+
     ngOnInit() {}
 
     private startupTimeout: any = null;
+
     ngAfterViewInit() {
         let token = null;
+
+        if(this.startupTimeout) {
+            clearTimeout(this.startupTimeout);
+            this.startupTimeout = null;
+        }
         if(this.sessionService) {
             try {
                 token = this.sessionService.Token;
@@ -1631,10 +1696,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             }
         }
         if(token) {
-            if(this.startupTimeout) {
-                clearTimeout(this.startupTimeout);
-                this.startupTimeout = null;
-            }
             this.fontService.loadFontFiles();
             this.coverPage.setFileService(this.getFileService);
             //Get logged in user's company name
