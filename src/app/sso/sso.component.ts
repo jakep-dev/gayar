@@ -27,6 +27,7 @@ export class SsoComponent implements OnInit {
    * Get current identity from the server.
    */
   private getCurrentIdentity(){
+      this.sessionService.removeAuth();
       let token: string  = this.route.snapshot.params['token'];
       if(token){
           this.sessionService.getCurrentIdentity(token, APPCONSTANTS.APPLICATION_ID).subscribe((res: SessionModel)=>{

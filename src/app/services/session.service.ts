@@ -79,6 +79,7 @@ export class SessionService extends BaseService {
     }
 
     public removeAuth(){
+        this.currentIdentity = null;
         localStorage.removeItem("identity");
     }
 
