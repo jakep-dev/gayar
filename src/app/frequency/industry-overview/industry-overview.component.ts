@@ -7,45 +7,50 @@ import { FrequencyService, SessionService } from "app/services/services";
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'frequency-industry-overview',
-  templateUrl: './industry-overview.component.html',
-  styleUrls: ['./industry-overview.component.css']
+    selector: 'frequency-industry-overview',
+    templateUrl: './industry-overview.component.html',
+    styleUrls: ['./industry-overview.component.css']
 })
 export class IndustryOverviewComponent implements OnInit {
   
-    modelData: FrequencyIndustryOverviewModel;
-    chartHeader : string;
-    hasAccess: boolean;
+    public modelData: FrequencyIndustryOverviewModel;
 
-    setModelData(modelData: FrequencyIndustryOverviewModel) {
+    private chartHeader : string;
+
+    public hasAccess: boolean;
+
+    private setModelData(modelData: FrequencyIndustryOverviewModel) {
         this.modelData = modelData;
         this.chartHeader = modelData.chartTitle;
     }
 
-    chartData: BarChartData;
+    public chartData: BarChartData;
 
-    @Input() componentData: FrequencyInput;
+    @Input() public componentData: FrequencyInput;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 
      * @param newChartData BarChart's required data
      */
-    onDataComplete(newChartData : BarChartData) {
+    public onDataComplete(newChartData : BarChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
+
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
@@ -54,27 +59,36 @@ export class IndustryOverviewComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart: BaseChart) {
-        let xPos: number;
-        if(this.printSettings == null) {
-            xPos = 10;
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
         } else {
-            xPos = 45;
+            return null;
         }
-        if(this.modelData.datasets && this.modelData.datasets.length > 0) {
-            if(this.modelData.displayText && this.modelData.displayText.length > 0) { 
-                let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
-                chart.addChartLabel(
-                    this.modelData.displayText,
-                    xPos,
-                    chart.chart.chartHeight - labelHeight,
-                    '#000000',
-                    10,
-                    null,
-                    chart.chart.chartWidth - 85
-                );             
-            }
-            if(this.printSettings == null) {
+    }
+
+    private addLabelAndImage(chart: BaseChart) {
+        if(this.printSettings == null) {
+            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+                if(this.modelData.displayText && this.modelData.displayText.length > 0) { 
+                    let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
+                    chart.addChartLabel(
+                        this.modelData.displayText,
+                        10,
+                        chart.chart.chartHeight - labelHeight,
+                        '#000000',
+                        12,
+                        null,
+                        chart.chart.chartWidth - 85
+                    );             
+                }
                 chart.addChartImage(
                     '../assets/images/advisen-logo.png',
                     chart.chart.chartWidth - 80,
@@ -97,18 +111,17 @@ export class IndustryOverviewComponent implements OnInit {
     /**
      * Get Frequency Industry Overview Data from back end nodejs server
      */
-    getFrequencyIndustryOverViewData() {     
+    private getFrequencyIndustryOverViewData() {     
         if(this.componentData) {           
           this.frequencyService.getFrequencyIndustryOverview(this.componentData.companyId, this.componentData.naics)
           .subscribe(modelData => this.setModelData(modelData));            
         }
     }
 
-    getPermission() {
+    private getPermission() {
         let permission = this.sessionService.getUserPermission();
         if(permission) {
             this.hasAccess = permission.frequency && permission.frequency.industry && permission.frequency.industry.hasAccess
         }
     }
-
 }

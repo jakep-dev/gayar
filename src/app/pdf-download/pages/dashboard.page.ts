@@ -65,24 +65,45 @@ export class DashboardPage extends BasePage  {
         bold: true
     };
 
+    //json block for the chart caption text style
+    private captionStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: false
+    };
+
     //left image name
     private imageLeft:string = '';
+
     //left image data url
     private imageLeftUrl:string = '';
+
+    //left image caption
+    private imageLeftCaption:string = '';
+
     //middle image name
     private imageMiddle:string = '';
+
     //middle image data url
     private imageMiddleUrl:string = '';
+
+    //middle image caption
+    private imageMiddleCaption:string = '';
+
     //right image name
     private imageRight:string = '';
+
     //right image data url
     private imageRightUrl:string = '';
+
+    //middle image caption
+    private imageRightCaption:string = '';
 
     //json block for the table structure to hold first row of images and page sub headers
     private table: any = {
         margin: [ 35, 20, 70, 0 ],
         table: {
-            heights: [ 15, 300 ],
+            heights: [ 15, 200, 150 ],
             body: [
                 [
                     { text: '', alignment: 'center', style: this.prefix + 'tableHeaderStyle' }, 
@@ -101,6 +122,26 @@ export class DashboardPage extends BasePage  {
                     {
                         // image: this.imageRight,
                         // width: 240
+                    }
+                ],
+                [
+                    {
+                        margin: [ 15, -60, 0, 0 ],
+                        columns: [
+                            { text: '', width: 220, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ 15, -60, 0, 0 ],
+                        columns: [
+                            { text: '', width: 220, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ 15, -60, 0, 0 ],
+                        columns: [
+                            { text: '', width: 220, style: this.prefix + 'captionStyle' },
+                        ]
                     }
                 ]
             ]
@@ -130,7 +171,8 @@ export class DashboardPage extends BasePage  {
             dashboardSectionList.push(
                 {
                     header: "Frequency",
-                    imageLink: this.prefix + this.imageLeft
+                    imageLink: this.prefix + this.imageLeft,
+                    caption: this.imageLeftCaption
                 }
             );
         }
@@ -138,7 +180,8 @@ export class DashboardPage extends BasePage  {
             dashboardSectionList.push(
                 {
                     header: "Severity",
-                    imageLink: this.prefix + this.imageMiddle
+                    imageLink: this.prefix + this.imageMiddle,
+                    caption: this.imageMiddleCaption
                 }
             );
         }
@@ -146,7 +189,8 @@ export class DashboardPage extends BasePage  {
             dashboardSectionList.push(
                 {
                     header: "Benchmark",
-                    imageLink: this.prefix + this.imageRight
+                    imageLink: this.prefix + this.imageRight,
+                    caption: this.imageRightCaption
                 }
             );
         }
@@ -156,6 +200,7 @@ export class DashboardPage extends BasePage  {
                 image: dashboardSectionList[i].imageLink,
                 width: 240
             }
+            this.table.table.body[2][i].columns[0].text = dashboardSectionList[i].caption;
         }
         for(; i < 3; i++) {
             this.table.table.body[0][i].text = '';
@@ -163,6 +208,7 @@ export class DashboardPage extends BasePage  {
                 text: '',
                 margin: [ 240, 0, 0, 0 ]
             };
+            this.table.table.body[2][i].columns[0].text = '';
         }
 
         return this.pdfContent;
@@ -225,6 +271,33 @@ export class DashboardPage extends BasePage  {
     }
 
     /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(index: number, chartCaptionText: string) {
+        if((index >= 0) && (index <= 2) && chartCaptionText) {
+            switch(index) {
+                case 0:
+                    this.imageLeftCaption = chartCaptionText;
+                    break;
+                case 1:
+                    this.imageMiddleCaption = chartCaptionText;
+                break;
+                case 2:
+                    this.imageRightCaption = chartCaptionText;
+                break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
      * Adds the given chart to a specific position within the underlying page object
      * returns the page number the chart is added to
      * For most pages, it shoult all be on the first page
@@ -276,9 +349,14 @@ export class DashboardPage extends BasePage  {
         this.table.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
         this.table.table.body[0][2].style = this.prefix + 'tableHeaderStyle';
         
+        this.table.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
+        this.table.table.body[2][1].columns[0].style = this.prefix + 'captionStyle';
+        this.table.table.body[2][2].columns[0].style = this.prefix + 'captionStyle';
+
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
+        this.styles[this.prefix + 'captionStyle'] = this.captionStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {

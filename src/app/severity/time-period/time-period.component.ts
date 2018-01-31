@@ -13,39 +13,44 @@ import { BaseChart } from './../../shared/charts/base-chart';
 
 export class TimePeriodComponent implements OnInit {
 
-	chartHeader: string = '';
-	modelData: SeverityTimePeriodModel;
+	private chartHeader: string = '';
 
-	setModelData(modelData: SeverityTimePeriodModel) {
+	public modelData: SeverityTimePeriodModel;
+
+	private setModelData(modelData: SeverityTimePeriodModel) {
 		this.modelData = modelData;
 		this.chartHeader = this.modelData.chartTitle;
 	}
 
-	chartData: BarChartData;
+	public chartData: BarChartData;
 
-	@Input() componentData: SeverityInput;
+	@Input() public componentData: SeverityInput;
 
-	@Input() printSettings: ComponentPrintSettings;
+	@Input() public printSettings: ComponentPrintSettings;
 
 	/**
 	 * Event handler to indicate the construction of the BarChart's required data is built 
 	 * @param newChartData BarChart's required data
 	 */
-	onDataComplete(newChartData: BarChartData) {
+	public onDataComplete(newChartData: BarChartData) {
 		this.chartData = newChartData;
 	}
 
 	private chartComponent = new BehaviorSubject<BaseChart>(null);
+
 	public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
-    private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
-    public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
-    private isDrillDownComplete: boolean = true;
+
+	private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
+	public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
+
+	private isDrillDownComplete: boolean = true;
 
 	/**
 	 * Event handler to indicate the chart is loaded 
 	 * @param chart The chart commponent
 	 */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.chartComponent.next(chart);
         if(this.isDrillDownComplete) {
@@ -82,30 +87,39 @@ export class TimePeriodComponent implements OnInit {
         }
     }
 
-	addLabelAndImage(chart){
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
+        } else {
+            return null;
+        }
+	}
+
+	private addLabelAndImage(chart){
         let xPos: number;
         if(this.printSettings == null) {
-            xPos = 10;
-        } else {
-            xPos = 45;
-        }
-		if (this.modelData.maxValue > 0) {
-			if(this.modelData.datasets && this.modelData.datasets.length > 0) {
-				if(this.modelData.displayText && this.modelData.displayText.length > 0) {
-					let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
-					
-					chart.addChartLabel(
-						this.modelData.displayText,
-						xPos,
-						chart.chart.chartHeight - labelHeight,
-						'#000000',
-						10,
-						null,
-						chart.chart.chartWidth - 85
-					);
+			if (this.modelData.maxValue > 0) {
+				if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+					if(this.modelData.displayText && this.modelData.displayText.length > 0) {
+						let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
+						chart.addChartLabel(
+							this.modelData.displayText,
+							10,
+							chart.chart.chartHeight - labelHeight,
+							'#000000',
+							12,
+							null,
+							chart.chart.chartWidth - 85
+						);
+					}
 				}
-			}
-			if(this.printSettings == null) {
 				chart.addChartImage(
 					'../assets/images/advisen-logo.png',
 					chart.chart.chartWidth - 80,
@@ -113,13 +127,12 @@ export class TimePeriodComponent implements OnInit {
 					69,
 					17
 				);
-			}
-
-			if(chart.chart.yAxis.length > 0) {
-				let  yBreakPoint = chart.getYAxisPosition(0);
-				chart.addLine([chart.chart.plotLeft - 5, yBreakPoint], [chart.chart.plotLeft + 5, yBreakPoint + 10], '#ccd6eb', 2);
-				chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 5], [chart.chart.plotLeft + 5, yBreakPoint + 5], '#FFFFFF', 5.5);
-				chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 10], [chart.chart.plotLeft + 5, yBreakPoint], '#ccd6eb', 2);
+				if(chart.chart.yAxis.length > 0) {
+					let  yBreakPoint = chart.getYAxisPosition(0);
+					chart.addLine([chart.chart.plotLeft - 5, yBreakPoint], [chart.chart.plotLeft + 5, yBreakPoint + 10], '#ccd6eb', 2);
+					chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 5], [chart.chart.plotLeft + 5, yBreakPoint + 5], '#FFFFFF', 5.5);
+					chart.addLine([chart.chart.plotLeft - 5, yBreakPoint - 10], [chart.chart.plotLeft + 5, yBreakPoint], '#ccd6eb', 2);
+				}
 			}
 		}
     }
@@ -137,7 +150,7 @@ export class TimePeriodComponent implements OnInit {
 	/**
 	 * Get Benchmark Limit Data from back end nodejs server
 	 */
-	getSeverityTimePeriodData() {
+	private getSeverityTimePeriodData() {
 		if (this.componentData) {
 			if (this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
 				this.severityService.getSeverityTimePeriodData(this.componentData.companyId, this.componentData.naics, this.componentData.revenueRange)
@@ -146,8 +159,6 @@ export class TimePeriodComponent implements OnInit {
 				this.severityService.getSeverityTimePeriodData(null, this.componentData.naics, this.componentData.revenueRange)
 					.subscribe(modelData => this.setModelData(modelData));
 			}
-
 		}
 	}
-
 }

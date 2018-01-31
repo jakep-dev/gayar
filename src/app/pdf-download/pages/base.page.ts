@@ -178,4 +178,15 @@ export abstract class BasePage {
     public showHeader(isShowHeader: boolean) {
     }
 
+    /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(chartPosition: number, captionText: string) {
+    }
 }
