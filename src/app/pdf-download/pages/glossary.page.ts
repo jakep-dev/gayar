@@ -204,7 +204,7 @@ export class GlossaryPage extends BasePage  {
             if(definitionTable.style) {
                 //change style name for unordered list
                 definitionTable.style = this.prefix + 'glossaryDefinitionStyle';
-            } else {
+            } else if(definitionTable.table) {
                 style = definitionTable.table.body[0][0].style;
                 if(style.match(/glossarySubTermStyle$/)) {
                     //change style name for child term
@@ -291,84 +291,89 @@ export class GlossaryPage extends BasePage  {
         let glossarySubTerm: GlossarySubTerm;
         let buttonList: Array<string> = [];
 
-        for(i = 0; i < n1; i++) {
-            glossaryTerm = glossaryData[i];
-            buttonList.length = 0;
-            if(currentLetter !== glossaryTerm.letter) {
-                firstColumn = {
-                    table: {
-                        widths: [58],
-                        body: [
-                            [
-                                { text: glossaryTerm.letter, alignment: 'center', style: this.prefix + 'glossaryLetterStyle' }
-                            ]
-                        ]
-                    },
-                    layout: 'noBorders'
-                };
-                topMargin = 10;
-            } else {
-                firstColumn = { text: '' };
-                topMargin = 0;
-            }
-            currentLetter = glossaryTerm.letter;
-            dataRow = [
-                firstColumn,
-                {
-                    margin: [20, topMargin, 0, 0],
-                    table: {
-                        body: [
-                            [
-                                { text: glossaryTerm.term, alignment: 'left', style: this.prefix + 'glossaryTermStyle' }
-                            ],
-                            [
-                                { text: glossaryTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
-                            ],
-                            [
-                                { text: (glossaryTerm.link) ? glossaryTerm.link : '' , alignment: 'left', style: this.prefix + 'glossaryLinkStyle' }
-                            ],
-                        ]
-                    },
-                    layout: 'noBorders'
-                }
-            ];
+        if(n1 == 0) {
+            dataRow = [{text:''},{text:''}];
             this.table.table.body.push(dataRow);
-            if(glossaryTerm.subComponents) {
-                n2 = glossaryTerm.subComponents.length;
-                for(j = 0; j < n2; j++) {
-                    glossarySubTerm = glossaryTerm.subComponents[j];
-                    if(glossarySubTerm.type == 'C') {
-                        if(buttonList.length > 0) {
-                            dataRow = this.buildListEntry(buttonList);
-                            this.table.table.body.push(dataRow);
-                            buttonList = [];
-                        }
-                        dataRow = [
-                            { text: '' },
-                            {
-                                margin: [20, 0, 0, 0],
-                                table: {
-                                    body: [
-                                        [
-                                            { text: glossarySubTerm.term, alignment: 'left', style: this.prefix + 'glossarySubTermStyle' }
-                                        ],
-                                        [
-                                            { text: glossarySubTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
-                                        ]
-                                    ]
-                                },
-                                layout: 'noBorders'
-                            }
-                        ];
-                        this.table.table.body.push(dataRow);
-                    } else if(glossarySubTerm.type == 'B') {
-                        buttonList.push(glossarySubTerm.definition);
-                    }
+        } else {
+            for(i = 0; i < n1; i++) {
+                glossaryTerm = glossaryData[i];
+                buttonList.length = 0;
+                if(currentLetter !== glossaryTerm.letter) {
+                    firstColumn = {
+                        table: {
+                            widths: [58],
+                            body: [
+                                [
+                                    { text: glossaryTerm.letter, alignment: 'center', style: this.prefix + 'glossaryLetterStyle' }
+                                ]
+                            ]
+                        },
+                        layout: 'noBorders'
+                    };
+                    topMargin = 10;
+                } else {
+                    firstColumn = { text: '' };
+                    topMargin = 0;
                 }
-                if(buttonList.length > 0) {
-                    dataRow = this.buildListEntry(buttonList);
-                    this.table.table.body.push(dataRow);
-                    buttonList = [];
+                currentLetter = glossaryTerm.letter;
+                dataRow = [
+                    firstColumn,
+                    {
+                        margin: [20, topMargin, 0, 0],
+                        table: {
+                            body: [
+                                [
+                                    { text: glossaryTerm.term, alignment: 'left', style: this.prefix + 'glossaryTermStyle' }
+                                ],
+                                [
+                                    { text: glossaryTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
+                                ],
+                                [
+                                    { text: (glossaryTerm.link) ? glossaryTerm.link : '' , alignment: 'left', style: this.prefix + 'glossaryLinkStyle' }
+                                ],
+                            ]
+                        },
+                        layout: 'noBorders'
+                    }
+                ];
+                this.table.table.body.push(dataRow);
+                if(glossaryTerm.subComponents) {
+                    n2 = glossaryTerm.subComponents.length;
+                    for(j = 0; j < n2; j++) {
+                        glossarySubTerm = glossaryTerm.subComponents[j];
+                        if(glossarySubTerm.type == 'C') {
+                            if(buttonList.length > 0) {
+                                dataRow = this.buildListEntry(buttonList);
+                                this.table.table.body.push(dataRow);
+                                buttonList = [];
+                            }
+                            dataRow = [
+                                { text: '' },
+                                {
+                                    margin: [20, 0, 0, 0],
+                                    table: {
+                                        body: [
+                                            [
+                                                { text: glossarySubTerm.term, alignment: 'left', style: this.prefix + 'glossarySubTermStyle' }
+                                            ],
+                                            [
+                                                { text: glossarySubTerm.definition, alignment: 'left', style: this.prefix + 'glossaryDefinitionStyle' }
+                                            ]
+                                        ]
+                                    },
+                                    layout: 'noBorders'
+                                }
+                            ];
+                            this.table.table.body.push(dataRow);
+                        } else if(glossarySubTerm.type == 'B') {
+                            buttonList.push(glossarySubTerm.definition);
+                        }
+                    }
+                    if(buttonList.length > 0) {
+                        dataRow = this.buildListEntry(buttonList);
+                        this.table.table.body.push(dataRow);
+                        buttonList = [];
+                    }
                 }
             }
         }
