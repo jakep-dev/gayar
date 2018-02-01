@@ -73,9 +73,10 @@ export class RetentionComponent implements OnInit {
         }
     }
 
-    private addLabelAndImage(chart){
+    private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
-            let labelHeight = ((Math.ceil(chart.chartData.displayText.length / RetentionComponent.maxCharactersPerLine)) * 10);
+            //let labelHeight = ((Math.ceil(chart.chartData.displayText.length / RetentionComponent.maxCharactersPerLine)) * 10);
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
             chart.addChartLabel(
                 chart.chartData.displayText,
                 10,

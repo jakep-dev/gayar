@@ -71,16 +71,17 @@ export class PeerGroupLossComponent implements OnInit {
         }
     }
 
-    private addLabelAndImage(chart){
+    private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
             chart.addChartLabel(
                 chart.chartData.displayText, 
                 10, 
-                chart.chart.chartHeight - 70, 
+                chart.chart.chartHeight - labelHeight, 
                 '#000000',
                 12,
                 null,
-                chart.chart.chartWidth - 73
+                chart.chart.chartWidth - 85
             );
             chart.addChartImage(
                 '../assets/images/advisen-logo.png', 

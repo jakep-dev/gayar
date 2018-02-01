@@ -129,7 +129,9 @@ export class FrequencyLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
-					marginTop:80
+                    marginTop: 80,
+                    marginBottom: 130,
+                    spacingBottom: 45
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',

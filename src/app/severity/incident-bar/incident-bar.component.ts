@@ -109,7 +109,7 @@ export class IncidentBarComponent implements OnInit {
 			if (this.modelData.maxValue > 0) {
 				if (this.modelData.datasets && this.modelData.datasets.length > 0) {
 					if (this.modelData.displayText && this.modelData.displayText.length > 0) {
-						let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
+						let labelHeight = (Math.ceil((this.modelData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
 						chart.addChartLabel(
 							this.modelData.displayText,
 							10,

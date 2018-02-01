@@ -137,7 +137,9 @@ export class SeverityLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: this.getMarginLeft(),
-                    marginTop:80
+                    marginTop: 80,
+                    marginBottom: 125,
+                    spacingBottom: 42
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
