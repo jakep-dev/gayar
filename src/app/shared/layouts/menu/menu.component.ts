@@ -143,7 +143,7 @@ export class MenuComponent implements OnInit {
       return this.searchService.selectedCompany.companyName;
     }
 
-    if(this.searchService.searchCriteria) {
+    if (this.searchService.searchCriteria) {
       return this.searchService.searchCriteria.value;
     }
 
@@ -157,7 +157,15 @@ export class MenuComponent implements OnInit {
    * @return {type} - No return type.
    */
   navigateToHome () {
-
+    const token: string = this.sessionService.Token;
+    const url = `${environment.landingPage}/login/${token}`;
+    const pdtUrl = `${environment.landingPage}/products`;
+    const winRef = window.open('', pdtUrl, '', true);
+      if (winRef.location.href === 'about:blank') {
+          winRef.location.href = url;
+          return;
+      }
+    winRef.location.href = pdtUrl;
   }
 
   /**
