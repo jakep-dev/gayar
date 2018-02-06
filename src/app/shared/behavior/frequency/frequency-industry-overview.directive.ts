@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { FrequencyIndustryOverviewModel } from "app/model/model";
+import { FrequencyIndustryOverviewModel, ComponentPrintSettings } from "app/model/model";
 
 @Directive({
     selector: '[frequency-industry-overview-behavior]'
@@ -14,6 +14,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input() chartComponent: BaseChart;
+
+    @Input() public printSettings: ComponentPrintSettings;
 
     ngOnChanges(changes: SimpleChanges) {}
 
@@ -43,6 +45,20 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
      */
     buildHighChartObject() {
         if (this.modelData) {
+
+            let legendYOffset: number;
+            let marginBottom: number;
+            let spacingBottom: number;
+            if(this.printSettings) {
+                legendYOffset = 10;
+                marginBottom = 115;
+                spacingBottom = 45;
+            } else {
+                legendYOffset = 4;
+                marginBottom = 132;
+                spacingBottom = 45;
+            }
+
             let tempChartData: BarChartData = {
                 series: [],
                 title: '',
@@ -57,8 +73,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     marginLeft: 75,
                     marginRight: 25,
                     marginTop: 25,
-                    marginBottom: 115,
-                    spacingBottom: 45
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                    },
                     xAxis: {
                         type: 'category',
@@ -101,7 +117,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     legend: {
                         enabled: true,
-                        symbolHeight: 8
+                        symbolHeight: 8,
+                        y: legendYOffset
                     }
                 },
                 hasRedrawActions: true
