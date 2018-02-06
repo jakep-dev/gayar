@@ -1,5 +1,5 @@
 import { Directive, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SeverityIndustryOverviewModel, BarChartData } from 'app/model/model';
+import { SeverityIndustryOverviewModel, BarChartData, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
 
 @Directive({
@@ -18,6 +18,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
       }
   
       @Input() chartComponent: BaseChart;
+
+      @Input() public printSettings: ComponentPrintSettings;
   
       ngOnChanges(changes: SimpleChanges) {       
           
@@ -49,6 +51,20 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
        */
       buildHighChartObject() {
         if (this.modelData) {
+
+            let legendYOffset: number;
+            let marginBottom: number;
+            let spacingBottom: number;
+            if(this.printSettings) {
+                legendYOffset = 20;
+                marginBottom = 120;
+                spacingBottom = 47;
+            } else {
+                legendYOffset = 0;
+                marginBottom = 137;
+                spacingBottom = 45;
+            }
+
             let tickPosition = this.getTickPosition(this.modelData.maxValue);
             tickPosition.splice(0,0,-0.9, -0.01);
             let tempChartData: BarChartData = {
@@ -65,8 +81,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     marginLeft: this.getMarginLeft(), 
                     marginRight: 25,
                     marginTop: 25,
-                    marginBottom: 120,
-                    spacingBottom: 47
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                    },                
                     xAxis: {
                         type: 'category',
@@ -190,7 +206,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     legend: {
                         enabled: true,
                         symbolHeight: 8,
-                        y: 6
+                        y: legendYOffset
                     }
                 },
                 hasRedrawActions: true

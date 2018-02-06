@@ -1,7 +1,7 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FrequencyLossBarModel, FrequencyLossGroup } from "app/model/frequency.model";
+import { FrequencyLossBarModel, FrequencyLossGroup, ComponentPrintSettings } from "app/model/model";
 import { SearchService, SessionService, FrequencyService } from 'app/services/services';
 
 @Directive({
@@ -13,10 +13,12 @@ export class FrequencyLossBarDirective {
 
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
-    @Input() chartComponent: BaseChart;   
+    @Input() chartComponent: BaseChart;
 
     @Input() chartView: string;
-  
+
+    @Input() public printSettings: ComponentPrintSettings;
+
     ngOnChanges(changes: SimpleChanges) {   
         if(changes &&
             changes.chartView &&
@@ -112,6 +114,19 @@ export class FrequencyLossBarDirective {
 
     buildNoBreakChart() {
 
+        let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = 0;
+            marginBottom = 145;
+            spacingBottom = 45;
+        } else {
+            legendYOffset = -6;
+            marginBottom = 130;
+            spacingBottom = 43;
+        }
+
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -130,8 +145,8 @@ export class FrequencyLossBarDirective {
                 chart: {
                     marginLeft: 80,
                     marginTop: 80,
-                    marginBottom: 130,
-                    spacingBottom: 45
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -202,7 +217,8 @@ export class FrequencyLossBarDirective {
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: legendYOffset
                 },
                 tooltip: {
                     shared: false,
