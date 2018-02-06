@@ -110,7 +110,7 @@ export class FrequencyTimePeriodDirective {
                     marginLeft: 80,
                     marginTop: 80,
                     marginBottom: 115,
-                    spacingBottom: 45
+                    spacingBottom: 50
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -140,7 +140,7 @@ export class FrequencyTimePeriodDirective {
                         step: 1
                     },
                     tickWidth: 0,
-                    lineWidth: 2,
+                    lineWidth: 2
                 },
                 yAxis: {
                     tickInterval: 2,
@@ -177,7 +177,8 @@ export class FrequencyTimePeriodDirective {
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: -5
                 },
                 tooltip: {
                     shared: false,

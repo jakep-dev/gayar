@@ -64,7 +64,9 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                   chart: { 
                     marginLeft: this.getMarginLeft(), 
                     marginRight: 25,
-                    marginTop: 25
+                    marginTop: 25,
+                    marginBottom: 120,
+                    spacingBottom: 47
                    },                
                     xAxis: {
                         type: 'category',
@@ -187,7 +189,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     legend: {
                         enabled: true,
-                        symbolHeight: 8
+                        symbolHeight: 8,
+                        y: 6
                     }
                 },
                 hasRedrawActions: true

@@ -56,7 +56,9 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                   chart: {
                     marginLeft: 75,
                     marginRight: 25,
-                    marginTop: 25
+                    marginTop: 25,
+                    marginBottom: 115,
+                    spacingBottom: 45
                    },
                     xAxis: {
                         type: 'category',
