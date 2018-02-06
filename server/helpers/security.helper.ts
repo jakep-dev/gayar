@@ -1,6 +1,5 @@
 import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
-import * as bodyParser from 'body-parser';
 import * as csrf from 'csurf';
 import * as https from 'https';
 import * as http from 'http';

@@ -1,8 +1,4 @@
-import * as http from 'http';
-//import * as express from 'express';
-import * as debug from 'debug';
 import { EnvConfig } from './env.config';
-import { Security } from './helpers/helpers';
 import { App } from './app';
 import { Logger } from './helpers/logger.helper';
 import { cpus } from 'os';
@@ -18,7 +14,14 @@ let numCPUs: number;
 let app: App;
 
 if (cluster.isMaster) {
-    numCPUs = cpus().length;
+
+    //Use these two lines for debugging in single threading mode
+    numCPUs = 0;
+    app = new App();
+
+    //Use this line in multi-threading mode
+    //numCPUs = cpus().length;
+
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
     }

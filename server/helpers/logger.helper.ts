@@ -2,7 +2,6 @@ import * as winston from 'winston';
 require('winston-daily-rotate-file');
 import { EnvConfig } from '../env.config';
 import { LogModel } from '../model/env.model';
-import { Response } from 'express';
 
 export class Logger {
     private static instance: Logger;
