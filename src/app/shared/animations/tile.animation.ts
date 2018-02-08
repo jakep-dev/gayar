@@ -30,27 +30,44 @@ export const ACCORDION_ANIMATION = [
 ];
 
 
+/**
+ * Split animation on tile content.
+ */
 export const SPLIT_ANIMATION = [
-   trigger('splitAnimation', [
-     state('split', style({
+   trigger('splitter', [
+     state('0', style({
+       height: 'auto'
+     })),
+     state('1', style({
         height: 'auto'
      })),
-     state('combine', style({
-        height: 'auto'
-     })),
-     transition('split => combine', animate('200ms')),
-      transition('combine => split', animate('200ms'))
+     transition('0 => 1', animate('300ms')),
+     transition('1 => 0', animate('300ms'))
    ])
 ];
 
+export const FLYINOUT_ANIMATION = [
+    trigger('flyInOut', [
+      state('in', style({transform: 'translateX(0)'})),
+      transition('void => *', [
+        style({transform: 'translateX(-100%)'}),
+        animate(100)
+      ]),
+      transition('* => void', [
+        animate(100, style({transform: 'translateX(100%)'}))
+      ])
+    ])
+]
+
+
+/**
+ * Flip animation on tile content.
+ */
 export const FLIP_ANIMATION = [
-  trigger('flipAnimation', [
-     state('back', style({
-
-     })),
-     state('front', style({
-
-     })),
-     transition('* => *', animate('0.2s 100ms ease-out'))
-   ])
+  trigger('flipper', [
+    state('0', style({transform: 'rotateY(0deg)'})),
+    state('1', style({transform: 'rotateY(180deg)'})),
+    transition('0 => 1', animate('300ms')),
+    transition('1 => 0', animate('300ms'))
+  ])
 ];

@@ -1,3 +1,21 @@
-<p>
-  BenchMark Chart
-</p>
+<app-tile [id]="'Dashboard_Benchmark'" [title]="'Benchmark'" class="width-100" [isFullScreen]="false" [isAccordion]="false"
+    [isDisabled]="isDisabled">
+    <div front class="width-100" fxLayout="row">
+        <gauge-chart
+            fxFlexFill
+            *ngIf='modelData'
+            (click)="navigate()"
+            dashboard-score
+            [modelData]="modelData"
+            [chartData]="chartData"
+            [chartComponent]="chartComponent$ | async"
+            (onDataComplete)="onDataComplete($event)"
+            (onChartRedraw)="onChartReDraw($event)"
+            [printSettings]="printSettings"
+            >
+        </gauge-chart>
+    </div>
+    <div disable class="width-100">
+        <disabled-chart></disabled-chart>
+    </div>
+</app-tile>

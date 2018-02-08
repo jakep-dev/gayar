@@ -1,21 +1,11 @@
-<div fxFlex fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-  <app-tile fxFlex [title]="'Tile 1'" [isSplittable]="true" 
-  [isFlippable]="true">
-    <div front>
-      Chart 1 Place Holder
-    </div>
-    <div back>
-      Chart 2 Place Holder
-    </div>
-  </app-tile>
-
-  <app-tile fxFlex [title]="'Tile 2'" >
-    <div front>
-      Chart 1 Place Holder
-    </div>
-    <div back>
-      Chart 2 Place Holder
-    </div>
-  </app-tile>
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayout.lt-lg="column"
+  fxLayoutAlign.lt-lg="start start"
+  fxLayoutGap="2px">
+    <app-dashboard-frequency  class="width-100" *ngIf="getDashboardScoreByManualInput" [componentData]="getDashboardScoreByManualInput"></app-dashboard-frequency>
+    <app-dashboard-severity class="width-100" *ngIf="getDashboardScoreByManualInput" [componentData]="getDashboardScoreByManualInput"></app-dashboard-severity>
+    <dashboard-benchmark-score class="width-100" *ngIf="getDashboardScoreByManualInput" [componentData]="getDashboardScoreByManualInput"></dashboard-benchmark-score>
+ 
 </div>
-

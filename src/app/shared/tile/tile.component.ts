@@ -1,53 +1,132 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ACCORDION_ANIMATION, SPLIT_ANIMATION } from '../animations/animations';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { MenuService } from 'app/services/services';
+import { FLIP_ANIMATION, SPLIT_ANIMATION, FLYINOUT_ANIMATION } from 'app/shared/animations/animations';
 
 @Component({
   selector: 'app-tile',
   templateUrl: './tile.component.html',
-  styleUrls: ['./tile.component.css'],
-  animations: [ ACCORDION_ANIMATION, SPLIT_ANIMATION ]
-})  
+  styleUrls: ['./tile.component.scss'],
+  animations: [ FLIP_ANIMATION, SPLIT_ANIMATION, FLYINOUT_ANIMATION ]
+})
 export class TileComponent implements OnInit {
+  @Input() id: string;
   @Input() title: string;
   @Input() isSplittable: boolean = false;
   @Input() isAccordion: boolean = true;
   @Input() isFlippable: boolean = false;
   @Input() isFullScreen: boolean = true;
+  @Input() isDragable: boolean = false;
+  @Input() isSelectable: boolean = false;
+  @Input() showProgress: boolean = false;
+  @Input() isSelected: boolean = false;
+  @Input() isSelectableDisabled: boolean = false;
+  @Input() isDisabled: boolean = false;
+
+  /**
+   * Fires on flip.
+   */
+  @Output() onFlip: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  /**
+   * Fires on split.
+   */
+  @Output() onSplit: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  /**
+   * Fires on fullscreen.
+   */
+  @Output() onFullScreen: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
-  private isContent: boolean = true;
-  private accordionState: string = "up";
+  /**
+   * Fires on checkbox selection
+   */
+  @Output() onSelectable: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private isFlipped: boolean = false;
-  private isSplitted: boolean = false;
-  private splitState: string = "split";
 
-  constructor() { }
+  isContent:    boolean = true;
+  isFlipped:    boolean = false;
+  isSplitted:   boolean = false;
+  isMaximize:   boolean = false;
+  isTileVisible: boolean = true;
+
+  constructor(private menuService: MenuService,
+              private element: ElementRef) {
+  }
 
   ngOnInit() {
+    this.menuService.appTileComponents.push(this);
   }
 
+
+  /**
+   * toggleContent - Toggle content expand/collapse
+   *
+   * @return {type}  description
+   */
   toggleContent(){
-    let timeout:number = 200;
-    if(this.isContent){ timeout = 0; }
-    setTimeout(()=>{
-      this.isContent = !this.isContent; 
-    }, timeout)
-    this.accordionState = this.accordionState === "up" ? "down" : "up";
+    this.isContent = !this.isContent;
   }
 
+  /**
+   * Toggle flip screen and fires the event accordingly.
+   */
   toggleFlip(){
       this.isFlipped = !this.isFlipped;
       this.isSplitted = false;
+      this.onFlip.emit(this.isFlipped);
   }
-  
+
+  /**
+   * Toggle full screen
+   */
   toggleFullScreen(){
-
+      this.menuService.appTileComponents.forEach(tile => {
+          if (tile.id !== this.id) {
+            tile.isTileVisible = this.isMaximize;
+          }
+      });
+      this.isMaximize = !this.isMaximize;
+      this.isAccordion = !this.isMaximize;
+      this.isContent = true;
+      this.menuService.isFullScreen = this.isMaximize;
+      this.onFullScreen.emit(this.isMaximize);
   }
 
+  /**
+   * Toggle split screen and fires the event accordingly.
+   */
   toggleSplit(){
     this.isSplitted = !this.isSplitted;
-    this.splitState = this.splitState === "split" ? "combine" : "split";
-    console.log(this.splitState);
+    this.onSplit.emit(this.isSplitted);
+  }
+
+
+  /**
+   * toggleSelected - description
+   *
+   * @return {type}  description
+   */
+  toggleSelected () {
+    this.isSelected = !this.isSelected;
+    this.onSelectable.emit(this.isSelected);
+  }
+
+  /**
+   * hideFront - Checks for the visibility of front view.
+   *
+   * @return {type} - boolean.
+   * */
+  hideFront () : boolean {
+    return this.isSplitted ? false : this.isFlipped;
+  }
+
+  /**
+   * hideBack - Checks for the visibility of back view.
+   *
+   * @return {type} - boolean.
+   * */
+  hideBack () : boolean {
+    return this.isSplitted ? false : !this.isFlipped;
   }
 }

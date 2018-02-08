@@ -1,0 +1,9 @@
+<div fxLayout="row" fxLayoutAlign="start start" [ngClass]="{'chart-bar' : !printSettings}">
+    <chart fxFlexFill
+        [options]="chartOptions"
+        (load)="setChart($event.context)"
+        (redraw)="onRedraw($event.context)"
+        (drilldown)="onDrilldown($event, chart)"
+        (drillup)="onDrillup($event, chart)">
+    </chart>
+</div>

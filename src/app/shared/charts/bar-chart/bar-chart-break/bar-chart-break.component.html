@@ -1,0 +1,17 @@
+<div fxLayout="column" fxFlex class="chart-holder width-100"
+	[ngClass]="{'more-than-million': hasMillionValue}">
+    <chart id="chart-break" class="chart-style width-100" 
+        fxFill fxFlex="{{hasMillionValue? 38 : 30}}"
+		[options]="chartWithBreakOptions" 
+		(load)="setChartWithBreak($event.context)"
+		(drilldown)="onDrilldown($event, true)" 
+		(drillup)="onDrillup($event, true)">
+	</chart>
+	<chart id="chart-main" class="chart-style width-100" 
+        fxFill fxFlex="{{hasMillionValue? 62 : 70}}"
+		[options]="chartOptions" 
+		(load)="setChart($event.context)" 
+		(redraw)="onRedraw($event.context)"
+		(drilldown)="onDrilldown($event, false)" 
+		(drillup)="onDrillup($event, false)"></chart>
+</div>

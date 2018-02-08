@@ -1,0 +1,77 @@
+.chart-holder {
+    float: left;
+    min-height: 275px;
+    height: 400px;
+    overflow:visible;
+    z-index: 4;
+    margin: 0px;
+    min-height: 100%;
+    min-width: 100%;
+    width: 100%;
+}
+
+.chart-style {
+    margin: 0 auto;
+}
+
+.tile-maximize .chart-holder{
+ /* min-height: 275px !important;*/
+  height: 86vh !important;
+}
+
+/*Align chart breaks fixes for maximize*/
+.tile-maximize .incident-upper1, .tile-maximize .time-upper1, .tile-maximize .loss-upper1{
+    height: 26.125vh !important;
+}
+
+.tile-maximize .incident-below1, .tile-maximize .time-below1, .tile-maximize .loss-below1{
+    height: 60.35vh !important;
+}
+
+.tile-maximize {
+  .more-than-million {
+    .incident-upper1, .time-upper1, .loss-upper1{
+      height: 33vh !important; 
+    }
+    .incident-below1, .time-below1, .loss-below1{
+      height: 53.35vh !important;
+    }
+  }
+}
+
+/*Align chart breaks fixes for maximize*/
+
+.incident-upper1, .time-upper1, .loss-upper1, .incident-upper1 .highcharts-root, .time-upper1 .highcharts-root, .loss-upper1 .highcharts-root{
+    overflow:visible !important;
+    z-index:9999 !important;
+  }
+
+.incident-below1 .highcharts-drillup-button, .time-below1 .highcharts-drillup-button, .loss-below1 .highcharts-drillup-button, .incident-upper1 .highcharts-drilldown-axis-label, .time-upper1 .highcharts-drilldown-axis-label, .loss-upper1 .highcharts-drilldown-axis-label,.incident-upper1 .highcharts-xaxis-labels, .time-upper1 .highcharts-xaxis-labels, .loss-upper1 .highcharts-xaxis-labels{
+  display: none !important;
+}
+/* 
+@media only screen and (max-width : 680px) {
+.chart-style .highcharts-container{
+    width: 401px !important;
+    height: 269px;
+  }
+
+.chart-style .highcharts-root{
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+
+.incident-upper1, .time-upper1, .loss-upper1{
+    height: 100.35px !important;
+    top:1px !important;
+  }
+.incident-below1, .time-below1, .loss-below1{
+    height: 179px !important;
+    top: -8px !important;
+  }
+
+.chart-holder{
+    height: 179px !important;
+  }
+} */

@@ -1,96 +1,192 @@
 {
-     "server": {
-            "protocol":"http",
-            "host": "localhost",
-            "port": 3002,
-            "useCertificate": false,
-            "certPath": "src/server/advisen.com2015.crt",
-            "certKey": "src/server/advisen2015.key",
-            "passPhrase":"advisen",
-            "deploymentFolder": "dist"
-     },
-     "api": {
-           "protocol": "http",
-           "host": "192.168.100.225",
-           "port": "8080",
-           "endPoints": [{
-                            "name": "companySearch",
-                            "contract": "/advwebservice/cybermetrix/util/companySearch"
-                         },
-                         {
-                            "name": "revenueRangeList",
-                            "contract": "/advwebservice/cybermetrix/util/getRangeList"
-                         },
-                         {
-                            "name": "getIndustries",
-                            "contract": "/advwebservice/cybermetrix/util/getIndustries"
-                         },
-                         {
-                            "name": "getDistributionDataSet",
-                            "contract": "/advwebservice/cybermetrix/chart/getDistributionDataset"
-                         },
-                         {
-                            "name": "ratePerMillion",
-                            "contract": "/advwebservice/cybermetrix/chart/getRatePerMillionDataset"
-                         },
-                         {
-                            "name": "getLimitAdequacy",
-                            "contract": "/advwebservice/cybermetrix/chart/getLimitAdequacyDataset"
-                         }]
-       },
-       "log": {
-           "level": "debug",
-           "dirName": "log/nodejs",
-           "exceptionFilePath": "_exceptions.log",
-           "datePattern": "yyyy-MM-dd",
-           "prepend": true,
-           "handleExceptions" : true,
-           "humanReadableUnhandledException": true,
-           "json": false,
-           "maxSize": 1048576,
-           "maxFiles": 2000,
-           "colorize": false,
-           "prettyPrint": true,
-           "filePath": "_all_msg.log"
-       },
-       "security":{
-           "isCookie": true,
-           "httpOnly": true,
-           "secure": true,
-           "sameSite": "strict",
-           "ignoreMethods": ["GET"],
-           "cookieParser": "TmN!m9BmqS5x%g8Zdd6p%sqP2G6kft@z5SztHzN##Mc%wk6cL$#?yfUGA=&Xw7rLVB5@WQP7k_+#YWtR2-9u#^&U8fhdDL-Vrjq9%uAt^UfN?ew+SCbcQq&_YZsGmAdx",
-           "headers":[  
-                        {
-                            "name": "X-Powered-By",
-                            "value": "X-Powered-By",
-                            "type": "remove"
-                        },
-                        {
-                            "name": "Content-Security-Policy",
-                            "value": "script-src 'self' *.advisen.com 'unsafe-eval' 'unsafe-inline'; object-src 'self'",
-                            "type": "add"
-                        },
-                        {
-                            "name": "Strict-Transport-Security",
-                            "value": "max-age=31536000; includeSubDomains; preload",
-                            "type": "add"
-                        },
-                        {
-                            "name": "X-Frame-Options",
-                            "value": "SAMEORIGIN",
-                            "type": "add"
-                        },
-                        {
-                            "name": "X-XSS-Protection",
-                            "value": "1; mode=block",
-                            "type": "add"
-                        },
-                        {
-                            "name": "X-Content-Type-Options",
-                            "value": "nosniff",
-                            "type": "add"
-                        }
-                    ]
-       }
+    "server": {
+        "protocol":"http",
+        "host": "localhost",
+        "port": 3002,
+        "useCertificate": false,
+        "certPath": "src/server/advisen.com2015.crt",
+        "certKey": "src/server/advisen2015.key",
+        "passPhrase":"advisen",
+        "deploymentFolder": "dist"
+    },
+    "api": {
+        "protocol": "http",
+        "host": "dev-vm-websvc.advisen.com",
+        "port": "8080",
+        "endPoints": [
+            {
+                "name": "companySearch",
+                "contract": "/cybermetrix/util/companySearch"
+            },
+            {
+                "name": "revenueRangeList",
+                "contract": "/cybermetrix/util/getRangeList"
+            },
+            {
+                "name": "getIndustries",
+                "contract": "/cybermetrix/util/getIndustries"
+            },
+            {
+                "name": "getDistributionDataSet",
+                "contract": "/cybermetrix/chart/getDistributionDataset"
+            },
+            {
+                "name": "ratePerMillion",
+                "contract": "/cybermetrix/chart/getRatePerMillionDataset"
+            },
+            {
+                "name": "getLimitAdequacy",
+                "contract": "/cybermetrix/chart/getLimitAdequacyDataset"
+            },
+            {
+                "name": "getBenchmarkScore",
+                "contract": "/cybermetrix/chart/getBenchmarkScore"
+            },
+            {
+                "name": "getActiveSession",
+                "contract": "/cybermetrix/getActiveSession"
+            },
+            {
+                "name": "getActiveSessionByToken",
+                "contract": "/advwebservice/templateManager/getUserInfo"
+            },
+            {
+                "name": "getPermissions",
+                "contract": "/cybermetrix/permissions/user/getPermissions"
+            },
+            {
+                "name": "getProducts",
+                "contract": "/cybermetrix/permissions/user/getProducts"
+            },
+            {
+                "name": "checkForRevenueAndIndustry",
+                "contract": "/cybermetrix/util/peergroupValidation"
+            },
+            {
+                "name": "getFrequencyData",
+                "contract": "/cybermetrix/chart/frequency/getFrequencyList"
+            },
+            {
+                "name": "getIndustryOverviewDisplayDataset",
+                "contract": "/cybermetrix/chart/frequency/getIndustryOverviewDisplayDataset"
+            },
+            {
+                "name": "getTypeOfIncidentBarData",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentDisplayDetailDataset"
+            },
+            {
+                "name": "getTypeOfLossBarData",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfLossDisplayDetailDataset"
+            },
+            {
+                "name": "getTimePeriodData",
+                "contract": "/cybermetrix/chart/frequency/getTimePeriodDisplayDetailDataset"
+            },
+            {
+                "name": "getTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfIncidentFlipDetailDataset"
+            },
+            {
+                "name": "getTypeOfLossFlipDetailDataset",
+                "contract": "/cybermetrix/chart/frequency/getTypeOfLossFlipDetailDataset"
+            },
+            {
+                "name": "getFrequencyScore",
+                "contract": "/cybermetrix/chart/frequency/getFrequencyScore"
+            },
+            {
+                "name": "getSeverityData",
+                "contract": "/cybermetrix/chart/severity/getSeverityList"
+            },
+            {
+                "name": "getSeverityTimePeriodData",
+                "contract": "/cybermetrix/chart/severity/getTimePeriodDisplayDetailDataset"
+            },
+            {
+                "name": "severity/getIndustryOverviewDisplayDataset",
+                "contract": "/cybermetrix/chart/severity/getIndustryOverviewDisplayDataset"
+            },
+            {
+                "name": "getSeverityTypeOfLossFlipDetailDataset",
+                "contract": "/cybermetrix/chart/severity/getTypeOfLossFlipDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfIncidentFlipDetailDataset",
+                "contract": "/cybermetrix/chart/severity/getTypeOfIncidentFlipDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfIncidentBarData",
+                "contract": "/cybermetrix/chart/severity/getTypeOfIncidentDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityTypeOfLossBarData",
+                "contract": "/cybermetrix/chart/severity/getTypeOfLossDisplayDetailDataset"
+            },
+            {
+                "name": "getSeverityScore",
+                "contract": "/cybermetrix/chart/severity/getSeverityScore"
+            },
+            {
+                "name": "checkValidationPeerGroupLoss",
+                "contract": "/cybermetrix/util/validatePeerGroupLosses"
+            }, 
+            {
+                "name": "getGlossary",
+                "contract": "/cybermetrix/util/getglossary"
+            }
+        ]
+    },
+    "log": {
+        "level": "debug",
+        "dirName": "/data/logs/nodejs",
+        "filePath": "_cyber_all_msg.log",
+        "exceptionFilePath": "_cyber_exceptions.log",
+        "datePattern": "yyyy-MM-dd",
+        "prepend": true,
+        "handleExceptions" : true,
+        "humanReadableUnhandledException": true,
+        "json": false,
+        "maxSize": 1048576,
+        "maxFiles": 2000,
+        "colorize": false,
+        "prettyPrint": true
+    },
+    "security":{
+        "isCookie": true,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "strict",
+        "ignoreMethods": ["GET"],
+        "cookieParser": "TmN!m9BmqS5x%g8Zdd6p%sqP2G6kft@z5SztHzN##Mc%wk6cL$#?yfUGA=&Xw7rLVB5@WQP7k_+#YWtR2-9u#^&U8fhdDL-Vrjq9%uAt^UfN?ew+SCbcQq&_YZsGmAdx",
+        "headers":[  
+            {
+                "name": "X-Powered-By",
+                "value": "X-Powered-By",
+                "type": "remove"
+            },
+            {
+                "name": "Strict-Transport-Security",
+                "value": "max-age=31536000; includeSubDomains; preload",
+                "type": "add"
+            },
+            {
+                "name": "X-Frame-Options",
+                "value": "SAMEORIGIN",
+                "type": "add"
+            },
+            {
+                "name": "X-XSS-Protection",
+                "value": "1; mode=block",
+                "type": "add"
+            },
+            {
+                "name": "X-Content-Type-Options",
+                "value": "nosniff",
+                "type": "add"
+            }
+        ]
+    },
+    "phantom": {
+        
+    }
 }

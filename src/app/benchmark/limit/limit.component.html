@@ -1,3 +1,11 @@
-<p>
-  limit works!
-</p>
+<bar-chart fxFlexFill
+    *ngIf='modelData'
+    benchmark-limit-distribution-behavior
+    [modelData]="modelData"
+    [chartData]="chartData"
+    [chartComponent]="chartComponent$ | async"
+    (onDataComplete)="onDataComplete($event)"
+    (onChartRedraw)="onChartReDraw($event)"
+    [printSettings]="printSettings"
+    >
+</bar-chart>

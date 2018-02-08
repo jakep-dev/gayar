@@ -48,7 +48,11 @@ export class BenchmarkRouter extends BaseRoute {
         try{
             super.PerformGetRequest("ratePerMillion", {
                 'company_id': req.body.companyId,
-                'ssnid': req.body.token
+                'ssnid': req.header('authorization'),
+                'limit': req.body.limit,
+                'premium': req.body.premium,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
             }, (data)=>{
                 res.send(data);
             });   
@@ -63,8 +67,29 @@ export class BenchmarkRouter extends BaseRoute {
         try{
             super.PerformGetRequest("getLimitAdequacy", {
                 'company_id': req.body.companyId,
-                'ssnid': req.body.token,
-                'limit': req.body.limit
+                'ssnid': req.header('authorization'),
+                'limit': req.body.limit,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
+            }, (data)=>{
+                res.send(data);
+            });
+        }
+        catch(e){
+            Logger.error(e);
+        }
+    }
+
+    //Get Benchmark Distribution chart details
+    public getDistributionDataset(req: Request, res: Response, next: NextFunction){
+        try{
+            super.PerformGetRequest("getDistributionDataset", {
+                'client_value': req.body.clientValue,
+                'chart_type': req.body.chartType,
+                'ssnid': req.header('authorization'),
+                'company_id': req.body.companyId,
+                'naics': req.body.naics,
+                'revenue_range': req.body.revenueRange
             }, (data)=>{
                 res.send(data);
             });
@@ -79,6 +104,7 @@ export class BenchmarkRouter extends BaseRoute {
        this.app.post('/api/getChartDataByManualInput', this.getChartDataByManualInput);
        this.app.post('/api/getRatePerMillion', this.getRatePerMillion);
        this.app.post('/api/getLimitAdequacy', this.getLimitAdequacy);
+       this.app.post('/api/getDistributionDataset', this.getDistributionDataset);
     }
 }
 

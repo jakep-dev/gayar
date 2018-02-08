@@ -1,0 +1,7 @@
+<div fxLayout="row" fxLayoutAlign="start start" [ngClass]="{'chart-boxplot' : !printSettings}">
+    <chart fxFlexFill
+      [options]="chartOptions"
+      (load)="setChart($event.context)"
+      (redraw)="onRedraw($event.context)">
+    </chart>
+</div>

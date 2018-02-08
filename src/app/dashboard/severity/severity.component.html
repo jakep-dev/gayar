@@ -1,0 +1,20 @@
+<app-tile [id]="'Dashboard_Severity'" [title]="'Severity'" class="width-100" [isFullScreen]="false" [isAccordion]="false" [isDisabled]="isDisabled">
+  <div front [ngClass]="{'width-100' : !printSettings}" fxLayout="row">
+      <gauge-chart
+          fxFlexFill
+          *ngIf='modelData'
+          (click)="navigate()"
+          dashboard-score
+          [modelData]="modelData"
+          [chartData]="chartData"
+          [chartComponent]="chartComponent$ | async"
+          (onDataComplete)="onDataComplete($event)"
+          (onChartRedraw)="onChartReDraw($event)"
+          [printSettings]="printSettings"
+          >
+      </gauge-chart>
+  </div>
+  <div disable class="width-100">
+    <disabled-chart></disabled-chart>
+</div>
+</app-tile>

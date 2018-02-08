@@ -1,0 +1,31 @@
+<table cellpadding="0" cellspacing="0" id="mainTable">
+    <tr>
+        <td style="width:35px" *ngIf="hasDescriptionAccess"></td>
+        <td *ngFor="let header of headerColumns; let hearderColumnNdx=index;" align="{{ columnsHAlignment[hearderColumnNdx] }}" class="header-column"
+            [ngStyle]="{'width': columnsWidth[hearderColumnNdx]}">
+            {{ header }}
+        </td>
+    </tr>
+    <tr *ngFor="let row of dataSource; let ndx=index;">
+        <td [attr.colspan]="headerColumns.length + 1">
+            <table cellpadding="0" cellspacing="0" id="innerTable">
+                <tr (click)="row.hidden = !row.hidden">
+                    <td style="width:35px" *ngIf="hasDescriptionAccess">
+                        <md-icon *ngIf="!row.hidden" class="icon-menu-right fa-2x"></md-icon>
+                        <md-icon *ngIf="row.hidden" class="icon-menu-down fa-2x"></md-icon>
+                    </td>
+                    <td *ngFor="let columnHAlignment of columnsHAlignment; let columnNdx=index;" align="{{ columnHAlignment }}" class="column"
+                        [ngStyle]="{'width': columnsWidth[columnNdx]}">
+                        {{ row[columnsKeys[columnNdx]] }}
+                    </td>
+                </tr>
+                <tr [hidden]="!row.hidden" *ngIf="hasDescriptionAccess">
+                    <td style="width:35px"></td>
+                    <td [attr.colspan]="headerColumns.length" class="column">
+                        {{ row[columnsKeys[columnsKeys.length - 1]] }}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

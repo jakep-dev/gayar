@@ -1,29 +1,56 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { BenchmarkModel } from 'app/model/model';
+import { BaseServiceClient } from 'app/services/base.service.client';
 
 @Injectable()
-export class BenchmarkService extends BaseService {
-    constructor(http: Http) {
+export class BenchmarkService extends BaseServiceClient {
+    constructor(http: HttpClient) {
         super(http);
     }
 
-    public getChartDataByCompanyId(clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
+    public getBenchmarkPremiumByCompanyId (clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
         try{
-           return super.Post<BenchmarkModel>('/api/getChartDataByCompanyId', {
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
                'clientValue': clientValue,
                'chartType': chartType,
                'companyId': companyId
-           });    
+           });
         }
         catch(e){
 
         }
     }
 
-    public getChartDataByManualInput(clientValue: string, naics: string, revenueRange: string): Observable<BenchmarkModel>{
+    public getBenchmarkPremiumByManualInput (clientValue: string, chartType: string, naics: string, revenueRange: string) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getDistributionDataset', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'naics': naics,
+               'revenueRange': revenueRange
+            });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getChartDataByCompanyId (clientValue: string, chartType: string, companyId: number) : Observable<BenchmarkModel> {
+        try{
+           return super.Post<BenchmarkModel>('/api/getChartDataByCompanyId', {
+               'clientValue': clientValue,
+               'chartType': chartType,
+               'companyId': companyId
+           });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getChartDataByManualInput (clientValue: string, naics: string, revenueRange: string): Observable<BenchmarkModel>{
         try{
             return super.Post<BenchmarkModel>('/api/getChartDataByManualInput', {
                'clientValue': clientValue,
@@ -32,14 +59,18 @@ export class BenchmarkService extends BaseService {
            });
         }
         catch(e){
-            
+
         }
     }
 
-    public getRatePerMillion(companyId: number): Observable<any>{
+    public getRatePerMillion (companyId: number, premium: string, limit: string, revenueRange: string, naics: string): Observable<any>{
         try{
             return super.Post<any>('/api/getRatePerMillion', {
-               'companyId': companyId
+               'companyId': companyId,
+               'premium': premium,
+               'limit': limit,
+               'revenueRange': revenueRange,
+               'naics': naics
            });
         }
         catch(e){
@@ -47,11 +78,24 @@ export class BenchmarkService extends BaseService {
         }
     }
 
-    public getLimitAdequacy(companyId: number, limit: number): Observable<any>{
+    public getLimitAdequacy (companyId: number, limit: string): Observable<any>{
         try{
             return super.Post<any>('/api/getLimitAdequacy', {
                'companyId': companyId,
                'limit': limit
+           });
+        }
+        catch(e){
+
+        }
+    }
+
+    public getLimitAdequacyChartByManualInput (limit: string, naics: string, revenueRange: string): Observable<any>{
+        try{
+            return super.Post<any>('/api/getLimitAdequacy', {
+                'limit': limit,
+                'naics': naics,
+                'revenueRange': revenueRange
            });
         }
         catch(e){

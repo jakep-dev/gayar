@@ -1,112 +1,108 @@
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="{{sideNavMode}}" opened="true">
+<md-progress-bar mode="indeterminate" color="warn" *ngIf="isLoading"></md-progress-bar>
+<md-sidenav-container [style.background]="menuService.containerBgColor">
+  <md-sidenav style="overflow: hidden !important"
+    #sidenav
+    [style.display]="menuService.isFullScreen ? 'none' : ''"
+    mode="{{sideNavMode}}"
+    opened="true">
     <div *ngIf="!showShortMenu" (mouseleave)="shortMenuMouseLeave()">
-      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
-          <span>Cyber Suite</span>
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
+          <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
+          <div class="top-logo-name">Cyber OverVue</div>
       </md-toolbar>
-
+      <div style="border: 1px solid lightgray"></div>
       <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center" [disabled]="true" class="user-preference">
                 <md-icon class="md-18">account_circle</md-icon>
-                <span>Sherin Dharmarajan</span>
+                <span *ngIf="this.sessionService.currentIdentity">{{this.sessionService.UserFullName}} </span>
             </button>
-          </div>
-          <div fxFlexFill>  
-            <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button routerLink="/search" [disabled]="!isCompanySearch()" (click)="onMenu('Company Search');"
+              routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+                <md-icon class="md-18">search</md-icon>
+                <span>Company Search</span>
+          </button>
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard())" (click)="onMenu('Dashboard');"
+             routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">dashboard</md-icon>
                 <span>Dashboard</span>
-            </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-                <md-icon class="md-18">wifi</md-icon>
+          </button>
+          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && isFrequency() && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');"
+            routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+            <md-icon class="md-18">wifi</md-icon>
                 <span>Frequency</span>
             </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
-                <md-icon class="md-18">gamepad</md-icon>
-                <span>Impact</span>
+          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && isSeverity() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');"
+            routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+            <md-icon class="md-18">gamepad</md-icon>
+                <span>Severity</span>
             </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button routerLink="/benchmark" [disabled]="!(this.isSearchCriteriaValid() && isBenchmark())" (click)="onMenu('Benchmark');"
+          routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">insert_chart</md-icon>
                 <span>Benchmark</span>
             </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          <button md-button (click)="onMenu('Report')" [disabled]="!(this.isSearchCriteriaValid() && isReport())" routerLinkActive="active" routerLink="/report" fxLayout="row" fxLayoutAlign="start center">
                 <md-icon class="md-18">pie_chart</md-icon>
                 <span>Report</span>
-            </button>
-          </div>
+          </button>
       </div>
     </div>
-    <div *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;" (mouseover)="shortMenuMouseOver()"  >
-      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="start center">
-          <md-icon class="md-18">hourglass_empty</md-icon>
+    <div id="ShortMenu" *ngIf="showShortMenu" fxHide.lt-sm="true" style="width: 60px; max-width: 60px;overflow-x: hidden !important"
+          (mouseover)="shortMenuMouseOver()"  >
+      <md-toolbar color="primary" fxLayout="row" fxLayoutAlign="center center">
+           <img  src="../assets/images/Icon_Cyber_Risk_Metrix.png" class="top-short-logo">
       </md-toolbar>
-      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item">
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+      <div style="border: 1px solid lightgray"></div>
+      <div fxLayout="column" fxLayoutAlign="start center" class="sidenav-item" style="overflow-y: hidden !important">
+          <button md-button (click)="onMenu()">
                 <md-icon class="md-18">account_circle</md-icon>
-            </button>
-          </div>
-          <div fxFlexFill>  
-            <button md-button routerLink="/dashboard" (click)="onMenu('Dashboard');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+          </button>
+          <button md-button routerLink="/search" [disabled]="!isCompanySearch()" (click)="onMenu('Company Search');" routerLinkActive="active">
+            <md-icon class="md-18">search</md-icon>
+          </button>
+          <button md-button routerLink="/dashboard" [disabled]="!(this.isSearchCriteriaValid() && isDashboard())" (click)="onMenu('Dashboard');" routerLinkActive="active">
                 <md-icon class="md-18">dashboard</md-icon>
-                
-            </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          </button>
+          <button md-button routerLink="/frequency" [disabled]="!(isSearchCriteriaValid && isFrequency() && this.searchService?.checkValidationPeerGroup()?.hasFrequencyData)" (click)="onMenu('Frequency');" routerLinkActive="active">
                 <md-icon class="md-18">wifi</md-icon>
-               
-            </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          </button>
+          <button md-button routerLink="/severity" [disabled]="!(this.isSearchCriteriaValid() && isSeverity() && this.searchService?.checkValidationPeerGroup()?.hasSeverityData)" (click)="onMenu('Severity');" routerLinkActive="active">
                 <md-icon class="md-18">gamepad</md-icon>
-                
-            </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" routerLinkActive="active" fxLayout="row" fxLayoutAlign="start center">
+          </button>
+          <button md-button routerLink="/benchmark" (click)="onMenu('Benchmark');" [disabled]="!(this.isSearchCriteriaValid() && isBenchmark())" routerLinkActive="active">
                 <md-icon class="md-18">insert_chart</md-icon>
-                
-            </button>
-          </div>
-          <div fxFlexFill> 
-            <button md-button (click)="onMenu()" fxLayout="row" fxLayoutAlign="start center">
+          </button>
+          <button md-button (click)="onMenu('Report')" [disabled]="!(this.isSearchCriteriaValid() && isReport())" routerLinkActive="active" routerLink="/report">
                 <md-icon class="md-18">pie_chart</md-icon>
-               
-            </button>
-          </div>
+          </button>
       </div>
     </div>
   </md-sidenav>
-  <md-toolbar color="accent" class="top-menu">
+  <md-toolbar
+      [style.display]="menuService.isFullScreen ? 'none' : ''"
+      class="top-menu" color="warn">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" >
         <div >
-          <button md-icon-button (click)="toggleMenu();">
-            <md-icon class="md-24">menu</md-icon>
+          <button md-icon-button (click)="toggleMenu();"
+            [ngClass]="{'menu-open':showShortMenu, 'menu-close':!showShortMenu}">
+            <i class="icon-backburger expand-collapse"></i>
           </button>
-          <span class="bread-crumb">{{breadCrumbName}}</span>
+          <span class="bread-crumb">{{this.menuService.breadCrumb}}</span>
         </div>
         <div>
-          <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+          <div  fxLayout="row" fxLayoutAlign="end center">
              <span class="bread-crumb" >{{searchCompanyName}}</span>
-             <button md-icon-button routerLink="/search" (click)="onMenu('Search');"><md-icon>search</md-icon></button>
-             <button md-icon-button><md-icon>home</md-icon></button>
-             <button md-icon-button><md-icon>pie_chart</md-icon></button>
+             <div style="font-size: 13px;">{{getSearchCompanyName()}}</div>
+             <icon-img imgSrc="../assets/images/Icon_Home.png" imgAlt="Home" (onClick)="navigateToHome()"></icon-img>
+             <icon-img [imgSrc]="( isGlossary() )? '../assets/images/Icon_Glossary.png': '../assets/images/Icon_Glossary_Disabled.png'" imgAlt="Glossary" (click)="navigateGlossary();"></icon-img>
+             <icon-img [imgSrc]="( isUnderwritingFramework() )? '../assets/images/Icon_UnderwritingFramework.png' : '../assets/images/Icon_UnderwritingFramework_Disabled.png'" imgAlt="UnderWriting" (onClick)="launchUnderWriting()"></icon-img>
+             <pdf-download></pdf-download>
           </div>
         </div>
     </div>
   </md-toolbar>
-
   <div class="app-content">
     <router-outlet></router-outlet>
+    <div style="height: 10px"></div>
   </div>
 </md-sidenav-container>

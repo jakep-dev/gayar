@@ -12,15 +12,19 @@ import { SecurityModel, ServerModel } from '../model/env.model';
 export class Security{
     private securityModel: SecurityModel;
     private serverModel: ServerModel;
+    private environment: string;
 
     constructor(private express: any){
         this.securityModel = EnvConfig.getSecurity();
         this.serverModel = EnvConfig.getServer();
+        this.environment = EnvConfig.getEnvironment();
         this.init();
     }
 
     init(): void {
-        //this.setupHeader();
+        if (this.environment.toLocaleUpperCase() !== 'DEBUG') {
+          this.setupHeader();
+        }
         this.setupServer();
     }
 
@@ -56,13 +60,13 @@ export class Security{
                 case 'ADD':
                     res.header(header.name, header.value);
                 break;
-                
+
                 case 'REMOVE':
                     res.removeHeader(header.value);
                 break;
 
                 default:break;
-            }   
+            }
         }
         next();
     }
@@ -93,7 +97,7 @@ export class Security{
         let isHttps: boolean = this.serverModel.useCertificate;
         let server: any;
         if(isHttps){
-            server = https.createServer(this.getHttpsOptions, this.express).listen(this.serverModel.port);
+            server = https.createServer(this.getHttpsOptions(), this.express).listen(this.serverModel.port);
         }
         else{
             server = http.createServer(this.express).listen(this.serverModel.port);

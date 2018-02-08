@@ -1,0 +1,42 @@
+table#mainTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+
+    tr {
+        height: 50px;
+        border-bottom: 1px solid lightgray;
+    }
+    
+    tr:last-child {
+        border-bottom: 1px solid transparent;
+    }
+}
+
+table#innerTable {
+    width: 100%;
+    tr {
+        height: 50px;
+        border-bottom: 0px solid lightgray;
+    }
+}
+
+.header-column {
+    padding: 5px;
+    font-family: "Helvetica Neue", "Arial", "sans-serif";
+    font-style: normal;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.column {
+    padding: 5px;
+    font-family: "Helvetica Neue", "Arial", "sans-serif";
+    font-style: normal;
+    font-size: 13px;
+    color: #000000;
+}

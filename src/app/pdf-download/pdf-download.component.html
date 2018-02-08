@@ -1,0 +1,25 @@
+<md-toolbar color="primary" [ngClass]="{'withPercentage' : percentageText}" class="top-menu" color="warn">
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+        <i class="fa fa-bell" style="font-size:20px"></i>
+    </button>
+    <button md-icon-button fxLayout="row" fxLayoutAlign="start center" [mdMenuTriggerFor]="menu" *ngIf="percentageText">
+        <span class="percentageText">{{percentageText}}</span>
+    </button>
+    <md-menu class="pdfMenu" #menu="mdMenu" md-offset="0 100">
+        <div *ngFor="let menu of menuItems" fxLayout="row" fxLayoutAlign="start center">
+            <button md-menu-item (click)="menuClicked(menu.id)">
+                <md-icon class="material-icons md-light md-48">{{menu.iconName}}</md-icon>
+                <span class="pdfMenuText">{{menu.menuName}}</span>
+            </button>
+            <button md-menu-item (click)="menuClicked(2)" class="cancelButton">
+                <md-icon class="material-icons md-light md-48 cancelIcon">clear</md-icon>
+            </button>
+        </div>
+    </md-menu>
+</md-toolbar>
+<div style="display: none;">
+    <ng-template #entryPoint></ng-template>
+</div>
+<div style="display: none;">
+    <canvas #canvas></canvas>
+</div>
