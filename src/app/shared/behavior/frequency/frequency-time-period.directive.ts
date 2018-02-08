@@ -1,7 +1,7 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FrequencyTimePeriodModel, FrequencyTimePeriodGroup } from "app/model/frequency.model";
+import { FrequencyTimePeriodModel, FrequencyTimePeriodGroup, ComponentPrintSettings } from "app/model/model";
 import { SearchService, SessionService } from 'app/services/services';
 
 @Directive({
@@ -14,6 +14,8 @@ export class FrequencyTimePeriodDirective {
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input() chartComponent: BaseChart;
+
+    @Input() public printSettings: ComponentPrintSettings;
 
     ngOnChanges(changes: SimpleChanges) {}
 
@@ -91,6 +93,19 @@ export class FrequencyTimePeriodDirective {
 
     buildNoBreakChart() {
 
+        let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = -5;
+            marginBottom = 115;
+            spacingBottom = 50;
+        } else {
+            legendYOffset = 0;
+            marginBottom = 140;
+            spacingBottom = 70;
+        }
+
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -108,7 +123,9 @@ export class FrequencyTimePeriodDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
-					marginTop:80
+                    marginTop: 80,
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -138,7 +155,7 @@ export class FrequencyTimePeriodDirective {
                         step: 1
                     },
                     tickWidth: 0,
-                    lineWidth: 2,
+                    lineWidth: 2
                 },
                 yAxis: {
                     tickInterval: 2,
@@ -175,7 +192,8 @@ export class FrequencyTimePeriodDirective {
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: legendYOffset
                 },
                 tooltip: {
                     shared: false,

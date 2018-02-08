@@ -13,39 +13,43 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class RateComponent implements OnInit {
 
-    chartHeader:string = '';
-    modelData: BenchmarkRateModel;
-    companyName: string;
+    private chartHeader:string = '';
 
-    setModelData(modelData: BenchmarkRateModel) {
+    public modelData: BenchmarkRateModel;
+
+    private companyName: string;
+
+    private setModelData(modelData: BenchmarkRateModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
-    chartData: BoxPlotChartData;
+    public chartData: BoxPlotChartData;
 
-    @Input() componentData: BenchmarkRateInput;
+    @Input() public componentData: BenchmarkRateInput;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the BoxPlotChart's required data is built 
      * @param newChartData BoxPlotChart's required data
      */
-    onDataComplete(newChartData : BoxPlotChartData) {
+    public onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
     
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.chartComponent.next(chart);
         this.addLabelAndImage(chart);
@@ -54,7 +58,22 @@ export class RateComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart: BaseChart){
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
+        } else {
+            return null;
+        }
+    }
+
+    private addLabelAndImage(chart: BaseChart){
         let lineColor = 'gray';
         let lineWidth = 1;
         let label = '';
@@ -202,17 +221,16 @@ export class RateComponent implements OnInit {
             xPos = 45;
         }
 
-        chart.addChartLabel(
-            this.modelData.displayText,
-            xPos,
-            xPosition,
-            '#000000',
-            labelHeight,
-            null,
-            chart.chart.chartWidth - 80
-        );
-
         if(this.printSettings == null) {
+            chart.addChartLabel(
+                this.modelData.displayText,
+                xPos,
+                xPosition,
+                '#000000',
+                labelHeight + 2,
+                null,
+                chart.chart.chartWidth - 80
+            );
             chart.addChartImage(
                 '../assets/images/advisen-logo.png',
                 chart.chart.chartWidth - 80,
@@ -222,8 +240,9 @@ export class RateComponent implements OnInit {
             );
         }
     }
+
     constructor(private benchmarkService: BenchmarkService, 
-                    private searchService: SearchService) {
+        private searchService: SearchService) {
     }
 
     ngOnInit() {
@@ -231,7 +250,7 @@ export class RateComponent implements OnInit {
         this.getCompanyName();
     }
 
-    getCompanyName() {
+    private getCompanyName() {
         if (this.searchService.searchCriteria &&
             this.searchService.searchCriteria.type &&
             this.searchService.searchCriteria.type !== 'SEARCH_BY_MANUAL_INPUT' &&
@@ -247,7 +266,7 @@ export class RateComponent implements OnInit {
         }
     }
 
-    ordinalSuffix(i) {
+    private ordinalSuffix(i) {
         var j = i % 10,
             k = i % 100;
         if(i == 0) {
@@ -268,7 +287,7 @@ export class RateComponent implements OnInit {
     /**
      * Get Benchmark Rate Data from back end nodejs server
      */
-    getBenchmarkRateData() {
+    private getBenchmarkRateData() {
         if(this.componentData) {
             if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
                 this.benchmarkService.getRatePerMillion(this.componentData.companyId, this.componentData.premiumValue, this.componentData.limitValue, null, null)
@@ -279,5 +298,4 @@ export class RateComponent implements OnInit {
             }      
         }
     }
-
 }
