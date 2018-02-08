@@ -158,14 +158,8 @@ export class MenuComponent implements OnInit {
    */
   navigateToHome () {
     const token: string = this.sessionService.Token;
-    const url = `${environment.landingPage}/login/${token}`;
-    const pdtUrl = `${environment.landingPage}/products`;
-    const winRef = window.open('', pdtUrl, '', true);
-      if (winRef.location.href === 'about:blank') {
-          winRef.location.href = url;
-          return;
-      }
-    winRef.location.href = pdtUrl;
+    const loginUrl = `${environment.landingPage}/login/${token}`;
+    window.location.replace(loginUrl);
   }
 
   /**
