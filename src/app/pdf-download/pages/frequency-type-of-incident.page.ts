@@ -83,6 +83,13 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         bold: true
     };
 
+    //json block for the chart caption text style
+    private captionStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: false
+    };
+
     //left image name
     private imageLeft:string = '';
     //left image data url
@@ -96,7 +103,7 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
     private table: any = {
         margin: [ 60, 20, 70, 0 ],
         table: {
-            heights: [ 15, 400 ],
+            heights: [ 15, 270, 100 ],
             body: [
                 [
                     { text: 'Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }, 
@@ -114,6 +121,20 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
                         //image: this.imageRight,
                         //width: 375
                         
+                    }
+                ],
+                [
+                    {
+                        margin: [ 0, -10, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ 30, -10, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
                     }
                 ]
             ]
@@ -193,6 +214,31 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
     }
 
     /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(index: number, chartCaptionText: string) {
+        if((index >= 0) && (index <= 1) && chartCaptionText) {
+            switch(index) {
+                case 0:
+                    this.table.table.body[2][index].columns[0].text = chartCaptionText;
+                    break;
+                case 1:
+                    this.table.table.body[2][index].columns[0].text = chartCaptionText;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
      * Adds the given chart to a specific position within the underlying page object
      * returns the page number the chart is added to
      * For most pages, it shoult all be on the first page
@@ -263,11 +309,14 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         this.header.style = this.prefix + 'headerStyle';
         this.topHeader.style = this.prefix + 'topHeaderStyle';
         this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
+        this.table.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
+        this.table.table.body[2][1].columns[0].style = this.prefix + 'captionStyle';
 
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'topHeaderStyle'] = this.topHeaderStyle;
         this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
+        this.styles[this.prefix + 'captionStyle'] = this.captionStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
@@ -304,5 +353,4 @@ export class FrequencyTypeOfIncidentPage extends BasePage  {
         this.pdfContent.push(this.header);
         this.pdfContent.push(this.table);
     }
-
 };

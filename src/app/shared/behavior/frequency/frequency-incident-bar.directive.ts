@@ -1,7 +1,7 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FrequencyIncidentBarModel, FrequencyIncidentGroup } from "app/model/frequency.model";
+import { FrequencyIncidentBarModel, FrequencyIncidentGroup, ComponentPrintSettings } from "app/model/model";
 import { SearchService, SessionService , FrequencyService} from 'app/services/services';
 
 @Directive({
@@ -17,6 +17,8 @@ export class FrequencyIncidentBarDirective {
 
     @Input() chartView: string;
   
+    @Input() public printSettings: ComponentPrintSettings;
+
       ngOnChanges(changes: SimpleChanges) {   
           if(changes &&
               changes.chartView &&
@@ -112,6 +114,19 @@ export class FrequencyIncidentBarDirective {
 
     buildNoBreakChart() {
 
+        let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = 0;
+            marginBottom = 150;
+            spacingBottom = 45;
+        } else {
+            legendYOffset = -5;
+            marginBottom = 150;
+            spacingBottom = 51;
+        }
+
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -129,7 +144,9 @@ export class FrequencyIncidentBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
-					marginTop:80
+                    marginTop: 80,
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -200,7 +217,8 @@ export class FrequencyIncidentBarDirective {
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: legendYOffset
                 },
                 tooltip: {
                     shared: false,

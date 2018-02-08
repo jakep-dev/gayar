@@ -12,39 +12,44 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class RetentionComponent implements OnInit {
 
-    chartHeader:string = '';
-    modelData: BenchmarkModel;
-    static maxCharactersPerLine: number = 105;
+    private chartHeader:string = '';
 
-    setModelData(modelData: BenchmarkModel) {
+    public modelData: BenchmarkModel;
+
+    private static maxCharactersPerLine: number = 105;
+
+    private setModelData(modelData: BenchmarkModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
-    chartData: BarChartData;
+    public chartData: BarChartData;
 
-    @Input() componentData: BenchmarkDistributionInput;
+    @Input() public componentData: BenchmarkDistributionInput;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 
      * @param newChartData BarChart's required data
      */
-    onDataComplete(newChartData : BarChartData) {
+    public onDataComplete(newChartData : BarChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
+
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
     
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
@@ -53,25 +58,34 @@ export class RetentionComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart){
-        let xPos: number;
-        if(this.printSettings == null) {
-            xPos = 10;
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
         } else {
-            xPos = 45;
+            return null;
         }
-        let labelHeight = ((Math.ceil(chart.chartData.displayText.length / RetentionComponent.maxCharactersPerLine)) * 10);
-        chart.addChartLabel(
-            chart.chartData.displayText,
-            xPos,
-            chart.chart.chartHeight - labelHeight,
-            '#000000',
-            10,
-            null,
-            chart.chart.chartWidth - 85
-        );
+    }
 
+    private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
+            //let labelHeight = ((Math.ceil(chart.chartData.displayText.length / RetentionComponent.maxCharactersPerLine)) * 10);
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
+            chart.addChartLabel(
+                chart.chartData.displayText,
+                10,
+                chart.chart.chartHeight - labelHeight,
+                '#000000',
+                12,
+                null,
+                chart.chart.chartWidth - 85
+            );
             chart.addChartImage(
                 '../assets/images/advisen-logo.png',
                 chart.chart.chartWidth - 80,
@@ -92,7 +106,7 @@ export class RetentionComponent implements OnInit {
     /**
      * Get Benchmark Retention Data from back end nodejs server
      */
-    getBenchmarkRetentionData() {
+    private getBenchmarkRetentionData() {
         if(this.componentData) {
             if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
                 this.benchmarkService.getBenchmarkPremiumByCompanyId(this.componentData.retentionValue, 'RETENTION', this.componentData.companyId)
@@ -103,5 +117,4 @@ export class RetentionComponent implements OnInit {
             }
         }
     }
-
 }
