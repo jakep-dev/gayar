@@ -103,7 +103,7 @@ export class Security{
         }
     }
 
-    private static getHttpsOptions(): any{
+    private static getHttpsOptions(): https.ServerOptions {
         return {
                 cert: fs.readFileSync(Security.serverModel.certPath),
                 key: fs.readFileSync(Security.serverModel.certKey),
