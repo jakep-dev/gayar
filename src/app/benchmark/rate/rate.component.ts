@@ -213,7 +213,7 @@ export class RateComponent implements OnInit {
             lineColor,
             lineWidth);
 
-        let xPosition = (hasClientLimit) ? chart.chart.chartHeight - 20 : chart.chart.chartHeight - 40;
+        let xPosition = (hasClientLimit) ? chart.chart.chartHeight - 35 : chart.chart.chartHeight - 55;
 
         if(this.printSettings == null) {
             xPos = 10;

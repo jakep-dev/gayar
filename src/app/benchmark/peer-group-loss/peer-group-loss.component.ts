@@ -14,6 +14,8 @@ export class PeerGroupLossComponent implements OnInit {
 
     private chartHeader:string = '';
 
+    static maxCharactersPerLine: number = 102;
+    
     public modelData: BenchmarkLimitModel;
 
     private setModelData(modelData: BenchmarkLimitModel) {
@@ -73,7 +75,7 @@ export class PeerGroupLossComponent implements OnInit {
 
     private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
-            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
+            let labelHeight = ((Math.ceil(chart.chartData.displayText.length / PeerGroupLossComponent.maxCharactersPerLine)) * 17);
             chart.addChartLabel(
                 chart.chartData.displayText, 
                 10, 
