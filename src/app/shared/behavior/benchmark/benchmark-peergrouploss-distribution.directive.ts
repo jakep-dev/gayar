@@ -58,7 +58,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     chart: {
                         marginLeft: 75,
                         marginRight: 25,
-                        spacingBottom: 60,
+                        spacingBottom: 65,
                         marginBottom: 180
                     },
                     credits: {

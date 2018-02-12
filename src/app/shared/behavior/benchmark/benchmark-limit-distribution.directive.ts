@@ -74,7 +74,8 @@ export class BenchmarkLimitDistributionDirective implements OnInit, OnChanges {
                 customChartSettings: {
                     chart:{
                         marginLeft: 75,
-                        marginRight: 25
+                        marginRight: 25,
+                        spacingBottom: 65
                     },
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',

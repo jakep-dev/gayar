@@ -75,6 +75,7 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
                     chart: {
                         marginLeft: 75,
                         marginRight: 25,
+                        spacingBottom: 65
                     },
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',

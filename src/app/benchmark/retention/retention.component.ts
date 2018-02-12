@@ -16,8 +16,6 @@ export class RetentionComponent implements OnInit {
 
     public modelData: BenchmarkModel;
 
-    private static maxCharactersPerLine: number = 105;
-
     private setModelData(modelData: BenchmarkModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
@@ -75,7 +73,7 @@ export class RetentionComponent implements OnInit {
 
     private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
-            let labelHeight = ((Math.ceil(chart.chartData.displayText.length / RetentionComponent.maxCharactersPerLine)) * 17);            
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;           
             chart.addChartLabel(
                 chart.chartData.displayText,
                 10,

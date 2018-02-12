@@ -104,7 +104,7 @@ export abstract class BaseChart {
                 type: 'line',
                 marginLeft: 30,
                 marginRight: 30,
-                spacingBottom: 65
+                spacingBottom: 35
             },
             credits: {
                 enabled: false,
