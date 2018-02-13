@@ -16,7 +16,17 @@
                     </td>
                     <td *ngFor="let columnHAlignment of columnsHAlignment; let columnNdx=index;" align="{{ columnHAlignment }}" class="column"
                         [ngStyle]="{'width': columnsWidth[columnNdx]}">
-                        {{ row[columnsKeys[columnNdx]] }}
+                        <div class="tooltip" *ngIf="hasTooltip && columnNdx == 0">
+                            {{ row[columnsKeys[columnNdx]] }}
+                            <div class="tooltiptext">
+                                <div class="tooltipBody">
+                                    {{ row['company_address'] }}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!hasTooltip || columnNdx > 0">
+                            {{ row[columnsKeys[columnNdx]] }}
+                        </div>
                     </td>
                 </tr>
                 <tr [hidden]="!row.hidden" *ngIf="hasDescriptionAccess">
