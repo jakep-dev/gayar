@@ -14,40 +14,46 @@ import { SnackBarService } from 'app/shared/shared';
 })
 export class BenchmarkComponent implements OnInit {
 
-    chartHeader:string = '';
-    modelData: DashboardScoreModel;
-    permission: any;
-    isDisabled: boolean = false;
+    private chartHeader:string = '';
 
-    setModelData(modelData: DashboardScoreModel) {
+    public modelData: DashboardScoreModel;
+
+    private permission: any;
+
+    public isDisabled: boolean = false;
+
+    private setModelData(modelData: DashboardScoreModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
-    chartData: GaugeChartData;
+    public chartData: GaugeChartData;
 
-    @Input() componentData: DashboardScore;
+    @Input() public componentData: DashboardScore;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the GaugeChart's required data is built
      * @param newChartData GaugeChart's required data
      */
-    onDataComplete(newChartData : GaugeChartData) {
+    public onDataComplete(newChartData : GaugeChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
+
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
@@ -56,7 +62,7 @@ export class BenchmarkComponent implements OnInit {
         }
     }
 
-    navigate () {            
+    private navigate () {            
         if (this.permission && this.permission.dashboard && 
             this.permission.benchmark && 
             this.permission.benchmark.hasAccess) {
@@ -66,17 +72,32 @@ export class BenchmarkComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart: BaseChart){
-        chart.addChartLabel(
-            this.modelData.displayText,
-            (chart.chart.chartWidth * 0.1) - 2,
-            chart.chart.chartHeight - 80,
-            '#000000',
-            10,
-            null,
-            (chart.chart.chartWidth * 0.75) + 50
-        );
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
+        } else {
+            return null;
+        }
+    }
+
+    private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
+            chart.addChartLabel(
+                this.modelData.displayText,
+                (chart.chart.chartWidth * 0.1) - 2,
+                chart.chart.chartHeight - 80,
+                '#000000',
+                12,
+                null,
+                (chart.chart.chartWidth * 0.75) + 50
+            );
             chart.addChartImage(
                 '../assets/images/advisen-logo.png', 
                 chart.chart.chartWidth - 80, 
@@ -88,9 +109,9 @@ export class BenchmarkComponent implements OnInit {
     }
 
     constructor(private dashboardService: DashboardService,
-                private sessionService: SessionService,
-                private snackBarService: SnackBarService,
-                private router: Router) {
+        private sessionService: SessionService,
+        private snackBarService: SnackBarService,
+        private router: Router) {
     }
 
     ngOnInit() {
@@ -101,7 +122,7 @@ export class BenchmarkComponent implements OnInit {
     /**
      * Get Benchmark Data from back end nodejs server
      */
-    getBenchmarkData() {
+    private getBenchmarkData() {
         if (this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
             this.dashboardService.getBenchmarkScore(this.componentData.companyId, this.componentData.chartType, this.componentData.limit, this.componentData.retention)
                 .subscribe(chartData => this.setModelData(chartData));
@@ -111,11 +132,10 @@ export class BenchmarkComponent implements OnInit {
         }
     }
 
-    getPermission() {
+    private getPermission() {
         this.permission = this.sessionService.getUserPermission();
         if (this.permission && this.permission.dashboard && this.permission.dashboard.benchmarkGauge) {
             this.isDisabled = !this.permission.dashboard.benchmarkGauge.hasAccess;
         }
     }
-
 }

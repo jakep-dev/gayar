@@ -12,39 +12,44 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class TimePeriodComponent implements OnInit {
 
-    chartHeader:string = '';
-    modelData: FrequencyTimePeriodModel;
+    private chartHeader:string = '';
 
-    setModelData(modelData: FrequencyTimePeriodModel) {
+    public modelData: FrequencyTimePeriodModel;
+
+    private setModelData(modelData: FrequencyTimePeriodModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
-    chartData: BarChartData;
+    public chartData: BarChartData;
 
-    @Input() componentData: FrequencyInput;
+    @Input() public componentData: FrequencyInput;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the BarChart's required data is built 
      * @param newChartData BarChart's required data
      */
-    onDataComplete(newChartData: BarChartData) {
+    public onDataComplete(newChartData: BarChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
+
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
+
     private isDrillDownComplete: boolean = true;
 
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.chartComponent.next(chart);
         if(this.isDrillDownComplete) {
@@ -81,30 +86,38 @@ export class TimePeriodComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart: BaseChart){
-        let xPos: number;
-        if(this.printSettings == null) {
-            xPos = 10;
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
         } else {
-            xPos = 45;
+            return null;
         }
-        if (this.modelData.maxValue > 0) {
-            if(this.modelData.datasets && this.modelData.datasets.length > 0) {
-                if(this.modelData.displayText && this.modelData.displayText.length > 0) {
-                    let labelHeight = (Math.ceil((this.modelData.displayText.length * 5) / (chart.chart.chartWidth - 85))) * 10;
-                    
-                    chart.addChartLabel(
-                        this.modelData.displayText,
-                        xPos,
-                        chart.chart.chartHeight - labelHeight,
-                        '#000000',
-                        10,
-                        null,
-                        chart.chart.chartWidth - 85
-                    );
+    }
+
+    private addLabelAndImage(chart: BaseChart){
+        if(this.printSettings == null) {
+            if (this.modelData.maxValue > 0) {
+                if(this.modelData.datasets && this.modelData.datasets.length > 0) {
+                    if(this.modelData.displayText && this.modelData.displayText.length > 0) {
+                        let labelHeight = (Math.ceil((this.modelData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
+                        chart.addChartLabel(
+                            this.modelData.displayText,
+                            10,
+                            chart.chart.chartHeight - labelHeight,
+                            '#000000',
+                            12,
+                            null,
+                            chart.chart.chartWidth - 85
+                        );
+                    }
                 }
-            }
-            if(this.printSettings == null) {
                 chart.addChartImage(
                     '../assets/images/advisen-logo.png',
                     chart.chart.chartWidth - 80,
@@ -129,7 +142,7 @@ export class TimePeriodComponent implements OnInit {
     /**
      * Get Benchmark Limit Data from back end nodejs server
      */
-    getBenchmarkLimitData() {
+    private getBenchmarkLimitData() {
         if (this.componentData) {
             if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
                 this.frequencyService.getTimePeriodData(this.componentData.companyId, this.componentData.naics, this.componentData.revenueRange)
@@ -138,8 +151,6 @@ export class TimePeriodComponent implements OnInit {
                 this.frequencyService.getTimePeriodData(null, this.componentData.naics, this.componentData.revenueRange)
                 .subscribe(modelData => this.setModelData(modelData));
             }
-
         }
     }
-
 }

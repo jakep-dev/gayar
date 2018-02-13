@@ -1,7 +1,7 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SeverityTimePeriodModel, SeverityTimePeriodGroup } from "app/model/severity.model";
+import { SeverityTimePeriodModel, SeverityTimePeriodGroup, ComponentPrintSettings } from "app/model/model";
 import { SearchService, SessionService } from 'app/services/services';
 
 @Directive({
@@ -15,6 +15,8 @@ export class SeverityTimePeriodDirective {
 	@Output() onDataComplete = new EventEmitter<BarChartData>();
 
 	@Input() chartComponent: BaseChart;
+
+	@Input() public printSettings: ComponentPrintSettings;
 
 	ngOnChanges(changes: SimpleChanges) { }
 
@@ -91,6 +93,20 @@ export class SeverityTimePeriodDirective {
     }
 
 	buildNoBreakChart() {
+
+		let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = 0;
+            marginBottom = 120;
+            spacingBottom = 45;
+        } else {
+            legendYOffset = 0;
+            marginBottom = 120;
+            spacingBottom = 55;
+		}
+
 		let tempChartData: BarChartData = {
 			series: [],
 			title: this.modelData.chartTitle,
@@ -108,7 +124,9 @@ export class SeverityTimePeriodDirective {
 			customChartSettings: {
 				chart: {
 					marginLeft: this.getMarginLeft(),
-					marginTop:80
+					marginTop: 80,
+					marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
 				},
 				title: {
 					text: (this.modelData.datasets && this.modelData.datasets.length > 0) ? this.modelData.xAxis : '',
@@ -188,7 +206,8 @@ export class SeverityTimePeriodDirective {
                 ],
 				legend: {
 					enabled: true,
-					symbolHeight: 8
+					symbolHeight: 8,
+					y: legendYOffset
 				},
 				tooltip: {
                     shared: false,

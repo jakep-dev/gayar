@@ -77,22 +77,43 @@ export class BenchmarkPage extends BasePage  {
         bold: true
     };
 
+    //json block for the chart caption text style
+    private captionStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: false
+    };
+
     //json block for the table structure to hold first row of images and page sub headers
     private tableRow1: any = {
         margin: [ 60, 20, 70, 0 ],
         table: {
-            heights: [ 15, 400 ],
+            heights: [ 15, 250, 100 ],
             body: [
                 [
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
-                ],                
+                ],
                 [
                     {
                         margin: [ -15, 0, 0, 0 ]
                     },
                     {
                         margin: [ -15, 0, 0, 0 ]
+                    }
+                ],
+                [
+                    {
+                        margin: [ -10, 0, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ -10, 0, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
                     }
                 ]
             ]
@@ -105,18 +126,32 @@ export class BenchmarkPage extends BasePage  {
     private tableRow2: any = {
         margin: [ 60, 20, 70, 0 ],
         table: {
-            heights: [ 15, 400 ],
+            heights: [ 15, 250, 100 ],
             body: [
                 [
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
-                ],                
+                ],
                 [
                     {
                         margin: [ -15, 0, 0, 0 ]
                     },
                     {
                         margin: [ -10, 0, 0, 0 ]
+                    }
+                ],
+                [
+                    {
+                        margin: [ -10, 0, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ -10, 0, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
                     }
                 ]
             ]
@@ -129,12 +164,12 @@ export class BenchmarkPage extends BasePage  {
     private tableRow3: any = {
         margin: [ 60, 20, 70, 0 ],
         table: {
-            heights: [ 15, 400 ],
+            heights: [ 15, 250, 100 ],
             body: [
                 [
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
                     { text: '', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
-                ],                
+                ],
                 [
                     {
                         margin: [ -5, 0, 0, 0 ]
@@ -142,6 +177,15 @@ export class BenchmarkPage extends BasePage  {
                     {
                         text: ''
                     }
+                ],
+                [
+                    {
+                        margin: [ -10, 0, 0, 0 ],
+                        columns: [
+                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    { text: '' }
                 ]
             ]
         },
@@ -167,6 +211,15 @@ export class BenchmarkPage extends BasePage  {
         this.tableRow3.table.body[1][0]
     ];
 
+    //build array of caption object locations to facilitate array based manipulation of caption text
+    private captionTargetObjects: Array<any> = [
+        this.tableRow1.table.body[2][0],
+        this.tableRow1.table.body[2][1],
+        this.tableRow2.table.body[2][0],
+        this.tableRow2.table.body[2][1],
+        this.tableRow3.table.body[2][0]
+    ];
+
     //build array of chart image objects with corresponding titles
     //index position of this array is the page position of the image used in function addChartLabel
     //each image position has a specific left margin requirement
@@ -175,31 +228,46 @@ export class BenchmarkPage extends BasePage  {
             chartTitle: 'Limit Adequacy',
             imageName: '',
             imageData: '',
-            leftMargin: -5
+            leftMargin: -5,
+            displayText: '',
+            displayLeftMargin: 10,
+            displayTopMargin: -30
         },
         {
             chartTitle: 'Premium Distribution by Counts',
             imageName: '',
             imageData: '',
-            leftMargin: -15
+            leftMargin: -15,
+            displayText: '',
+            displayLeftMargin: 10,
+            displayTopMargin: -10
         },
         {
             chartTitle: 'Limit Distribution by Counts',
             imageName: '',
             imageData: '',
-            leftMargin: -15
+            leftMargin: -15,
+            displayText: '',
+            displayLeftMargin: 10,
+            displayTopMargin: -10
         },
         {
             chartTitle: 'Retention Distribution by Counts',
             imageName: '',
             imageData: '',
-            leftMargin: -15
+            leftMargin: -15,
+            displayText: '',
+            displayLeftMargin: 10,
+            displayTopMargin: -10
         },
         {
             chartTitle: 'Rate Per Million Distribution by Values',
             imageName: '',
             imageData: '',
-            leftMargin: -10
+            leftMargin: -10,
+            displayText: '',
+            displayLeftMargin: 10,
+            displayTopMargin: -10
         }
     ];
 
@@ -227,12 +295,16 @@ export class BenchmarkPage extends BasePage  {
                 this.imageTargetObjects[imageCount].image = this.prefix + this.chartList[i].imageName;
                 this.imageTargetObjects[imageCount].width = 375;
                 this.imageTargetObjects[imageCount].margin[0] = this.chartList[i].leftMargin;
+                this.captionTargetObjects[imageCount].columns[0].text = this.chartList[i].displayText;
+                this.captionTargetObjects[imageCount].margin[0] = this.chartList[i].displayLeftMargin;
+                this.captionTargetObjects[imageCount].margin[1] = this.chartList[i].displayTopMargin;
                 imageCount++;
             }
         }
         for(j = imageCount; j < this.headerTargetObjects.length; j++) {
             this.headerTargetObjects[j].text = '';
             this.imageTargetObjects[j].text = '';
+            this.captionTargetObjects[j].columns[0].text = '';
         }
 
         //clear pdd contents
@@ -334,6 +406,21 @@ export class BenchmarkPage extends BasePage  {
     }
 
     /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(index: number, chartCaptionText: string) {
+        if((index >= 0) && (index <= 4) && chartCaptionText) {
+            this.chartList[index].displayText = chartCaptionText;
+        }
+    }
+
+    /**
      * Adds the given chart to a specific position within the underlying page object
      * returns the page number the chart is added to
      * For most pages, it shoult all be on the first page
@@ -373,11 +460,17 @@ export class BenchmarkPage extends BasePage  {
         this.tableRow2.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
         this.tableRow2.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
         this.tableRow3.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
-        this.tableRow3.table.body[0][1].style = this.prefix + 'tableHeaderStyle';
+
+        this.tableRow1.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
+        this.tableRow1.table.body[2][1].columns[0].style = this.prefix + 'captionStyle';
+        this.tableRow2.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
+        this.tableRow2.table.body[2][1].columns[0].style = this.prefix + 'captionStyle';
+        this.tableRow3.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
         
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
+        this.styles[this.prefix + 'captionStyle'] = this.captionStyle;
 
         this.clearArray(this.images);
 

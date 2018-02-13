@@ -75,6 +75,8 @@ export class BenchmarkRetentionDistributionDirective implements OnInit, OnChange
                     chart:{
                         marginLeft: 75,
                         marginRight: 25,
+                        marginBottom: 150,
+                        spacingBottom: 35
                     },
                     tooltip: {
                         headerFormat: '<b>{point.key}</b><br>',
