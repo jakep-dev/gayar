@@ -133,6 +133,14 @@
             {
                 "name": "getGlossary",
                 "contract": "/cybermetrix/util/getglossary"
+            },
+            {
+                "name": "getFrequencyHierarchyLossesData",
+                "contract": "/cybermetrix/chart/frequency/getLossesHierarchy"
+            },
+            {
+                "name": "getSeverityHierarchyLossesData",
+                "contract": "/cybermetrix/chart/severity/getLossesHierarchy"
             }
         ]
     },

@@ -101,7 +101,17 @@ export class FrequencyService extends BaseServiceClient {
 
         }
     }
-    
+
+    public getFrequencyHierarchyLossesDataTable(companyId: number): Observable<FrequencyDataResponseModel> {
+        try {
+            return super.Post<FrequencyDataResponseModel>('/api/getFrequencyHierarchyLossesData', {
+                'company_id': companyId
+            });
+        }
+        catch (e) {
+        }
+    }
+
     public getIncidentChartView() {
         return this.incidentChartView;
     }

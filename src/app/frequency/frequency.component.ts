@@ -15,28 +15,31 @@ export class FrequencyComponent implements OnInit {
     
     public peerGroupTable: Array<FrequencyDataModel>;
     public companyLossesTable: Array<FrequencyDataModel>;
+    public hierarchyLossesTable: Array<FrequencyDataModel>;
     public columnsKeys: Array<string>;
     public headerColumns: Array<string>;
     public columnsHAlignment: Array<string>;
     public columnsWidth: Array<string>;
+
+    public frequencyInput: FrequencyInput;
+    public isHierarchyLossesTable: boolean;
+    public isHierarchyLossesTableHasDescriptionAccess: boolean = false;
+    public isIncident: boolean;
     public isIncidentShowFlip: boolean;
     public isIncidentShowSplit: boolean;
+    public isLoss: boolean;
     public isLossShowFlip: boolean;
     public isLossShowSplit: boolean;
-    public frequencyInput: FrequencyInput;
-
+    public isCompanyTable: boolean;
+    public isCompanyTableHasDescriptionAccess: boolean = false;
+    public isPeerGroupTable: boolean;
+    public isPeerGroupTableHasDescriptionAccess: boolean = false;
+    public isTimePeriod: boolean;
     public showLossPie: boolean;
     public showIncidentPie: boolean;
 
     public incidentChartView: string;    
     public lossChartView: string;  
-    public isTimePeriod: boolean;
-    public isIncident: boolean;
-    public isLoss: boolean;
-    public isPeerGroupTable: boolean;
-    public isCompanyTable: boolean;
-    public isPeerGroupTableHasDescriptionAccess: boolean = false;
-    public isCompanyTableHasDescriptionAccess: boolean = false;
 
     constructor(public frequencyService: FrequencyService,
         public menuService: MenuService,
@@ -50,6 +53,7 @@ export class FrequencyComponent implements OnInit {
         this.setupTileButtons();
         this.setupTableDefinitions();
         this.loadFrequencyDataTable();
+        this.loadFrequencyHierarchyLossesDataTable();
         this.setupChartPermission();
         this.buildCommonInput();
     }    
@@ -89,7 +93,16 @@ export class FrequencyComponent implements OnInit {
                 }
         });
     }
-    
+
+    loadFrequencyHierarchyLossesDataTable() {
+        this.frequencyService.getFrequencyHierarchyLossesDataTable(this.searchService.getCompanyId)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                if (res.losses != null && res.losses.length > 0) {
+                    this.hierarchyLossesTable = res.losses;
+                }
+        });
+    }
+
     buildCommonInput() {
         this.frequencyInput = {
             searchType: this.searchService.getSearchType,
@@ -101,14 +114,16 @@ export class FrequencyComponent implements OnInit {
 
     setupChartPermission() {
         let permission = this.sessionService.getUserPermission();
-        if(permission) {
-            this.isTimePeriod = permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
+        if (permission) {
+            this.isCompanyTable = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+            this.isCompanyTableHasDescriptionAccess = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasDescriptionAccess;
+            this.isHierarchyLossesTable = permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess;
+            this.isHierarchyLossesTableHasDescriptionAccess = permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasDescriptionAccess;
             this.isIncident = permission.frequency && permission.frequency.incident && permission.frequency.incident.hasAccess;
             this.isLoss = permission.frequency && permission.frequency.loss && permission.frequency.loss.hasAccess;
             this.isPeerGroupTable = permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
-            this.isCompanyTable = permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
-            this.isPeerGroupTableHasDescriptionAccess = permission.frequency.peerGroupTable.hasDescriptionAccess;
-            this.isCompanyTableHasDescriptionAccess = permission.frequency.companyTable.hasDescriptionAccess;
+            this.isPeerGroupTableHasDescriptionAccess = permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasDescriptionAccess;
+            this.isTimePeriod = permission.frequency && permission.frequency.timePeriod && permission.frequency.timePeriod.hasAccess;
         }        
     }
 }
