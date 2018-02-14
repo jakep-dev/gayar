@@ -45,7 +45,7 @@ export class ReportComponent implements OnInit {
     //boolean to indicate benchmark gauge is enabled
     private enableBenchmarkGauge: boolean = false;
 
-    //boolean to indicate company loss table for severity & frequency is enabled
+    //boolean to indicate company/hierarchy loss table for severity & frequency is enabled
     private enableCompanyLossTable: boolean = false;
 
     constructor(
@@ -202,12 +202,12 @@ export class ReportComponent implements OnInit {
                 this.frequencyPeerGroupTable = res.peerGroup;
                 let permission = this.sessionService.getUserPermission();
                 let finalValue: boolean;
-                finalValue = permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+                finalValue = permission && permission.frequency && permission.frequency.hasAccess && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
                 finalValue = finalValue && (this.frequencyPeerGroupTable.length > 0);
                 this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyPeerLosses, finalValue, this.reportTileModel);
                 if (res.company != null && res.company.length > 0) {
                     this.frequencyCompanyLossesTable = res.company;
-                    finalValue = permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+                    finalValue = permission && permission.frequency && permission.frequency.hasAccess && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
                     finalValue = finalValue && (this.frequencyCompanyLossesTable.length > 0);
                     this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses, finalValue, this.reportTileModel);
                 }
@@ -229,12 +229,12 @@ export class ReportComponent implements OnInit {
             this.severityPeerGroupTable = res.peerGroup;
             let permission = this.sessionService.getUserPermission();
             let finalValue: boolean;
-            finalValue = permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+            finalValue = permission && permission.severity && permission.severity.hasAccess && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
             finalValue = finalValue && (this.severityPeerGroupTable.length > 0);
             this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityPeerLosses, finalValue, this.reportTileModel);
             if (res.company != null && res.company.length > 0) {
                 this.severityCompanyLossesTable = res.company;
-                finalValue = permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+                finalValue = permission && permission.severity && permission.severity.hasAccess && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
                 finalValue = finalValue && (this.severityCompanyLossesTable.length > 0);
                 this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityCompanyLosses, finalValue, this.reportTileModel);
             }
@@ -370,6 +370,8 @@ export class ReportComponent implements OnInit {
                     hasData = false;
                 }
                 return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
+            case APPCONSTANTS.REPORTS_ID.frequencyHierarchyLosses:
+                return permission && permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess && this.enableCompanyLossTable;
             
             //severity components
             case APPCONSTANTS.REPORTS_ID.severityIdustry:
@@ -394,6 +396,8 @@ export class ReportComponent implements OnInit {
                     hasData = false;
                 }
                 return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
+            case APPCONSTANTS.REPORTS_ID.severityHierarchyLosses:
+                return permission && permission.severity && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess && this.enableCompanyLossTable;
             
             //benchmark components
             case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacy:
