@@ -51,6 +51,8 @@ export const APPCONSTANTS = {
     frequencyPeerLossesDetails:           'REPORT_FREQUENCY_MOST_RECENT_PEER_GROUP_LOSSES_DETAILS',
     frequencyCompanyLosses:               'REPORT_FREQUENCY_MOST_RECENT_COMPANY_LOSSES',
     frequencyCompanyLossesDetails:        'REPORT_FREQUENCY_MOST_RECENT_COMPANY_LOSSES_DETAILS',
+    frequencyHierarchyLosses:             'REPORT_FREQUENCY_MOST_RECENT_HIERARCHY_LOSSES',
+    frequencyHierarchyLossesDetails:      'REPORT_FREQUENCY_MOST_RECENT_HIERARCHY_LOSSES_DETAILS',
 
     severityPage:                         'REPORT_TILE_SEVERITY',
 
@@ -87,6 +89,8 @@ export const APPCONSTANTS = {
     severityPeerLossesDetails:            'REPORT_SEVERITY_TOP_PEER_GROUP_LOSSES_DETAILS',
     severityCompanyLosses:                'REPORT_SEVERITY_TOP_COMPANY_LOSSES',
     severityCompanyLossesDetails:         'REPORT_SEVERITY_TOP_COMPANY_LOSSES_DETAILS',
+    severityHierarchyLosses:              'REPORT_SEVERITY_MOST_RECENT_HIERARCHY_LOSSES',
+    severityHierarchyLossesDetails:       'REPORT_SEVERITY_MOST_RECENT_HIERARCHY_LOSSES_DETAILS',
 
     benchmarkPage:                        'REPORT_TILE_BENCHMARK',
     benchmarkLimitAdequacy:               'REPORT_BENCHMARK_LIMIT_ADEQUACY',

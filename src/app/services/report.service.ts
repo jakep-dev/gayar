@@ -336,6 +336,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 pageType: 'FrequencyMostRecentCompanyLossesPage',
                 chartComponents: null,
                 subSubComponents: null
+            },
+            {
+                description: 'Most Recent Company Hierarchy Losses',
+                id: 'REPORT_FREQUENCY_MOST_RECENT_HIERARCHY_LOSSES',
+                value: true,
+                hasAccess: false,
+                pageType: 'FrequencyMostRecentCompanyLossesPage', //to be changed
+                chartComponents: null,
+                subSubComponents: null
             }
 
         ]
@@ -592,6 +601,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 value: true,
                 hasAccess: false,
                 pageType: 'SeverityTopCompanyLossesPage',
+                chartComponents: null,
+                subSubComponents: null
+            },
+            {
+                description: 'Top Company Hierarchy Losses',
+                id: 'REPORT_SEVERITY_MOST_RECENT_HIERARCHY_LOSSES',
+                value: true,
+                hasAccess: false,
+                pageType: 'SeverityTopCompanyLossesPage', //to be changed
                 chartComponents: null,
                 subSubComponents: null
             }
