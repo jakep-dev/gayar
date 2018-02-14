@@ -13,7 +13,7 @@ import { BaseChart } from './../../shared/charts/base-chart';
 export class PeerGroupLossComponent implements OnInit {
 
     private chartHeader:string = '';
-
+    
     public modelData: BenchmarkLimitModel;
 
     private setModelData(modelData: BenchmarkLimitModel) {
@@ -73,7 +73,7 @@ export class PeerGroupLossComponent implements OnInit {
 
     private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
-            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 12;
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 15;
             chart.addChartLabel(
                 chart.chartData.displayText, 
                 10, 
