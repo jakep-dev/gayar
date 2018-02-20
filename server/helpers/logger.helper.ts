@@ -12,7 +12,7 @@ export class Logger {
     
     private env: string;
     
-    private workerId: number
+    private workerId: number;
 
     static getInstance(): Logger {
         if(!Logger.instance){
