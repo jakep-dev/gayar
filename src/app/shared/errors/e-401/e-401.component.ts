@@ -20,10 +20,6 @@ export class E401Component implements OnInit {
   navigateToLogin () {
     const token: string = this.sessionService.Token;
     const loginUrl = `${environment.landingPage}/login/${token}`;
-    let winRef = window.open('', loginUrl, '', true);
-    if (winRef.location.href === 'about:blank') {
-      winRef.location.href = loginUrl;
-   }
-   winRef.location.href = loginUrl;
+    window.location.replace(loginUrl);
   }
 }

@@ -102,6 +102,16 @@ export class SeverityService extends BaseServiceClient {
         }
     }
 
+    public getSeverityHierarchyLossesData(companyId: number): Observable<SeverityDataResponseModel> {
+        try {
+            return super.Post<SeverityDataResponseModel>('/api/getSeverityHierarchyLossesData', {
+                'company_id': companyId
+            });
+        }
+        catch (e) {
+        }
+    }
+
     public getIncidentChartView(): string  {
 		return this.incidentChartView;
 	}
