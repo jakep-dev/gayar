@@ -93,13 +93,13 @@ export class Security{
                 },{ });
     }
 
-    public static setupServer(express: any) {
+    public static setupServer(express: any): any {
         let isHttps: boolean = Security.serverModel.useCertificate;
         if(isHttps) {
-            https.createServer(Security.getHttpsOptions(), express).listen(Security.serverModel.port, Security.logServerDetails);
+            return https.createServer(Security.getHttpsOptions(), express).listen(Security.serverModel.port, Security.logServerDetails);
         }
         else {
-            http.createServer(express).listen(Security.serverModel.port, Security.logServerDetails);
+            return http.createServer(express).listen(Security.serverModel.port, Security.logServerDetails);
         }
     }
 
