@@ -16,12 +16,22 @@ export class App {
     public expressApp: express.Application;
 
     private serverModel: ServerModel;
+    private runningServer: any;
 
     constructor() {
         this.serverModel = EnvConfig.getServer();
         this.expressApp = express();
         this.middleware();
         this.routes();
+    }
+
+    public gracefulShutdown() {
+        this.runningServer.close(
+            function() {
+                Logger.info('Closing out existing connections.');
+                process.exit();
+            }
+        );
     }
 
     private middleware(): void {
@@ -33,7 +43,9 @@ export class App {
         this.expressApp.use(methodOverride());
         Security.initialize();
         Security.applySecurity(this.expressApp);
-        Security.setupServer(this.expressApp);
+
+        //returns either http.Server or https.Server
+        this.runningServer = Security.setupServer(this.expressApp);
         this.expressApp.use(express.static(path.join(__dirname, `../${this.serverModel.deploymentFolder}`)));
         this.expressApp.use('/*', express.static(path.join(__dirname, `../${this.serverModel.deploymentFolder}/index.html`)));
     }

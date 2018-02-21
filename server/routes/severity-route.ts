@@ -18,6 +18,7 @@ export class SeverityRouter extends BaseRoute {
         this.app.post('/api/getSeverityTypeOfIncidentFlipDetailDataset', this.getSeverityTypeOfIncidentFlipDetailDataset);
         this.app.post('/api/getSeverityTypeOfIncidentBarData', this.getSeverityTypeOfIncidentBarData);
         this.app.post('/api/getSeverityTypeOfLossBarData', this.getSeverityTypeOfLossBarData);
+        this.app.post('/api/getSeverityHierarchyLossesData', this.getSeverityHierarchyLossesData);
     }
 
     public getSeverityData(req: Request, res: Response, next: NextFunction) {
@@ -130,6 +131,20 @@ export class SeverityRouter extends BaseRoute {
             });
         }
         catch(e){
+            Logger.error(e);
+        }
+    }
+
+    public getSeverityHierarchyLossesData(req: Request, res: Response, next: NextFunction) {
+        try {
+            super.PerformGetRequest("getSeverityHierarchyLossesData", {
+                'ssnid': req.header('authorization'),
+                'company_id': req.body.company_id
+            }, (data) => {
+                res.send(data);
+            });
+        }
+        catch (e) {
             Logger.error(e);
         }
     }

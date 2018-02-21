@@ -198,4 +198,10 @@ export class MenuComponent implements OnInit {
       this.sideNavMode = NAV_MODE;
     }
   }
+
+  launchHelp () {
+    const url = 'https://advisen.atlassian.net/servicedesk/customer/portal/14';
+    let winRef = window.open('',url,'',true);
+    winRef.location.href = url;
+  }
 }

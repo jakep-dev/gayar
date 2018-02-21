@@ -17,6 +17,7 @@ export class SeverityComponent implements OnInit {
 
     public peerGroupTable: Array<SeverityDataModel>;
     public companyLossesTable: Array<SeverityDataModel>;
+    public hierarchyLossesTable: Array<SeverityDataModel>;
     public columnsKeys: Array<string>;
     public headerColumns: Array<string>;
     public columnsHAlignment: Array<string>;
@@ -28,7 +29,6 @@ export class SeverityComponent implements OnInit {
     public incidentChartView: string;    
     public lossChartView: string;    
 
-
     public isTimePeriod: boolean;
     public isIncident: boolean;
     public isLoss: boolean;
@@ -36,6 +36,9 @@ export class SeverityComponent implements OnInit {
     public isCompanyTable: boolean;
     public isPeerGroupTableHasDescriptionAccess: boolean;
     public isCompanyTableHasDescriptionAccess: boolean;
+
+    public isHierarchyLossTable: boolean;
+    public isHierarchyLossTableHasDescriptionAccess: boolean;
 
     constructor(public severityService: SeverityService,
         public menuService: MenuService,
@@ -49,6 +52,7 @@ export class SeverityComponent implements OnInit {
         this.buildCommonInput();
         this.setupTableDefinitions();
         this.loadSeverityDataTable();
+        this.loadSeverityHierarchyLossesDataTable();
         this.setupChartPermission();
         this.incidentChartView = 'main';                
         this.lossChartView = 'main';                
@@ -85,17 +89,28 @@ export class SeverityComponent implements OnInit {
             }
         });
     }
-    
+
+    loadSeverityHierarchyLossesDataTable() {
+        this.severityService.getSeverityHierarchyLossesData(this.searchService.getCompanyId)
+            .subscribe((res: SeverityDataResponseModel) => {
+                if (res.losses != null && res.losses.length > 0) {
+                    this.hierarchyLossesTable = res.losses;
+                }
+        });
+    }
+
     setupChartPermission() {
         let permission = this.sessionService.getUserPermission();
-        if(permission) {
-            this.isTimePeriod = permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasAccess;
+        if (permission) {
+            this.isCompanyTable = permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+            this.isCompanyTableHasDescriptionAccess = permission.severity.companyTable.hasDescriptionAccess;
+            this.isHierarchyLossTable = permission.severity && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess;
+            this.isHierarchyLossTableHasDescriptionAccess = permission.severity.hierarchyLossesTable.hasDescriptionAccess;
             this.isIncident = permission.severity && permission.severity.incident && permission.severity.incident.hasAccess;
             this.isLoss = permission.severity && permission.severity.loss && permission.severity.loss.hasAccess;
             this.isPeerGroupTable = permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
-            this.isCompanyTable = permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
             this.isPeerGroupTableHasDescriptionAccess = permission.severity.peerGroupTable.hasDescriptionAccess;
-            this.isCompanyTableHasDescriptionAccess = permission.severity.companyTable.hasDescriptionAccess;
+            this.isTimePeriod = permission.severity && permission.severity.timePeriod && permission.severity.timePeriod.hasAccess;
         }
     }
 }
