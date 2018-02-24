@@ -62,7 +62,9 @@ import {
 
     BenchmarkPage, 
     FrequencyMostRecentPeerGroupLossesPage, FrequencyMostRecentCompanyLossesPage,
+    FrequencyMostRecentCompanyHierarchyLossesPage,
     SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage,
+    SeverityTopCompanyHierarchyLossesPage,
     GlossaryPage
 } from 'app/pdf-download/pages/pages'
 
@@ -148,6 +150,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //input to frequency most recent company losses table
     private frequencyCompanyLossesTable: Array<FrequencyDataModel> = null;
 
+    //input to frequency most recent company's hierarchy losses table
+    private frequencyCompanyHierarchyLossesTable: Array<FrequencyDataModel> = null;
+
     //boolean to indicate frequency data is loaded
     //private frequencyDataDone: boolean = false;
 
@@ -156,6 +161,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //input to severity top company losses table
     private severityCompanyLossesTable: Array<SeverityDataModel> = null;
+
+    //input to severity most recent company's hierarchy losses table
+    private severityCompanyHierarchyLossesTable: Array<SeverityDataModel> = null;
 
     //boolean to indicate severity data is loaded
     //private severityDataDone: boolean = false;
@@ -647,14 +655,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @param {Array<IReportTileModel} reportSelections - input user selections and permission settings based on user's login
      * @return {} - No return types.
      */
-    public buildPdf(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[]) {
+    public buildPdf(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], frequencyCompanyHierarchyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[], severityCompanyHierarchyLossesTable: SeverityDataModel[]) {
 
         if(!this.isProcessing) {
             this.isProcessing = true;
             this.frequencyPeerGroupTable = frequencyPeerGroupTable;
             this.frequencyCompanyLossesTable = frequencyCompanyLossesTable;
+            this.frequencyCompanyHierarchyLossesTable = frequencyCompanyHierarchyLossesTable;
             this.severityPeerGroupTable = severityPeerGroupTable;
             this.severityCompanyLossesTable = severityCompanyLossesTable;
+            this.severityCompanyHierarchyLossesTable = severityCompanyHierarchyLossesTable;
             this.resetDownloadMenu();
             this.addMenu();
 
@@ -1048,6 +1058,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
+            case FrequencyMostRecentCompanyHierarchyLossesPage.pageType:
+                let frequencyMostRecentCompanyHierarchyLossesPage = new FrequencyMostRecentCompanyHierarchyLossesPage();
+                frequencyMostRecentCompanyHierarchyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyHierarchyLossesDetails));
+                frequencyMostRecentCompanyHierarchyLossesPage.setPeerGroupData(this.frequencyCompanyHierarchyLossesTable);
+                this.pageCollection[pageType] = frequencyMostRecentCompanyHierarchyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
+                this.pageOrder.push(pageType);
+                break;
 
             case SeverityTopPeerGroupLossesPage.pageType:
                 let severityTopPeerGroupLossesPage = new SeverityTopPeerGroupLossesPage();
@@ -1062,6 +1080,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityTopCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails));
                 severityTopCompanyLossesPage.setPeerGroupData(this.severityCompanyLossesTable);
                 this.pageCollection[pageType] = severityTopCompanyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
+                this.pageOrder.push(pageType);
+                break;
+            case SeverityTopCompanyHierarchyLossesPage.pageType:
+                let severityTopCompanyHierarchyLossesPage = new SeverityTopCompanyHierarchyLossesPage();
+                severityTopCompanyHierarchyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityHierarchyLossesDetails));
+                severityTopCompanyHierarchyLossesPage.setPeerGroupData(this.severityCompanyHierarchyLossesTable);
+                this.pageCollection[pageType] = severityTopCompanyHierarchyLossesPage;
                 this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
@@ -1128,12 +1154,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && permission.frequency.companyTable.hasDescriptionAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails:
                 return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess && permission.frequency.peerGroupTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyHierarchyLossesDetails:
+                return permission && permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess && permission.frequency.hierarchyLossesTable.hasDescriptionAccess;
             
             //severity detailed tables
             case APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails:
                 return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && permission.severity.companyTable.hasDescriptionAccess;
             case APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails:
                 return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess && permission.severity.peerGroupTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.severityHierarchyLossesDetails:
+                return permission && permission.severity && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess && permission.severity.hierarchyLossesTable.hasDescriptionAccess;
             
             default: 
                 return false;
