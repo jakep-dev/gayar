@@ -16,6 +16,7 @@ export { FrequencyCorporateLossesPage } from 'app/pdf-download/pages/frequency-c
 
 export { FrequencyMostRecentPeerGroupLossesPage } from 'app/pdf-download/pages/frequency-most-recent-peer-group-losses.page';
 export { FrequencyMostRecentCompanyLossesPage } from 'app/pdf-download/pages/frequency-most-recent-company-losses.page';
+export { FrequencyMostRecentCompanyHierarchyLossesPage } from 'app/pdf-download/pages/frequency-most-recent-company-hierarchy-losses.page';
 
 export { SeverityIndustryOverviewPage } from 'app/pdf-download/pages/severity-industry-overview.page';
 export { SeverityTimePeriodPage } from 'app/pdf-download/pages/severity-time-period.page';
@@ -30,6 +31,7 @@ export { SeverityCorporateLossesPage } from 'app/pdf-download/pages/severity-cor
 
 export { SeverityTopPeerGroupLossesPage } from 'app/pdf-download/pages/severity-top-peer-group-losses.page';
 export { SeverityTopCompanyLossesPage } from 'app/pdf-download/pages/severity-top-company-losses.page';
+export { SeverityTopCompanyHierarchyLossesPage } from 'app/pdf-download/pages/severity-top-company-hierarchy-losses.page';
 
 export { BenchmarkPage } from 'app/pdf-download/pages/benchmark.page';
 export { GlossaryPage } from 'app/pdf-download/pages/glossary.page';
