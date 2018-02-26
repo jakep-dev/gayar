@@ -55,8 +55,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                 spacingBottom = 45;
             } else {
                 legendYOffset = 4;
-                marginBottom = 132;
-                spacingBottom = 45;
+                marginBottom = 150;
+                spacingBottom = 51;
             }
 
             let tempChartData: BarChartData = {

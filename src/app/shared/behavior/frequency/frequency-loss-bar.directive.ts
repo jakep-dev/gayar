@@ -123,8 +123,8 @@ export class FrequencyLossBarDirective {
             spacingBottom = 45;
         } else {
             legendYOffset = -6;
-            marginBottom = 130;
-            spacingBottom = 43;
+            marginBottom = 150;
+            spacingBottom = 65;
         }
 
         let tempChartData: BarChartData = {

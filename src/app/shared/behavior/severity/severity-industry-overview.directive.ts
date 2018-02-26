@@ -61,8 +61,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                 spacingBottom = 47;
             } else {
                 legendYOffset = 0;
-                marginBottom = 137;
-                spacingBottom = 45;
+                marginBottom = 150;
+                spacingBottom = 51;
             }
 
             let tickPosition = this.getTickPosition(this.modelData.maxValue);
