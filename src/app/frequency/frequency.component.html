@@ -77,7 +77,7 @@
     </div>
 
     <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
-        <app-tile [id]="'FREQ_HIERARCHY_LOSSES_TABLE'" [title]="'10 Top Losses of Company\'s Hierarchy'" class="width-100" *ngIf="hierarchyLossesTable" [isDisabled]="!isHierarchyLossesTable">
+        <app-tile [id]="'FREQ_HIERARCHY_LOSSES_TABLE'" [title]="'Most Recent Company Hierarchy Losses'" class="width-100" *ngIf="hierarchyLossesTable" [isDisabled]="!isHierarchyLossesTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="hierarchyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
                                   [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isHierarchyLossesTableHasDescriptionAccess" [hasTooltip]="true">
