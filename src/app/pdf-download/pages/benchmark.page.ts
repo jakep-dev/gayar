@@ -234,7 +234,7 @@ export class BenchmarkPage extends BasePage  {
             displayTopMargin: -30
         },
         {
-            chartTitle: 'Premium Distribution by Counts',
+            chartTitle: 'Premium Distribution',
             imageName: '',
             imageData: '',
             leftMargin: -15,
@@ -243,7 +243,7 @@ export class BenchmarkPage extends BasePage  {
             displayTopMargin: -10
         },
         {
-            chartTitle: 'Limit Distribution by Counts',
+            chartTitle: 'Limit Distribution',
             imageName: '',
             imageData: '',
             leftMargin: -15,
@@ -252,7 +252,7 @@ export class BenchmarkPage extends BasePage  {
             displayTopMargin: -10
         },
         {
-            chartTitle: 'Retention Distribution by Counts',
+            chartTitle: 'Retention Distribution',
             imageName: '',
             imageData: '',
             leftMargin: -15,

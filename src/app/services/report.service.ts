@@ -641,7 +641,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Premium Distribution by Counts',
+                description: 'Premium Distribution',
                 id: 'REPORT_BENCHMARK_PREMIUM',
                 value: true,
                 hasAccess: false,
@@ -658,7 +658,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Limit Distribution by Counts',
+                description: 'Limit Distribution',
                 id: 'REPORT_BENCHMARK_LIMIT',
                 value: true,
                 hasAccess: false,
@@ -675,7 +675,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Retention Distribution by Counts',
+                description: 'Retention Distribution',
                 id: 'REPORT_BENCHMARK_RETENTION',
                 value: true,
                 hasAccess: false,
