@@ -103,8 +103,8 @@ export class SeverityTimePeriodDirective {
             spacingBottom = 45;
         } else {
             legendYOffset = 0;
-            marginBottom = 120;
-            spacingBottom = 55;
+            marginBottom = 140;
+            spacingBottom = 70;
 		}
 
 		let tempChartData: BarChartData = {

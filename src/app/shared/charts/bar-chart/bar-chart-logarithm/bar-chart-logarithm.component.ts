@@ -81,6 +81,12 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             this.chartData.customChartSettings.xAxis.length) {
             this.chartOptions.xAxis = this.chartData.customChartSettings.xAxis;
         }
+
+        if (this.chartData.customChartSettings &&
+            this.chartData.customChartSettings.chart) {
+            this.chartOptions.chart = this.chartData.customChartSettings.chart;
+        }
+
     }
 
     /**

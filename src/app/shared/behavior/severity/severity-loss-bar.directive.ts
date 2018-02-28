@@ -133,7 +133,7 @@ export class SeverityLossBarDirective {
         } else {
             legendYOffset = 0;
             marginBottom = 155;
-            spacingBottom = 50;
+            spacingBottom = 65;
         }
 
         let tempChartData: BarChartData = {
