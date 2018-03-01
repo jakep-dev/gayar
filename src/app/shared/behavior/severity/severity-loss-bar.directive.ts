@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityLossBarModel, SeverityLossGroup, ComponentPrintSettings } from "app/model/model";
-import { SearchService, SessionService, SeverityService } from 'app/services/services';
+import { SearchService, SessionService, SeverityService, FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[severity-bar-loss]'
@@ -58,7 +58,7 @@ export class SeverityLossBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService, private severityService: SeverityService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private severityService: SeverityService, private formatService: FormatService) {
         
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
@@ -135,7 +135,7 @@ export class SeverityLossBarDirective {
             marginBottom = 155;
             spacingBottom = 50;
         }
-
+        var formatService = this.formatService;
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -214,17 +214,7 @@ export class SeverityLossBarDirective {
                         labels: {
                             format: '{value:,.0f}',
                             formatter: function() {
-                                return (this.value.toFixed().toString()).replace(
-                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                    var insertCommas  = function(string) { 
-                                        var reversed  = reverseString(string);
-                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                        return reverseString(reversedWithCommas);
-                                    };
-                                    return sign + (decimal ? insertCommas(before) : insertCommas(before + after));
-                                    }
-                                );
+                                return formatService.tooltipFormatter(this.value.toFixed());
                             }
                         },
                         title: {
@@ -245,17 +235,7 @@ export class SeverityLossBarDirective {
                 tooltip: {
                     shared: false,
                     formatter: function () {
-                        let value =  (this.point.y.toString()).replace(
-                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                            var reverseString = function(string) { return string.split('').reverse().join(''); };
-                            var insertCommas  = function(string) { 
-                                var reversed  = reverseString(string);
-                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                return reverseString(reversedWithCommas);
-                            };
-                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                            }
-                        );
+                        let value = formatService.tooltipFormatter(this.point.y);
                         return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
                             '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
                     }

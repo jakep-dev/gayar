@@ -1,6 +1,7 @@
 import { Directive, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SeverityIndustryOverviewModel, BarChartData, ComponentPrintSettings } from 'app/model/model';
 import { BaseChart } from 'app/shared/charts/base-chart';
+import { FormatService } from 'app/services/services';
 
 @Directive({
   selector: '[severity-industry-overview-behavior]'
@@ -32,7 +33,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
   
       displayText: string = '';
   
-      constructor() {
+      constructor(private formatService: FormatService) {
           this.seriesColor = [];     
           this.seriesColor["All Industries"] = '#B1D23B';        
           this.categories =  ['Less than $25M', '$25M to < $100M', '$100M to < $250M', '$250M to < $500M', '$500M to < $1B', '$1B to Greater'];
@@ -64,7 +65,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                 marginBottom = 137;
                 spacingBottom = 45;
             }
-
+            var formatService = this.formatService;
             let tickPosition = this.getTickPosition(this.modelData.maxValue);
             tickPosition.splice(0,0,-0.9, -0.01);
             let tempChartData: BarChartData = {
@@ -108,17 +109,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                             labels: {
                                 format: '{value:,.0f}',
                                 formatter: function() {
-                                    return (this.value.toString()).replace(
-                                        /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                        var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                        var insertCommas  = function(string) { 
-                                            var reversed  = reverseString(string);
-                                            var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                            return reverseString(reversedWithCommas);
-                                        };
-                                        return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                        }
-                                    );
+                                    return formatService.tooltipFormatter(this.value);
                                 },
                                 style:{
                                     color:'transparent'
@@ -141,17 +132,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                             labels: {
                                 format: '{value:,.0f}',
                                 formatter: function() {
-                                    return (this.value.toFixed().toString()).replace(
-                                        /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                        var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                        var insertCommas  = function(string) { 
-                                            var reversed  = reverseString(string);
-                                            var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                            return reverseString(reversedWithCommas);
-                                        };
-                                        return sign + (decimal ? insertCommas(before) : insertCommas(before + after));
-                                        }
-                                    );
+                                    return formatService.tooltipFormatter(this.value.toFixed());
                                 }
                             },
                             title: {
@@ -178,17 +159,7 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                             let category =  String(this.x).replace(/[&<>"'\/]/g, s => entityMap[s]);
                             let tooltip = '<span style="font-size:11px">' + category + '</span><br>';
                             this.points.forEach(point => {
-                                let value =  (point.y.toString()).replace(
-                                    /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                    var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                    var insertCommas  = function(string) { 
-                                        var reversed  = reverseString(string);
-                                        var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                        return reverseString(reversedWithCommas);
-                                    };
-                                    return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                    }
-                                );
+                                let value = formatService.tooltipFormatter(point.y);
                                 tooltip += '<span style="color:' + point.color + '">' + point.series.name + '</span>: <b>' + value + '</b><br/>';
                             }); 
 
