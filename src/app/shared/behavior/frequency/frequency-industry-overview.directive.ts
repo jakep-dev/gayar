@@ -55,8 +55,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                 spacingBottom = 45;
             } else {
                 legendYOffset = 4;
-                marginBottom = 132;
-                spacingBottom = 45;
+                marginBottom = 150;
+                spacingBottom = 51;
             }
 
             let tempChartData: BarChartData = {
@@ -105,7 +105,29 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>',
+                        positioner: function(labelWidth, labelHeight, point) {
+                            let xPos = point.plotX;
+                            let yPos = point.plotY;
+
+                            if (xPos < 10 ) {
+                                xPos = 20;
+                            }
+
+                            if (xPos + labelWidth > this.chart.chartWidth) {
+                                xPos = this.chart.chartWidth - labelWidth - 5;
+                            }
+
+                            if ( yPos < labelHeight + 5) {
+                                yPos = labelHeight + 5;
+                            }
+
+                            if ( yPos >= this.chart.plotHeight + this.chart.plotTop - labelHeight) {
+                                yPos = this.chart.plotHeight + this.chart.plotTop - labelHeight - 5;
+                            }
+
+                            return { x: xPos, y: yPos};
+                        }
                     },
                     plotOptions: {
                         column: {

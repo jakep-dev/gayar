@@ -1,7 +1,7 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkModel, BarChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
-import { SearchService } from 'app/services/services';
+import { SearchService, FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[benchmark-premium-distribution-behavior]'
@@ -28,7 +28,7 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
 
     displayText: string = '';
 
-    constructor(private searchService: SearchService) {
+    constructor(private searchService: SearchService, private formatService: FormatService) {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
@@ -62,6 +62,7 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
      */
     buildHighChartObject() {
         if (this.modelData) {
+            var formatService = this.formatService;
             let tempChartData: BarChartData = {
                 series: [],
                 title: '',
@@ -78,8 +79,12 @@ export class BenchmarkPremiumDistributionDirective implements OnInit, OnChanges 
                         spacingBottom: 65
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.key}</b><br>',
-                        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
+                        shared: false,
+                        formatter: function () {
+                            let value =  formatService.tooltipFormatter(this.point.y);
+                            return '<b>'+ this.x +'</b><br>'+
+                            '<span style="color:'+this.series.color+'">\u25CF</span>'+ this.series.name +':'+ value
+                        }
                     },
                     legend: {
                         itemStyle: {

@@ -12,6 +12,7 @@ export * from './font.service';
 export * from './getFile.service';
 export * from './overlay.service';
 export * from './application.service';
+export * from './format.service';
 
 
 import { BenchmarkService } from './benchmark.service';
@@ -28,6 +29,7 @@ import { FontService } from './font.service';
 import { GetFileService } from './getFile.service';
 import { OverlayService } from './overlay.service';
 import { ApplicationService } from './application.service';
+import { FormatService } from './format.service';
 
 export const BLOCK_SERVICES = [
     BenchmarkService,
@@ -43,5 +45,6 @@ export const BLOCK_SERVICES = [
     FontService,
     GetFileService,
     OverlayService,
-    ApplicationService
+    ApplicationService,
+    FormatService
 ];
