@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FrequencyLossBarModel, FrequencyLossGroup, ComponentPrintSettings } from "app/model/model";
-import { SearchService, SessionService, FrequencyService } from 'app/services/services';
+import { SearchService, SessionService, FrequencyService, FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[frequeny-bar-loss]'
@@ -50,7 +50,7 @@ export class FrequencyLossBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {        
+    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService, private formatService: FormatService) {        
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -126,7 +126,7 @@ export class FrequencyLossBarDirective {
             marginBottom = 150;
             spacingBottom = 65;
         }
-
+        var formatService = this.formatService;
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -201,17 +201,7 @@ export class FrequencyLossBarDirective {
                                 value = this.value;
                             }
     
-                            return (value.toString()).replace(
-                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                var insertCommas  = function(string) { 
-                                    var reversed  = reverseString(string);
-                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                    return reverseString(reversedWithCommas);
-                                };
-                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                }
-                            );
+                            return formatService.tooltipFormatter(value);
                         }
                     },
                 },
@@ -229,17 +219,7 @@ export class FrequencyLossBarDirective {
 
                         }
                          
-                        let value =  (value1.toString()).replace(
-                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                            var reverseString = function(string) { return string.split('').reverse().join(''); };
-                            var insertCommas  = function(string) { 
-                                var reversed  = reverseString(string);
-                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                return reverseString(reversedWithCommas);
-                            };
-                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                            }
-                        );
+                        let value =  formatService.tooltipFormatter(value1);
                         return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
                             '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
                     }
