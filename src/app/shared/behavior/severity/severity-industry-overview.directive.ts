@@ -193,6 +193,28 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
                             }); 
 
                             return tooltip;
+                        },
+                        positioner: function(labelWidth, labelHeight, point) {
+                            let xPos = point.plotX;
+                            let yPos = point.plotY;
+
+                            if (xPos < 10 ) {
+                                xPos = 20;
+                            }
+
+                            if (xPos + labelWidth > this.chart.chartWidth) {
+                                xPos = this.chart.chartWidth - labelWidth - 5;
+                            }
+
+                            if ( yPos < labelHeight + 5) {
+                                yPos = labelHeight + 5;
+                            }
+
+                            if ( yPos >= this.chart.plotHeight + this.chart.plotTop - labelHeight) {
+                                yPos = this.chart.plotHeight + this.chart.plotTop - labelHeight - 5;
+                            }
+
+                            return { x: xPos, y: yPos};
                         }
                     },
                     plotOptions: {
