@@ -200,7 +200,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             ]).attr({
                 stroke: '#ff0000',
                 'stroke-width': 2,
-                zIndex: 999
+                zIndex: 2
             })
             redLine.add();
             this.breakLines.push(redLine);
@@ -211,7 +211,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             ]).attr({
                 stroke: '#ccd6eb',
                 'stroke-width': 2,
-                zIndex: 999
+                zIndex: 2
             })
             upperBreakLine.add();
             this.breakLines.push(upperBreakLine);
@@ -222,7 +222,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             ]).attr({
                 stroke: '#FFFFFF',
                 'stroke-width': 5.5,
-                zIndex: 999
+                zIndex: 2
             })
             betweenBreakLine.add();
             this.breakLines.push(betweenBreakLine);
@@ -233,7 +233,7 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
             ]).attr({
                 stroke: '#ccd6eb',
                 'stroke-width': 2,
-                zIndex: 999
+                zIndex: 2
             })
             lowerBreakLine.add();
             this.breakLines.push(lowerBreakLine);
