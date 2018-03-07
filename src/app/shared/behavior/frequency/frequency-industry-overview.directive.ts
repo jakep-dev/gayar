@@ -51,7 +51,7 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
             let spacingBottom: number;
             if(this.printSettings) {
                 legendYOffset = 10;
-                marginBottom = 115;
+                marginBottom = 125;
                 spacingBottom = 45;
             } else {
                 legendYOffset = 4;
