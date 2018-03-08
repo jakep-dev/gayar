@@ -58,8 +58,8 @@ export class SeverityIndustryOverviewDirective implements OnInit, OnChanges {
             let spacingBottom: number;
             if(this.printSettings) {
                 legendYOffset = 20;
-                marginBottom = 120;
-                spacingBottom = 47;
+                marginBottom = 125;
+                spacingBottom = 45;
             } else {
                 legendYOffset = 0;
                 marginBottom = 150;
