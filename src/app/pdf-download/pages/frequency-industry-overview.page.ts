@@ -70,7 +70,8 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
         color: '#464646',
         fontSize: 12,
         bold: false,
-        margin: [ -55, 210, 0, 0 ]
+        margin: [ 0, 100, 0, 0 ],
+        alignment: 'justify'
     };
 
     //left image name
@@ -83,7 +84,7 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
         margin: [ 60, 20, 70, 0 ],
         table: {
             heights: [ 15, 300 ],
-            widths:[500, 180],
+            widths:[350, 340],
             body: [
                 [
                     { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
@@ -212,8 +213,8 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
                     delete this.table.table.body[1][index].text;
                 }
                 this.table.table.body[1][index].image = imageName;
-                this.table.table.body[1][index].width = 500;
-                this.table.table.body[1][index].height = 400;
+                this.table.table.body[1][index].width = 375;
+                this.table.table.body[1][index].height = 270;
                 this.table.table.body[1][index].margin = [ -45, 0, 0, 0 ];
                 switch(index) {
                     case 0:
