@@ -692,7 +692,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Rate Per Million Distribution by Values',
+                description: 'Rate Per Million Distribution',
                 id: 'REPORT_BENCHMARK_RATE_PER_MILLION',
                 value: true,
                 hasAccess: false,
