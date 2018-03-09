@@ -80,7 +80,8 @@ export class SeverityNetworkSecurityPage extends BasePage  {
     private captionStyle: any = {
         color: '#464646',
         fontSize: 12,
-        bold: false
+        bold: false,
+        alignment: 'justify'
     };
 
     //left image name
@@ -118,13 +119,13 @@ export class SeverityNetworkSecurityPage extends BasePage  {
                     {
                         margin: [ 30, -10, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     },
                     {
                         margin: [ 30, -10, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     }
                 ]

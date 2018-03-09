@@ -81,7 +81,8 @@ export class BenchmarkPage extends BasePage  {
     private captionStyle: any = {
         color: '#464646',
         fontSize: 12,
-        bold: false
+        bold: false,
+        alignment: 'justify'        
     };
 
     //json block for the table structure to hold first row of images and page sub headers
@@ -106,13 +107,13 @@ export class BenchmarkPage extends BasePage  {
                     {
                         margin: [ -10, 0, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     },
                     {
                         margin: [ -10, 0, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     }
                 ]
@@ -144,13 +145,13 @@ export class BenchmarkPage extends BasePage  {
                     {
                         margin: [ -10, 0, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     },
                     {
                         margin: [ -10, 0, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     }
                 ]
@@ -182,7 +183,7 @@ export class BenchmarkPage extends BasePage  {
                     {
                         margin: [ -10, 0, 0, 0 ],
                         columns: [
-                            { text: '', width: 300, style: this.prefix + 'captionStyle' },
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
                         ]
                     },
                     { text: '' }
@@ -261,7 +262,7 @@ export class BenchmarkPage extends BasePage  {
             displayTopMargin: -10
         },
         {
-            chartTitle: 'Rate Per Million Distribution by Values',
+            chartTitle: 'Rate Per Million Distribution',
             imageName: '',
             imageData: '',
             leftMargin: -10,

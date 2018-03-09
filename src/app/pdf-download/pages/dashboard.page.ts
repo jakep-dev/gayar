@@ -69,7 +69,8 @@ export class DashboardPage extends BasePage  {
     private captionStyle: any = {
         color: '#464646',
         fontSize: 12,
-        bold: false
+        bold: false,
+        alignment: 'justify'
     };
 
     //left image name
