@@ -190,7 +190,11 @@ export class BarChartLogarithmComponent extends BaseChart implements OnInit {
         });
         this.breakLines = [];
             
-        if(this.chart.yAxis[0].dataMax > 10) {
+        if( this && this.chart &&
+            this.chart.yAxis &&
+            this.chart.yAxis[0]&&
+            this.chart.yAxis[0].dataMax &&
+            this.chart.yAxis[0].dataMax > 10) {
             let getYPosition = this.getYAxisPosition(10);
             let getMaxYPosition = this.getYAxisPosition(this.chart.yAxis[0].max)
 
