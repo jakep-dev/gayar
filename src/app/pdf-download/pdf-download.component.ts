@@ -222,9 +222,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.generateMenu
     ];
 
-    //Array of chart that maps on TOC by index
-    private tocChartList: Array<any> = [];
-
     private isNoData: boolean = false;
 
     //Reference to the HighChart object
@@ -470,7 +467,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.chartDataCollection.length = 0;
         this.pageOrder.length = 0;
         this.clearArray(this.pageCollection);
-        this.clearArray(this.tocChartList);
         this.tocPage.clearTOC();
         this.entryPoint.clear();
     }
@@ -902,11 +898,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                             targetPage: this.pageCollection[pageType]
                         }
                     );
-
-                    this.tocChartList.push({
-                        tocIndex: this.tocPage.tocList.length -1,
-                        chart: this.chartDataCollection[this.chartDataCollection.length -1]
-                    });
                 }
             }
         }
@@ -1702,13 +1693,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     private renderCompleteCallback() {
 
         if(this.isNoData) {
-            let currentImage = this.chartDataCollection[this.chartLoadCount].targetPage;
-            if( currentImage && currentImage.getPageType()
-                && !(currentImage.getPageType().indexOf('Benchmark') > -1 || currentImage.getPageType().indexOf('Dashboard') > -1) 
-            ) {
-                this.removePage(currentImage.getPageType());
-            }
-            this.removeTOCEntry(this.chartDataCollection[this.chartLoadCount]);
+            this.tocPage.deleteTocEntry(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType());            
+            this.chartDataCollection[this.chartLoadCount].targetPage.setHasNoContent(true);
             this.chartDataCollection.splice(this.chartLoadCount, 1);
             this.isNoData = false;
         } else {
@@ -1718,6 +1704,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
             this.chartDataCollection[this.chartLoadCount].imageData = buffer;
             let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
             this.chartDataCollection[this.chartLoadCount].targetPage.setChartCaption(this.chartDataCollection[this.chartLoadCount].pagePosition, this.getCurrentChartComponentText());
+            this.chartDataCollection[this.chartLoadCount].targetPage.setHasNoContent(false);
             //if the image added is placed beyond the first page we need to update toc
             if(pageOffset > 1) {
                 //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
@@ -1740,36 +1727,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 this.processPageCounts();
             }    
         }
-    }
-
-    /**
-     * Remove page on the PDF
-     * 
-     * @private
-     * @function removePage
-     * @return {} - No return types.
-     */
-    private removePage(pageType: string) {
-        let removeIndex = this.pageOrder.indexOf(pageType);
-         if( removeIndex > -1 ) {
-            this.pageOrder.splice(removeIndex, 1);    
-        }
-    }
-
-    /**
-     * Remove item on TOC
-     * 
-     * @private
-     * @function removeTOCEntry
-     * @return {} - No return types.
-     */
-    private removeTOCEntry(chartImage: IChartMetaData ) {
-        let findTOCEntry = this.tocChartList.find( chartCollection => {
-            let chart: IChartMetaData = chartCollection.chart;
-            return chart && chart.imageIndex ===  chartImage.imageIndex
-        });
-
-        this.tocPage.excludeTOCItem(findTOCEntry.tocIndex);
     }
 
     /**
@@ -1839,6 +1796,28 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * Remove all pages that has no content
+     * 
+     * @private
+     * @function cleanPages
+     * @return {} - No return types.
+     */
+    private cleanPages() {
+        for( let i = this.pageOrder.length; i > 0; i--) {
+            let pageType: string = this.pageOrder[i-1];
+            let page:any = this.pageCollection[pageType];
+            
+            if(page && page.getHasNoContent() && page.getHasNoContent() === true ) {
+                this.pageOrder.splice( i-1, 1);
+
+                //remove parent item on TOC, applicable for benchmark or dashboard
+                let pageHeaderText:string = (page.header && page.header.text)? page.header.text : '';
+                this.tocPage.deleteTocEntry(pageHeaderText, pageType);
+            }
+        }
+    }
+
     private pdfGenerateTimeout: any = null;
 
     /**
@@ -1851,7 +1830,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      */
     private generatePDF() {
 
-        this.tocPage.processTOCBody();
+        this.cleanPages();
 
         //first page is the cover sheet, second to third page is the table of contents
         let pageNumber = 2 + this.tocPage.getPageCount();

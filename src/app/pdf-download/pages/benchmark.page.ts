@@ -44,6 +44,32 @@ export class BenchmarkPage extends BasePage  {
         return BenchmarkPage.pageType;
     }
 
+    //flag if the page has no content to include/exclude on pdf
+    private hasNoContent:boolean = false;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
+    }
+
     //json block representing the style for header within this page
     private headerStyle: any = {
         color: '#27a9bc',

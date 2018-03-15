@@ -125,9 +125,6 @@ export class TOCPage extends BasePage  {
     //Array of toc items
     tocList: Array<any> = [];
 
-    //Array of toc indices to exclude
-    excludeItems: Array<number> = [];
-
     //Associative array that maps page type to an array of toc items
     pageMapping: Array<any> = [];
 
@@ -270,7 +267,7 @@ export class TOCPage extends BasePage  {
         }
         if(tocItem) {
             this.tocList.push(tocItem);
-            //this.toc.table.body.push(tocItem);
+            this.toc.table.body.push(tocItem);
             let pageMappingList: any = this.pageMapping[pageType];
             if(!pageMappingList) {
                 pageMappingList = this.pageMapping[pageType] = [];
@@ -279,23 +276,33 @@ export class TOCPage extends BasePage  {
         }
     }
 
-    /** 
-     * Process the TOC items, 
-     * removes the excluded items 
-     * then add the remaining items to the body
-     * 
-     * @public
-     * @function processTOCBody
-     * @return {} - No return types.
-    */
-    public processTOCBody() {
-        for( let i = this.excludeItems.length; i > 0; i--) {
-            this.tocList.splice(this.excludeItems[i-1], 1);
+    public deleteTocEntry(title: string, pageType: string) {
+        let tocItem: any;
+        let tocTable: any;
+        let tocDescription: any;
+        let targetTocItem: any;
+        let pageMappingList: any = this.pageMapping[pageType];
+        let i: number;
+        if(pageMappingList) {
+            for(i = 0; i < pageMappingList.length; i++) {
+                tocItem = pageMappingList[i];
+                tocTable = tocItem[0].table || tocItem[1].table || tocItem[2].table;
+                tocDescription = tocTable.body[0][0].text;
+                if(tocDescription === title) {
+                    targetTocItem = tocItem;
+                    break;
+                }
+            }            
         }
-
-        this.tocList.forEach ( tocItem => {
-            this.toc.table.body.push(tocItem);
-        });
+        
+        if(targetTocItem) {
+            let index = this.tocList.indexOf(targetTocItem);
+            this.tocList.splice(index, 1);
+            index = this.toc.table.body.indexOf(targetTocItem);
+            this.toc.table.body.splice(index, 1);
+            index = pageMappingList.indexOf(tocItem);
+            pageMappingList.splice(index, 1);
+        }
     }
 
     /**
@@ -372,7 +379,6 @@ export class TOCPage extends BasePage  {
         this.clearArray(this.pageChartOffset);
         this.toc.table.body.length = 0;
         this.clearArray(this.tocList);
-        this.clearArray(this.excludeItems);
         this.updatePdfContent();
     }
 
@@ -447,20 +453,6 @@ export class TOCPage extends BasePage  {
         } else {
             return 1 + Math.ceil((this.tocList.length - TOCPage.FIRST_PAGE_TOC_ITEM_COUNT) / TOCPage.TOC_ITEM_COUNT_PER_PAGE);
         }
-    }
-
-    /**
-     * Add toc index to exclude on the final TOC
-     * 
-     * @public
-     * @function excludeTOCItem
-     * @return {} - No return types.
-     */
-    public excludeTOCItem( tocIndex: number){
-        if(this.excludeItems.indexOf(tocIndex) < 0){
-            this.excludeItems.push(tocIndex);
-        }
-        
     }
 
     constructor() {
