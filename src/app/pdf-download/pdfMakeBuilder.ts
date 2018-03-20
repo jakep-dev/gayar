@@ -187,7 +187,8 @@ export class PDFMakeBuilder {
             body: [
                 [
                     {
-                        text: 'For a detailed explanation of terms and analytics, please see the Appendix at the end of this report',
+                        text: `For a detailed explanation of terms and analytics, please see the Appendix at the end of this report 
+                               Analytics in Cyber OverVue powered by Advisen’s proprietary cyber loss data and transaction data`,
                         alignment: 'center',
                         border: [false, true, false, false]
                     },
