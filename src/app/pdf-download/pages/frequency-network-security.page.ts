@@ -45,7 +45,8 @@ export class FrequencyNetworkSecurityPage extends BasePage  {
     }
 
     //flag if the page has no content to include/exclude on pdf
-    private hasNoContent:boolean = false;
+    //initially set hasNoContent to true for pages that contains chart(s)
+    private hasNoContent:boolean = true;
 
     /**
      * get the page if has n content

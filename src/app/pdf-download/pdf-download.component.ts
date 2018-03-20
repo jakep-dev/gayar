@@ -1694,7 +1694,6 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
         if(this.isNoData) {
             this.tocPage.deleteTocEntry(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType());            
-            this.chartDataCollection[this.chartLoadCount].targetPage.setHasNoContent(true);
             this.chartDataCollection.splice(this.chartLoadCount, 1);
             this.isNoData = false;
         } else {
