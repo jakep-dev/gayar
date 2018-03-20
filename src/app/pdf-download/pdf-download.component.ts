@@ -222,6 +222,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         this.generateMenu
     ];
 
+    private isNoData: boolean = false;
+
     //Reference to the HighChart object
     private chart: BaseChart;
 
@@ -1486,10 +1488,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                     //console.log('x = ' + x + ', y = ' + y);
                     for(i = 0; i < n; i++) {
                         if(tspanList[i].innerHTML === 'No Data Available') {
-                            isNoData = true;
+                            this.isNoData = true;
                             tspanList[i].parentElement.parentElement.attributes['transform'].value = translateValue;
                         } else if(tspanList[i].childNodes && (tspanList[i].childNodes.length == 1) && (tspanList[i].childNodes[0].textContent === 'No Data Available') ) {
-                            isNoData = true;
+                            this.isNoData = true;
                             tspanList[i].parentNode.parentNode.attributes["transform"].value = translateValue;
                         }
                     }
@@ -1689,22 +1691,31 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private renderCompleteCallback() {
-        let buffer = this.canvas.nativeElement.toDataURL('image/png');
-        this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
-        this.entryPoint.clear();
-        this.chartDataCollection[this.chartLoadCount].imageData = buffer;
-        let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
-        this.chartDataCollection[this.chartLoadCount].targetPage.setChartCaption(this.chartDataCollection[this.chartLoadCount].pagePosition, this.getCurrentChartComponentText());
-        //if the image added is placed beyond the first page we need to update toc
-        if(pageOffset > 1) {
-            //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
-            this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+
+        if(this.isNoData) {
+            this.tocPage.deleteTocEntry(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType());            
+            this.chartDataCollection.splice(this.chartLoadCount, 1);
+            this.isNoData = false;
+        } else {
+            let buffer = this.canvas.nativeElement.toDataURL('image/png');
+            this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
+            this.entryPoint.clear();
+            this.chartDataCollection[this.chartLoadCount].imageData = buffer;
+            let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+            this.chartDataCollection[this.chartLoadCount].targetPage.setChartCaption(this.chartDataCollection[this.chartLoadCount].pagePosition, this.getCurrentChartComponentText());
+            this.chartDataCollection[this.chartLoadCount].targetPage.setHasNoContent(false);
+            //if the image added is placed beyond the first page we need to update toc
+            if(pageOffset > 1) {
+                //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
+                this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+            }
+            this.chartLoadCount++;
+            this.setPollingInterval(0);
+            //console.log('image size = ' + buffer.length);
+            let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
+            this.setDownloadMenuMessage(value + '% done.', value + '%');
         }
-        this.chartLoadCount++;
-        this.setPollingInterval(0);
-        //console.log('image size = ' + buffer.length);
-        let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
-        this.setDownloadMenuMessage(value + '% done.', value + '%');
+
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
@@ -1784,6 +1795,28 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * Remove all pages that has no content
+     * 
+     * @private
+     * @function cleanPages
+     * @return {} - No return types.
+     */
+    private cleanPages() {
+        for( let i = this.pageOrder.length; i > 0; i--) {
+            let pageType: string = this.pageOrder[i-1];
+            let page:any = this.pageCollection[pageType];
+            
+            if(page && page.getHasNoContent() && page.getHasNoContent() === true ) {
+                this.pageOrder.splice( i-1, 1);
+
+                //remove parent item on TOC, applicable for benchmark or dashboard
+                let pageHeaderText:string = (page.header && page.header.text)? page.header.text : '';
+                this.tocPage.deleteTocEntry(pageHeaderText, pageType);
+            }
+        }
+    }
+
     private pdfGenerateTimeout: any = null;
 
     /**
@@ -1795,6 +1828,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private generatePDF() {
+
+        this.cleanPages();
+
         //first page is the cover sheet, second to third page is the table of contents
         let pageNumber = 2 + this.tocPage.getPageCount();
         this.pageOrder.forEach(pageType => 

@@ -44,6 +44,33 @@ export class FrequencyTechEOPage extends BasePage  {
         return FrequencyTechEOPage.pageType;
     }
 
+    //flag if the page has no content to include/exclude on pdf
+    //initially set hasNoContent to true for pages that contains chart(s)
+    private hasNoContent:boolean = true;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
+    }
+
     //Indicate if we are showing the section header
     //This happens when this is the first page selected in the section by the user
     private showTopHeader: boolean = false;

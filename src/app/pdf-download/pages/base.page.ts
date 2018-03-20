@@ -33,6 +33,27 @@ export abstract class BasePage {
     }
 
     /**
+     * get the page if has no content
+     * 
+     * @public
+     * @function getHasContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return false;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasContent
+     * @param {boolean} hasContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasContent: boolean) { }
+
+    /**
      * Setter function to set the prefix for this page
      * 
      * @public
