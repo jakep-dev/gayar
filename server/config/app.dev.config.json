@@ -147,9 +147,9 @@
     "log": {
         "level": "debug",
         "dirName": "/data/logs/nodejs",
-        "filePath": "_cyber_all_msg.log",
-        "exceptionFilePath": "_cyber_exceptions.log",
-        "datePattern": "yyyy-MM-dd",
+        "filePath": "%DATE%_cyber_all_msg.log",
+        "exceptionFilePath": "%DATE%_cyber_exceptions.log",
+        "datePattern": "YYYY-MM-DD",
         "prepend": true,
         "handleExceptions" : true,
         "humanReadableUnhandledException": true,
