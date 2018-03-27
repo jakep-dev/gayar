@@ -85,6 +85,12 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     },
                     yAxis: {
                         allowDecimals: false,
+                        title: {
+                            style: {
+                               step: 1,
+                               width : "200px"
+                            }
+                        },
                         plotLines: [
                             {
                                 color: '#000000',
