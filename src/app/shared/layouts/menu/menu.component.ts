@@ -200,7 +200,7 @@ export class MenuComponent implements OnInit {
   }
 
   launchHelp () {
-    const url = 'https://advisen.atlassian.net/servicedesk/customer/portal/14';
+    const url = 'https://advisen.atlassian.net/servicedesk/customer/portal/16';
     let winRef = window.open('',url,'',true);
     winRef.location.href = url;
   }
