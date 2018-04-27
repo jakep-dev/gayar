@@ -3,7 +3,11 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. 
+
+Use the `ng build --env=prod` flag for a single server production build.
+
+Use the `ng build --env=prod --output-hashing=none` flag for a cluster production build.
 
 ## Running unit tests
 
