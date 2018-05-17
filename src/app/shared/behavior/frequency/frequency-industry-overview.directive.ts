@@ -2,7 +2,7 @@ import { BaseChart } from '../../charts/base-chart';
 
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { FrequencyIndustryOverviewModel } from "app/model/model";
+import { FrequencyIndustryOverviewModel, ComponentPrintSettings } from "app/model/model";
 
 @Directive({
     selector: '[frequency-industry-overview-behavior]'
@@ -14,6 +14,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
     @Input() chartComponent: BaseChart;
+
+    @Input() public printSettings: ComponentPrintSettings;
 
     ngOnChanges(changes: SimpleChanges) {}
 
@@ -43,6 +45,20 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
      */
     buildHighChartObject() {
         if (this.modelData) {
+
+            let legendYOffset: number;
+            let marginBottom: number;
+            let spacingBottom: number;
+            if(this.printSettings) {
+                legendYOffset = 10;
+                marginBottom = 125;
+                spacingBottom = 45;
+            } else {
+                legendYOffset = 4;
+                marginBottom = 150;
+                spacingBottom = 51;
+            }
+
             let tempChartData: BarChartData = {
                 series: [],
                 title: '',
@@ -56,7 +72,9 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                   chart: {
                     marginLeft: 75,
                     marginRight: 25,
-                    marginTop: 25
+                    marginTop: 25,
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                    },
                     xAxis: {
                         type: 'category',
@@ -87,7 +105,29 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}<br/></span><table>',
-                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>'
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}:<b>{point.y}</b><br/></span>',
+                        positioner: function(labelWidth, labelHeight, point) {
+                            let xPos = point.plotX;
+                            let yPos = point.plotY;
+
+                            if (xPos < 10 ) {
+                                xPos = 20;
+                            }
+
+                            if (xPos + labelWidth > this.chart.chartWidth) {
+                                xPos = this.chart.chartWidth - labelWidth - 5;
+                            }
+
+                            if ( yPos < labelHeight + 5) {
+                                yPos = labelHeight + 5;
+                            }
+
+                            if ( yPos >= this.chart.plotHeight + this.chart.plotTop - labelHeight) {
+                                yPos = this.chart.plotHeight + this.chart.plotTop - labelHeight - 5;
+                            }
+
+                            return { x: xPos, y: yPos};
+                        }
                     },
                     plotOptions: {
                         column: {
@@ -99,7 +139,8 @@ export class FrequencyIndustryOverviewDirective implements OnInit, OnChanges {
                     },
                     legend: {
                         enabled: true,
-                        symbolHeight: 8
+                        symbolHeight: 8,
+                        y: legendYOffset
                     }
                 },
                 hasRedrawActions: true

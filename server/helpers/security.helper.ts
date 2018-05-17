@@ -1,6 +1,5 @@
 import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
-import * as bodyParser from 'body-parser';
 import * as csrf from 'csurf';
 import * as https from 'https';
 import * as http from 'http';
@@ -10,35 +9,36 @@ import { EnvConfig } from '../env.config';
 import { SecurityModel, ServerModel } from '../model/env.model';
 
 export class Security{
-    private securityModel: SecurityModel;
-    private serverModel: ServerModel;
-    private environment: string;
+    private static securityModel: SecurityModel;
+    private static serverModel: ServerModel;
+    private static environment: string;
 
-    constructor(private express: any){
-        this.securityModel = EnvConfig.getSecurity();
-        this.serverModel = EnvConfig.getServer();
-        this.environment = EnvConfig.getEnvironment();
-        this.init();
+    public static initialize() {
+        Security.securityModel = EnvConfig.getSecurity();
+        Security.serverModel = EnvConfig.getServer();
+        Security.environment = EnvConfig.getEnvironment();
     }
 
-    init(): void {
-        if (this.environment.toLocaleUpperCase() !== 'DEBUG') {
-          this.setupHeader();
+    public static applySecurity(express: any) {
+        Security.init(express);
+    }
+
+    private static init(express: any): void {
+        if (Security.environment.toLocaleUpperCase() !== 'DEBUG') {
+          Security.setupHeader(express);
         }
-        this.setupServer();
     }
 
-
-    private setupHeader(): void {
-        this.express.use(cookieParser(this.securityModel.cookieParser));
-        this.express.set('trust proxy');
-        this.express.use(this.getCsurfProtection(this.securityModel.isCookie, this.securityModel.httpOnly, this.securityModel.secure, this.securityModel.sameSite, this.securityModel.ignoreMethods));
-        this.express.use(this.manageToken);
-        this.express.use(this.manageTransactionId);
+    private static setupHeader(express: any): void {
+        express.use(cookieParser(Security.securityModel.cookieParser));
+        express.set('trust proxy');
+        express.use(Security.getCsurfProtection(Security.securityModel.isCookie, Security.securityModel.httpOnly, Security.securityModel.secure, Security.securityModel.sameSite, Security.securityModel.ignoreMethods));
+        express.use(Security.manageToken);
+        express.use(Security.manageTransactionId);
     }
 
     //Set the csurf protection
-    private getCsurfProtection(isCookie, httpOnly, secure, sameSite, ignoreMethods): any {
+    private static getCsurfProtection(isCookie, httpOnly, secure, sameSite, ignoreMethods): any {
         return csrf({
             cookie: isCookie,
             httpOnly: httpOnly,
@@ -49,7 +49,7 @@ export class Security{
     }
 
     //Manage token for each request
-    private manageToken(req, res, next){
+    private static manageToken(req, res, next){
         let csrfToken = req.csrfToken();
         res.cookie('XSRF-TOKEN', csrfToken);
         res.locals._csrf = csrfToken;
@@ -71,7 +71,7 @@ export class Security{
         next();
     }
 
-    private manageTransactionId(req: express.Request, res, next){
+    private static manageTransactionId(req: express.Request, res, next){
         let allCookies =  Security.parseCookies(req.headers.cookie);
         if(allCookies && !allCookies.TransactionId){
             res.cookie('TransactionId', uuid.v4());
@@ -93,28 +93,26 @@ export class Security{
                 },{ });
     }
 
-    private setupServer(): void {
-        let isHttps: boolean = this.serverModel.useCertificate;
-        let server: any;
-        if(isHttps){
-            server = https.createServer(this.getHttpsOptions(), this.express).listen(this.serverModel.port);
+    public static setupServer(express: any): any {
+        let isHttps: boolean = Security.serverModel.useCertificate;
+        if(isHttps) {
+            return https.createServer(Security.getHttpsOptions(), express).listen(Security.serverModel.port, Security.logServerDetails);
         }
-        else{
-            server = http.createServer(this.express).listen(this.serverModel.port);
+        else {
+            return http.createServer(express).listen(Security.serverModel.port, Security.logServerDetails);
         }
-        this.logServerDetails();
     }
 
-    private getHttpsOptions(): any{
+    private static getHttpsOptions(): https.ServerOptions {
         return {
-                cert: fs.readFileSync(this.serverModel.certPath),
-                key: fs.readFileSync(this.serverModel.certKey),
-                passphrase: this.serverModel.passPhrase
+                cert: fs.readFileSync(Security.serverModel.certPath),
+                key: fs.readFileSync(Security.serverModel.certKey),
+                passphrase: Security.serverModel.passPhrase
             };
     }
 
-    private logServerDetails(): void{
-        console.log(`Listening to ${this.serverModel.host}`)
-        console.log(`Port - ${this.serverModel.port}`);
+    private static logServerDetails(): void{
+        console.log(`Listening to ${Security.serverModel.host}`);
+        console.log(`Port - ${Security.serverModel.port}`);
     }
-}
+};

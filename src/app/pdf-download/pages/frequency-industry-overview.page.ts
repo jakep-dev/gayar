@@ -44,6 +44,33 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
         return FrequencyIndustryOverviewPage.pageType;
     }
 
+    //flag if the page has no content to include/exclude on pdf
+    //initially set hasNoContent to true for pages that contains chart(s)
+    private hasNoContent:boolean = true;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
+    }
+
     //json block representing the style for header within this page
     private headerStyle: any = {
         color: '#27a9bc',
@@ -65,6 +92,15 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
         bold: true
     };
 
+    //json block for the chart caption text style
+    private captionStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: false,
+        margin: [ 0, 100, 0, 0 ],
+        alignment: 'justify'
+    };
+
     //left image name
     private imageLeft:string = '';
     //left image data url
@@ -75,9 +111,11 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
         margin: [ 60, 20, 70, 0 ],
         table: {
             heights: [ 15, 300 ],
+            widths:[350, 340],
             body: [
                 [
-                    { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' }
+                    { text: 'Industry Overview', alignment: 'left', style: this.prefix + 'tableHeaderStyle' },
+                    { text: '' }
                 ],                
                 [
                     {
@@ -86,7 +124,8 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
                         // height: 430,
                         // width: 550,
                         // margin: [ -45, 0, 0, 0 ]
-                    }
+                    },
+                    { text: '', style: this.prefix + 'captionStyle' }
                 ]
             ]
         },
@@ -158,10 +197,25 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
     public getPrintSettings(componentOrder: number) : ComponentPrintSettings {
         //all charts in this page type are the same size
         return {
-            width: 400,
+            width: 500,
             height: 400,
             drillDown: ''
         };
+    }
+
+    /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(index: number, chartCaptionText: string) {
+        if((index == 0) && chartCaptionText) {
+            this.table.table.body[1][1].text = chartCaptionText;
+        }
     }
 
     /**
@@ -187,7 +241,7 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
                 }
                 this.table.table.body[1][index].image = imageName;
                 this.table.table.body[1][index].width = 375;
-                this.table.table.body[1][index].height = 430;
+                this.table.table.body[1][index].height = 270;
                 this.table.table.body[1][index].margin = [ -45, 0, 0, 0 ];
                 switch(index) {
                     case 0:
@@ -233,10 +287,12 @@ export class FrequencyIndustryOverviewPage extends BasePage  {
 
         this.header.style = this.prefix + 'headerStyle';
         this.table.table.body[0][0].style = this.prefix + 'tableHeaderStyle';
+        this.table.table.body[1][1].style = this.prefix + 'captionStyle';
         
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'tableHeaderStyle'] = this.tableHeaderStyle;
+        this.styles[this.prefix + 'captionStyle'] = this.captionStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {

@@ -53,7 +53,7 @@
         <app-tile [id]="'SEV_PEER_TABLE'" [title]="'Top Peer Group Losses'" class="width-100" [isDisabled]="!isPeerGroupTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="peerGroupTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isPeerGroupTableHasDescriptionAccess" [hasTooltip]="false">
                 </app-simple-table>
             </div>
             <div disable class="width-100">
@@ -65,7 +65,20 @@
         <app-tile [id]="'SEV_COMPANY_TABLE'" [title]="'Top Company Losses'" class="width-100" *ngIf="companyLossesTable" [isDisabled]="!isCompanyTable">
             <div front class="width-100">
                 <app-simple-table [dataSource]="companyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
-                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess">
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isCompanyTableHasDescriptionAccess" [hasTooltip]="false">
+                </app-simple-table>
+            </div>
+            <div disable class="width-100">
+                <disabled-chart></disabled-chart>
+            </div>
+        </app-tile>
+    </div>
+
+    <div fxFlexFill fxFlex="100" fxFlex.lt-md="100" fxFlexOrder="5">
+        <app-tile [id]="'SEV_HIERARCHY_LOSSES_TABLE'" [title]="'Top Company Hierarchy Losses'" class="width-100" *ngIf="hierarchyLossesTable" [isDisabled]="!isHierarchyLossTable">
+            <div front class="width-100">
+                <app-simple-table [dataSource]="hierarchyLossesTable" [headerColumns]="headerColumns" [columnsKeys]="columnsKeys" [columnsHAlignment]="columnsHAlignment"
+                                  [columnsWidth]="columnsWidth" [hasDescriptionAccess]="isHierarchyLossTableHasDescriptionAccess" [hasTooltip]="true">
                 </app-simple-table>
             </div>
             <div disable class="width-100">

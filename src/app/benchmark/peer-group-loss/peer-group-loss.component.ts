@@ -12,38 +12,42 @@ import { BaseChart } from './../../shared/charts/base-chart';
 })
 export class PeerGroupLossComponent implements OnInit {
 
-    chartHeader:string = '';
-    modelData: BenchmarkLimitModel;
+    private chartHeader:string = '';
+    
+    public modelData: BenchmarkLimitModel;
 
-    setModelData(modelData: BenchmarkLimitModel) {
+    private setModelData(modelData: BenchmarkLimitModel) {
         this.modelData = modelData;
         this.chartHeader = this.modelData.chartTitle;
     }
 
-    chartData: BoxPlotChartData;
+    public chartData: BoxPlotChartData;
 
-    @Input() componentData: BenchmarkLimitAdequacyInput;
+    @Input() public componentData: BenchmarkLimitAdequacyInput;
 
-    @Input() printSettings: ComponentPrintSettings;
+    @Input() public printSettings: ComponentPrintSettings;
 
     /**
      * Event handler to indicate the construction of the BoxPlotChart's required data is built 
      * @param newChartData BoxPlotChart's required data
      */
-    onDataComplete(newChartData : BoxPlotChartData) {
+    public onDataComplete(newChartData : BoxPlotChartData) {
         this.chartData = newChartData;
     }
 
     private chartComponent = new BehaviorSubject<BaseChart>(null);
+
     public chartComponent$: Observable<BaseChart> = this.chartComponent.asObservable();
+
     private isFirstRedrawComplete = new BehaviorSubject<Boolean>(false);
+
     public isFirstRedrawComplete$: Observable<Boolean> = this.isFirstRedrawComplete.asObservable();
 
     /**
      * Event handler to indicate the chart is loaded 
      * @param chart The chart commponent
      */
-    onChartReDraw(chart: BaseChart) {
+    public onChartReDraw(chart: BaseChart) {
         chart.removeRenderedObjects();
         this.addLabelAndImage(chart);
         this.chartComponent.next(chart);
@@ -52,24 +56,33 @@ export class PeerGroupLossComponent implements OnInit {
         }
     }
 
-    addLabelAndImage(chart){
-        let xPos: number;
-        if(this.printSettings == null) {
-            xPos = 10;
+    /**
+     * get the display text of the underlying chart
+     * 
+     * @public
+     * @function getDisplayText
+     * @return {string} - the display string for the underlying chart if available otherwise return null
+     */
+    public getDisplayText(): string {
+        if(this.modelData && this.modelData.displayText && this.modelData.displayText.length > 0) { 
+            return this.modelData.displayText;
         } else {
-            xPos = 45;
+            return null;
         }
-        chart.addChartLabel(
-            chart.chartData.displayText, 
-            xPos, 
-            chart.chart.chartHeight - 70, 
-            '#000000',
-            10,
-            null,
-            chart.chart.chartWidth - 73
-        );
+    }
 
+    private addLabelAndImage(chart: BaseChart){
         if(this.printSettings == null) {
+            let labelHeight = (Math.ceil((chart.chartData.displayText.length * 6) / (chart.chart.chartWidth - 85))) * 15;
+            chart.addChartLabel(
+                chart.chartData.displayText, 
+                10, 
+                chart.chart.chartHeight - labelHeight, 
+                '#000000',
+                12,
+                null,
+                chart.chart.chartWidth - 85
+            );
             chart.addChartImage(
                 '../assets/images/advisen-logo.png', 
                 chart.chart.chartWidth - 80, 
@@ -90,7 +103,7 @@ export class PeerGroupLossComponent implements OnInit {
     /**
      * Get Benchmark Peer Group Loss Data from back end nodejs server
      */
-    getBenchmarkPeerGroupLossData() {
+    private getBenchmarkPeerGroupLossData() {
         if(this.componentData) {
             if(this.componentData.searchType !== 'SEARCH_BY_MANUAL_INPUT') {
                 this.benchmarkService.getLimitAdequacy(this.componentData.companyId, this.componentData.limits)
@@ -101,5 +114,4 @@ export class PeerGroupLossComponent implements OnInit {
             }
         }
     }
-
 }

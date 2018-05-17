@@ -40,3 +40,49 @@ table#innerTable {
     font-size: 13px;
     color: #000000;
 }
+
+.tooltip {
+    font-family: arial, verdana;
+    // display: inline-block;
+    outline: none;
+    position: relative;
+    width: 91%;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	position: absolute;
+	z-index: 1;
+	width:100%;
+	min-width: 100px;
+	max-width: 350px;
+	bottom: 150%;
+}
+
+.tooltipBody {
+	width: 100%;
+	background-color: #ffffff;
+	height:100%;
+	border-radius: 6px;
+	border-left: 1px solid #dcdcdc;
+	border-right: 1px solid #dcdcdc;
+	border-top: 1px solid #dcdcdc;
+	border-bottom: 1px solid #dcdcdc;
+	padding:5px 10px;
+	color: #464646;
+	font-size:12px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    left: 25%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #dcdcdc transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

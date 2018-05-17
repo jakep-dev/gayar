@@ -1,13 +1,13 @@
 import { BasePage } from './base.page';
 import { FrequencyDataModel } from 'app/model/model';
 
-export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
+export class FrequencyMostRecentCompanyHierarchyLossesPage extends BasePage  {
 
     //page type name for this page
-    public static pageType:string = 'FrequencyMostRecentCompanyLossesPage';
+    public static pageType:string = 'FrequencyMostRecentCompanyHierarchyLossesPage';
 
     //default page prefix of this page to prevent json object names from one page don't clash with other pages
-    private prefix: string = FrequencyMostRecentCompanyLossesPage.pageType + '_';
+    private prefix: string = FrequencyMostRecentCompanyHierarchyLossesPage.pageType + '_';
 
     /**
      * get the page prefix for the current page of the assessment report
@@ -41,33 +41,7 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
      * @return {string} - page type for the current page of the assessment report.
      */
     public getPageType(): string {
-        return FrequencyMostRecentCompanyLossesPage.pageType;
-    }
-
-    //flag if the page has no content to include/exclude on pdf
-    private hasNoContent:boolean = false;
-
-    /**
-     * get the page if has n content
-     * 
-     * @public
-     * @function getHasNoContent
-     * @return {boolean} - if page has no content
-     */
-    public getHasNoContent() {
-        return this.hasNoContent;
-    }
-
-    /**
-     * Setter function to set if the page has no content
-     * 
-     * @public
-     * @function setHasNoContent
-     * @param {boolean} hasNoContent - if has no content for this page
-     * @return {} - No return types.
-     */
-    public setHasNoContent(hasNoContent: boolean) {
-        this.hasNoContent = hasNoContent;
+        return FrequencyMostRecentCompanyHierarchyLossesPage.pageType;
     }
 
     //Indicate if we are showing the section header
@@ -98,7 +72,7 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
 
     //json block representing the header within this page
     private header: any = {
-        text: 'Most Recent Company Losses',
+        text: 'Most Recent Company Hierarchy Losses',
         style: this.prefix + 'headerStyle'
     };
     
@@ -184,6 +158,32 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
      */
     public getImages(): Array<string> {
         return this.images;
+    }
+
+    //flag if the page has no content to include/exclude on pdf
+    private hasNoContent:boolean = false;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
     }
 
     //object used to hold the table data

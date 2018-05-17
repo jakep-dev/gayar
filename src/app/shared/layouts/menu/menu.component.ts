@@ -143,7 +143,7 @@ export class MenuComponent implements OnInit {
       return this.searchService.selectedCompany.companyName;
     }
 
-    if(this.searchService.searchCriteria) {
+    if (this.searchService.searchCriteria) {
       return this.searchService.searchCriteria.value;
     }
 
@@ -157,7 +157,9 @@ export class MenuComponent implements OnInit {
    * @return {type} - No return type.
    */
   navigateToHome () {
-
+    const token: string = this.sessionService.Token;
+    const loginUrl = `${environment.landingPage}/login/${token}`;
+    window.location.replace(loginUrl);
   }
 
   /**
@@ -195,5 +197,11 @@ export class MenuComponent implements OnInit {
       this.showShortMenu = true;
       this.sideNavMode = NAV_MODE;
     }
+  }
+
+  launchHelp () {
+    const url = 'https://advisen.atlassian.net/servicedesk/customer/portal/16';
+    let winRef = window.open('',url,'',true);
+    winRef.location.href = url;
   }
 }

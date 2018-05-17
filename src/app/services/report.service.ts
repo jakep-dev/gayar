@@ -336,6 +336,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 pageType: 'FrequencyMostRecentCompanyLossesPage',
                 chartComponents: null,
                 subSubComponents: null
+            },
+            {
+                description: 'Most Recent Company Hierarchy Losses',
+                id: 'REPORT_FREQUENCY_MOST_RECENT_HIERARCHY_LOSSES',
+                value: true,
+                hasAccess: false,
+                pageType: 'FrequencyMostRecentCompanyHierarchyLossesPage',
+                chartComponents: null,
+                subSubComponents: null
             }
 
         ]
@@ -594,6 +603,15 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 pageType: 'SeverityTopCompanyLossesPage',
                 chartComponents: null,
                 subSubComponents: null
+            },
+            {
+                description: 'Top Company Hierarchy Losses',
+                id: 'REPORT_SEVERITY_MOST_RECENT_HIERARCHY_LOSSES',
+                value: true,
+                hasAccess: false,
+                pageType: 'SeverityTopCompanyHierarchyLossesPage',
+                chartComponents: null,
+                subSubComponents: null
             }
 
         ]
@@ -623,7 +641,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Premium Distribution by Counts',
+                description: 'Premium Distribution',
                 id: 'REPORT_BENCHMARK_PREMIUM',
                 value: true,
                 hasAccess: false,
@@ -640,7 +658,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Limit Distribution by Counts',
+                description: 'Limit Distribution',
                 id: 'REPORT_BENCHMARK_LIMIT',
                 value: true,
                 hasAccess: false,
@@ -657,7 +675,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Retention Distribution by Counts',
+                description: 'Retention Distribution',
                 id: 'REPORT_BENCHMARK_RETENTION',
                 value: true,
                 hasAccess: false,
@@ -674,7 +692,7 @@ const REPORT_CONFIGURATION: Array<IReportTileModel> = [
                 subSubComponents: null
             },
             {
-                description: 'Rate Per Million Distribution by Values',
+                description: 'Rate Per Million Distribution',
                 id: 'REPORT_BENCHMARK_RATE_PER_MILLION',
                 value: true,
                 hasAccess: false,

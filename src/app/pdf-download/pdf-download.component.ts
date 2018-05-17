@@ -62,7 +62,9 @@ import {
 
     BenchmarkPage, 
     FrequencyMostRecentPeerGroupLossesPage, FrequencyMostRecentCompanyLossesPage,
+    FrequencyMostRecentCompanyHierarchyLossesPage,
     SeverityTopPeerGroupLossesPage, SeverityTopCompanyLossesPage,
+    SeverityTopCompanyHierarchyLossesPage,
     GlossaryPage
 } from 'app/pdf-download/pages/pages'
 
@@ -148,6 +150,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     //input to frequency most recent company losses table
     private frequencyCompanyLossesTable: Array<FrequencyDataModel> = null;
 
+    //input to frequency most recent company's hierarchy losses table
+    private frequencyCompanyHierarchyLossesTable: Array<FrequencyDataModel> = null;
+
     //boolean to indicate frequency data is loaded
     //private frequencyDataDone: boolean = false;
 
@@ -156,6 +161,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //input to severity top company losses table
     private severityCompanyLossesTable: Array<SeverityDataModel> = null;
+
+    //input to severity most recent company's hierarchy losses table
+    private severityCompanyHierarchyLossesTable: Array<SeverityDataModel> = null;
 
     //boolean to indicate severity data is loaded
     //private severityDataDone: boolean = false;
@@ -168,6 +176,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
 
     //list of chart data objects
     private chartDataCollection: Array<IChartMetaData> = [];
+
+    //The current chart component being rendered
+    private currentChartComponent: any = null;
 
     //list of  page type names
     private pageOrder: Array<string> = [];
@@ -210,6 +221,8 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     public menuItems: Array<any> = [
         this.generateMenu
     ];
+
+    private isNoData: boolean = false;
 
     //Reference to the HighChart object
     private chart: BaseChart;
@@ -644,14 +657,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @param {Array<IReportTileModel} reportSelections - input user selections and permission settings based on user's login
      * @return {} - No return types.
      */
-    public buildPdf(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[]) {
+    public buildPdf(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], frequencyCompanyHierarchyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[], severityCompanyHierarchyLossesTable: SeverityDataModel[]) {
 
         if(!this.isProcessing) {
             this.isProcessing = true;
             this.frequencyPeerGroupTable = frequencyPeerGroupTable;
             this.frequencyCompanyLossesTable = frequencyCompanyLossesTable;
+            this.frequencyCompanyHierarchyLossesTable = frequencyCompanyHierarchyLossesTable;
             this.severityPeerGroupTable = severityPeerGroupTable;
             this.severityCompanyLossesTable = severityCompanyLossesTable;
+            this.severityCompanyHierarchyLossesTable = severityCompanyHierarchyLossesTable;
             this.resetDownloadMenu();
             this.addMenu();
 
@@ -1045,6 +1060,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
+            case FrequencyMostRecentCompanyHierarchyLossesPage.pageType:
+                let frequencyMostRecentCompanyHierarchyLossesPage = new FrequencyMostRecentCompanyHierarchyLossesPage();
+                frequencyMostRecentCompanyHierarchyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.frequencyHierarchyLossesDetails));
+                frequencyMostRecentCompanyHierarchyLossesPage.setPeerGroupData(this.frequencyCompanyHierarchyLossesTable);
+                this.pageCollection[pageType] = frequencyMostRecentCompanyHierarchyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
+                this.pageOrder.push(pageType);
+                break;
 
             case SeverityTopPeerGroupLossesPage.pageType:
                 let severityTopPeerGroupLossesPage = new SeverityTopPeerGroupLossesPage();
@@ -1059,6 +1082,14 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityTopCompanyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails));
                 severityTopCompanyLossesPage.setPeerGroupData(this.severityCompanyLossesTable);
                 this.pageCollection[pageType] = severityTopCompanyLossesPage;
+                this.pageCollection[pageType].showHeader(showHeader);
+                this.pageOrder.push(pageType);
+                break;
+            case SeverityTopCompanyHierarchyLossesPage.pageType:
+                let severityTopCompanyHierarchyLossesPage = new SeverityTopCompanyHierarchyLossesPage();
+                severityTopCompanyHierarchyLossesPage.setDesciptionPermission(this.getTableDetailAccess(APPCONSTANTS.REPORTS_ID.severityHierarchyLossesDetails));
+                severityTopCompanyHierarchyLossesPage.setPeerGroupData(this.severityCompanyHierarchyLossesTable);
+                this.pageCollection[pageType] = severityTopCompanyHierarchyLossesPage;
                 this.pageCollection[pageType].showHeader(showHeader);
                 this.pageOrder.push(pageType);
                 break;
@@ -1125,12 +1156,16 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && permission.frequency.companyTable.hasDescriptionAccess;
             case APPCONSTANTS.REPORTS_ID.frequencyPeerLossesDetails:
                 return permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess && permission.frequency.peerGroupTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.frequencyHierarchyLossesDetails:
+                return permission && permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess && permission.frequency.hierarchyLossesTable.hasDescriptionAccess;
             
             //severity detailed tables
             case APPCONSTANTS.REPORTS_ID.severityCompanyLossesDetails:
                 return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && permission.severity.companyTable.hasDescriptionAccess;
             case APPCONSTANTS.REPORTS_ID.severityPeerLossesDetails:
                 return permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess && permission.severity.peerGroupTable.hasDescriptionAccess;
+            case APPCONSTANTS.REPORTS_ID.severityHierarchyLossesDetails:
+                return permission && permission.severity && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess && permission.severity.hierarchyLossesTable.hasDescriptionAccess;
             
             default: 
                 return false;
@@ -1195,6 +1230,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 dashboardFrequencyGaugeComponent.printSettings = this.printSettings;
                 dashboardFrequencyGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 dashboardFrequencyGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = dashboardFrequencyGaugeComponent;
                 break;
             case 'app-dashboard-severity':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_SeverityComponent);
@@ -1203,6 +1239,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 dashboardSeverityGaugeComponent.printSettings = this.printSettings;
                 dashboardSeverityGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 dashboardSeverityGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = dashboardSeverityGaugeComponent;
                 break;
             case 'dashboard-benchmark-score':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Dashboard_BenchmarkComponent);
@@ -1211,6 +1248,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 dashboardBenchmarkGaugeComponent.printSettings = this.printSettings;
                 dashboardBenchmarkGaugeComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 dashboardBenchmarkGaugeComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = dashboardBenchmarkGaugeComponent;
                 break;
 
             case 'frequency-industry-overview':
@@ -1220,6 +1258,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyIndustryOverviewComponent.printSettings = this.printSettings;
                 frequencyIndustryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyIndustryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyIndustryOverviewComponent;
                 break;
             case 'frequency-time-period':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_TimePeriodComponent);
@@ -1228,6 +1267,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyTimePeriodComponent.printSettings = this.printSettings;
                 frequencyTimePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyTimePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyTimePeriodComponent;
                 break;
             case 'frequency-incident-bar':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_IncidentBarComponent);
@@ -1236,6 +1276,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyIncidentBarComponent.printSettings = this.printSettings;
                 frequencyIncidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyIncidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyIncidentBarComponent;
                 break;
             case 'frequency-incident-pie':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_IncidentPieComponent);
@@ -1244,6 +1285,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyIncidentPieComponent.printSettings = this.printSettings;
                 frequencyIncidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyIncidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyIncidentPieComponent;
                 break;
             case 'frequency-loss-bar':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_LossBarComponent);
@@ -1252,6 +1294,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyLossBarComponent.printSettings = this.printSettings;
                 frequencyLossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyLossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyLossBarComponent;
                 break;
             case 'frequency-loss-pie':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Frequency_LossPieComponent);
@@ -1260,6 +1303,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 frequencyLossPieComponent.printSettings = this.printSettings;
                 frequencyLossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 frequencyLossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = frequencyLossPieComponent;
                 break;
 
             case 'severity-industry-overview':
@@ -1269,6 +1313,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityIndustryOverviewComponent.printSettings = this.printSettings;
                 severityIndustryOverviewComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityIndustryOverviewComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityIndustryOverviewComponent;
                 break;
             case 'severity-time-period':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_TimePeriodComponent);
@@ -1277,6 +1322,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityTimePeriodComponent.printSettings = this.printSettings;
                 severityTimePeriodComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityTimePeriodComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityTimePeriodComponent;
                 break;
             case 'severity-incident-bar':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_IncidentBarComponent);
@@ -1285,6 +1331,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityIncidentBarComponent.printSettings = this.printSettings;
                 severityIncidentBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityIncidentBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityIncidentBarComponent;
                 break;
             case 'severity-incident-pie':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_IncidentPieComponent);
@@ -1293,6 +1340,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityIncidentPieComponent.printSettings = this.printSettings;
                 severityIncidentPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityIncidentPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityIncidentPieComponent;
                 break;
             case 'severity-loss-bar':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_LossBarComponent);
@@ -1301,6 +1349,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityLossBarComponent.printSettings = this.printSettings;
                 severityLossBarComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityLossBarComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityLossBarComponent;
                 break;
             case 'severity-loss-pie':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Severity_LossPieComponent);
@@ -1309,6 +1358,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 severityLossPieComponent.printSettings = this.printSettings;
                 severityLossPieComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 severityLossPieComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = severityLossPieComponent;
                 break;
 
             case 'app-limit':
@@ -1318,6 +1368,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 benchmarkLimitComponent.printSettings = this.printSettings;
                 benchmarkLimitComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 benchmarkLimitComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = benchmarkLimitComponent;
                 break;
             case 'app-peer-group-loss':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_PeerGroupLossComponent);
@@ -1326,6 +1377,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 benchmarkPeerGroupLossComponent.printSettings = this.printSettings;
                 benchmarkPeerGroupLossComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 benchmarkPeerGroupLossComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = benchmarkPeerGroupLossComponent;
                 break;
             case 'app-premium':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_PremiumComponent);
@@ -1334,6 +1386,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 benchmarkPremiumComponent.printSettings = this.printSettings;
                 benchmarkPremiumComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 benchmarkPremiumComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = benchmarkPremiumComponent;
                 break;
             case 'app-rate':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_RateComponent);
@@ -1342,6 +1395,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 benchmarkRateComponent.printSettings = this.printSettings;
                 benchmarkRateComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 benchmarkRateComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = benchmarkRateComponent;
                 break;
             case 'app-retention':
                 componentFactory = this.componentFactoryResolver.resolveComponentFactory(Benchmark_RetentionComponent);
@@ -1350,6 +1404,7 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                 benchmarkRetentionComponent.printSettings = this.printSettings;
                 benchmarkRetentionComponent.chartComponent$.subscribe(this.setWorkingChart.bind(this));
                 benchmarkRetentionComponent.isFirstRedrawComplete$.subscribe(this.startImageConversion.bind(this));
+                this.currentChartComponent = benchmarkRetentionComponent;
                 break;
 
             default:
@@ -1433,10 +1488,10 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
                     //console.log('x = ' + x + ', y = ' + y);
                     for(i = 0; i < n; i++) {
                         if(tspanList[i].innerHTML === 'No Data Available') {
-                            isNoData = true;
+                            this.isNoData = true;
                             tspanList[i].parentElement.parentElement.attributes['transform'].value = translateValue;
                         } else if(tspanList[i].childNodes && (tspanList[i].childNodes.length == 1) && (tspanList[i].childNodes[0].textContent === 'No Data Available') ) {
-                            isNoData = true;
+                            this.isNoData = true;
                             tspanList[i].parentNode.parentNode.attributes["transform"].value = translateValue;
                         }
                     }
@@ -1492,6 +1547,135 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
     }
 
     /**
+     * Get the current chart component from the chartDataCollection
+     * and get the display text if any
+     * 
+     * @private
+     * @function getCurrentChartComponentText
+     * @return {string} - The current chart component's display text
+     */
+    private getCurrentChartComponentText() : string {
+        let displayText = null;
+
+        let dashboardBenchmarkGaugeComponent: Dashboard_BenchmarkComponent;
+        let dashboardFrequencyGaugeComponent: Dashboard_FrequencyComponent;
+        let dashboardSeverityGaugeComponent: Dashboard_SeverityComponent;
+
+        let frequencyIndustryOverviewComponent: Frequency_IndustryOverviewComponent;
+        let frequencyTimePeriodComponent: Frequency_TimePeriodComponent;
+        let frequencyIncidentBarComponent: Frequency_IncidentBarComponent;
+        let frequencyIncidentPieComponent: Frequency_IncidentPieComponent;
+        let frequencyLossBarComponent: Frequency_LossBarComponent;
+        let frequencyLossPieComponent: Frequency_LossPieComponent;
+
+        let severityIndustryOverviewComponent: Severity_IndustryOverviewComponent;
+        let severityTimePeriodComponent: Severity_TimePeriodComponent;
+        let severityIncidentBarComponent: Severity_IncidentBarComponent;
+        let severityIncidentPieComponent: Severity_IncidentPieComponent;
+        let severityLossBarComponent: Severity_LossBarComponent;
+        let severityLossPieComponent: Severity_LossPieComponent;
+
+        let benchmarkLimitComponent: Benchmark_LimtComponent;
+        let benchmarkPeerGroupLossComponent: Benchmark_PeerGroupLossComponent;
+        let benchmarkPremiumComponent: Benchmark_PremiumComponent;
+        let benchmarkRateComponent: Benchmark_RateComponent;
+        let benchmarkRetentionComponent: Benchmark_RetentionComponent;
+
+        //get the current chart in the chartDataCollection
+        let chartData: IChartMetaData = this.chartDataCollection[this.chartLoadCount];
+        switch(chartData.chartSetting.componentName) {
+
+            case 'app-dashboard-frequency':
+                dashboardFrequencyGaugeComponent = <Dashboard_FrequencyComponent>this.currentChartComponent;
+                displayText = dashboardFrequencyGaugeComponent.getDisplayText();
+                break;
+            case 'app-dashboard-severity':
+                dashboardSeverityGaugeComponent = <Dashboard_SeverityComponent>this.currentChartComponent;
+                displayText = dashboardSeverityGaugeComponent.getDisplayText();
+                break;
+            case 'dashboard-benchmark-score':
+                dashboardBenchmarkGaugeComponent = <Dashboard_BenchmarkComponent>this.currentChartComponent;
+                displayText = dashboardBenchmarkGaugeComponent.getDisplayText();
+                break;
+
+            case 'frequency-industry-overview':
+                frequencyIndustryOverviewComponent = <Frequency_IndustryOverviewComponent>this.currentChartComponent;
+                displayText = frequencyIndustryOverviewComponent.getDisplayText();
+                break;
+            case 'frequency-time-period':
+                frequencyTimePeriodComponent = <Frequency_TimePeriodComponent>this.currentChartComponent;
+                displayText = frequencyTimePeriodComponent.getDisplayText();
+                break;
+            case 'frequency-incident-bar':
+                frequencyIncidentBarComponent = <Frequency_IncidentBarComponent>this.currentChartComponent;
+                displayText = frequencyIncidentBarComponent.getDisplayText();
+                break;
+            case 'frequency-incident-pie':
+                frequencyIncidentPieComponent = <Frequency_IncidentPieComponent>this.currentChartComponent;
+                displayText = frequencyIncidentPieComponent.getDisplayText();
+                break;
+            case 'frequency-loss-bar':
+                frequencyLossBarComponent = <Frequency_LossBarComponent>this.currentChartComponent;
+                displayText = frequencyLossBarComponent.getDisplayText();
+                break;
+            case 'frequency-loss-pie':
+                frequencyLossPieComponent = <Frequency_LossPieComponent>this.currentChartComponent;
+                displayText = frequencyLossPieComponent.getDisplayText();
+                break;
+
+            case 'severity-industry-overview':
+                severityIndustryOverviewComponent = <Severity_IndustryOverviewComponent>this.currentChartComponent;
+                displayText = severityIndustryOverviewComponent.getDisplayText();
+                break;
+            case 'severity-time-period':
+                severityTimePeriodComponent = <Severity_TimePeriodComponent>this.currentChartComponent;
+                displayText = severityTimePeriodComponent.getDisplayText();
+                break;
+            case 'severity-incident-bar':
+                severityIncidentBarComponent = <Severity_IncidentBarComponent>this.currentChartComponent;
+                displayText = severityIncidentBarComponent.getDisplayText();
+                break;
+            case 'severity-incident-pie':
+                severityIncidentPieComponent = <Severity_IncidentPieComponent>this.currentChartComponent;
+                displayText = severityIncidentPieComponent.getDisplayText();
+                break;
+            case 'severity-loss-bar':
+                severityLossBarComponent = <Severity_LossBarComponent>this.currentChartComponent;
+                displayText = severityLossBarComponent.getDisplayText();
+                break;
+            case 'severity-loss-pie':
+                severityLossPieComponent = <Severity_LossPieComponent>this.currentChartComponent;
+                displayText = severityLossPieComponent.getDisplayText();
+                break;
+
+            case 'app-limit':
+                benchmarkLimitComponent = <Benchmark_LimtComponent>this.currentChartComponent;
+                displayText = benchmarkLimitComponent.getDisplayText();
+                break;
+            case 'app-peer-group-loss':
+                benchmarkPeerGroupLossComponent = <Benchmark_PeerGroupLossComponent>this.currentChartComponent;
+                displayText = benchmarkPeerGroupLossComponent.getDisplayText();
+                break;
+            case 'app-premium':
+                benchmarkPremiumComponent = <Benchmark_PremiumComponent>this.currentChartComponent;
+                displayText = benchmarkPremiumComponent.getDisplayText();
+                break;
+            case 'app-rate':
+                benchmarkRateComponent = <Benchmark_RateComponent>this.currentChartComponent;
+                displayText = benchmarkRateComponent.getDisplayText();
+                break;
+            case 'app-retention':
+                benchmarkRetentionComponent = <Benchmark_RetentionComponent>this.currentChartComponent;
+                displayText = benchmarkRetentionComponent.getDisplayText();
+                break;
+
+            default:
+                break;
+        }
+        return displayText;
+    }
+
+    /**
      * Call back functon that is called when the canvas object is 
      * finished generating the png file as data url from svg object.
      * Add data url to page object.  If the page determines more 
@@ -1507,21 +1691,31 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private renderCompleteCallback() {
-        let buffer = this.canvas.nativeElement.toDataURL('image/png');
-        this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
-        this.entryPoint.clear();
-        this.chartDataCollection[this.chartLoadCount].imageData = buffer;
-        let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
-        //if the image added is placed beyond the first page we need to update toc
-        if(pageOffset > 1) {
-            //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
-            this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+
+        if(this.isNoData) {
+            this.tocPage.deleteTocEntry(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType());            
+            this.chartDataCollection.splice(this.chartLoadCount, 1);
+            this.isNoData = false;
+        } else {
+            let buffer = this.canvas.nativeElement.toDataURL('image/png');
+            this.canvas.nativeElement.getContext('2d').clearRect(0, 0, this.printSettings.width, this.printSettings.height);
+            this.entryPoint.clear();
+            this.chartDataCollection[this.chartLoadCount].imageData = buffer;
+            let pageOffset = this.chartDataCollection[this.chartLoadCount].targetPage.addChartLabel(this.chartDataCollection[this.chartLoadCount].pagePosition, this.chartDataCollection[this.chartLoadCount].imageIndex, this.chartDataCollection[this.chartLoadCount].imageData);
+            this.chartDataCollection[this.chartLoadCount].targetPage.setChartCaption(this.chartDataCollection[this.chartLoadCount].pagePosition, this.getCurrentChartComponentText());
+            this.chartDataCollection[this.chartLoadCount].targetPage.setHasNoContent(false);
+            //if the image added is placed beyond the first page we need to update toc
+            if(pageOffset > 1) {
+                //console.log(this.chartDataCollection[this.chartLoadCount].tocDescription + ' with page type ' + this.chartDataCollection[this.chartLoadCount].targetPage.getPageType() + ' is on page ' + pageOffset);
+                this.tocPage.registerTOCPageOffset(this.chartDataCollection[this.chartLoadCount].tocDescription, this.chartDataCollection[this.chartLoadCount].targetPage.getPageType(), pageOffset);
+            }
+            this.chartLoadCount++;
+            this.setPollingInterval(0);
+            //console.log('image size = ' + buffer.length);
+            let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
+            this.setDownloadMenuMessage(value + '% done.', value + '%');
         }
-        this.chartLoadCount++;
-        this.setPollingInterval(0);
-        //console.log('image size = ' + buffer.length);
-        let value = Math.round((0.1 + this.chartLoadCount / this.chartDataCollection.length * 0.9) * 100.0);
-        this.setDownloadMenuMessage(value + '% done.', value + '%');
+
         if(!this.isProcessing) {
             this.resetDownloadMenu();
         } else {
@@ -1601,6 +1795,28 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
         }
     }
 
+    /**
+     * Remove all pages that has no content
+     * 
+     * @private
+     * @function cleanPages
+     * @return {} - No return types.
+     */
+    private cleanPages() {
+        for( let i = this.pageOrder.length; i > 0; i--) {
+            let pageType: string = this.pageOrder[i-1];
+            let page:any = this.pageCollection[pageType];
+            
+            if(page && page.getHasNoContent() && page.getHasNoContent() === true ) {
+                this.pageOrder.splice( i-1, 1);
+
+                //remove parent item on TOC, applicable for benchmark or dashboard
+                let pageHeaderText:string = (page.header && page.header.text)? page.header.text : '';
+                this.tocPage.deleteTocEntry(pageHeaderText, pageType);
+            }
+        }
+    }
+
     private pdfGenerateTimeout: any = null;
 
     /**
@@ -1612,6 +1828,9 @@ export class PdfDownloadComponent implements OnInit, AfterViewInit {
      * @return {} - No return types.
      */
     private generatePDF() {
+
+        this.cleanPages();
+
         //first page is the cover sheet, second to third page is the table of contents
         let pageNumber = 2 + this.tocPage.getPageCount();
         this.pageOrder.forEach(pageType => 

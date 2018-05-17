@@ -1,8 +1,8 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FrequencyTimePeriodModel, FrequencyTimePeriodGroup } from "app/model/frequency.model";
-import { SearchService, SessionService } from 'app/services/services';
+import { FrequencyTimePeriodModel, FrequencyTimePeriodGroup, ComponentPrintSettings } from "app/model/model";
+import { SearchService, SessionService, FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[frequeny-time-period]'
@@ -15,6 +15,8 @@ export class FrequencyTimePeriodDirective {
 
     @Input() chartComponent: BaseChart;
 
+    @Input() public printSettings: ComponentPrintSettings;
+
     ngOnChanges(changes: SimpleChanges) {}
 
     public static defaultLineColor: string = 'black';
@@ -23,7 +25,7 @@ export class FrequencyTimePeriodDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService) {
+    constructor(private searchService: SearchService, private sessionService: SessionService, private formatService: FormatService) {
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -91,6 +93,19 @@ export class FrequencyTimePeriodDirective {
 
     buildNoBreakChart() {
 
+        let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = -5;
+            marginBottom = 115;
+            spacingBottom = 50;
+        } else {
+            legendYOffset = 0;
+            marginBottom = 140;
+            spacingBottom = 70;
+        }
+        var formatService = this.formatService;
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -108,7 +123,9 @@ export class FrequencyTimePeriodDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
-					marginTop:80
+                    marginTop: 80,
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -138,7 +155,7 @@ export class FrequencyTimePeriodDirective {
                         step: 1
                     },
                     tickWidth: 0,
-                    lineWidth: 2,
+                    lineWidth: 2
                 },
                 yAxis: {
                     tickInterval: 2,
@@ -159,23 +176,14 @@ export class FrequencyTimePeriodDirective {
                                 value = this.value;
                             }
 
-                            return (value.toString()).replace(
-                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                var insertCommas  = function(string) { 
-                                    var reversed  = reverseString(string);
-                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                    return reverseString(reversedWithCommas);
-                                };
-                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                }
-                            );
+                            return formatService.tooltipFormatter(value);
                         }
                     },
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: legendYOffset
                 },
                 tooltip: {
                     shared: false,
@@ -186,17 +194,7 @@ export class FrequencyTimePeriodDirective {
 
                         }
                          
-                        let value =  (value1.toString()).replace(
-                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                            var reverseString = function(string) { return string.split('').reverse().join(''); };
-                            var insertCommas  = function(string) { 
-                                var reversed  = reverseString(string);
-                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                return reverseString(reversedWithCommas);
-                            };
-                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                            }
-                        );
+                        let value =  formatService.tooltipFormatter(value1);
                         return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
                             '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
                     }

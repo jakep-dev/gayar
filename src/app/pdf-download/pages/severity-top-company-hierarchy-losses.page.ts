@@ -1,13 +1,13 @@
 import { BasePage } from './base.page';
-import { FrequencyDataModel } from 'app/model/model';
+import { SeverityDataModel } from 'app/model/model';
 
-export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
+export class SeverityTopCompanyHierarchyLossesPage extends BasePage  {
 
     //page type name for this page
-    public static pageType:string = 'FrequencyMostRecentCompanyLossesPage';
+    public static pageType:string = 'SeverityTopCompanyHierarchyLossesPage';
 
     //default page prefix of this page to prevent json object names from one page don't clash with other pages
-    private prefix: string = FrequencyMostRecentCompanyLossesPage.pageType + '_';
+    private prefix: string = SeverityTopCompanyHierarchyLossesPage.pageType + '_';
 
     /**
      * get the page prefix for the current page of the assessment report
@@ -41,33 +41,7 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
      * @return {string} - page type for the current page of the assessment report.
      */
     public getPageType(): string {
-        return FrequencyMostRecentCompanyLossesPage.pageType;
-    }
-
-    //flag if the page has no content to include/exclude on pdf
-    private hasNoContent:boolean = false;
-
-    /**
-     * get the page if has n content
-     * 
-     * @public
-     * @function getHasNoContent
-     * @return {boolean} - if page has no content
-     */
-    public getHasNoContent() {
-        return this.hasNoContent;
-    }
-
-    /**
-     * Setter function to set if the page has no content
-     * 
-     * @public
-     * @function setHasNoContent
-     * @param {boolean} hasNoContent - if has no content for this page
-     * @return {} - No return types.
-     */
-    public setHasNoContent(hasNoContent: boolean) {
-        this.hasNoContent = hasNoContent;
+        return SeverityTopCompanyHierarchyLossesPage.pageType;
     }
 
     //Indicate if we are showing the section header
@@ -84,11 +58,10 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
 
     //json block representing the section header within this page
     private topHeader: any = {
-        text: 'Frequency\n\n',
+        text: 'Severity\n\n',
         style: this.prefix + 'topHeaderStyle'
     };
 
-    //json block representing the style for header within this page
     private headerStyle: any = {
         color: '#464646',
         fontSize: 14,
@@ -96,20 +69,20 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
         margin: [ 60, 0, 40, 0]
     };
 
-    //json block representing the header within this page
+    //json block representing the style for header within this page
     private header: any = {
-        text: 'Most Recent Company Losses',
+        text: 'Top Company Hierarchy Losses',
         style: this.prefix + 'headerStyle'
     };
     
-    //json block for the table header style
+    //json block representing the header within this page
     private tableHeaderStyle: any = {
         color: '#464646',
         fontSize: 12,
         bold: true
     };
 
-    //json block for the table row content style
+    //json block for the table header style
     private tableRowContentStyle: any = {
         color: '#464646',
         fontSize: 12
@@ -186,8 +159,34 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
         return this.images;
     }
 
+    //flag if the page has no content to include/exclude on pdf
+    private hasNoContent:boolean = false;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
+    }
+
     //object used to hold the table data
-    private peerGroupData: Array<FrequencyDataModel>
+    private peerGroupData: Array<SeverityDataModel>
 
     private hasDescriptionPermission: boolean;
 
@@ -296,7 +295,7 @@ export class FrequencyMostRecentCompanyLossesPage extends BasePage  {
      * @param {Array<FrequencyDataModel>string} peerGroupData - table data
      * @return {} - No return types.
      */
-    public setPeerGroupData(peerGroupData: Array<FrequencyDataModel>) {
+    public setPeerGroupData(peerGroupData: Array<SeverityDataModel>) {
 
         if(peerGroupData && peerGroupData.length > 0) {
             this.peerGroupData = peerGroupData;

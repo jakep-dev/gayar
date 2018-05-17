@@ -104,7 +104,7 @@ export class BenchmarkRateDistributionDirective implements OnInit, OnChanges {
                 xAxisFormatter: null,
                 customChartSettings: {
                     chart: {
-                        spacingBottom: 50,
+                        spacingBottom: 65,
                         spacingLeft: 30,
                         marginLeft: 90
                     },

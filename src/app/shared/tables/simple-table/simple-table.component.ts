@@ -13,6 +13,7 @@ export class SimpleTableComponent implements OnInit {
     @Input() columnsWidth: Array<String>;
     @Input() dataSource: Array<any>;
     @Input() hasDescriptionAccess: boolean = false;
+    @Input() hasTooltip: boolean = false;
 
     constructor() { }
 

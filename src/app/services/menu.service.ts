@@ -15,9 +15,9 @@ export class MenuService {
       this.pdfDownloader = pdfDownloader;
     }
 
-    public startPdfDownload(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[]) {
+    public startPdfDownload(reportSelections: Array<IReportTileModel>, frequencyPeerGroupTable: FrequencyDataModel[], frequencyCompanyLossesTable: FrequencyDataModel[], frequencyCompanyHierarchyLossesTable: FrequencyDataModel[], severityPeerGroupTable: SeverityDataModel[], severityCompanyLossesTable: SeverityDataModel[], severityCompanyHierarchyLossesTable: SeverityDataModel[]) {
       if(this.pdfDownloader) {
-        this.pdfDownloader.buildPdf(reportSelections, frequencyPeerGroupTable, frequencyCompanyLossesTable, severityPeerGroupTable, severityCompanyLossesTable);
+        this.pdfDownloader.buildPdf(reportSelections, frequencyPeerGroupTable, frequencyCompanyLossesTable, frequencyCompanyHierarchyLossesTable, severityPeerGroupTable, severityCompanyLossesTable, severityCompanyHierarchyLossesTable);
       }
     }
     constructor() {

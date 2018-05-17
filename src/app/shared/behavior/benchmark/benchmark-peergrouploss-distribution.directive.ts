@@ -1,6 +1,7 @@
 import { Directive, Output, Input, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { BenchmarkLimitModel, BoxPlotChartData } from 'app/model/model';
 import { BaseChart } from './../../charts/base-chart';
+import { FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[benchmark-peergrouploss-distribution-behavior]'
@@ -23,7 +24,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
 
     displayText: string = '';
 
-    constructor() {
+    constructor(private formatService : FormatService) {
         this.seriesColor = [];
         this.seriesColor["Above Client"] = '#F68C20';
         this.seriesColor["Below Client"] = '#B1D23B';
@@ -42,6 +43,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
      * Use chart data from web service to build parts of Highchart chart options object
      */
     buildHighChartObject() {
+        var formatService = this.formatService;
         if(this.modelData) {
             let tempChartData: BoxPlotChartData = {
                 series: {
@@ -58,8 +60,8 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     chart: {
                         marginLeft: 75,
                         marginRight: 25,
-                        spacingBottom: 40,
-                        marginBottom: 150,
+                        spacingBottom: 65,
+                        marginBottom: 180
                     },
                     credits: {
                         enabled: false
@@ -83,6 +85,12 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     },
                     yAxis: {
                         allowDecimals: false,
+                        title: {
+                            style: {
+                               step: 1,
+                               width : "200px"
+                            }
+                        },
                         plotLines: [
                             {
                                 color: '#000000',
@@ -122,17 +130,7 @@ export class BenchmarkPeerGroupLossDistributionDirective implements OnInit, OnCh
                     tooltip: {
                         shared: false,
                         formatter: function () {
-                            let value =  (this.point.stackTotal.toString()).replace(
-                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                var insertCommas  = function(string) { 
-                                    var reversed  = reverseString(string);
-                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                    return reverseString(reversedWithCommas);
-                                };
-                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                }
-                            );
+                            let value = formatService.tooltipFormatter(this.point.stackTotal);
                             return '<b>' + value + '</b><br/>Loss Amount<br/>';
                         }
                     },

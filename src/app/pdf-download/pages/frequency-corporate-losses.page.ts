@@ -44,6 +44,33 @@ export class FrequencyCorporateLossesPage extends BasePage  {
         return FrequencyCorporateLossesPage.pageType;
     }
 
+    //flag if the page has no content to include/exclude on pdf
+    //initially set hasNoContent to true for pages that contains chart(s)
+    private hasNoContent:boolean = true;
+
+    /**
+     * get the page if has n content
+     * 
+     * @public
+     * @function getHasNoContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return this.hasNoContent;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasNoContent
+     * @param {boolean} hasNoContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasNoContent: boolean) {
+        this.hasNoContent = hasNoContent;
+    }
+
     //Indicate if we are showing the section header
     //This happens when this is the first page selected in the section by the user
     private showTopHeader: boolean = false;
@@ -76,6 +103,14 @@ export class FrequencyCorporateLossesPage extends BasePage  {
         style: this.prefix + 'headerStyle'
     };
 
+    //json block for the chart caption text style
+    private captionStyle: any = {
+        color: '#464646',
+        fontSize: 12,
+        bold: false,
+        alignment: 'justify'
+    };
+
     //left image name
     private imageLeft:string = '';
     //left image data url
@@ -89,7 +124,7 @@ export class FrequencyCorporateLossesPage extends BasePage  {
     private table: any = {
         margin: [ 30, 23, 70, 0 ],
         table: {
-            heights: [ 15, 400 ],
+            heights: [ 15, 270, 100 ],
             body: [
                 [
                     { text: '' },
@@ -105,6 +140,20 @@ export class FrequencyCorporateLossesPage extends BasePage  {
                         text: ''
                         // image: this.imageRight,
                         // width: 375
+                    }
+                ],
+                [
+                    {
+                        margin: [ 30, -10, 0, 0 ],
+                        columns: [
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
+                        ]
+                    },
+                    {
+                        margin: [ 30, -10, 0, 0 ],
+                        columns: [
+                            { text: '', width: 340, style: this.prefix + 'captionStyle' },
+                        ]
                     }
                 ]
             ]
@@ -184,6 +233,31 @@ export class FrequencyCorporateLossesPage extends BasePage  {
     }
 
     /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(index: number, chartCaptionText: string) {
+        if((index >= 0) && (index <= 1) && chartCaptionText) {
+            switch(index) {
+                case 0:
+                    this.table.table.body[2][index].columns[0].text = chartCaptionText;
+                    break;
+                case 1:
+                    this.table.table.body[2][index].columns[0].text = chartCaptionText;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
      * Adds the given chart to a specific position within the underlying page object
      * returns the page number the chart is added to
      * For most pages, it shoult all be on the first page
@@ -246,10 +320,13 @@ export class FrequencyCorporateLossesPage extends BasePage  {
 
         this.header.style = this.prefix + 'headerStyle';
         this.topHeader.style = this.prefix + 'topHeaderStyle';
+        this.table.table.body[2][0].columns[0].style = this.prefix + 'captionStyle';
+        this.table.table.body[2][1].columns[0].style = this.prefix + 'captionStyle';
 
         this.clearArray(this.styles);
         this.styles[this.prefix + 'headerStyle'] = this.headerStyle;
         this.styles[this.prefix + 'topHeaderStyle'] = this.topHeaderStyle;
+        this.styles[this.prefix + 'captionStyle'] = this.captionStyle;
 
         this.clearArray(this.images);
         if(this.imageLeftUrl) {
@@ -286,5 +363,4 @@ export class FrequencyCorporateLossesPage extends BasePage  {
         this.pdfContent.push(this.header);
         this.pdfContent.push(this.table);
     }
-
 };

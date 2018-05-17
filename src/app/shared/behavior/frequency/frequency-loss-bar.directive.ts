@@ -1,8 +1,8 @@
 import { BaseChart } from '../../charts/base-chart';
 import { BarChartData } from 'app/model/charts/bar-chart.model';
 import { Directive, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FrequencyLossBarModel, FrequencyLossGroup } from "app/model/frequency.model";
-import { SearchService, SessionService, FrequencyService } from 'app/services/services';
+import { FrequencyLossBarModel, FrequencyLossGroup, ComponentPrintSettings } from "app/model/model";
+import { SearchService, SessionService, FrequencyService, FormatService } from 'app/services/services';
 
 @Directive({
     selector: '[frequeny-bar-loss]'
@@ -13,10 +13,12 @@ export class FrequencyLossBarDirective {
 
     @Output() onDataComplete = new EventEmitter<BarChartData>();
 
-    @Input() chartComponent: BaseChart;   
+    @Input() chartComponent: BaseChart;
 
     @Input() chartView: string;
-  
+
+    @Input() public printSettings: ComponentPrintSettings;
+
     ngOnChanges(changes: SimpleChanges) {   
         if(changes &&
             changes.chartView &&
@@ -48,7 +50,7 @@ export class FrequencyLossBarDirective {
     displayText: string = '';
     companyName: string = '';
 
-    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService) {        
+    constructor(private searchService: SearchService, private sessionService: SessionService, private frequencyService: FrequencyService, private formatService: FormatService) {        
         this.seriesColor = [];
         this.seriesColor["Company"] = '#F68C20';
         this.seriesColor["Peer"] = '#487AA1';
@@ -112,6 +114,19 @@ export class FrequencyLossBarDirective {
 
     buildNoBreakChart() {
 
+        let legendYOffset: number;
+        let marginBottom: number;
+        let spacingBottom: number;
+        if(this.printSettings) {
+            legendYOffset = 0;
+            marginBottom = 145;
+            spacingBottom = 45;
+        } else {
+            legendYOffset = -6;
+            marginBottom = 150;
+            spacingBottom = 65;
+        }
+        var formatService = this.formatService;
         let tempChartData: BarChartData = {
             series: [],
             title: this.modelData.chartTitle,
@@ -129,7 +144,9 @@ export class FrequencyLossBarDirective {
             customChartSettings: {
                 chart: {
                     marginLeft: 80,
-					marginTop:80
+                    marginTop: 80,
+                    marginBottom: marginBottom,
+                    spacingBottom: spacingBottom
                 },
                 title: {
                     text: (this.modelData.datasets && this.modelData.datasets.length > 0)? this.modelData.xAxis: '',
@@ -184,23 +201,14 @@ export class FrequencyLossBarDirective {
                                 value = this.value;
                             }
     
-                            return (value.toString()).replace(
-                                /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                                var reverseString = function(string) { return string.split('').reverse().join(''); };
-                                var insertCommas  = function(string) { 
-                                    var reversed  = reverseString(string);
-                                    var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                    return reverseString(reversedWithCommas);
-                                };
-                                return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                                }
-                            );
+                            return formatService.tooltipFormatter(value);
                         }
                     },
                 },
                 legend: {
                     enabled: true,
-                    symbolHeight: 8
+                    symbolHeight: 8,
+                    y: legendYOffset
                 },
                 tooltip: {
                     shared: false,
@@ -211,17 +219,7 @@ export class FrequencyLossBarDirective {
 
                         }
                          
-                        let value =  (value1.toString()).replace(
-                            /^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
-                            var reverseString = function(string) { return string.split('').reverse().join(''); };
-                            var insertCommas  = function(string) { 
-                                var reversed  = reverseString(string);
-                                var reversedWithCommas = reversed.match(/.{1,3}/g).join(',');
-                                return reverseString(reversedWithCommas);
-                            };
-                            return sign + (decimal ? insertCommas(before) + decimal + after : insertCommas(before + after));
-                            }
-                        );
+                        let value =  formatService.tooltipFormatter(value1);
                         return '<span style="font-size:11px">' + this.series.name + '</span><br>' +
                             '<span style="color:' + this.point.color + '">' + this.point.name + '</span>: <b>' + value + '</b><br/>';
                     }

@@ -7,7 +7,8 @@ export interface SeverityInput {
 
 export interface SeverityDataResponseModel {
     peerGroup: Array<SeverityDataModel>,
-    company: Array<SeverityDataModel>
+    company: Array<SeverityDataModel>,
+    losses: Array<SeverityDataModel>
 }
 
 export interface SeverityDataModel {

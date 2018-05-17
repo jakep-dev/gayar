@@ -7,7 +7,8 @@ export interface FrequencyInput {
 
 export interface FrequencyDataResponseModel {
     peerGroup: Array<FrequencyDataModel>,
-    company: Array<FrequencyDataModel>
+    company: Array<FrequencyDataModel>,
+    losses: Array<FrequencyDataModel>
 }
 
 export interface FrequencyDataModel {

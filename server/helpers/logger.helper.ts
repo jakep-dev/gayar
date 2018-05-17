@@ -2,15 +2,17 @@ import * as winston from 'winston';
 require('winston-daily-rotate-file');
 import { EnvConfig } from '../env.config';
 import { LogModel } from '../model/env.model';
-import { Response } from 'express';
-
 
 export class Logger {
     private static instance: Logger;
+    
     private static logger: winston.LoggerInstance;
     
     private logModel: LogModel;
+    
     private env: string;
+    
+    private workerId: number;
 
     static getInstance(): Logger {
         if(!Logger.instance){
@@ -19,12 +21,37 @@ export class Logger {
         return Logger.instance;
     }
 
+    private getTimestamp() {
+        return (new Date()).toISOString();
+    }
+
+    private logFormatter(options) {
+        if (options.message) {
+            //strip out extra \n from morgan log messages
+            if (options.message[options.message.length - 1] == '\n') {
+                options.message = options.message.replace(/\n$/, '');
+            }
+        } else {
+            //if the message is blank, null or undefined and not a stack trace from an exception then message is most likely a JSON object.
+            //attempt to stringify the object
+            if (!options.meta || !options.meta.stack) {
+                try {
+                    options.message = JSON.stringify(options.meta);
+                } catch (exception) {}
+            }
+        }
+
+        //options.timestamp() +' ['+ options.level.toUpperCase() +'] '+ (undefined !== options.message ? options.message : '') + (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+        return options.timestamp() +' ['+ options.level.toUpperCase() +']['+ Logger.instance.workerId +'] '+ (undefined !== options.message ? options.message : '') + (options.meta && options.meta.stack ? '\n' + options.meta.stack : '' );
+    }
+
     private constructor(){}
 
-    init(env: string){
-         this.env = env;
-         this.logModel = EnvConfig.getLog();
-         this.handleLogger();
+    init(env: string, workerId: number) {
+        this.workerId = workerId;
+        this.env = env;
+        this.logModel = EnvConfig.getLog();
+        this.handleLogger();
     }
     
     private unHandleException(): void {
@@ -40,7 +67,9 @@ export class Logger {
                     maxsize: this.logModel.maxSize,
                     maxFiles: this.logModel.maxFiles,
                     colorize: this.logModel.colorize,
-                    prettyPrint: this.logModel.prettyPrint
+                    prettyPrint: this.logModel.prettyPrint,
+                    timestamp: this.getTimestamp,
+                    formatter: this.logFormatter
                  }));
     }
 
@@ -58,7 +87,9 @@ export class Logger {
                     maxsize: this.logModel.maxSize,
                     maxFiles: this.logModel.maxFiles,
                     colorize: this.logModel.colorize,
-                    prettyPrint: this.logModel.prettyPrint
+                    prettyPrint: this.logModel.prettyPrint,
+                    timestamp: this.getTimestamp,
+                    formatter: this.logFormatter
                  })); 
     }
 
@@ -78,7 +109,9 @@ export class Logger {
                     maxsize: this.logModel.maxSize,
                     maxFiles: this.logModel.maxFiles,
                     colorize: this.logModel.colorize,
-                    prettyPrint: this.logModel.prettyPrint
+                    prettyPrint: this.logModel.prettyPrint,
+                    timestamp: this.getTimestamp,
+                    formatter: this.logFormatter
                  })
             ],
             exceptionHandlers: [
@@ -94,7 +127,9 @@ export class Logger {
                     maxsize: this.logModel.maxSize,
                     maxFiles: this.logModel.maxFiles,
                     colorize: this.logModel.colorize,
-                    prettyPrint: this.logModel.prettyPrint
+                    prettyPrint: this.logModel.prettyPrint,
+                    timestamp: this.getTimestamp,
+                    formatter: this.logFormatter
                  })
             ],
             handleExceptions: true,

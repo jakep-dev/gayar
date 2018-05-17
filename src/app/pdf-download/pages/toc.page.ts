@@ -276,6 +276,35 @@ export class TOCPage extends BasePage  {
         }
     }
 
+    public deleteTocEntry(title: string, pageType: string) {
+        let tocItem: any;
+        let tocTable: any;
+        let tocDescription: any;
+        let targetTocItem: any;
+        let pageMappingList: any = this.pageMapping[pageType];
+        let i: number;
+        if(pageMappingList) {
+            for(i = 0; i < pageMappingList.length; i++) {
+                tocItem = pageMappingList[i];
+                tocTable = tocItem[0].table || tocItem[1].table || tocItem[2].table;
+                tocDescription = tocTable.body[0][0].text;
+                if(tocDescription === title) {
+                    targetTocItem = tocItem;
+                    break;
+                }
+            }            
+        }
+        
+        if(targetTocItem) {
+            let index = this.tocList.indexOf(targetTocItem);
+            this.tocList.splice(index, 1);
+            index = this.toc.table.body.indexOf(targetTocItem);
+            this.toc.table.body.splice(index, 1);
+            index = pageMappingList.indexOf(tocItem);
+            pageMappingList.splice(index, 1);
+        }
+    }
+
     /**
      * Save multipage page offsets for page objects that render to multiple pdf pages
      * 

@@ -27,6 +27,12 @@ export class ReportComponent implements OnInit {
     //boolean to indicate frequency data is loaded
     private frequencyDataDone: boolean = false;
 
+    //input to frequency most recent company's parent hierarchy losses table
+    private frequencyCompanyHierarchyLossesTable: Array<FrequencyDataModel> = null;
+
+    //boolean to indicate frequency hierarchy data is loaded
+    private frequencyHierarchyDataDone: boolean = false;
+
     //input to severity top peer group losses table
     private severityPeerGroupTable: Array<SeverityDataModel> = null;
 
@@ -35,7 +41,13 @@ export class ReportComponent implements OnInit {
 
     //boolean to indicate severity data is loaded
     private severityDataDone: boolean = false;
-    
+
+    //input to frequency most recent company's parent hierarchy losses table
+    private severityCompanyHierarchyLossesTable: Array<SeverityDataModel> = null;
+
+    //boolean to indicate frequency hierarchy data is loaded
+    private severityHierarchyDataDone: boolean = false;
+
     //boolean to indicate frequency is enabled
     private enableFrequency: boolean = false;
 
@@ -45,7 +57,7 @@ export class ReportComponent implements OnInit {
     //boolean to indicate benchmark gauge is enabled
     private enableBenchmarkGauge: boolean = false;
 
-    //boolean to indicate company loss table for severity & frequency is enabled
+    //boolean to indicate company/hierarchy loss table for severity & frequency is enabled
     private enableCompanyLossTable: boolean = false;
 
     constructor(
@@ -97,16 +109,22 @@ export class ReportComponent implements OnInit {
         //if frequency is disabled, signal frequency data as done because we don't need to get the data
         if(!this.enableFrequency) {
             this.frequencyDataDone = true;
+            this.frequencyHierarchyDataDone = true;
         } else {
             this.frequencyDataDone = false;
+            this.frequencyHierarchyDataDone = false;
             this.getFrequencyTables();
+            this.getFrequencyHierarchyTables();
         }
         //if severity is disabled, signal severity data as done because we don't need to get the data
         if(!this.enableSeverity) {
             this.severityDataDone = true;
+            this.severityHierarchyDataDone = true;
         } else {
             this.severityDataDone = false;
+            this.severityHierarchyDataDone = false;
             this.getSeverityTables();
+            this.getSeverityHierarchyTables();
         }
 
         if( this.searchService.getLimit && this.searchService.getRetention ) {
@@ -202,17 +220,39 @@ export class ReportComponent implements OnInit {
                 this.frequencyPeerGroupTable = res.peerGroup;
                 let permission = this.sessionService.getUserPermission();
                 let finalValue: boolean;
-                finalValue = permission && permission.frequency && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
+                finalValue = permission && permission.frequency && permission.frequency.hasAccess && permission.frequency.peerGroupTable && permission.frequency.peerGroupTable.hasAccess;
                 finalValue = finalValue && (this.frequencyPeerGroupTable.length > 0);
                 this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyPeerLosses, finalValue, this.reportTileModel);
                 if (res.company != null && res.company.length > 0) {
                     this.frequencyCompanyLossesTable = res.company;
-                    finalValue = permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
+                    finalValue = permission && permission.frequency && permission.frequency.hasAccess && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess;
                     finalValue = finalValue && (this.frequencyCompanyLossesTable.length > 0);
                     this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyCompanyLosses, finalValue, this.reportTileModel);
                 }
                 //console.log('Frequency Data Done!');
                 this.frequencyDataDone = true;
+        });
+    }
+
+    /**
+     * Get frequency hierarchy table data for 
+     * Most Recent Company' Hierarchy Losses section
+     * 
+     * @private
+     * @function getFrequencyHierarchyTables
+     * @return {} - No return types.
+     */
+    private getFrequencyHierarchyTables() {
+        this.frequencyService.getFrequencyHierarchyLossesDataTable(this.searchService.getCompanyId)
+            .subscribe((res: FrequencyDataResponseModel) => {
+                this.frequencyCompanyHierarchyLossesTable = res.losses;
+                let permission = this.sessionService.getUserPermission();
+                let finalValue: boolean;
+                finalValue = permission && permission.frequency && permission.frequency.hasAccess && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess;
+                finalValue = finalValue && (this.frequencyCompanyHierarchyLossesTable.length > 0);
+                this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.frequencyHierarchyLosses, finalValue, this.reportTileModel);
+                //console.log('Frequency Hierarchy Data Done!');
+                this.frequencyHierarchyDataDone = true;
         });
     }
 
@@ -229,17 +269,39 @@ export class ReportComponent implements OnInit {
             this.severityPeerGroupTable = res.peerGroup;
             let permission = this.sessionService.getUserPermission();
             let finalValue: boolean;
-            finalValue = permission && permission.severity && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
+            finalValue = permission && permission.severity && permission.severity.hasAccess && permission.severity.peerGroupTable && permission.severity.peerGroupTable.hasAccess;
             finalValue = finalValue && (this.severityPeerGroupTable.length > 0);
             this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityPeerLosses, finalValue, this.reportTileModel);
             if (res.company != null && res.company.length > 0) {
                 this.severityCompanyLossesTable = res.company;
-                finalValue = permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
+                finalValue = permission && permission.severity && permission.severity.hasAccess && permission.severity.companyTable && permission.severity.companyTable.hasAccess;
                 finalValue = finalValue && (this.severityCompanyLossesTable.length > 0);
                 this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityCompanyLosses, finalValue, this.reportTileModel);
             }
             //console.log('Severity Data Done!');
             this.severityDataDone = true;
+        });
+    }
+
+    /**
+     * Get severity hierarchy table data for 
+     * Most Recent Company' Hierarchy Losses section
+     * 
+     * @private
+     * @function getFrequencyHierarchyTables
+     * @return {} - No return types.
+     */
+    private getSeverityHierarchyTables() {
+        this.severityService.getSeverityHierarchyLossesData(this.searchService.getCompanyId)
+            .subscribe((res: SeverityDataResponseModel) => {
+                this.severityCompanyHierarchyLossesTable = res.losses;
+                let permission = this.sessionService.getUserPermission();
+                let finalValue: boolean;
+                finalValue = permission && permission.severity && permission.severity.hasAccess && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess;
+                finalValue = finalValue && (this.severityCompanyHierarchyLossesTable.length > 0);
+                this.setReportSectionAccessPermissionById(APPCONSTANTS.REPORTS_ID.severityHierarchyLosses, finalValue, this.reportTileModel);
+                //console.log('Severity Hierarchy Data Done!');
+                this.severityHierarchyDataDone = true;
         });
     }
 
@@ -370,7 +432,14 @@ export class ReportComponent implements OnInit {
                     hasData = false;
                 }
                 return permission && permission.frequency && permission.frequency.companyTable && permission.frequency.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
-            
+            case APPCONSTANTS.REPORTS_ID.frequencyHierarchyLosses:
+                if(this.frequencyHierarchyDataDone && this.frequencyCompanyHierarchyLossesTable && this.frequencyCompanyHierarchyLossesTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.frequency && permission.frequency.hierarchyLossesTable && permission.frequency.hierarchyLossesTable.hasAccess && this.enableCompanyLossTable && hasData;
+
             //severity components
             case APPCONSTANTS.REPORTS_ID.severityIdustry:
                 return permission && permission.severity && permission.severity.industry && permission.severity.industry.hasAccess;
@@ -394,7 +463,14 @@ export class ReportComponent implements OnInit {
                     hasData = false;
                 }
                 return permission && permission.severity && permission.severity.companyTable && permission.severity.companyTable.hasAccess && this.enableCompanyLossTable && hasData;
-            
+            case APPCONSTANTS.REPORTS_ID.severityHierarchyLosses:
+                if(this.severityHierarchyDataDone && this.severityCompanyHierarchyLossesTable && this.severityCompanyHierarchyLossesTable.length > 0) {
+                    hasData = true;
+                } else {
+                    hasData = false;
+                }
+                return permission && permission.severity && permission.severity.hierarchyLossesTable && permission.severity.hierarchyLossesTable.hasAccess && this.enableCompanyLossTable && hasData;
+
             //benchmark components
             case APPCONSTANTS.REPORTS_ID.benchmarkLimitAdequacy:
                 return permission && permission.severity && permission.benchmark.limitAdequacy && permission.benchmark.limitAdequacy.hasAccess;
@@ -615,7 +691,7 @@ export class ReportComponent implements OnInit {
         if(this.frequencyDataDone && this.severityDataDone) {
             this.getReportMessage();
             if(this.hasSelectedComponent()) {
-                this.menuService.startPdfDownload(this.reportTileModel, this.frequencyPeerGroupTable, this.frequencyCompanyLossesTable, this.severityPeerGroupTable, this.severityCompanyLossesTable);
+                this.menuService.startPdfDownload(this.reportTileModel, this.frequencyPeerGroupTable, this.frequencyCompanyLossesTable, this.frequencyCompanyHierarchyLossesTable, this.severityPeerGroupTable, this.severityCompanyLossesTable, this.severityCompanyHierarchyLossesTable);
             }
         } else {
             this.waitTimeout = setTimeout(() => this.onReport(), 100);

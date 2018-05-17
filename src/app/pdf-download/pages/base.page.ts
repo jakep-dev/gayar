@@ -33,6 +33,27 @@ export abstract class BasePage {
     }
 
     /**
+     * get the page if has no content
+     * 
+     * @public
+     * @function getHasContent
+     * @return {boolean} - if page has no content
+     */
+    public getHasNoContent() {
+        return false;
+    }
+
+    /**
+     * Setter function to set if the page has no content
+     * 
+     * @public
+     * @function setHasContent
+     * @param {boolean} hasContent - if has no content for this page
+     * @return {} - No return types.
+     */
+    public setHasNoContent(hasContent: boolean) { }
+
+    /**
      * Setter function to set the prefix for this page
      * 
      * @public
@@ -178,4 +199,15 @@ export abstract class BasePage {
     public showHeader(isShowHeader: boolean) {
     }
 
+    /**
+     * set the caption text for this chart object will be render out to the final pdf
+     * 
+     * @public
+     * @function setChartCaption
+     * @param {number} chartPosition - the position within the page object
+     * @param {string} captionText - caption text for the chart image
+     * @return {} - No return types.
+     */
+    public setChartCaption(chartPosition: number, captionText: string) {
+    }
 }
