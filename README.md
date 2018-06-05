@@ -7,7 +7,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Use the `ng build --env=prod` flag for a single server production build.
 
-Use the `ng build --env=prod --output-hashing=none` flag for a cluster production build.
+Use the `ng build -prod --output-hashing=none` flag for a cluster production build.
 
 ## Running unit tests
 
